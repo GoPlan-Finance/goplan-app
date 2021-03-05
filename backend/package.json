@@ -16,7 +16,7 @@
   "dependencies": {
     "express": "4.17.1",
     "kerberos": "1.1.4",
-    "parse": "2.19.0",
+    "parse": "3.1.0",
     "parse-server": "4.5.0"
   },
   "scripts": {
