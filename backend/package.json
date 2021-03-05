@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",
-    "babel-watch": "7.4.0",
+    "babel-watch": "7.4.1",
     "bluebird": "3.7.2",
     "eslint": "7.19.0",
     "eslint-config-standard": "16.0.2",
