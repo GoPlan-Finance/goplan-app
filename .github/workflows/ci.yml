@@ -32,8 +32,8 @@ jobs:
     - run: npm install -g mongodb-runner
     - run: mongodb-runner start
     - run: npm run lint
-    - run: npm test -- --maxWorkers=4
-    - run: npm run integration
+#    - run: npm test -- --maxWorkers=4
+#    - run: npm run integration
       env:
         CI: true
     - run: bash <(curl -s https://codecov.io/bash)
