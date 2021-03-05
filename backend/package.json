@@ -1,0 +1,49 @@
+{
+  "name": "goplan-server",
+  "version": "0.0.0",
+  "description": "A financial planning platform for the general public.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoPlan-Finance/GoPlan-app.git"
+  },
+  "author": "GoPlan-Finance team",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
+  },
+  "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
+  "dependencies": {
+    "express": "4.17.1",
+    "kerberos": "1.1.4",
+    "parse": "2.19.0",
+    "parse-server": "4.5.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint --cache ./cloud && eslint --cache index.js",
+    "lint-fix": "eslint --cache --fix ./cloud && eslint --cache --fix index.js",
+    "test": "jasmine",
+    "coverage": "nyc jasmine",
+    "prettier": "prettier --write '{cloud}/{**/*,*}.js' 'index.js'",
+    "watch": "babel-watch index.js"
+  },
+  "engines": {
+    "node": ">=4.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.1.0",
+    "babel-watch": "7.4.0",
+    "bluebird": "3.7.2",
+    "eslint": "7.19.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-varspacing": "^1.2.2",
+    "jasmine": "3.6.4",
+    "mongodb-runner": "4.8.1",
+    "nyc": "15.1.0",
+    "prettier": "2.2.1"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "GoPlan",
+  "description": "A financial planning platform for the general public.",
+  "repository": "https://github.com/GoPlan-Finance/GoPlan-app",
+  "logo": "",
+  "keywords": [
+    "finance",
+    "plan",
+    "stocks",
+    "stock-market",
+    "dashboard"
+  ],
+  "env": {
+    "APP_ID": {
+      "description": "A unique identifier for your app.",
+      "value": "myAppId"
+    },
+    "MASTER_KEY": {
+      "description": "A key that overrides all permissions. Keep this secret.",
+      "value": "myMasterKey"
+    },
+    "DATABASE_URI": {
+      "description": "Database URL ( mongo or postgre )",
+      "value": "mongodb://localhost:27017/dev"
+    },
+
+    "SERVER_URL": {
+      "description": "URL to connect to your Heroku instance (update with your app's name + PARSE_MOUNT)",
+      "value": "http://yourappname.herokuapp.com/parse"
+    }
+  },
+  "image": "heroku/nodejs",
+  "addons": ["mongolab"]
+}
