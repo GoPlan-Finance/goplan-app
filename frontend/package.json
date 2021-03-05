@@ -1,0 +1,26 @@
+{
+  "name": "goplan-frontend",
+  "version": "0.0.0",
+  "description": "a financial planning platform for the general public.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: TBD !\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoPlan-Finance/GoPlan-app.git"
+  },
+  "keywords": [
+    "finance",
+    "plan",
+    "stocks",
+    "stock-market",
+    "dashboard"
+  ],
+  "author": "GoPlan-Finance team",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
+  },
+  "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme"
+}
