@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name:  ️💡 Request a feature
+    url: https://github.com/GoPlan-Finance/GoPlan-app/discussions/categories/ideas
+    about: Suggest new functionality or an enhancement of existing functionality.
   - name: 🙋🏽‍♀️ Getting help with code
     url: https://discord.gg/2mHUjKTq3K
     about: Get help with code-level questions on Discord.
   - name: 🙋 Getting general help
     url: https://discord.gg/2mHUjKTq3K
-    about: Discord server
+    about:  Get help on our Discord server
