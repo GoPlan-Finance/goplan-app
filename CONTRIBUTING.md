@@ -78,7 +78,6 @@ TBD GoPlan has a [responsible Vulnerability Disclosure Program](https://github.c
 ## Coding Style
 
 * Most importantly, match the existing code style as much as possible.
-* We use [Flow](http://flowtype.org/) and ES6 for this codebase. Use modern syntax whenever possible.
 * Keep lines within 140 characters.
 
 ### Code of Conduct
