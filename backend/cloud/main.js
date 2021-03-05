@@ -4,6 +4,6 @@
  *
  */
 
-require('./Auth');
-require('./User');
-require('./Watchlists');
+require('./Auth')
+require('./User')
+require('./Watchlists')

@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
   },
-  "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme"
+  "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
+  "devDependencies": {
+    "eslint-plugin-varspacing": "^1.2.2"
+  }
 }

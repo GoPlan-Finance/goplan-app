@@ -24,16 +24,16 @@ if (!process.env.SERVER_URL) {
 
 if (!process.env.MASTER_KEY) {
   console.log('MASTER_KEY not specified')
-  return
+  process.exit(-1)
 }
 
 const config = {
-  databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
-  cloud:       __dirname + '/cloud/main.js',
-  appId:       'GoPlan-Finance',
-  masterKey:   process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL:   process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
-  liveQuery:   {
+  databaseURI : databaseUri || 'mongodb://localhost:27017/dev',
+  cloud       : `${__dirname  }/cloud/main.js`,
+  appId       : 'GoPlan-Finance',
+  masterKey   : process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
+  serverURL   : process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
+  liveQuery   : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions
   },
 }
@@ -59,12 +59,11 @@ app.get('/', function (req, res) {
   res.status(200).send('I dream of being a website.  Please star the GoPlan-Finance repo on GitHub!')
 })
 
-
 const port = process.env.PORT || 1337
 if (!test) {
   const httpServer = require('http').createServer(app)
   httpServer.listen(port, function () {
-    console.log('GoPlan running on port ' + port + '.')
+    console.log(`GoPlan running on port ${  port  }.`)
   })
   // This will enable the Live Query real-time server
   ParseServer.createLiveQueryServer(httpServer)
