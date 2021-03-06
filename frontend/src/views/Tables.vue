@@ -2,42 +2,13 @@
   <div>
     <h3 class="text-gray-700 text-3xl font-medium">Tables</h3>
 
-    <div class="mt-4">
-      <h4 class="text-gray-600">Simple Table</h4>
-
-      <div class="mt-6">
-        <div class="bg-white shadow rounded-md overflow-hidden my-6">
-          <table class="text-left w-full border-collapse">
-            <thead class="border-b">
-              <tr>
-                <th
-                  class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
-                >
-                  City
-                </th>
-                <th
-                  class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
-                >
-                  Total orders
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(i, index) in simpleTableData"
-                :key="index"
-                class="hover:bg-gray-200"
-              >
-                <td class="py-4 px-6 border-b text-gray-700 text-lg">
-                  {{ i.city }}
-                </td>
-                <td class="py-4 px-6 border-b text-gray-500">
-                  {{ i.totalOrders }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div>
+      <div v-if="isLoading"> Loading ... </div>
+      <div v-else-if="error"> {{ error.message }}</div>
+      <div v-else>
+<!--        <div v-for="item in data.value">-->
+<!--          {{ item }}-->
+<!--        </div>-->
       </div>
     </div>
 
@@ -330,9 +301,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
-import { useTableData } from "../hooks/useTableData";
+import {useTableData} from "../hooks/useTableData";
 
 export default defineComponent({
   setup() {
@@ -346,6 +317,9 @@ export default defineComponent({
       simpleTableData,
       paginatedTableData,
       wideTableData,
+      isLoading,
+      error,
+      data
     };
   },
 });
