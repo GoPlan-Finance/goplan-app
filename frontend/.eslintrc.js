@@ -1,11 +1,10 @@
 module.exports = {
-  extends:         [
+  extends: [
     '../common/.eslintrc.js',
-    'plugin:vue/essential',
-    '@vue/airbnb',
+    'plugin:vue/essential'
   ],
-  rules:           {
-     'vue/html-quotes':                  [
+  rules: {
+    'vue/html-quotes': [
       'error',
       'double',
     ],
