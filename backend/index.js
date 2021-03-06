@@ -12,28 +12,32 @@ const test        = args.some(arg => arg.includes('jasmine'))
 
 const liveQueryClassNames = require('./cloud/liveQuery.js')
 
-const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI
+const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev'
 
 if (!databaseUri) {
-  console.log('DATABASE_URI not specified, falling back to localhost.')
+  console.warn('DATABASE_URI not specified, falling back to localhost.')
 }
 
 if (!process.env.SERVER_URL) {
-  console.log('SERVER_URL not specified, falling back to localhost.')
+  console.warn('SERVER_URL not specified, falling back to localhost.')
 }
 
 if (!process.env.MASTER_KEY) {
-  console.log('MASTER_KEY not specified')
+  console.error('MASTER_KEY not specified')
   process.exit(-1)
 }
 
 const config = {
-  databaseURI : databaseUri || 'mongodb://localhost:27017/dev',
-  cloud       : `${__dirname  }/cloud/main.js`,
-  appId       : 'GoPlan-Finance',
-  masterKey   : process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL   : process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
-  liveQuery   : {
+  auth: {
+    google: {},
+  },
+  allowClientClassCreation : false,
+  databaseURI              : databaseUri,
+  cloud                    : `${__dirname}/cloud/main.js`,
+  appId                    : 'GoPlan-Finance',
+  masterKey                : process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
+  serverURL                : process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
+  liveQuery                : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions
   },
 }
@@ -63,7 +67,7 @@ const port = process.env.PORT || 1337
 if (!test) {
   const httpServer = require('http').createServer(app)
   httpServer.listen(port, function () {
-    console.log(`GoPlan running on port ${  port  }.`)
+    console.log(`GoPlan running on port ${port}.`)
   })
   // This will enable the Live Query real-time server
   ParseServer.createLiveQueryServer(httpServer)
