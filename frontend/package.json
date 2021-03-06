@@ -4,7 +4,9 @@
   "description": "a financial planning platform for the general public.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: TBD !\" && exit 1"
+    "test": "echo \"Error: TBD !\" && exit 1",
+    "dev": "vite",
+    "build": "cross-env NODE_ENV=production vite build"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,16 @@
     "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
+  "dependencies": {
+    "tailwindcss": "^1.9.6",
+    "vue": "next",
+    "vue-router": "^4.0.0-beta.13"
+  },
   "devDependencies": {
-    "eslint-plugin-varspacing": "^1.2.2"
+    "@tailwindcss/custom-forms": "^0.2.1",
+    "@vue/compiler-sfc": "^3.0.0",
+    "cross-env": "^7.0.2",
+    "eslint-plugin-varspacing": "^1.2.2",
+    "vite": "^1.0.0-rc.8"
   }
 }
