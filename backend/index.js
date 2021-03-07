@@ -12,6 +12,8 @@ const test        = args.some(arg => arg.includes('jasmine'))
 
 const liveQueryClassNames = require('./cloud/liveQuery.js')
 
+process.env.TZ = 'America/New_York' // here is the magical line
+
 const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev'
 
 if (!databaseUri) {
@@ -35,11 +37,21 @@ const config = {
   databaseURI              : databaseUri,
   cloud                    : `${__dirname}/cloud/main.js`,
   appId                    : 'goplan-finance',
-  masterKey                : process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL                : process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
+  masterKey                : process.env.MASTER_KEY,
+  serverURL                : process.env.SERVER_URL || 'http://local.goplan.finance:1337/parse', // Don't forget to change to https if needed
   liveQuery                : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions
   },
+  serverStartComplete: async () => {
+
+    // eslint-disable-next-line no-unused-vars
+    const { BetterThanNothingMigration } = require('./Migrations/index.ts')
+
+    // @todo run theses ONCE !
+    //await BetterThanNothingMigration.v2021_03_06()
+    //await BetterThanNothingMigration.v2021_03_07()
+
+  }
 }
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
@@ -55,6 +67,7 @@ const app = express()
 const mountPath = process.env.PARSE_MOUNT || '/parse'
 if (!test) {
   const api = new ParseServer(config)
+
   app.use(mountPath, api)
 }
 

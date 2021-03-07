@@ -7,6 +7,8 @@
 // @todo  Global Parse instance created in index.html, this is probably bad and we need to make require('parse') work withh vite
 
 
+import {User} from "./models";
+
 Parse.initialize('goplan-finance')
 
 window.Parse.serverURL = 'https://goplan.finance/parse'
@@ -17,4 +19,6 @@ if (import.meta.env.VITE_APP_PARSE_API_LOCATION === 'local') {
 
 window.Parse.enableLocalDatastore()
 Parse.CoreManager.setStorageController(Parse.IndexedDB);
+
+// @todo move to common/models/User
 

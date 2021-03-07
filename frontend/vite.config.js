@@ -7,7 +7,8 @@ export default {
   esmExternals : true,
   optimizeDeps : {
     exclude: [
-      'parse'
+      'parse', // @todo check if ok to ignore
+      'vue-class-store', // @todo check if ok to ignore
     ]
   },
   plugins: [

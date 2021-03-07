@@ -6,6 +6,7 @@ import Tables from "./views/Tables.vue";
 import UIElements from "./views/UIElements.vue";
 // import Login from "./views/Login.vue";
 import Auth from './views/modules/Auth/Auth.vue';
+import Onboarding from './views/modules/Auth/Onboarding.vue';
 import Modal from "./views/Modal.vue";
 import Card from "./views/Card.vue";
 import Blank from "./views/Blank.vue";
@@ -21,12 +22,14 @@ const routes: RouteRecordRaw[] = [
             layout: "empty",
         },
     },
-    // {
-    //   path: "/",
-    //   name: "Login",
-    //   component: Login,
-    //   meta: { layout: "empty" },
-    // },
+    {
+        path: "/auth/createAccount",
+        name: "create-account",
+        component: Onboarding,
+        meta: {
+            layout: "empty"
+        },
+    },
     {
         path: "/dashboard",
         name: "Dashboard",
