@@ -12,6 +12,13 @@ export class AuthStore {
         return this.value * 2
     }
 
+
+    public async  currentUser(): Promise<Parse.User> {
+
+        return await Parse.User.currentAsync()
+    }
+
+
     public async  isAuthenticated(): Promise<boolean> {
 
         return !! await Parse.User.currentAsync()

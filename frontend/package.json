@@ -34,7 +34,7 @@
     "tailwindcss": "^1.9.6",
     "tslib": "^2.1.0",
     "vue": "next",
-    "vue-class-store": "^3.0.0",
+    "vue-class-store": "github:sadortun/vue-class-store#build",
     "vue-gapi": "next",
     "vue-router": "^4.0.0-beta.13"
   },
