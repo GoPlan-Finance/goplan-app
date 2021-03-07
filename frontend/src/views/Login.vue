@@ -24,29 +24,35 @@
         <span class="text-gray-700 font-semibold text-2xl">V-Dashboard</span>
       </div>
 
-      <form class="mt-4" @submit.prevent="login">
+      <form
+        class="mt-4"
+        @submit.prevent="login"
+      >
         <label class="block">
           <span class="text-gray-700 text-sm">Email</span>
           <input
+            v-model="email"
             type="email"
             class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
-            v-model="email"
-          />
+          >
         </label>
 
         <label class="block mt-3">
           <span class="text-gray-700 text-sm">Password</span>
           <input
+            v-model="password"
             type="password"
             class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
-            v-model="password"
-          />
+          >
         </label>
 
         <div class="flex justify-between items-center mt-4">
           <div>
             <label class="inline-flex items-center">
-              <input type="checkbox" class="form-checkbox text-indigo-600" />
+              <input
+                type="checkbox"
+                class="form-checkbox text-indigo-600"
+              >
               <span class="mx-2 text-gray-600 text-sm">Remember me</span>
             </label>
           </div>
@@ -55,8 +61,7 @@
             <a
               class="block text-sm fontme text-indigo-700 hover:underline"
               href="#"
-              >Forgot your password?</a
-            >
+            >Forgot your password?</a>
           </div>
         </div>
 
@@ -74,24 +79,24 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
-import { useRouter } from "vue-router";
+import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-  setup() {
-    const router = useRouter();
-    const email = ref("johndoe@mail.com");
-    const password = ref("@#!@#asdf1231!_!@#");
+  setup () {
+    const router   = useRouter()
+    const email    = ref('johndoe@mail.com')
+    const password = ref('@#!@#asdf1231!_!@#')
 
-    function login() {
-      router.push("/dashboard");
+    function login () {
+      router.push('/dashboard')
     }
 
     return {
       login,
       email,
       password,
-    };
+    }
   },
-});
+})
 </script>

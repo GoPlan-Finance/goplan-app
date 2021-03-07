@@ -3,9 +3,9 @@
     <!-- Backdrop -->
     <div
       :class="isOpen ? 'block' : 'hidden'"
-      @click="isOpen = false"
       class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"
-    ></div>
+      @click="isOpen = false"
+    />
     <!-- End Backdrop -->
 
     <div
@@ -34,9 +34,9 @@
             />
           </svg>
 
-          <span class="text-white text-2xl mx-2 font-semibold"
-            >V-Dashboard</span
-          >
+          <span
+            class="text-white text-2xl mx-2 font-semibold"
+          >V-Dashboard</span>
         </div>
       </div>
 
@@ -130,7 +130,11 @@
           :class="[$route.name === 'Forms' ? activeClass : inactiveClass]"
           to="/forms"
         >
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path
               d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
             />
@@ -149,7 +153,11 @@
           :class="[$route.name === 'Cards' ? activeClass : inactiveClass]"
           to="/cards"
         >
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path
               d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
             />
@@ -168,7 +176,11 @@
           :class="[$route.name === 'Modal' ? activeClass : inactiveClass]"
           to="/modal"
         >
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path
               d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
             />
@@ -182,7 +194,11 @@
           :class="[$route.name === 'Blank' ? activeClass : inactiveClass]"
           to="/blank"
         >
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path
               d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
             />
@@ -196,24 +212,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useSidebar } from "../hooks/useSidebar";
+import { defineComponent, ref } from 'vue'
+import { useSidebar } from '../hooks/useSidebar'
 
 export default defineComponent({
-  setup() {
-    const { isOpen } = useSidebar();
-    const activeClass = ref(
-      "bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100"
-    );
+  setup () {
+    const { isOpen }    = useSidebar()
+    const activeClass   = ref(
+      'bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100'
+    )
     const inactiveClass = ref(
-      "border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100"
-    );
+      'border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100'
+    )
 
     return {
       isOpen,
       activeClass,
       inactiveClass,
-    };
+    }
   },
-});
+})
 </script>

@@ -1,7 +1,10 @@
 module.exports = {
   extends: [
+    'plugin:vue/vue3-recommended',
     '../common/.eslintrc.js',
-    'plugin:vue/essential'
+  ],
+  plugins: [
+    'vue',
   ],
   rules: {
     'vue/html-quotes': [

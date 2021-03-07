@@ -1,12 +1,21 @@
 <template>
-  <button class="googleSignIn" @click="clicked">
-    <img alt="Google logo" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/G-on-white.svg">
+  <button
+    class="googleSignIn"
+    @click="clicked"
+  >
+    <img
+      alt="Google logo"
+      src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/8399/G-on-white.svg"
+    >
     <span class="googleSignIn__text">Sign in with Google</span>
   </button>
 </template>
 
 <script>
 export default {
+  emits: [
+    'clicked'
+  ],
   methods: {
     clicked () {
       this.$emit('clicked')
