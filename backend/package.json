@@ -13,12 +13,6 @@
     "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
-  "dependencies": {
-    "express": "4.17.1",
-    "kerberos": "1.1.4",
-    "parse": "3.1.0",
-    "parse-server": "4.5.0"
-  },
   "scripts": {
     "start": "node index.js",
     "debug": "nodemon  --inspect --trace-warnings index.js",
@@ -31,6 +25,13 @@
   },
   "engines": {
     "node": ">=4.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "4.17.1",
+    "kerberos": "1.1.4",
+    "parse": "3.1.0",
+    "parse-server": "4.5.0"
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",
