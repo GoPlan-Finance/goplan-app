@@ -1,5 +1,5 @@
 import {PriceHistoryItem} from "../../../interfaces/ApplicationInterfaces";
-import {PriceAdapterInterface} from "../../../interfaces/AdapterInterfaces";
+import {PriceAdapterInterface} from "../../AdapterInterfaces";
 
 interface TiingoApiPriceResponse {
     date: Date;
@@ -18,13 +18,12 @@ interface TiingoApiPriceResponse {
 }
 
 export class TiingoApiAdapter implements PriceAdapterInterface {
-    async getPrices(ticker: string) {
+    async loadPricesFromApi(ticker: string): Promise<TiingoApiPriceResponse[]> {
         let response = await fetch("./tiingo.json");
-
-        return await response.json() as TiingoApiPriceResponse[];
+        return response.json();
     }
 
-    resolveApiResponse(json: any[]): PriceHistoryItem[] {
+    resolvePriceApiResponse(json: any[]): PriceHistoryItem[] {
         let priceHistoryItems: PriceHistoryItem[] = [];
 
         json.forEach(item => {
