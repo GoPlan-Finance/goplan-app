@@ -64,7 +64,7 @@
 
         <div
           v-show="dropdownOpen"
-          class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
+          class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl z-20"
         >
           <a
             href="#"

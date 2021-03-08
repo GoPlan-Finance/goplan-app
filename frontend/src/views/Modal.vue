@@ -3,7 +3,7 @@
     <h3 class="text-gray-700 text-3xl font-medium">Modal</h3>
     <button
       @click="open = true"
-      class="mt-3 px-6 py-3 bg-indigo-600 rounded-md text-white font-medium tracking-wide hover:bg-indigo-500"
+      class="mt-3 px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
     >
       Open Modal
     </button>
@@ -70,7 +70,7 @@
             </button>
             <button
               @click="open = false"
-              class="px-6 py-3 bg-indigo-600 rounded-md text-white font-medium tracking-wide hover:bg-indigo-500"
+              class="px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
             >
               Action
             </button>

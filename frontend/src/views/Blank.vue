@@ -4,7 +4,7 @@
   <div v-if="isLoading">still loading...</div>
   <div v-if="error">{{ error }}</div>
   <div class="mt-6">
-    <div class="bg-white shadow rounded-md overflow-hidden my-6">
+    <div class="bg-white shadow rounded-lg overflow-hidden my-6">
       <table class="text-left w-full border-collapse">
         <thead class="border-b">
         <tr>
