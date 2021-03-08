@@ -132,7 +132,7 @@
                       </div>
 
                       <div class="ml-3">
-                        <p class="text-gray-900 whitespace-no-wrap">
+                        <p class="text-gray-900 whitespace-nowrap">
                           {{ u.name }}
                         </p>
                       </div>
@@ -141,12 +141,12 @@
                   <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
-                    <p class="text-gray-900 whitespace-no-wrap">{{ u.role }}</p>
+                    <p class="text-gray-900 whitespace-nowrap">{{ u.role }}</p>
                   </td>
                   <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
-                    <p class="text-gray-900 whitespace-no-wrap">
+                    <p class="text-gray-900 whitespace-nowrap">
                       {{ u.created }}
                     </p>
                   </td>
@@ -233,7 +233,7 @@
               <tbody class="bg-white">
                 <tr v-for="(u, index) in wideTableData" :key="index">
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
@@ -258,7 +258,7 @@
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <div class="text-sm leading-5 text-gray-900">
                       {{ u.title }}
@@ -269,7 +269,7 @@
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <span
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
@@ -278,13 +278,13 @@
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                   >
                     {{ u.role }}
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                    class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                   >
                     <a href="#" class="text-indigo-600 hover:text-indigo-900"
                       >Edit</a
