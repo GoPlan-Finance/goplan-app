@@ -81,18 +81,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, inject } from 'vue'
-import { useRouter } from 'vue-router'
+import {defineComponent, getCurrentInstance, inject} from 'vue'
+import {useRouter} from 'vue-router'
 import GoogleButton from './googleButton.vue'
-import { User } from '../../../models'
+import {User} from '../../../models'
 
 export default defineComponent({
-  components: { GoogleButton },
-  setup () {
+  components: {GoogleButton},
+  setup() {
 
-    const app       = getCurrentInstance()
-    const gapi      = app.appContext.config.globalProperties.$gapi
-    const router    = useRouter()
+    const app = getCurrentInstance()
+    const gapi = app.appContext.config.globalProperties.$gapi
+    const router = useRouter()
     const authStore = inject('$authStore')
 
     const signInGoogle = async () => {
@@ -101,19 +101,20 @@ export default defineComponent({
         // const client = await gapi.getGapiClient() // @todo this is a hack,
         const auth = await gapi.getAuthInstance()
         await auth.signIn({
-          'prompt':     'select_account',
+          'prompt': 'select_account',
           'grant_type': 'authorization_code',
-          'scope':      'profile',
+          'scope': 'profile',
         })
+        debugger
 
         const currentGoogleUser = auth.currentUser.get()
-        const loggedIn          = await User.logInWith('google', {
+        const loggedIn = await User.logInWith('google', {
           authData: {
-            id:       currentGoogleUser.getId(),
+            id: currentGoogleUser.getId(),
             id_token: currentGoogleUser.getAuthResponse().id_token,
           }
         })
-
+debugger
         // const profile           = currentGoogleUser.getBasicProfile()
         // await Parse.Cloud.run('User--updateGoogleInfo', {
         //   info: {
@@ -126,12 +127,13 @@ export default defineComponent({
         //   },
         // })
         const user = await User.currentAsync()
+
         if (user && !user.isOnboardingCompleted()) {
-          router.push({ name: 'create-account' })
+          router.push({name: 'create-account'})
           return
         }
 
-        router.push({ name: 'dashboard' })
+        router.push({name: 'dashboard'})
 
       } catch (error) {
         console.error(error)

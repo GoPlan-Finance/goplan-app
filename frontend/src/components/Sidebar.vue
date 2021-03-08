@@ -145,8 +145,8 @@
         </navigation-item>
 
         <navigation-item
-          title="Blank"
-          to="/blank"
+          title="Test"
+          to="/test"
         >
           <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
             <path
