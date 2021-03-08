@@ -1,32 +1,12 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-medium">
-      Tables
-    </h3>
-
-    <div>
-      <div v-if="isLoading">
-        Loading ...
-      </div>
-      <div v-else-if="error">
-        {{ error.message }}
-      </div>
-      <div v-else>
-        <!--        <div v-for="item in data.value">-->
-        <!--          {{ item }}-->
-        <!--        </div>-->
-      </div>
-    </div>
+    <h3 class="text-gray-700 text-3xl font-medium">Tables</h3>
 
     <div class="mt-8">
-      <h4 class="text-gray-600">
-        Table with pagination
-      </h4>
+      <h4 class="text-gray-600">Table with pagination</h4>
 
       <div class="mt-6">
-        <h2 class="text-xl font-semibold text-gray-700 leading-tight">
-          Users
-        </h2>
+        <h2 class="text-xl font-semibold text-gray-700 leading-tight">Users</h2>
 
         <div class="mt-3 flex flex-col sm:flex-row">
           <div class="flex">
@@ -94,7 +74,7 @@
             <input
               placeholder="Search"
               class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
-            >
+            />
           </div>
         </div>
 
@@ -128,10 +108,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(u, index) in paginatedTableData"
-                  :key="index"
-                >
+                <tr v-for="(u, index) in paginatedTableData" :key="index">
                   <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
@@ -141,11 +118,11 @@
                           class="w-full h-full rounded-full"
                           :src="u.picture"
                           alt
-                        >
+                        />
                       </div>
 
                       <div class="ml-3">
-                        <p class="text-gray-900 whitespace-no-wrap">
+                        <p class="text-gray-900 whitespace-nowrap">
                           {{ u.name }}
                         </p>
                       </div>
@@ -154,14 +131,12 @@
                   <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
-                    <p class="text-gray-900 whitespace-no-wrap">
-                      {{ u.role }}
-                    </p>
+                    <p class="text-gray-900 whitespace-nowrap">{{ u.role }}</p>
                   </td>
                   <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
-                    <p class="text-gray-900 whitespace-no-wrap">
+                    <p class="text-gray-900 whitespace-nowrap">
                       {{ u.created }}
                     </p>
                   </td>
@@ -174,7 +149,7 @@
                       <span
                         aria-hidden
                         :class="`absolute inset-0 bg-${u.statusColor}-200 opacity-50 rounded-full`"
-                      />
+                      ></span>
                       <span class="relative">{{ u.status }}</span>
                     </span>
                   </td>
@@ -184,9 +159,9 @@
             <div
               class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"
             >
-              <span
-                class="text-xs xs:text-sm text-gray-900"
-              >Showing 1 to 4 of 50 Entries</span>
+              <span class="text-xs xs:text-sm text-gray-900"
+                >Showing 1 to 4 of 50 Entries</span
+              >
 
               <div class="inline-flex mt-2 xs:mt-0">
                 <button
@@ -207,9 +182,7 @@
     </div>
 
     <div class="mt-8">
-      <h4 class="text-gray-600">
-        Wide Table
-      </h4>
+      <h4 class="text-gray-600">Wide Table</h4>
 
       <div class="flex flex-col mt-6">
         <div
@@ -243,17 +216,14 @@
                   </th>
                   <th
                     class="px-6 py-3 border-b border-gray-200 bg-gray-100"
-                  />
+                  ></th>
                 </tr>
               </thead>
 
               <tbody class="bg-white">
-                <tr
-                  v-for="(u, index) in wideTableData"
-                  :key="index"
-                >
+                <tr v-for="(u, index) in wideTableData" :key="index">
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
@@ -261,7 +231,7 @@
                           class="h-10 w-10 rounded-full"
                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           alt
-                        >
+                        />
                       </div>
 
                       <div class="ml-4">
@@ -278,7 +248,7 @@
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <div class="text-sm leading-5 text-gray-900">
                       {{ u.title }}
@@ -289,26 +259,26 @@
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                   >
                     <span
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >{{ u.status }}</span>
+                      >{{ u.status }}</span
+                    >
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                   >
                     {{ u.role }}
                   </td>
 
                   <td
-                    class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                    class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                   >
-                    <a
-                      href="#"
-                      class="text-indigo-600 hover:text-indigo-900"
-                    >Edit</a>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-900"
+                      >Edit</a
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -321,26 +291,23 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from "vue";
 
-import {useTableData} from '../hooks/useTableData'
+import {useTableData} from "../hooks/useTableData";
 
 export default defineComponent({
-  setup () {
+  setup() {
     const {
       simpleTableData,
       paginatedTableData,
       wideTableData,
-    } = useTableData()
+    } = useTableData();
 
     return {
       simpleTableData,
       paginatedTableData,
       wideTableData,
-      // isLoading,
-      // error,
-      // data
-    }
+    };
   },
-})
+});
 </script>

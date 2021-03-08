@@ -6,7 +6,7 @@
       <div class="flex flex-wrap -mx-6">
         <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
           <div
-            class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white"
+            class="flex items-center px-5 py-6 shadow-sm rounded-lg bg-white"
           >
             <div class="p-3 rounded-full bg-indigo-600 bg-opacity-75">
               <svg
@@ -51,7 +51,7 @@
 
         <div class="w-full mt-6 px-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
           <div
-            class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white"
+            class="flex items-center px-5 py-6 shadow-sm rounded-lg bg-white"
           >
             <div class="p-3 rounded-full bg-orange-600 bg-opacity-75">
               <svg
@@ -84,7 +84,7 @@
 
         <div class="w-full mt-6 px-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
           <div
-            class="flex items-center px-5 py-6 shadow-sm rounded-md bg-white"
+            class="flex items-center px-5 py-6 shadow-sm rounded-lg bg-white"
           >
             <div class="p-3 rounded-full bg-pink-600 bg-opacity-75">
               <svg
@@ -154,7 +154,7 @@
             <tbody class="bg-white">
               <tr v-for="(u, index) in users" :key="index">
                 <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                  class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                 >
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
@@ -177,7 +177,7 @@
                 </td>
 
                 <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                  class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                 >
                   <div class="text-sm leading-5 text-gray-900">
                     {{ u.title }}
@@ -188,7 +188,7 @@
                 </td>
 
                 <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
+                  class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                 >
                   <span
                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
@@ -197,13 +197,13 @@
                 </td>
 
                 <td
-                  class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500"
+                  class="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                 >
                   {{ u.role }}
                 </td>
 
                 <td
-                  class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                  class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                 >
                   <a href="#" class="text-indigo-600 hover:text-indigo-900"
                     >Edit</a

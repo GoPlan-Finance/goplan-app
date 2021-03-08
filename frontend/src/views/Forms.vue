@@ -7,7 +7,7 @@
 
       <div class="mt-4">
         <div
-          class="max-w-sm w-full bg-white shadow-md rounded-md overflow-hidden border"
+          class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden border"
         >
           <form>
             <div
@@ -34,7 +34,7 @@
             <div class="px-5 py-6 bg-gray-200 text-gray-700 border-b">
               <label class="text-xs">Name</label>
 
-              <div class="mt-2 relative rounded-md shadow-sm">
+              <div class="mt-2 relative rounded-lg shadow-sm">
                 <span
                   class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600"
                 >
@@ -55,19 +55,19 @@
 
                 <input
                   type="text"
-                  class="form-input w-full px-12 py-2 appearance-none rounded-md focus:border-indigo-600"
+                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-indigo-600"
                 />
               </div>
             </div>
 
             <div class="flex justify-between items-center px-5 py-3">
               <button
-                class="px-3 py-1 text-gray-700 text-sm rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                class="px-3 py-1 text-gray-700 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 focus:outline-none"
               >
                 Cancel
               </button>
               <button
-                class="px-3 py-1 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-500 focus:outline-none"
+                class="px-3 py-1 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-500 focus:outline-none"
               >
                 Save
               </button>
@@ -81,7 +81,7 @@
       <h4 class="text-gray-600">Forms</h4>
 
       <div class="mt-4">
-        <div class="p-6 bg-white rounded-md shadow-md">
+        <div class="p-6 bg-white rounded-lg shadow-md">
           <h2 class="text-lg text-gray-700 font-semibold capitalize">
             Account settings
           </h2>
@@ -91,7 +91,7 @@
               <div>
                 <label class="text-gray-700" for="username">Username</label>
                 <input
-                  class="form-input w-full mt-2 rounded-md focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="text"
                   v-model="user.username"
                 />
@@ -102,7 +102,7 @@
                   >Email Address</label
                 >
                 <input
-                  class="form-input w-full mt-2 rounded-md focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="email"
                   v-model="user.email"
                 />
@@ -111,7 +111,7 @@
               <div>
                 <label class="text-gray-700" for="password">Password</label>
                 <input
-                  class="form-input w-full mt-2 rounded-md focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="password"
                   v-model="user.password"
                 />
@@ -122,7 +122,7 @@
                   >Password Confirmation</label
                 >
                 <input
-                  class="form-input w-full mt-2 rounded-md focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="password"
                   v-model="user.confirm"
                 />
@@ -131,7 +131,7 @@
 
             <div class="flex justify-end mt-4">
               <button
-                class="px-4 py-2 bg-gray-800 text-gray-200 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                class="px-4 py-2 bg-gray-800 text-gray-200 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
               >
                 Save
               </button>

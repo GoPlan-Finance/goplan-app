@@ -8,7 +8,7 @@
 
       <div class="mt-4">
         <div
-          class="rounded-md bg-white py-4 px-4 overflow-x-auto whitespace-no-wrap"
+          class="rounded-lg bg-white py-4 px-4 overflow-x-auto whitespace-nowrap"
         >
           <div
             class="inline-flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden ml-3"
@@ -114,7 +114,7 @@
       <h4 class="text-gray-600">Radio Buttons</h4>
 
       <div class="mt-4">
-        <div class="flex rounded-md bg-white py-4 px-4 overflow-x-auto">
+        <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <label
             :class="`inline-flex items-center ${index && 'ml-3'}`"
             v-for="(c, index) in colors"
@@ -135,7 +135,7 @@
       <h4 class="text-gray-600">Checkboxes</h4>
 
       <div class="mt-4">
-        <div class="flex rounded-md bg-white py-4 px-4 overflow-x-auto">
+        <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <label
             :class="`inline-flex items-center ${index && 'ml-3'}`"
             v-for="(c, index) in colors"
@@ -156,9 +156,9 @@
       <h4 class="text-gray-600">Buttons</h4>
 
       <div class="mt-4">
-        <div class="flex rounded-md bg-white py-4 px-4 overflow-x-auto">
+        <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <button
-            :class="`px-6 py-3 bg-${c}-600 rounded-md text-white font-medium tracking-wide hover:bg-${c}-500 ${
+            :class="`px-6 py-3 bg-${c}-600 rounded-lg text-white font-medium tracking-wide hover:bg-${c}-500 ${
               index && 'ml-3'
             }`"
             v-for="(c, index) in colors"
@@ -175,7 +175,7 @@
       <h4 class="text-gray-600">Paginations</h4>
 
       <div class="mt-4">
-        <div class="flex rounded-md bg-white py-4 px-4 overflow-x-auto">
+        <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <div class="flex rounded mr-4">
             <a
               href="#"

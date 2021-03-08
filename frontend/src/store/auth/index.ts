@@ -29,7 +29,7 @@ class Auth {
     }
 
     static encrypt(key, plainText) {
-        
+
         var ivSize = 128;
 
         var salt = CryptoJS.lib.WordArray.random(ivSize / 8);
