@@ -1,11 +1,13 @@
 module.exports = {
-  extends:         [
+  extends: [
+    'plugin:vue/vue3-recommended',
     '../common/.eslintrc.js',
-    'plugin:vue/essential',
-    '@vue/airbnb',
   ],
-  rules:           {
-     'vue/html-quotes':                  [
+  plugins: [
+    'vue',
+  ],
+  rules: {
+    'vue/html-quotes': [
       'error',
       'double',
     ],

@@ -10,10 +10,10 @@ jobs:
   build-backend:
     defaults:
       run:
-        working-directory: ./backend  
+        working-directory: ./backend
     runs-on: ubuntu-18.04
     timeout-minutes: 30
-    env:      
+    env:
       MONGODB_VERSION: 3.6.9
     steps:
     - uses: actions/checkout@v2
@@ -40,10 +40,10 @@ jobs:
   build-frontend:
     defaults:
       run:
-        working-directory: ./frontend  
+        working-directory: ./frontend
     runs-on: ubuntu-18.04
     timeout-minutes: 30
-    env:      
+    env:
       MONGODB_VERSION: 3.6.9
     steps:
     - uses: actions/checkout@v2
@@ -60,8 +60,8 @@ jobs:
             ${{ runner.os }}-node-
     - run: npm ci
     - run: npm install
+    - run: npm run lint
 #    - run: mongodb-runner start
-#    - run: npm run lint
 #    - run: npm test -- --maxWorkers=4
 #    - run: npm run integration
       env:
