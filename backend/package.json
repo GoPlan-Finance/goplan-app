@@ -16,8 +16,8 @@
   "scripts": {
     "start": "node index.js",
     "debug": "nodemon  --inspect --trace-warnings index.js",
-    "lint": " eslint --cache ../common && eslint --cache ./cloud && eslint --cache index.js",
-    "lint-fix": " eslint --cache --fix ../common && eslint --cache --fix ./cloud && eslint --cache --fix index.js",
+    "lint": " eslint --cache .",
+    "lint-fix": "eslint --cache --fix .",
     "test": "jasmine",
     "coverage": "nyc jasmine",
     "prettier": "prettier --write '{cloud}/{**/*,*}.js' 'index.js'",

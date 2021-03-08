@@ -7,6 +7,34 @@ on:
     branches:
       - '**'
 jobs:
+  build-common:
+    defaults:
+      run:
+        working-directory: ./common
+    runs-on: ubuntu-18.04
+    timeout-minutes: 30
+    env:
+      MONGODB_VERSION: 3.6.9
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.14'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - run: npm ci
+      - run: npm run lint
+        #    - run: npm test -- --maxWorkers=4
+        #    - run: npm run integration
+        env:
+          CI: true
+      - run: bash <(curl -s https://codecov.io/bash)
   build-backend:
     defaults:
       run:
@@ -16,27 +44,28 @@ jobs:
     env:
       MONGODB_VERSION: 3.6.9
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '10.14'
-    - name: Cache Node.js modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.14'
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
             ${{ runner.os }}-node-
-    - run: npm ci
-    - run: npm install -g mongodb-runner
-    - run: mongodb-runner start
-    - run: npm run lint
-#    - run: npm test -- --maxWorkers=4
-#    - run: npm run integration
-      env:
-        CI: true
-    - run: bash <(curl -s https://codecov.io/bash)
+      - run: npm ci
+      - run: npm install -g mongodb-runner
+      - run: npm install -g eslint-plugin-varspacing
+      - run: mongodb-runner start
+      - run: npm run lint
+        #    - run: npm test -- --maxWorkers=4
+        #    - run: npm run integration
+        env:
+          CI: true
+      - run: bash <(curl -s https://codecov.io/bash)
   build-frontend:
     defaults:
       run:
@@ -59,7 +88,8 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-node-
     - run: npm ci
-    - run: npm install
+    - run: npm install -g mongodb-runner
+    - run: npm install -g eslint-plugin-varspacing
     - run: npm run lint
 #    - run: mongodb-runner start
 #    - run: npm test -- --maxWorkers=4
