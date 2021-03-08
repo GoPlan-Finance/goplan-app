@@ -26,17 +26,21 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
-    "tailwindcss": "^1.9.6",
-    "vue": "next",
+    "feather-icons": "^4.28.0",
+    "tailwindcss": "^2.0.3",
+    "vue": "^3.0.5",
+    "vue-feather": "^2.0.0-beta",
     "vue-router": "^4.0.0-beta.13"
   },
   "devDependencies": {
-    "@tailwindcss/custom-forms": "^0.2.1",
+    "@tailwindcss/forms": "^0.2.1",
     "@vue/compiler-sfc": "^3.0.0",
+    "autoprefixer": "^10.2.5",
     "cross-env": "^7.0.2",
     "eslint": "^7.21.0",
     "eslint-plugin-varspacing": "^1.2.2",
     "eslint-plugin-vue": "^7.7.0",
+    "postcss": "^8.2.7",
     "vite": "^1.0.0-rc.8"
   }
 }
