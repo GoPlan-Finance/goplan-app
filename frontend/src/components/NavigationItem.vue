@@ -1,27 +1,37 @@
 <template>
-  <div class="relative mx-4 lg:mx-0">
-        <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-          <svg class="h-5 w-5 text-gray-300" viewBox="0 0 24 24" fill="none">
-            <path
-                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            />
-          </svg>
-        </span>
+  <router-link
+      class="flex items-center duration-200 mt-4 mx-4 py-2 px-6 rounded-lg"
+      :class="[$route.name === title ? activeClass : inactiveClass]"
+      :to="to"
+  >
+    <slot></slot>
 
-    <input
-        class="w-32 sm:w-64 rounded-md pl-10 pr-4 border-0 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50"
-        type="text"
-        placeholder="Search"
-    />
-  </div>
+    <span class="mx-4">
+      {{ title }}
+    </span>
+  </router-link>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, ref} from "vue";
 
-export default defineComponent({})
+export default defineComponent({
+  props: {
+    title: String,
+    to: String
+  },
+  setup(props) {
+    const activeClass = ref(
+        "bg-gray-600 bg-opacity-25 text-white border-gray-100"
+    );
+    const inactiveClass = ref(
+        "text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-white"
+    );
+
+    return {
+      activeClass,
+      inactiveClass
+    }
+  }
+})
 </script>
