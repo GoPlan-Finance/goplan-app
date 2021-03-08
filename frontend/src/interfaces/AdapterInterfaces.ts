@@ -1,4 +1,4 @@
-import {PriceHistoryItem} from "./goplan-interfaces";
+import {PriceHistoryItem} from "./ApplicationInterfaces";
 
 export interface PriceAdapterInterface {
     getPrices(ticker: string);

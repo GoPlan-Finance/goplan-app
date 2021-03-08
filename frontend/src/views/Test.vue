@@ -57,8 +57,8 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, reactive, ref} from "vue";
-import {TiingoApiAdapter} from "../hooks/api/adapters/tiingo/tiingo-api";
-import {PriceHistoryItem} from "../hooks/api/interfaces/goplan-interfaces";
+import {TiingoApiAdapter} from "../api/adapters/tiingo/TiingoApi";
+import {PriceHistoryItem} from "../interfaces/ApplicationInterfaces";
 
 interface apiPrices {
   prices: PriceHistoryItem[] | null
