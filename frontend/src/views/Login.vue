@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center items-center h-screen bg-gray-200 px-6">
-    <div class="p-6 max-w-sm w-full bg-white shadow-md rounded-md">
+    <div class="p-6 max-w-sm w-full bg-white shadow-md rounded-lg">
       <div class="flex justify-center items-center">
         <svg
           class="h-10 w-10"
@@ -29,7 +29,7 @@
           <span class="text-gray-700 text-sm">Email</span>
           <input
             type="email"
-            class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+            class="form-input mt-1 block w-full rounded-lg focus:border-indigo-600"
             v-model="email"
           />
         </label>
@@ -38,7 +38,7 @@
           <span class="text-gray-700 text-sm">Password</span>
           <input
             type="password"
-            class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+            class="form-input mt-1 block w-full rounded-lg focus:border-indigo-600"
             v-model="password"
           />
         </label>
@@ -63,7 +63,7 @@
         <div class="mt-6">
           <button
             type="submit"
-            class="py-2 px-4 text-center bg-indigo-600 rounded-md w-full text-white text-sm hover:bg-indigo-500"
+            class="py-2 px-4 text-center bg-indigo-600 rounded-lg w-full text-white text-sm hover:bg-indigo-500"
           >
             Sign in
           </button>

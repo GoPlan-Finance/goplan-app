@@ -2,16 +2,6 @@
   <div>
     <h3 class="text-gray-700 text-3xl font-medium">Tables</h3>
 
-    <div>
-      <div v-if="isLoading"> Loading ... </div>
-      <div v-else-if="error"> {{ error.message }}</div>
-      <div v-else>
-<!--        <div v-for="item in data.value">-->
-<!--          {{ item }}-->
-<!--        </div>-->
-      </div>
-    </div>
-
     <div class="mt-8">
       <h4 class="text-gray-600">Table with pagination</h4>
 
@@ -317,9 +307,6 @@ export default defineComponent({
       simpleTableData,
       paginatedTableData,
       wideTableData,
-      isLoading,
-      error,
-      data
     };
   },
 });
