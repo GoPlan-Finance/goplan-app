@@ -28,7 +28,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - run: npm ci
+      - run: npm i
       - run: npm run lint
         #    - run: npm test -- --maxWorkers=4
         #    - run: npm run integration
@@ -58,11 +58,10 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm ci
       - run: npm install -g mongodb-runner
-      - run: npm install -g eslint-plugin-varspacing
       - run: mongodb-runner start
       - run: npm run lint
-        #    - run: npm test -- --maxWorkers=4
-        #    - run: npm run integration
+#    - run: npm test -- --maxWorkers=4
+#    - run: npm run integration
         env:
           CI: true
       - run: bash <(curl -s https://codecov.io/bash)
@@ -88,10 +87,7 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-node-
     - run: npm ci
-    - run: npm install -g mongodb-runner
-    - run: npm install -g eslint-plugin-varspacing
     - run: npm run lint
-#    - run: mongodb-runner start
 #    - run: npm test -- --maxWorkers=4
 #    - run: npm run integration
       env:
