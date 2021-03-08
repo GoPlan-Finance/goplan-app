@@ -41,6 +41,6 @@
     "eslint-plugin-varspacing": "^1.2.2",
     "eslint-plugin-vue": "^7.7.0",
     "postcss": "^8.2.7",
-    "vite": "^1.0.0-rc.8"
+    "vite": "^2.0.5"
   }
 }
