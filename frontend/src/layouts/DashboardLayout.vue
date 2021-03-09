@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import Header from "../components/Header.vue";
-import Sidebar from "../components/Sidebar.vue";
+import { defineComponent } from 'vue'
+import Header from '../components/Header.vue'
+import Sidebar from '../components/Sidebar.vue'
 
 
 export default defineComponent({
@@ -25,5 +25,5 @@ export default defineComponent({
     Header,
     Sidebar,
   },
-});
+})
 </script>

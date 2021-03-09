@@ -5,37 +5,54 @@
  *
  */
 
-const express     = require('express')
-const ParseServer = require('parse-server').ParseServer
-const args        = process.argv || []
-const test        = args.some(arg => arg.includes('jasmine'))
+import express from 'express'
 
-const liveQueryClassNames = require('./cloud/liveQuery.js')
+import { ParseServer } from 'parse-server'
 
-const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI
+import liveQueryClassNames from './cloud/liveQuery.js'
+
+import { createServer } from 'http'
+
+const args     = process.argv || []
+const test     = args.some(arg => arg.includes('jasmine'))
+process.env.TZ = 'America/New_York' // here is the magical line
+
+const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev'
 
 if (!databaseUri) {
-  console.log('DATABASE_URI not specified, falling back to localhost.')
+  console.warn('DATABASE_URI not specified, falling back to localhost.')
 }
 
 if (!process.env.SERVER_URL) {
-  console.log('SERVER_URL not specified, falling back to localhost.')
+  console.warn('SERVER_URL not specified, falling back to localhost.')
 }
 
 if (!process.env.MASTER_KEY) {
-  console.log('MASTER_KEY not specified')
+  console.error('MASTER_KEY not specified')
   process.exit(-1)
 }
 
 const config = {
-  databaseURI : databaseUri || 'mongodb://localhost:27017/dev',
-  cloud       : `${__dirname  }/cloud/main.js`,
-  appId       : 'GoPlan-Finance',
-  masterKey   : process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL   : process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
-  liveQuery   : {
+  auth: {
+    google: {},
+  },
+  allowClientClassCreation : false,
+  databaseURI              : databaseUri,
+  cloud                    : `${__dirname}/cloud/main.js`,
+  appId                    : 'goplan-finance',
+  masterKey                : process.env.MASTER_KEY,
+  serverURL                : process.env.SERVER_URL || 'http://local.goplan.finance:1337/parse', // Don't forget to change to https if needed
+  liveQuery                : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions
   },
+  serverStartComplete: async () => {
+
+    // @todo run theses ONCE !
+    // const { BetterThanNothingMigration } = require('./Migrations/index.ts')
+    // await BetterThanNothingMigration.v2021_03_06()
+    // await BetterThanNothingMigration.v2021_03_07()
+
+  }
 }
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
@@ -51,6 +68,7 @@ const app = express()
 const mountPath = process.env.PARSE_MOUNT || '/parse'
 if (!test) {
   const api = new ParseServer(config)
+
   app.use(mountPath, api)
 }
 
@@ -61,9 +79,9 @@ app.get('/', function (req, res) {
 
 const port = process.env.PORT || 1337
 if (!test) {
-  const httpServer = require('http').createServer(app)
+  const httpServer = createServer(app)
   httpServer.listen(port, function () {
-    console.log(`GoPlan running on port ${  port  }.`)
+    console.log(`GoPlan running on port ${port}.`)
   })
   // This will enable the Live Query real-time server
   ParseServer.createLiveQueryServer(httpServer)

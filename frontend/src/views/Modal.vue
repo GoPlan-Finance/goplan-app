@@ -1,9 +1,11 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-medium">Modal</h3>
+    <h3 class="text-gray-700 text-3xl font-medium">
+      Modal
+    </h3>
     <button
-      @click="open = true"
       class="mt-3 px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
+      @click="open = true"
     >
       Open Modal
     </button>
@@ -15,7 +17,7 @@
     >
       <div
         class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
-      ></div>
+      />
 
       <div
         class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto"
@@ -41,8 +43,13 @@
         <div class="modal-content py-4 text-left px-6">
           <!--Title-->
           <div class="flex justify-between items-center pb-3">
-            <p class="text-2xl font-bold">Modal Title</p>
-            <div class="modal-close cursor-pointer z-50" @click="open = false">
+            <p class="text-2xl font-bold">
+              Modal Title
+            </p>
+            <div
+              class="modal-close cursor-pointer z-50"
+              @click="open = false"
+            >
               <svg
                 class="fill-current text-black"
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,14 +70,14 @@
           <!--Footer-->
           <div class="flex justify-end pt-2">
             <button
-              @click="open = false"
               class="px-6 py-3 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+              @click="open = false"
             >
               Close
             </button>
             <button
-              @click="open = false"
               class="px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
+              @click="open = false"
             >
               Action
             </button>
@@ -82,16 +89,16 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  setup() {
-    const open = ref(false);
+  setup () {
+    const open = ref(false)
     return {
       open,
-    };
+    }
   },
-});
+})
 </script>
 
 <style>

@@ -1,13 +1,17 @@
 module.exports = {
   root : true,
   env  : {
-    node: true,
+    node : true,
+    es6  : true
   },
-  extends: [
-    'eslint:recommended'
+  parser  : '@typescript-eslint/parser',
+  extends : [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   plugins: [
-    'varspacing'
+    '@typescript-eslint',
+    'varspacing',
   ],
   rules: {
     'max-len'                : 'off',
@@ -131,11 +135,6 @@ module.exports = {
     'object-shorthand'     : 'error',
     'prefer-const'         : 'error',
     'prefer-template'      : 'error',
-  },
-  parserOptions: {
-    //parser      : 'babel-eslint',
-    ecmaVersion : 6,
-    sourceType  : 'module',
   },
   globals: {
     'Parse': true

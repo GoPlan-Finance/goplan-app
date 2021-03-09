@@ -1,5 +1,5 @@
-import {PriceHistoryItem} from "../../../interfaces/ApplicationInterfaces";
-import {PriceAdapterInterface} from "../../AdapterInterfaces";
+import {PriceHistoryItem} from '../../../interfaces/ApplicationInterfaces'
+import {PriceAdapterInterface} from '../../AdapterInterfaces'
 
 interface TiingoApiPriceResponse {
     date: Date;
@@ -18,28 +18,31 @@ interface TiingoApiPriceResponse {
 }
 
 export class TiingoApiAdapter implements PriceAdapterInterface {
-    async loadPricesFromApi(ticker: string): Promise<TiingoApiPriceResponse[]> {
-        let response = await fetch("./tiingo.json");
-        return response.json();
-    }
 
-    resolvePriceApiResponse(json: any[]): PriceHistoryItem[] {
-        let priceHistoryItems: PriceHistoryItem[] = [];
+  async loadPricesFromApi (ticker: string): Promise<TiingoApiPriceResponse[]> {
+    console.log(ticker)
+    const response = await fetch('./tiingo.json')
+    return response.json()
+  }
 
-        json.forEach(item => {
-            let priceHistoryItem: PriceHistoryItem = {
-                close: item.close,
-                date: item.date,
-                divCash: item.divCash,
-                high: item.high,
-                low: item.low,
-                open: item.open,
-                splitFactor: item.splitFactor,
-                volume: item.volume
-            }
-            priceHistoryItems.push(priceHistoryItem);
-        })
+  resolvePriceApiResponse<T> (json: T[]): PriceHistoryItem[] {
+    const priceHistoryItems: PriceHistoryItem[] = []
 
-        return priceHistoryItems;
-    }
+    json.forEach(item => {
+      const priceHistoryItem: PriceHistoryItem = {
+        close       : item.close,
+        date        : item.date,
+        divCash     : item.divCash,
+        high        : item.high,
+        low         : item.low,
+        open        : item.open,
+        splitFactor : item.splitFactor,
+        volume      : item.volume
+      }
+      priceHistoryItems.push(priceHistoryItem)
+    })
+
+    return priceHistoryItems
+  }
+
 }
