@@ -4,13 +4,13 @@ import {User} from '../../models'
 import {Crypto, EncryptedValue} from '../../../../common/Crypto'
 import {Session} from './index'
 
-// interface ClientKeyInterface {
-//     encryptionKey: string,
-// }
+interface ClientKeyInterface {
+    encryptionKey: string,
+}
 
 export class Auth {
 
-  public async signOut () :void {
+  public async signOut () : Promise<Parse.User> {
 
     return Parse.User.logOut()
   }
@@ -51,7 +51,7 @@ export class Auth {
     }
 
     const clientKey = user.get('clientKey')
-    const key       = Crypto.decrypt(masterKey, clientKey)
+    const key       = Crypto.decrypt(masterKey, clientKey) as ClientKeyInterface
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key'
@@ -79,7 +79,7 @@ export class Auth {
     return false
   }
 
-  public async createMasterKey (newMasterKey: string) : EncryptedValue {
+  public async createMasterKey (newMasterKey: string) : Promise<EncryptedValue> {
     if (await this.hasClientKey()) {
       throw 'Master Key already exists'
     }
