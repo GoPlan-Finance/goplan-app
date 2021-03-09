@@ -1,4 +1,3 @@
-const USE_MASTER_KEY = {useMasterKey: true}
 
 const requiresAuthenticationCPL = { // @see https://docs.parseplatform.org/js/guide/#clp-and-acl-interaction
   find: {

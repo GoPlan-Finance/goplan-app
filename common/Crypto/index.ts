@@ -14,66 +14,67 @@ export interface EncryptedValue {
 
 export class Crypto {
 
-    static encrypt(key, data): EncryptedValue {
+  static encrypt (key :string, data :unknown|string|number|null): EncryptedValue {
 
-        var ivSize = 128;
+    const ivSize = 128
 
-        var salt = CryptoJS.lib.WordArray.random(ivSize / 8);
-        var iv = CryptoJS.lib.WordArray.random(ivSize / 8);
+    const salt = CryptoJS.lib.WordArray.random(ivSize / 8)
+    const iv   = CryptoJS.lib.WordArray.random(ivSize / 8)
 
-        var derivateKey = Crypto.PBKDF2(key, salt);
+    const derivedKey = Crypto.PBKDF2(key, salt)
 
-        var encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), derivateKey, {
-            iv: iv,
-            padding: CryptoJS.pad.Pkcs7,
-            mode: CryptoJS.mode.CBC
-        });
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), derivedKey, {
+      iv,
+      padding : CryptoJS.pad.Pkcs7,
+      mode    : CryptoJS.mode.CBC
+    })
 
-        return {
-            iv: iv.toString(),
-            s: salt.toString(),
-            ct: encrypted.toString(),
-            kVer: 1,
-            aVer: 1,
-        }
+    return {
+      iv   : iv.toString(),
+      s    : salt.toString(),
+      ct   : encrypted.toString(),
+      kVer : 1,
+      aVer : 1,
+    }
+  }
+
+  static PBKDF2 (key:string, salt :unknown) : unknown {
+    const keySize    = 256
+    const iterations = 1000
+
+    return CryptoJS.PBKDF2(key, salt, {
+      keySize: keySize / 32,
+      iterations
+    })
+  }
+
+  static decrypt (key:string, cypherObject: EncryptedValue) : unknown {
+
+    const salt      = CryptoJS.enc.Hex.parse(cypherObject.s)
+    const iv        = CryptoJS.enc.Hex.parse(cypherObject.iv)
+    const encrypted = cypherObject.ct
+
+    const derivedKey = Crypto.PBKDF2(key, salt)
+
+    const decrypted = CryptoJS.AES.decrypt(
+      encrypted,
+      derivedKey, {
+        iv,
+        padding : CryptoJS.pad.Pkcs7,
+        mode    : CryptoJS.mode.CBC
+      }).toString(CryptoJS.enc.Utf8)
+
+    if (typeof decrypted !== 'string' || decrypted.length === 0) {
+      throw 'Decryption failed'
     }
 
-    static PBKDF2(key, salt) {
-        var keySize = 256;
-        var iterations = 1000;
-
-        return CryptoJS.PBKDF2(key, salt, {
-            keySize: keySize / 32,
-            iterations: iterations
-        });
-    }
-
-    static decrypt(key, cypherObject: EncryptedValue) {
-
-        var salt = CryptoJS.enc.Hex.parse(cypherObject.s);
-        var iv = CryptoJS.enc.Hex.parse(cypherObject.iv)
-        var encrypted = cypherObject.ct;
-
-        var derivateKey = Crypto.PBKDF2(key, salt);
-
-        var decrypted = CryptoJS.AES.decrypt(
-            encrypted,
-            derivateKey, {
-                iv: iv,
-                padding: CryptoJS.pad.Pkcs7,
-                mode: CryptoJS.mode.CBC
-            }).toString(CryptoJS.enc.Utf8)
-
-        if (typeof decrypted !== 'string' || decrypted.length === 0) {
-            throw `Decryption failed`
-        }
-
-        return (JSON.parse(decrypted))
-    }
+    return (JSON.parse(decrypted))
+  }
 
 
-    static randomWords(len: number): string {
-        return CryptoJS.lib.WordArray.random(len).toString();
+  static randomWords (len: number): string {
+    return CryptoJS.lib.WordArray.random(len).toString()
 
-    }
+  }
+
 }
