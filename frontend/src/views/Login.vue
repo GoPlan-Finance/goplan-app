@@ -33,7 +33,7 @@
           <input
             v-model="email"
             type="email"
-            class="form-input mt-1 block w-full rounded-lg focus:border-indigo-600"
+            class="form-input mt-1 block w-full rounded-lg focus:border-blue-600"
           >
         </label>
 
@@ -42,7 +42,7 @@
           <input
             v-model="password"
             type="password"
-            class="form-input mt-1 block w-full rounded-lg focus:border-indigo-600"
+            class="form-input mt-1 block w-full rounded-lg focus:border-blue-600"
           >
         </label>
 
@@ -51,7 +51,7 @@
             <label class="inline-flex items-center">
               <input
                 type="checkbox"
-                class="form-checkbox text-indigo-600"
+                class="form-checkbox text-blue-600"
               >
               <span class="mx-2 text-gray-600 text-sm">Remember me</span>
             </label>
@@ -59,7 +59,7 @@
 
           <div>
             <a
-              class="block text-sm fontme text-indigo-700 hover:underline"
+              class="block text-sm fontme text-blue-700 hover:underline"
               href="#"
             >Forgot your password?</a>
           </div>
@@ -68,7 +68,7 @@
         <div class="mt-6">
           <button
             type="submit"
-            class="py-2 px-4 text-center bg-indigo-600 rounded-lg w-full text-white text-sm hover:bg-indigo-500"
+            class="py-2 px-4 text-center bg-blue-600 rounded-lg w-full text-white text-sm hover:bg-blue-500"
           >
             Sign in
           </button>

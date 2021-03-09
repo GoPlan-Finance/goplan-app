@@ -14,7 +14,7 @@
       <span class="text-gray-700 text-sm">Enter your master key</span>
       <input
         v-model="masterKey"
-        class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+        class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
         type="password"
       >
     </label>
@@ -25,7 +25,7 @@
         <label class="inline-flex items-center">
           <input
             v-model="acceptTesting"
-            class="form-checkbox text-indigo-600"
+            class="form-checkbox text-blue-600"
             type="checkbox"
           >
           <span class="mx-2 text-gray-600 text-sm">I understand that this project is still a prototype and i accept all risks!</span>
@@ -37,7 +37,7 @@
       <button
         id="acceptTestingBtn"
         :disabled="!acceptTesting || masterKey.length < 7"
-        class="py-2 px-4 text-center bg-indigo-600 rounded-md w-full text-white text-sm hover:bg-indigo-500"
+        class="py-2 px-4 text-center bg-blue-600 rounded-md w-full text-white text-sm hover:bg-blue-500"
         type="submit"
       >
         Sign in

@@ -61,7 +61,7 @@
 
                 <input
                   type="text"
-                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-indigo-600"
+                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-blue-600"
                 >
               </div>
             </div>
@@ -73,7 +73,7 @@
                 Cancel
               </button>
               <button
-                class="px-3 py-1 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-500 focus:outline-none"
+                class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-500 focus:outline-none"
               >
                 Save
               </button>
@@ -103,7 +103,7 @@
                 >Username</label>
                 <input
                   v-model="user.username"
-                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="text"
                 >
               </div>
@@ -115,7 +115,7 @@
                 >Email Address</label>
                 <input
                   v-model="user.email"
-                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="email"
                 >
               </div>
@@ -127,7 +127,7 @@
                 >Password</label>
                 <input
                   v-model="user.password"
-                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="password"
                 >
               </div>
@@ -139,7 +139,7 @@
                 >Password Confirmation</label>
                 <input
                   v-model="user.confirm"
-                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
+                  class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="password"
                 >
               </div>

@@ -4,7 +4,7 @@
       Modal
     </h3>
     <button
-      class="mt-3 px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
+      class="mt-3 px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
       @click="open = true"
     >
       Open Modal
@@ -70,13 +70,13 @@
           <!--Footer-->
           <div class="flex justify-end pt-2">
             <button
-              class="px-6 py-3 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+              class="px-6 py-3 bg-transparent p-3 rounded-lg text-blue-500 hover:bg-gray-100 hover:text-blue-400 mr-2"
               @click="open = false"
             >
               Close
             </button>
             <button
-              class="px-6 py-3 bg-indigo-600 rounded-lg text-white font-medium tracking-wide hover:bg-indigo-500"
+              class="px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
               @click="open = false"
             >
               Action

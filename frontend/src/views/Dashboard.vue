@@ -10,7 +10,7 @@
           <div
             class="flex items-center px-5 py-6 shadow-sm rounded-lg bg-white"
           >
-            <div class="p-3 rounded-full bg-indigo-600 bg-opacity-75">
+            <div class="p-3 rounded-full bg-blue-600 bg-opacity-75">
               <svg
                 class="h-8 w-8 text-white"
                 viewBox="0 0 28 30"
@@ -223,7 +223,7 @@
                 >
                   <a
                     href="#"
-                    class="text-indigo-600 hover:text-indigo-900"
+                    class="text-blue-600 hover:text-blue-900"
                   >Edit</a>
                 </td>
               </tr>
