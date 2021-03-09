@@ -1,9 +1,13 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-semibold">Forms</h3>
+    <h3 class="text-gray-700 text-3xl font-semibold">
+      Forms
+    </h3>
 
     <div class="mt-4">
-      <h4 class="text-gray-600">Model Form</h4>
+      <h4 class="text-gray-600">
+        Model Form
+      </h4>
 
       <div class="mt-4">
         <div
@@ -13,7 +17,9 @@
             <div
               class="flex justify-between items-center px-5 py-3 text-gray-700 border-b"
             >
-              <h3 class="text-sm">Add Category</h3>
+              <h3 class="text-sm">
+                Add Category
+              </h3>
               <button>
                 <svg
                   class="h-4 w-4"
@@ -56,7 +62,7 @@
                 <input
                   type="text"
                   class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-indigo-600"
-                />
+                >
               </div>
             </div>
 
@@ -78,7 +84,9 @@
     </div>
 
     <div class="mt-8">
-      <h4 class="text-gray-600">Forms</h4>
+      <h4 class="text-gray-600">
+        Forms
+      </h4>
 
       <div class="mt-4">
         <div class="p-6 bg-white rounded-lg shadow-md">
@@ -89,43 +97,51 @@
           <form @submit.prevent="register">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
               <div>
-                <label class="text-gray-700" for="username">Username</label>
+                <label
+                  class="text-gray-700"
+                  for="username"
+                >Username</label>
                 <input
+                  v-model="user.username"
                   class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="text"
-                  v-model="user.username"
-                />
+                >
               </div>
 
               <div>
-                <label class="text-gray-700" for="emailAddress"
-                  >Email Address</label
-                >
+                <label
+                  class="text-gray-700"
+                  for="emailAddress"
+                >Email Address</label>
                 <input
+                  v-model="user.email"
                   class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="email"
-                  v-model="user.email"
-                />
-              </div>
-
-              <div>
-                <label class="text-gray-700" for="password">Password</label>
-                <input
-                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
-                  type="password"
-                  v-model="user.password"
-                />
-              </div>
-
-              <div>
-                <label class="text-gray-700" for="passwordConfirmation"
-                  >Password Confirmation</label
                 >
+              </div>
+
+              <div>
+                <label
+                  class="text-gray-700"
+                  for="password"
+                >Password</label>
                 <input
+                  v-model="user.password"
                   class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
                   type="password"
+                >
+              </div>
+
+              <div>
+                <label
+                  class="text-gray-700"
+                  for="passwordConfirmation"
+                >Password Confirmation</label>
+                <input
                   v-model="user.confirm"
-                />
+                  class="form-input w-full mt-2 rounded-lg focus:border-indigo-600"
+                  type="password"
+                >
               </div>
             </div>
 
@@ -144,7 +160,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 
 interface User {
   username: string;
@@ -154,23 +170,23 @@ interface User {
 }
 
 export default defineComponent({
-  setup() {
+  setup () {
     const user = ref<User>({
-      username: "",
-      email: "",
-      password: "",
-      confirm: "",
-    });
+      username : '',
+      email    : '',
+      password : '',
+      confirm  : '',
+    })
 
     const register = () => {
-      const data = JSON.parse(JSON.stringify(user.value));
-      console.log("Registered: ", data);
-    };
+      const data = JSON.parse(JSON.stringify(user.value))
+      console.log('Registered: ', data)
+    }
 
     return {
       user,
       register,
-    };
+    }
   },
-});
+})
 </script>

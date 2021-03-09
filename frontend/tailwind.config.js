@@ -1,10 +1,9 @@
 // const defaultTheme = require('tailwindcss/defaultTheme');
 
-// eslint-disable-next-line no-unused-vars
-const whitelist = [
-  'gray', 'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink'
-].reduce(
-  (result, color) => result.push(`text-${color}-600`, `bg-${color}-600`, `bg-${color}-500`) && result, [])
+// const whitelist = [
+//   'gray', 'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink'
+// ].reduce(
+//   (result, color) => result.push(`text-${color}-600`, `bg-${color}-600`, `bg-${color}-500`) && result, [])
 
 module.exports = {
   purge: [

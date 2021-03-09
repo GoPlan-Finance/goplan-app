@@ -1,16 +1,20 @@
 // @todo move to common/models/user.ts
 
-class ExternalDataProvider extends Parse.Object {
+import {SecureObject} from './base/SecureObject'
 
-    constructor() {
-        super('ExternalDataProvider');
-    }
+class ExternalDataProvider extends SecureObject {
 
+  constructor () {
+    super('ExternalDataProvider', [
+      'credentials'
+    ])
+  }
 
 }
 
-Parse.Object.registerSubclass('ExternalDataProvider', ExternalDataProvider);
+Parse.Object.registerSubclass('ExternalDataProvider', ExternalDataProvider)
+asdf = 123
 
 export {
-    ExternalDataProvider
+  ExternalDataProvider
 }

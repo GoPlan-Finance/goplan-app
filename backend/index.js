@@ -5,13 +5,16 @@
  *
  */
 
-const express     = require('express')
-const ParseServer = require('parse-server').ParseServer
-const args        = process.argv || []
-const test        = args.some(arg => arg.includes('jasmine'))
+import express from 'express'
 
-const liveQueryClassNames = require('./cloud/liveQuery.js')
+import { ParseServer } from 'parse-server'
 
+import liveQueryClassNames from './cloud/liveQuery.js'
+
+import { createServer } from 'http'
+
+const args     = process.argv || []
+const test     = args.some(arg => arg.includes('jasmine'))
 process.env.TZ = 'America/New_York' // here is the magical line
 
 const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev'
@@ -44,12 +47,10 @@ const config = {
   },
   serverStartComplete: async () => {
 
-    // eslint-disable-next-line no-unused-vars
-    const { BetterThanNothingMigration } = require('./Migrations/index.ts')
-
     // @todo run theses ONCE !
-    //await BetterThanNothingMigration.v2021_03_06()
-    //await BetterThanNothingMigration.v2021_03_07()
+    // const { BetterThanNothingMigration } = require('./Migrations/index.ts')
+    // await BetterThanNothingMigration.v2021_03_06()
+    // await BetterThanNothingMigration.v2021_03_07()
 
   }
 }
@@ -78,7 +79,7 @@ app.get('/', function (req, res) {
 
 const port = process.env.PORT || 1337
 if (!test) {
-  const httpServer = require('http').createServer(app)
+  const httpServer = createServer(app)
   httpServer.listen(port, function () {
     console.log(`GoPlan running on port ${port}.`)
   })

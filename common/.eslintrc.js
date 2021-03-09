@@ -4,11 +4,14 @@ module.exports = {
     node : true,
     es6  : true
   },
+  parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   plugins: [
-    'varspacing'
+    '@typescript-eslint',
+    'varspacing',
   ],
   rules: {
     'max-len'                : 'off',
@@ -132,10 +135,6 @@ module.exports = {
     'object-shorthand'     : 'error',
     'prefer-const'         : 'error',
     'prefer-template'      : 'error',
-  },
-  parserOptions: {
-    ecmaVersion : 8,
-    sourceType  : 'module',
   },
   globals: {
     'Parse': true

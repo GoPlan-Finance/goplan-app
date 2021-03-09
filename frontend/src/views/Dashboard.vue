@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-medium">Dashboard</h3>
+    <h3 class="text-gray-700 text-3xl font-medium">
+      Dashboard
+    </h3>
 
     <div class="mt-4">
       <div class="flex flex-wrap -mx-6">
@@ -43,8 +45,12 @@
             </div>
 
             <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">8,282</h4>
-              <div class="text-gray-500">New Users</div>
+              <h4 class="text-2xl font-semibold text-gray-700">
+                8,282
+              </h4>
+              <div class="text-gray-500">
+                New Users
+              </div>
             </div>
           </div>
         </div>
@@ -76,8 +82,12 @@
             </div>
 
             <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">200,521</h4>
-              <div class="text-gray-500">Total Orders</div>
+              <h4 class="text-2xl font-semibold text-gray-700">
+                200,521
+              </h4>
+              <div class="text-gray-500">
+                Total Orders
+              </div>
             </div>
           </div>
         </div>
@@ -109,15 +119,19 @@
             </div>
 
             <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">215,542</h4>
-              <div class="text-gray-500">Available Products</div>
+              <h4 class="text-2xl font-semibold text-gray-700">
+                215,542
+              </h4>
+              <div class="text-gray-500">
+                Available Products
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="mt-8"></div>
+    <div class="mt-8" />
 
     <div class="flex flex-col mt-8">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -147,12 +161,15 @@
                 >
                   Role
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50" />
               </tr>
             </thead>
 
             <tbody class="bg-white">
-              <tr v-for="(u, index) in users" :key="index">
+              <tr
+                v-for="(u, index) in users"
+                :key="index"
+              >
                 <td
                   class="px-6 py-4 whitespace-nowrap border-b border-gray-200"
                 >
@@ -162,7 +179,7 @@
                         class="h-10 w-10 rounded-full"
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         alt=""
-                      />
+                      >
                     </div>
 
                     <div class="ml-4">
@@ -192,8 +209,7 @@
                 >
                   <span
                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >{{ u.status }}</span
-                  >
+                  >{{ u.status }}</span>
                 </td>
 
                 <td
@@ -205,9 +221,10 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                 >
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                    >Edit</a
-                  >
+                  <a
+                    href="#"
+                    class="text-indigo-600 hover:text-indigo-900"
+                  >Edit</a>
                 </td>
               </tr>
             </tbody>
@@ -219,7 +236,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 
 interface User {
   name: string;
@@ -231,21 +248,23 @@ interface User {
 }
 
 export default defineComponent({
-  setup() {
+  setup () {
     const testUser: User = {
-      name: "John Doe",
-      email: "john@example.com",
-      title: "Software Engineer",
-      title2: "Web dev",
-      status: "Active",
-      role: "Owner",
-    };
+      name   : 'John Doe',
+      email  : 'john@example.com',
+      title  : 'Software Engineer',
+      title2 : 'Web dev',
+      status : 'Active',
+      role   : 'Owner',
+    }
 
-    const users = ref<User[]>([...Array(10).keys()].map(() => testUser));
+    const users = ref<User[]>([
+      ...Array(10).keys()
+    ].map(() => testUser))
 
     return {
       users,
-    };
+    }
   },
-});
+})
 </script>
