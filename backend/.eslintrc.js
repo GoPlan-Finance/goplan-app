@@ -1,8 +1,9 @@
 module.exports = {
-  extends:         [
+  root    : true,
+  extends : [
     '../common/.eslintrc.js',
   ],
-  rules:           {
+  rules: {
   },
 
 }

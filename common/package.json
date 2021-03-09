@@ -1,13 +1,9 @@
 {
-  "name": "goplan-frontend",
+  "name": "goplan-common",
   "version": "0.0.0",
   "description": "a financial planning platform for the general public.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: TBD !\" && exit 1",
-    "dev": "vite",
-    "build": "cross-env NODE_ENV=production vite build",
-    "lint": " eslint --cache .",
+    "lint": "eslint --cache .",
     "lint-fix": "eslint --cache --fix ."
   },
   "repository": {
@@ -27,24 +23,12 @@
     "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
-  "dependencies": {
-    "@types/parse": "^2.18.3",
-    "feather-icons": "^4.28.0",
-    "tailwindcss": "^2.0.3",
-    "vue": "^3.0.5",
-    "vue-feather": "^2.0.0-beta",
-    "vue-router": "^4.0.0-beta.13"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@tailwindcss/forms": "^0.2.1",
+    "@types/parse": "^2.18.3",
     "@types/node": "^14.14.32",
-    "@vue/compiler-sfc": "^3.0.0",
-    "autoprefixer": "^10.2.5",
-    "cross-env": "^7.0.2",
     "eslint": "^7.21.0",
     "eslint-plugin-varspacing": "^1.2.2",
-    "eslint-plugin-vue": "^7.7.0",
-    "postcss": "^8.2.7",
-    "vite": "^2.0.5"
+    "eslint-plugin-vue": "^7.7.0"
   }
 }
