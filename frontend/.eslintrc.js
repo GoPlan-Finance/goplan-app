@@ -1,5 +1,6 @@
 module.exports = {
-  extends: [
+  root    : true,
+  extends : [
     'plugin:vue/vue3-recommended',
     '../common/.eslintrc.js',
   ],
