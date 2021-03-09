@@ -13,7 +13,6 @@ class ExternalDataProvider extends SecureObject {
 }
 
 Parse.Object.registerSubclass('ExternalDataProvider', ExternalDataProvider)
-asdf = 123
 
 export {
   ExternalDataProvider

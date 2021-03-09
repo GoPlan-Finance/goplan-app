@@ -37,12 +37,12 @@ router.beforeEach(async (to, _, next) => {
     next({name: 'auth'})
     return
   }
-  const currentUser = await authStore.currentUser()
-  if (currentUser.isOnboardingCompleted() && to.name !== 'create-account') {
-    next({name: 'profile'})
-
-    return
-  }
+  // const currentUser = await authStore.currentUser()
+  // if (currentUser.isOnboardingCompleted() && to.name !== 'create-account') {
+  //   next({name: 'profile'})
+  //
+  //   return
+  // }
 
   next()
 })

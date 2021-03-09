@@ -17,7 +17,7 @@ export default {
     'clicked'
   ],
   methods: {
-    clicked () :void {
+    clicked ()  {
       this.$emit('clicked')
     },
   },
