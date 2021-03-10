@@ -4,7 +4,56 @@
 
 We seek to create a financial planning platform for the general public. Allocation dashboards, investment management tools, portfolio allocation, optimization, risk assessment, simulation, and forecasting. The tools of quantitative analysts and financial planners in hands of the regular investor and general public.
 
+## Planned Features
+### Version 1.0 (MVP)
 
+- [ ] LandingPage #9
+- [x] Login #2
+- [x] Onboarding #25 
+- [ ] Search for securities
+- [ ] Watchlist #8
+    - Actions: Add/Delete
+- [ ] Dashboard 
+    - Total value, gains, percentage gains
+    - Performance chart
+    - Asset Type overview (Stock, bonds, cash...)
+- [ ] Transactions #7
+    - Show all buy/sell/split transactions
+    - Actions: Add/Edit/Delete
+- [ ] Holdings #7
+- [ ] Stock Detail Page
+- [ ] Fund Detail Page
+- [ ] Settings
+    - Default Currency
+    - Download/Backup personal Data
+    - Delete Account
+
+### Additional Features
+- [ ] CSV import/export of holdings
+- [ ] Multiple Accounts  #6
+- [ ] Non-financial/custom assets #3
+- [ ] Allocations
+    - Type (stock, bond, cash ...)
+    - Industry (Tech, Consumer goods ...) 
+    - Region (US, Europe, Asia ...)
+- [ ] Analytics
+    - Volatility
+    - Diversity #51 
+    - Performance
+
+### Long Term Features
+- [ ] Notifications #47 
+- [ ] Stock bundles #45 
+- [ ] Compare Assets #44 
+- [ ] Social features #46
+    - Comments for financial assets
+    - Share watchlists/bundles
+    - Follow watchlists/bundles
+- [ ] Multiple portfolios
+- [ ] Customizable widgets
+- [ ] Market research
+- [ ] Advanced analytics
+- [ ] Integrations with brokers
 
 ## Notes
 
