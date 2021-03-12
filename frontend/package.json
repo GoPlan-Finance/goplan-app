@@ -36,7 +36,7 @@
     "vue-class-store": "github:sadortun/vue-class-store#build",
     "vue-feather": "^2.0.0-beta",
     "vue-gapi": "next",
-    "vue-router": "^4.0.0-beta.13"
+    "vue-router": "^4.0.5"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.2.1",
