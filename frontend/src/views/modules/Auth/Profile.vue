@@ -60,7 +60,7 @@
                 </span>
 
                 <input
-                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-indigo-600"
+                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-blue-600"
                   type="text"
                 >
               </div>
@@ -73,7 +73,7 @@
                 Cancel
               </button>
               <button
-                class="px-3 py-1 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-500 focus:outline-none"
+                class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-500 focus:outline-none"
               >
                 Save
               </button>
@@ -102,7 +102,7 @@
               <span class="text-gray-700 text-sm">Email</span>
               <input
                 v-model="email"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="email"
               >
             </label>
@@ -111,7 +111,7 @@
               <span class="text-gray-700 text-sm">First Name</span>
               <input
                 v-model="firstName"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="text"
               >
             </label>
@@ -120,7 +120,7 @@
               <span class="text-gray-700 text-sm">Last Name</span>
               <input
                 v-model="lastName"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="text"
               >
             </label>
@@ -131,7 +131,7 @@
                 v-model="yearBorn"
                 :max="2030"
                 :min="1900"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="number"
               >
             </label>
@@ -142,7 +142,7 @@
                 v-model="plannedRetirementAge"
                 :max="130"
                 :min="18"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="number"
               >
             </label>
@@ -176,14 +176,14 @@
             <label class="block">
               <input
                 v-model="apiToken"
-                class="form-input mt-1 block w-full rounded-md focus:border-indigo-600"
+                class="form-input mt-1 block w-full rounded-md focus:border-blue-600"
                 type="text"
               >
             </label>
 
             <div class="mt-6">
               <button
-                class="py-2 px-4 text-center bg-indigo-600 rounded-md w-full text-white text-sm hover:bg-indigo-500"
+                class="py-2 px-4 text-center bg-blue-600 rounded-md w-full text-white text-sm hover:bg-blue-500"
                 type="submit"
               >
                 Save

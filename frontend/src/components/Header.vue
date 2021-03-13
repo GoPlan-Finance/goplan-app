@@ -67,17 +67,17 @@
           class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl z-20"
         >
           <router-link
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
             to="profile"
           >
             Profile
           </router-link>
           <a
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
             href="#"
           >Products</a>
           <a
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
             @click="signOut"
           >
             Log out

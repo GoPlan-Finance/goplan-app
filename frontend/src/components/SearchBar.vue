@@ -17,7 +17,7 @@
     </span>
 
     <input
-      class="w-32 sm:w-64 rounded-lg pl-10 pr-4 border-0 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50"
+      class="w-32 sm:w-64 rounded-lg pl-10 pr-4 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       type="text"
       placeholder="Search"
     >

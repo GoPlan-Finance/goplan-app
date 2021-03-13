@@ -18,22 +18,22 @@
         <thead class="border-b">
           <tr>
             <th
-              class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
+              class="py-3 px-5 bg-blue-800 font-medium uppercase text-sm text-gray-100"
             >
               Date
             </th>
             <th
-              class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
+              class="py-3 px-5 bg-blue-800 font-medium uppercase text-sm text-gray-100"
             >
               High
             </th>
             <th
-              class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
+              class="py-3 px-5 bg-blue-800 font-medium uppercase text-sm text-gray-100"
             >
               Low
             </th>
             <th
-              class="py-3 px-5 bg-indigo-800 font-medium uppercase text-sm text-gray-100"
+              class="py-3 px-5 bg-blue-800 font-medium uppercase text-sm text-gray-100"
             >
               Volume
             </th>
