@@ -31,7 +31,7 @@
     "crypto-js": "^4.0.0",
     "feather-icons": "^4.28.0",
     "parse": "^3.1.0",
-    "tailwindcss": "^2.0.3",
+    "tailwindcss": "^2.0.4",
     "vue": "^3.0.5",
     "vue-class-store": "github:sadortun/vue-class-store#build",
     "vue-feather": "^2.0.0-beta",
