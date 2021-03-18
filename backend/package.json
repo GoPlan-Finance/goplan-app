@@ -45,7 +45,7 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.3.1",
     "eslint-plugin-varspacing": "^1.2.2",
-    "jasmine": "3.6.4",
+    "jasmine": "3.7.0",
     "mongodb-runner": "4.8.3",
     "nyc": "15.1.0",
     "prettier": "2.2.1",
