@@ -9,6 +9,7 @@ import Auth from './views/modules/Auth/Auth.vue'
 import Modal from './views/Modal.vue'
 import Card from './views/Card.vue'
 import Test from './views/Test.vue'
+import Charts from './views/Charts.vue'
 import NotFound from './views/Error404.vue'
 import Profile from './views/modules/Auth/Profile.vue'
 
@@ -61,6 +62,11 @@ const routes: RouteRecordRaw[] = [
     path      : '/test',
     name      : 'Test',
     component : Test,
+  },
+  {
+    path      : '/charts',
+    name      : 'Charts',
+    component : Charts,
   },
   {
     path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound

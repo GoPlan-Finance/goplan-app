@@ -9,6 +9,7 @@ import VueGapi from 'vue-gapi'
 import {AuthStore} from './store'
 
 import './parseConfig'
+import VueApexCharts from 'vue3-apexcharts'
 
 const app = createApp(App)
 
@@ -16,6 +17,8 @@ app.use(VueGapi, {
   clientId : '625813000498-2etprn7qf2ca8d3hpg0v1if77ihlp231.apps.googleusercontent.com',
   scope    : 'profile',
 })
+
+app.use(VueApexCharts)
 
 const authStore = new AuthStore()
 
