@@ -3,6 +3,13 @@
     {{ ticker.toUpperCase() }}
   </h1>
 
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <AssetPrice
+      :increase="0.5"
+      :percent="1.2"
+      :price="121.1"
+    />
+  </div>
   <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
     <CandlestickChart
       :series="series"
@@ -14,9 +21,11 @@
 import {computed, defineComponent} from 'vue'
 import {useRoute} from 'vue-router'
 import CandlestickChart, {CandlestickSeries} from '../components/Charts/CandlestickChart.vue'
+import AssetPrice from '../components/AssetPrice.vue'
 
 export default defineComponent({
   components: {
+    AssetPrice,
     CandlestickChart
   },
   setup () {
