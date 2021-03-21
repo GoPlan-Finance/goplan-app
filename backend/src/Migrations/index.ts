@@ -23,22 +23,6 @@ const requiresAuthenticationCPL = { // @see https://docs.parseplatform.org/js/gu
 class BetterThanNothingMigration {
 
   static async v2021_03_06 () {
-    const userSchema = new Parse.Schema('_User')
-    userSchema.setCLP({   // @see https://docs.parseplatform.org/js/guide/#clp-and-acl-interaction
-      find   : {},
-      create : {
-        '*': true
-      },
-      get    : {},
-      update : {
-        '*': true
-      },
-      addField : {},
-      delete   : {}
-
-    }
-    )
-    await userSchema.update()
 
 
     const dataProvider = new Parse.Schema('ExternalDataProvider')

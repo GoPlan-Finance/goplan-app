@@ -1,0 +1,8 @@
+/**
+ *
+ *
+ *
+ *
+ */
+
+require('./Jobs/fetchAllSymbols')
