@@ -3,7 +3,7 @@
  *
  *
  */
-import {DataProviderInterface, Symbol} from '../types'
+import {DataProviderInterface, AssetSymbol} from '../types'
 
 const FinancialModelingPrep = require('financialmodelingprep')
 
@@ -34,7 +34,7 @@ class FMP implements DataProviderInterface {
     }
 
 
-    async fetchSupportedSymbols (): Promise<Array<symbol>> {
+    async fetchSupportedSymbols (): Promise<Array<AssetSymbol>> {
 
       const symbols = await FinancialModelingPrep(this.apiKey).list().availableTraded()
 

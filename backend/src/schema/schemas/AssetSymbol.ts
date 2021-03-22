@@ -1,5 +1,5 @@
-export const Asset = {
-  className : 'Asset',
+export const AssetSymbol = {
+  className : 'AssetSymbol',
   fields    : {
     objectId  : {type: 'String'},
     createdAt : {

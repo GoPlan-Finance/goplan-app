@@ -4,7 +4,7 @@
  *
  *
  */
-import {DataProviderInterface, Symbol} from './types'
+import {DataProviderInterface, AssetSymbol} from './types'
 
 interface ProviderConfigInterface {
     name: string,
@@ -21,7 +21,7 @@ for (const provider: ProviderConfigInterface of global.weHateGlobals_dataProvide
     providers.push(new FMP(provider.apiKey))
   }
 }
-export type ProviderSymbols = { [key: string]: symbol[] }
+export type ProviderSymbols = { [key: string]: AssetSymbol[] }
 
 class DataProvider {
 

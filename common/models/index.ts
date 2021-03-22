@@ -2,12 +2,11 @@
  *
  *
  */
-import {Asset} from './Asset'
+import {AssetSymbol} from './AssetSymbol'
 import {StockExchange} from './StockExchange'
 
 
-
 export {
-    Asset,
+    AssetSymbol,
     StockExchange,
 }

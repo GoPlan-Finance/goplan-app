@@ -1,9 +1,9 @@
 import {User} from './User'
 import {StockExchange} from './StockExchange'
-import {Asset} from './Asset'
+import {AssetSymbol} from './AssetSymbol'
 
 export const schemas = [
   User,
   StockExchange,
-  Asset,
+  AssetSymbol,
 ]

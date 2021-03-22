@@ -5,7 +5,7 @@
  *
  */
 
-export interface Symbol {
+export interface AssetSymbol {
     name: string,
     symbol: string,
     exchange: string,
@@ -14,7 +14,7 @@ export interface Symbol {
 export interface DataProviderInterface {
     name(): string
 
-    fetchSupportedSymbols(): Promise<Array<symbol>>
+    fetchSupportedSymbols(): Promise<Array<AssetSymbol>>
 
     test1234?(): void
 
