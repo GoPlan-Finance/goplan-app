@@ -1,4 +1,8 @@
+/* eslint-disable */
 //from https://github.com/Moumouls/next-atomic-gql-server/
+
+
+
 export const buildSchemas = async (localSchemas: any[]) => {
   const allCloudSchema = (await Parse.Schema.all()).filter(
     (s: any) => !lib.isDefaultSchema(s.className),

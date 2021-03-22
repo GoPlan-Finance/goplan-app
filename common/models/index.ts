@@ -7,6 +7,6 @@ import {StockExchange} from './StockExchange'
 
 
 export {
-    AssetSymbol,
-    StockExchange,
+  AssetSymbol,
+  StockExchange,
 }

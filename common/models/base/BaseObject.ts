@@ -4,7 +4,7 @@
  *
  */
 
-export class BaseObject extends Parse.Object{
+export class BaseObject extends Parse.Object {
 
 
 }

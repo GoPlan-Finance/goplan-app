@@ -1,9 +1,10 @@
-import {BaseObject} from "./base/BaseObject";
+import {BaseObject} from './base/BaseObject'
 
 
-export class StockExchange extends BaseObject{
+export class StockExchange extends BaseObject {
 
-    constructor() {
-        super('StockExchange');
-    }
+  constructor () {
+    super('StockExchange')
+  }
+
 }

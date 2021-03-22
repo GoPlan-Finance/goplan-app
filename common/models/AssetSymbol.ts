@@ -1,9 +1,10 @@
-import {BaseObject} from "./base/BaseObject";
+import {BaseObject} from './base/BaseObject'
 
 
-export class AssetSymbol extends BaseObject{
+export class AssetSymbol extends BaseObject {
 
-    constructor() {
-        super('AssetSymbol');
-    }
+  constructor () {
+    super('AssetSymbol')
+  }
+
 }

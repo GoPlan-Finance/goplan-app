@@ -6,22 +6,22 @@ function sleep(ms: number): Promise<void> {
 const processBatch = async <T, U>(
     data: Array<T>, func: (elem: T) => U,
     statusFunc: (curIndex: number, len: number, result: U) => boolean | undefined = null,
-    nbParallel = 8) => {
+    nbParallel = 8): Promise<U[]> => {
 
     const results: Array<U> = []
     let index = 0
     let iCompleted = 0
     let abortAll = false
 
-    const runOne = async (curIndex : number) => {
-        let result : U = null
+    const runOne = async (curIndex: number) => {
+        let result: U = null
         try {
             result = await func(data[curIndex])
         } catch (error) {
             console.error(error)
             result = error
         }
-        const statusResult = statusFunc?  await statusFunc(curIndex, data.length, result) : true
+        const statusResult = statusFunc ? await statusFunc(curIndex, data.length, result) : true
 
         if (statusResult === false) {
             console.warn('Abort "signal" received')

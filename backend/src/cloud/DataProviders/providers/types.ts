@@ -4,7 +4,7 @@
  *
  *
  */
-import {Dayjs} from "dayjs";
+import {Dayjs} from 'dayjs'
 
 export interface AssetSymbol {
     name: string,
@@ -33,7 +33,7 @@ export interface DataProviderInterface {
 
     fetchSupportedSymbols(): Promise<Array<AssetSymbol>>
 
-    fetchEndOfDay?(assetSymbol :string , from : Dayjs , to : Dayjs) : Promise<EndOfDayData[]>
+    fetchEndOfDay?(assetSymbol :string, from : Dayjs, to : Dayjs) : Promise<EndOfDayData[]>
 
     test1234?(): void
 

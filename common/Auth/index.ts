@@ -3,7 +3,7 @@
  *
  *
  */
-import {EncryptedValue} from "../Crypto";
+import {EncryptedValue} from '../Crypto'
 
 
 const assertEncrypted = (value: EncryptedValue): void => {

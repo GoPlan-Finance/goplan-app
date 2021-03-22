@@ -4,7 +4,7 @@
  *
  */
 import * as Types from '../types'
-import {Dayjs} from "dayjs";
+import {Dayjs} from 'dayjs'
 // noinspection ES6PreferShortImport
 
 const FinancialModelingPrep = require('financialmodelingprep')
@@ -23,42 +23,39 @@ const FinancialModelingPrep = require('financialmodelingprep')
 // fmp.forex('USD', 'EUR').rate().then(response => console.log(response));
 
 
-class FMP implements Types.DataProviderInterface {
+export class FMP implements Types.DataProviderInterface {
 
     private apiKey: string
 
-    constructor(apiKey: string) {
-        this.apiKey = apiKey
+    constructor (apiKey: string) {
+      this.apiKey = apiKey
     }
 
-    public name(): string {
-        return 'FMP'
-    }
-
-
-    async fetchSupportedSymbols(): Promise<Array<Types.AssetSymbol>> {
-
-        const symbols = await FinancialModelingPrep(this.apiKey).list().availableTraded()
-
-        return symbols
+    public name (): string {
+      return 'FMP'
     }
 
 
-    async fetchEndOfDay?(symbol: string, from: Dayjs, to: Dayjs): Promise<Types.EndOfDayData[]> {
+    async fetchSupportedSymbols (): Promise<Array<Types.AssetSymbol>> {
 
-        const eod = await FinancialModelingPrep(this.apiKey)
-            .stock(symbol)
-            .history({
-                start_date: from.toISOString(),
-                end_date: to.toISOString()
-            })
+      const symbols = await FinancialModelingPrep(this.apiKey).list().availableTraded()
+
+      return symbols
+    }
 
 
+    async fetchEndOfDay? (symbol: string, from: Dayjs, to: Dayjs): Promise<Types.EndOfDayData[]> {
+
+      const eod = await FinancialModelingPrep(this.apiKey)
+        .stock(symbol)
+        .history({
+          start_date : from.toISOString(),
+          end_date   : to.toISOString()
+        })
 
 
-        return eod.historical
+      return eod.historical
     }
 
 }
 
-module.exports = FMP

@@ -1,9 +1,9 @@
-const convict = require('convict')
+import convict from 'convict'
 
 
 convict.addFormat({
   name: 'data-provider-array',
-  validate (sources: Object, schema: Object) {
+  validate (sources: unknown, schema: unknown) {
     if (!Array.isArray(sources)) {
       throw new Error('must be of type Array')
     }

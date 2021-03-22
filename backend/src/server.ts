@@ -22,6 +22,7 @@ import config from './config'
 
 import defaultConfig from '../config/config.defaults'
 import userConfig from '../config/config'
+import {ProviderConfigInterface} from './cloud/DataProviders/providers'
 
 config.load({
   ...defaultConfig,
@@ -31,8 +32,10 @@ config.load({
 // Perform validation
 config.validate({allowed: 'strict'})
 
+// @todo, ok ok :)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-global.weHateGlobals_dataProviders = config.get('dataProviders')
+global.weHateGlobals_dataProviders = config.get('dataProviders') as ProviderConfigInterface[]
 
 
 const args     = process.argv || []
