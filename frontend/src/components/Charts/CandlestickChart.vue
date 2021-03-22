@@ -38,7 +38,6 @@ export type CandlestickSeries = {
 export default defineComponent({
   props: {
     assetSymbol: {
-      // @ts-ignore
       type     : AssetSymbol,
       required : true
     }

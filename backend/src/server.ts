@@ -58,7 +58,7 @@ const parseConfig = {
   databaseURI              : config.get('parse.databaseUri'),
   cloud                    : `${__dirname}/cloud/main.js`,
   appId                    : config.get('parse.appId'),
-  masterKey                : config.get('parse.masterKey')  as string,
+  masterKey                : config.get('parse.masterKey') as string,
   serverURL                : config.get('parse.serverUrl'), // Don't forget to change to https if needed
   liveQuery                : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions

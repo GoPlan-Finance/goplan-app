@@ -1,8 +1,8 @@
 <template>
   <header
-    class="flex justify-between items-center py-4 px-6"
+    class="flex items-center py-4 px-6"
   >
-    <div class="flex items-center">
+    <div class="flex items-center flex-1">
       <button
         class="text-gray-500 focus:outline-none lg:hidden"
         @click="isOpen = true"
