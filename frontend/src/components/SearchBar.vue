@@ -1,5 +1,7 @@
 <template>
-  <div class="relative mx-4 lg:mx-0">
+  <div
+    class="relative mx-4 lg:mx-0 sm:w-96 active::min-w-full"
+  >
     <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
       <svg
         class="h-5 w-5 text-gray-300"
@@ -19,18 +21,26 @@
     <!--suppress HtmlFormInputWithoutLabel -->
     <input
       v-model="tickerName"
-      class="w-32 sm:w-64 rounded-lg pl-10 pr-4 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+      class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       placeholder="Search"
       type="text"
     >
 
-    <ul v-if="symbols.data.length">
-      <li v-for="symbol in symbols.data">
+    <ul
+      v-if="symbols.data.length"
+      class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-10"
+    >
+      <li
+        v-for="symbol in symbols.data"
+        :key="symbol"
+      >
         <a
           href="#"
+          class="hover:bg-gray-100 block px-4 py-2"
           @click.prevent="click(symbol)"
         >
-          {{ symbol.get('symbol') }} - <small>{{ symbol.get('name') }}</small>
+          <div class="w-14 min-w-min">{{ symbol.get('symbol') }}</div>
+          <div class="text-gray-500 text-sm">{{ symbol.get('name') }}</div>
         </a>
       </li>
     </ul>
@@ -49,12 +59,10 @@ const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
 
   const q = new Parse.Query(AssetSymbol)
   q.startsWith('symbol', tickerName.toUpperCase())
-  q.limit(20)
+  q.limit(10)
   //q.include(['exchange.name'])
 
-  const symbols = await q.find()
-
-  return symbols
+  return await q.find()
 }
 
 export default defineComponent({
