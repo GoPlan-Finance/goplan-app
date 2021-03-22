@@ -34,7 +34,11 @@ const findBy = async (type: string, params: { [key: string]: string | boolean | 
   return await query.find(useMasterKey ? USE_MASTER_KEY : undefined)
 }
 
-const findOneBy = async (type: string, params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer }, useMasterKey = false) => {
+const findOneBy = async (
+  type: string,
+  params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer },
+  useMasterKey = false
+): Promise<Parse.Object | undefined> => {
   const query = new Parse.Query(type)
 
   for (const [
@@ -43,7 +47,7 @@ const findOneBy = async (type: string, params: { [key: string]: string | boolean
     query.equalTo(k, v)
   }
 
-  return await query.first(useMasterKey ? USE_MASTER_KEY : undefined)
+  return query.first(useMasterKey ? USE_MASTER_KEY : undefined)
 }
 
 
