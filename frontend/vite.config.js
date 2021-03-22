@@ -1,7 +1,7 @@
 // vite.config.js
 
 import vue from '@vitejs/plugin-vue'
-import pluginRewriteAll from 'vite-plugin-rewrite-all';
+import pluginRewriteAll from 'vite-plugin-rewrite-all'
 
 
 // https://vitejs.dev/config/

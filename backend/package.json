@@ -15,10 +15,10 @@
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "scripts": {
     "start": "npm run serve",
-    "serve": "node dist/src/server.js",
+    "serve": "node dist/backend/src/server.js",
     "build-ts": "tsc",
     "build": "npm run build-ts",
-    "serve-debug": "nodemon --inspect dist/src/server.js",
+    "serve-debug": "nodemon --inspect dist/backend/src/server.js",
     "watch-ts": "tsc -w",
     "debug": "npm run build && npm run watch-debug",
     "lint": " eslint --cache .  --ext ts --ext js ",
