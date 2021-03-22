@@ -7,51 +7,65 @@
 
 import express from 'express'
 
-import { ParseServer } from 'parse-server'
+import {ParseServer} from 'parse-server'
 
-import liveQueryClassNames from './cloud/liveQuery.js'
+import liveQueryClassNames from './cloud/liveQuery'
 
-import { createServer } from 'http'
+import {createServer} from 'http'
+import {makeSchemas} from './schema'
+
+
+import config from './config'
+
+// Load environment dependent configuration
+//const env = config.get('env');
+
+import defaultConfig from '../config/config.defaults'
+import userConfig from '../config/config'
+import {ProviderConfigInterface} from './cloud/DataProviders/providers'
+
+config.load({
+  ...defaultConfig,
+  ...userConfig,
+})
+
+// Perform validation
+config.validate({allowed: 'strict'})
+
+// @todo, ok ok :)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+global.weHateGlobals_dataProviders = config.get('dataProviders') as ProviderConfigInterface[]
+
 
 const args     = process.argv || []
 const test     = args.some(arg => arg.includes('jasmine'))
 process.env.TZ = 'America/New_York' // here is the magical line
 
-const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev'
 
-if (!databaseUri) {
-  console.warn('DATABASE_URI not specified, falling back to localhost.')
-}
-
-if (!process.env.SERVER_URL) {
-  console.warn('SERVER_URL not specified, falling back to localhost.')
-}
-
-if (!process.env.MASTER_KEY) {
-  console.error('MASTER_KEY not specified')
+if (!config.get('parse.masterKey')) {
+  console.error('parse.masterKey not specified')
   process.exit(-1)
 }
 
-const config = {
+const parseConfig = {
   auth: {
-    google: {},
+    google: {
+      clientId: config.get('parse.auth.google.clientId') as string
+    },
   },
   allowClientClassCreation : false,
-  databaseURI              : databaseUri,
+  databaseURI              : config.get('parse.databaseUri'),
   cloud                    : `${__dirname}/cloud/main.js`,
-  appId                    : 'goplan-finance',
-  masterKey                : process.env.MASTER_KEY,
-  serverURL                : process.env.SERVER_URL || 'http://local.goplan.finance:1337/parse', // Don't forget to change to https if needed
+  appId                    : config.get('parse.appId'),
+  masterKey                : config.get('parse.masterKey')  as string,
+  serverURL                : config.get('parse.serverUrl'), // Don't forget to change to https if needed
   liveQuery                : {
     classNames: liveQueryClassNames, // List of classes to support for query subscriptions
   },
   serverStartComplete: async () => {
 
-    // @todo run theses ONCE !
-    // const { BetterThanNothingMigration } = require('./Migrations/index.ts')
-    // await BetterThanNothingMigration.v2021_03_06()
-    // await BetterThanNothingMigration.v2021_03_07()
-
+    await makeSchemas()
   }
 }
 
@@ -65,11 +79,10 @@ const app = express()
 // app.use('/public', express.static(path.join(__dirname, '/public')))
 
 // Serve the Parse API on the /parse URL prefix
-const mountPath = process.env.PARSE_MOUNT || '/parse'
 if (!test) {
-  const api = new ParseServer(config)
+  const api = new ParseServer(parseConfig)
 
-  app.use(mountPath, api)
+  app.use(config.get('parse.mountPath'), api)
 }
 
 // Parse Server plays nicely with the rest of your web routes
@@ -77,7 +90,7 @@ app.get('/', function (req, res) {
   res.status(200).send('I dream of being a website.  Please star the GoPlan-Finance repo on GitHub!')
 })
 
-const port = process.env.PORT || 1337
+const port = config.get('parse.port')
 if (!test) {
   const httpServer = createServer(app)
   httpServer.listen(port, function () {

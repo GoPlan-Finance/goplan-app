@@ -3,6 +3,9 @@ module.exports = {
   extends : [
     '../common/.eslintrc.js',
   ],
+  ignorePatterns: [
+    'dist/*'
+  ],
   rules: {
   },
 

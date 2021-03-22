@@ -14,31 +14,45 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "scripts": {
-    "start": "node index.js",
-    "debug": "nodemon  --inspect --trace-warnings index.js",
+    "start": "npm run serve",
+    "serve": "node dist/backend/src/server.js",
+    "build-ts": "tsc",
+    "build": "npm run build-ts",
+    "serve-debug": "nodemon --inspect dist/backend/src/server.js",
+    "watch-ts": "tsc -w",
+    "debug": "npm run build && npm run watch-debug",
     "lint": " eslint --cache .  --ext ts --ext js ",
     "lint-fix": "eslint --cache --fix .  --ext ts --ext js ",
-    "test": "jasmine",
-    "coverage": "nyc jasmine",
-    "prettier": "prettier --write '{cloud}/{**/*,*}.js' 'index.js'",
-    "watch": "babel-watch index.js"
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
   "engines": {
     "node": ">=4.3"
   },
   "dependencies": {
+    "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
+    "convict": "^6.0.1",
+    "crypto-js": "^4.0.0",
+    "dayjs": "^1.10.4",
     "express": "4.17.1",
+    "financialmodelingprep": "github:GoPlan-Finance/financialmodelingprep",
     "kerberos": "1.1.4",
+    "node-ts": "^5.1.1",
     "parse": "3.1.0",
-    "parse-server": "4.5.0"
+    "parse-server": "github:GoPlan-Finance/parse-server#4_5_0"
   },
   "devDependencies": {
+    "@types/concurrently": "^6.0.1",
+    "@types/convict": "^6.0.1",
+    "@types/crypto-js": "^4.0.1",
+    "@types/jest": "^26.0.21",
+    "@types/parse": "^2.18.4",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "babel-eslint": "10.1.0",
     "babel-watch": "7.4.1",
     "bluebird": "3.7.2",
+    "concurrently": "^6.0.0",
     "eslint": "^7.22.0",
     "eslint-config-standard": "16.0.2",
     "eslint-plugin-import": "2.22.1",
@@ -47,8 +61,10 @@
     "eslint-plugin-varspacing": "^1.2.2",
     "jasmine": "3.7.0",
     "mongodb-runner": "4.8.3",
+    "nodemon": "^2.0.7",
     "nyc": "15.1.0",
     "prettier": "2.2.1",
+    "ts-jest": "^26.5.4",
     "typescript": "^4.2.3"
   }
 }

@@ -27,9 +27,9 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BarChart from '../components/BarChart.vue'
-import CandlestickChart from '../components/CandlestickChart.vue'
-import DonutChart from '../components/DonutChart.vue'
+import DonutChart from '../components/Charts/DonutChart.vue'
+import BarChart from '../components/Charts/BarChart.vue'
+import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 
 export default defineComponent({
   components: {

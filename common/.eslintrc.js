@@ -30,11 +30,11 @@ module.exports = {
         allowTernary: true,
       },
     ],
-    'no-unused-vars': [
-      'error', {
-        'args': 'after-used'
-      }
-    ],
+    // 'no-unused-vars': [
+    //   'error', {
+    //     'args': 'after-used'
+    //   }
+    // ],
     'no-useless-concat'     : 'error',
     'no-useless-return'     : 'error',
     'init-declarations'     : 'error',

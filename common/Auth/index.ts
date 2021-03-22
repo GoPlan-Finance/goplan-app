@@ -3,9 +3,10 @@
  *
  *
  */
+import {EncryptedValue} from '../Crypto'
 
 
-const assertEncrypted = (value: unknown): void => {
+const assertEncrypted = (value: EncryptedValue): void => {
 
   if (typeof value !== 'object') {
     throw 'Invalid encrypted field value'
@@ -24,7 +25,7 @@ const assertEncrypted = (value: unknown): void => {
   }
 }
 
-const assertEncryptedField = (object: unknown, fieldName: string) :void => {
+const assertEncryptedField = (object: Parse.Object, fieldName: string) :void => {
 
   const value = object.get(fieldName)
   assertEncrypted(value)

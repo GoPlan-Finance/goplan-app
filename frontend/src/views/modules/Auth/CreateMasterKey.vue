@@ -4,7 +4,9 @@
   >
     <p
       class="text-gray-700 text-sm mb-4"
-    >Its now time to create your Master Key. All your data will be encrypted with this key.</p>
+    >
+      Its now time to create your Master Key. All your data will be encrypted with this key.
+    </p>
     <label class="block mb-4">
       <span
         class="text-gray-700 text-sm font-bold"

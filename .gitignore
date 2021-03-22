@@ -105,3 +105,4 @@ dist
 /.idea
 *.bak
 /common/package-lock.json
+/backend/config/config.ts

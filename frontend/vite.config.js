@@ -1,6 +1,8 @@
 // vite.config.js
 
 import vue from '@vitejs/plugin-vue'
+import pluginRewriteAll from 'vite-plugin-rewrite-all'
+
 
 // https://vitejs.dev/config/
 export default {
@@ -14,5 +16,6 @@ export default {
   },
   plugins: [
     vue(),
+    pluginRewriteAll(), // we need  this to allow dot(.) in path
   ]
 }
