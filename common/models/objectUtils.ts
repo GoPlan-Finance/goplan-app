@@ -59,7 +59,7 @@ const findOrCreate = async (
   type: string,
   params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer },
   useMasterKey = false) => {
-  const obj = await findOneBy(type, params)
+  const obj = await findOneBy(type, params  , useMasterKey)
 
   if (obj) {
     return obj
