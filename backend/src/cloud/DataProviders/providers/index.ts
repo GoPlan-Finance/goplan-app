@@ -4,57 +4,88 @@
  *
  *
  */
-import {DataProviderInterface, AssetSymbol} from './types'
+import * as Types from './types'
+// noinspection ES6PreferShortImport
+import {AssetSymbol} from "../../../../../common/models"
+import {Dayjs} from 'dayjs'
 
 interface ProviderConfigInterface {
     name: string,
     apiKey: string | null
 }
 
-const providers: Array<DataProviderInterface> = []
+const providers: Array<Types.DataProviderInterface> = []
 
 // @ts-ignore
 for (const provider: ProviderConfigInterface of global.weHateGlobals_dataProviders) {
-  if (provider.name.toLowerCase() === 'fmp') {
-    const FMP = require('./FMP')
+    if (provider.name.toLowerCase() === 'fmp') {
+        const FMP = require('./FMP')
 
-    providers.push(new FMP(provider.apiKey))
-  }
+        providers.push(new FMP(provider.apiKey))
+    }
 }
-export type ProviderSymbols = { [key: string]: AssetSymbol[] }
+
+
+export type ProviderSymbols = { [key: string]: Types.AssetSymbol[] }
 
 class DataProvider {
 
     name: 'GlobalProvider'
 
-    constructor () {
+    constructor() {
 
     }
 
-    private async callOne (method: string, ...args: IArguments[]) {
+    private static getProviderFor(assetSymbol: AssetSymbol): Types.DataProviderInterface {
 
-      for (const provider of providers) {
+        return providers.find(provider => provider.name() === assetSymbol.get('dataProviderName'))
+    }
 
-        // @ts-ignore
-        if (provider[method] !== undefined) {
-          // @ts-ignore
-          return await provider[method](...args)
+    private static async callOne(method: string, ...args: IArguments[]) {
+
+        for (const provider of providers) {
+
+            // @ts-ignore
+            if (provider[method] !== undefined) {
+                // @ts-ignore
+                return await provider[method](...args)
+            }
+
         }
 
-      }
-
-      throw `DataProvider method "${method as string} is not supported by any providers ...`
+        throw `DataProvider method "${method as string} is not supported by any providers ...`
     }
 
-    async fetchSupportedSymbols (): Promise<ProviderSymbols> {
+    private static async callAll(method: string, ...args: IArguments[]) {
 
-      const symbols: ProviderSymbols = {}
-      for (const provider of providers) {
+        const data = {}
+        for (const provider of providers) {
+            // @ts-ignore
+            if (provider[method] !== undefined) {
+                // @ts-ignore @todo figure out the proper way
+                data[provider.name()] = await provider[method](...args)
+            }
+        }
 
-        symbols[provider.name()] = await this.callOne('fetchSupportedSymbols', ...arguments)
-      }
+        return data
+    }
 
-      return symbols
+    async fetchSupportedSymbols(): Promise<ProviderSymbols> {
+
+        return await DataProvider.callAll('fetchSupportedSymbols')
+    }
+
+    async getEndOfDayData(
+        assetSymbol: AssetSymbol,
+        from: Dayjs,
+        to: Dayjs): Promise<Types.EndOfDayData[]> {
+
+        return await DataProvider
+            .getProviderFor(assetSymbol)
+            .fetchEndOfDay(assetSymbol.get('symbol'),
+                from,
+                to
+            );
     }
 
 
@@ -62,6 +93,6 @@ class DataProvider {
 
 
 module.exports = {
-  DataProvider: new DataProvider()
+    DataProvider: new DataProvider()
 }
 

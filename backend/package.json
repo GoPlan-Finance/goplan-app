@@ -33,6 +33,7 @@
     "axios": "^0.21.1",
     "convict": "^6.0.1",
     "crypto-js": "^4.0.0",
+    "dayjs": "^1.10.4",
     "express": "4.17.1",
     "financialmodelingprep": "github:GoPlan-Finance/financialmodelingprep",
     "kerberos": "1.1.4",

@@ -10,7 +10,8 @@ import {processBatch} from "../../../../../common/utils";
 import * as DataProviderInterfaces from '../providers/types'
 import {ProviderSymbols} from '../providers'
 
-import {findOrCreate} from "models/objectUtils";
+// noinspection ES6PreferShortImport
+import {findOrCreate} from "../../../../../common/models/objectUtils";
 
 var Mutex = require('async-mutex').Mutex;
 

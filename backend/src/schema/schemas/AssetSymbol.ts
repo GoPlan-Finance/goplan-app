@@ -22,7 +22,7 @@ export const AssetSymbol = {
     find            : {requiresAuthentication: true},
     count           : {},
     get             : {requiresAuthentication: true},
-    update          : {requiresAuthentication: true},
+    update          : {},
     create          : {},
     delete          : {},
     addField        : {},
