@@ -34,6 +34,7 @@
     "feather-icons": "^4.28.0",
     "parse": "^3.1.0",
     "tailwindcss": "^2.0.4",
+    "ts-money": "^0.4.6",
     "vue": "^3.0.5",
     "vue-class-store": "github:sadortun/vue-class-store#build",
     "vue-feather": "^2.0.0-beta",

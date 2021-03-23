@@ -6,9 +6,8 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
-        :increase="0.5"
-        :percent="1.2"
-        :price="121.1"
+        :current-price="currentPrice"
+        :previous-price="previousPrice"
       />
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
@@ -26,6 +25,8 @@ import {useRoute} from 'vue-router'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import AssetPrice from '../components/AssetPrice.vue'
 import {findOneBy} from '../../../common/models/objectUtils'
+import {Currencies, Money} from 'ts-money'
+import {AssetSymbol} from '../../../common/models'
 
 export default defineComponent({
   components: {
@@ -36,12 +37,19 @@ export default defineComponent({
   async setup () {
     const route = useRoute()
 
-    const data = reactive({
-      loading     : false,
-      assetSymbol : null
+    const data: {
+      loading: boolean,
+      assetSymbol: AssetSymbol|null,
+      currentPrice: Money,
+      previousPrice: Money,
+    } = reactive({
+      loading       : false,
+      assetSymbol   : null,
+      currentPrice  : Money.fromDecimal(14, Currencies.USD),
+      previousPrice : Money.fromDecimal(12, Currencies.USD)
     })
 
-    const load = (async () => {
+    const loadAssetSymbol = (async () => {
       data.loading     = true
       data.assetSymbol = await findOneBy('AssetSymbol', {
         symbol: route.params.ticker as string
@@ -50,9 +58,8 @@ export default defineComponent({
       data.loading = false
     })
 
-    watch(() => route.params, load)
-    await load()
-
+    watch(() => route.params, loadAssetSymbol)
+    await loadAssetSymbol()
 
     return {
       ...toRefs(data),

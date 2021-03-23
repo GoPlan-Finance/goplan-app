@@ -2,17 +2,25 @@
  *
  *
  */
-
 const USE_MASTER_KEY = {useMasterKey: true}
 
-const getOrNull = async (type: string, docId: string, useMasterKey = false) => {
+//const getOrNull = async <T extends Parse.Object>(type: T, docId: string, useMasterKey = false): Promise<T> => {
+const getOrNull = async (
+  type: string,
+  docId: string,
+  useMasterKey = false
+): Promise<Parse.Object> => {
 
   const query = new Parse.Query(type)
 
   return await query.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
 }
 
-const get = async (type: string, docId: string, useMasterKey = false) => {
+const get = async (
+  type: string,
+  docId: string,
+  useMasterKey = false
+): Promise<Parse.Object> => {
   const doc = await getOrNull(type, docId, useMasterKey)
 
   if (doc) {
@@ -22,7 +30,11 @@ const get = async (type: string, docId: string, useMasterKey = false) => {
   throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
 }
 
-const findBy = async (type: string, params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer }, useMasterKey = false) => {
+const findBy = async (
+  type: string,
+  params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer },
+  useMasterKey = false
+): Promise<Parse.Object[]> => {
   const query = new Parse.Query(type)
 
   for (const [
@@ -51,7 +63,11 @@ const findOneBy = async (
 }
 
 
-const createWithData = async (type: string, params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer }, useMasterKey = false) => {
+const createWithData = async (
+  type: string,
+  params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer },
+  useMasterKey = false
+): Promise<Parse.Object> => {
 
   const obj = new Parse.Object(type)
   obj.set(params)
@@ -62,7 +78,7 @@ const createWithData = async (type: string, params: { [key: string]: string | bo
 const findOrCreate = async (
   type: string,
   params: { [key: string]: string | boolean | number | Parse.Object | Parse.Pointer },
-  useMasterKey = false) => {
+  useMasterKey = false): Promise<Parse.Object> => {
   const obj = await findOneBy(type, params, useMasterKey)
 
   if (obj) {
