@@ -5,6 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/logs" />
       <excludeFolder url="file://$MODULE_DIR$/backend/dist" />
       <excludeFolder url="file://$MODULE_DIR$/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -6,19 +6,23 @@
  */
 import {Dayjs} from 'dayjs'
 
+
 export interface AssetSymbol {
     name: string,
     symbol: string,
     exchange: string,
 }
 
-export interface EndOfDayData{
-    date : string,
-    open : number,
-    high : number,
-    low : number,
-    close : number,
-    volume : number,
+export type SymbolDataResolution = 'minute' | 'hour' | 'day' | 'week' | 'month'
+
+
+export interface EndOfDayData {
+    date: string,
+    open: number,
+    high: number,
+    low: number,
+    close: number,
+    volume: number,
     // "unadjustedVolume" : number,
     // "change" : number,
     // "changePercent" : number,
@@ -27,13 +31,24 @@ export interface EndOfDayData{
     // "changeOverTime" :number
 }
 
+export interface TimeSeriesData {
+    resolution: SymbolDataResolution
+    data: EndOfDayData[]
+}
+
 export interface DataProviderInterface {
 
     name(): string
 
     fetchSupportedSymbols(): Promise<Array<AssetSymbol>>
 
-    fetchEndOfDay?(assetSymbol :string, from : Dayjs, to : Dayjs) : Promise<EndOfDayData[]>
+    fetchSymbolTimeSeriesData?(
+        symbol: string,
+        from: Dayjs,
+        to: Dayjs,
+        resolution: SymbolDataResolution,
+    ): Promise<TimeSeriesData>
+
 
     test1234?(): void
 

@@ -13,6 +13,7 @@
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
       <CandlestickChart
+        v-if="assetSymbol"
         :asset-symbol="assetSymbol"
       />
     </div>
