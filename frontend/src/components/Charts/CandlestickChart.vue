@@ -15,14 +15,11 @@
   </label>
   <apexchart
     ref="theChart"
-    :options="data.chartOptions"
-    :series="data.series"
+    :options="chartOptions"
+    :series="series"
     height="350"
     type="candlestick"
   />
-
-  <!--  @todo If you remove this, charts wont update-->
-  <small>{{ data.series }}</small>
 </template>
 
 <script lang="ts">
@@ -46,38 +43,38 @@ export default defineComponent({
     const theChart     = ref(null)
     const currentScale = ref(30)
 
-    const data = reactive({
-      chartOptions: {
-        chart: {
-          type   : 'candlestick',
-          height : 350
-        },
-        xaxis: {
-          type: 'datetime'
-        },
-        yaxis: {
-          tooltip: {
-            enabled: true
-          }
-        }
+    const chartOptions = reactive({
+      chart: {
+        type   : 'candlestick',
+        height : 350
       },
-      series: [
+      xaxis: {
+        type: 'datetime'
+      },
+      yaxis: {
+        tooltip: {
+          enabled: true
+        }
+      }
+    })
+
+    const series = ref(
+      [
         {
           name : 'series-1',
           data : []
-        },
-      ],
-    })
+        }
+      ]
+    )
 
     const updateSeriesLine = (data) => {
       console.log(theChart.value)
 
-      data.series[0].data = data
+      series.value[0].data = data
       //   theChart.value.$forceUpdate()
 
 
     }
-
 
     const loadData = async () => {
       const eod = await Parse.Cloud.run('Assets--GetEndOfDay', {
@@ -87,15 +84,23 @@ export default defineComponent({
         assetSymbol : props.assetSymbol.toPointer()
       })
 
-      data.series[0].data = reactive(eod.map(elem => {
+      const ohlc: CandlestickSeries[] = eod.map(elem => {
         return {
           x : new Date(elem.date),
           y : [
             elem.open, elem.open, elem.low, elem.close
           ]
         } as CandlestickSeries
-      }))
-      console.log(data.series[0].data)
+      })
+
+      series.value = [
+        {
+          name : 'series-1',
+          data : ohlc
+        }
+      ]
+
+      console.log(series.value[0].data)
       //  updateSeriesLine(data)
     }
 
@@ -120,10 +125,11 @@ export default defineComponent({
     })
 
     return {
+      chartOptions,
+      series,
       theChart,
       timeScales,
       currentScale,
-      data,
     }
   },
 })
