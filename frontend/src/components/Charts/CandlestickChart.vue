@@ -89,7 +89,7 @@ export default defineComponent({
         return {
           x : new Date(elem.date),
           y : [
-            elem.open, elem.open, elem.low, elem.close
+            elem.open.toFixed(2), elem.open.toFixed(2), elem.low.toFixed(2), elem.close.toFixed(2)
           ]
         } as CandlestickSeries
       })
