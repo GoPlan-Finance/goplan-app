@@ -41,6 +41,7 @@ export class FMP implements Types.DataProviderInterface {
 
     async fetchSupportedSymbols(): Promise<Array<Types.AssetSymbol>> {
 
+        //@ts-ignore
         const symbols = await this.fmp.list().availableTraded()
 
         return symbols
@@ -57,7 +58,7 @@ export class FMP implements Types.DataProviderInterface {
             start_date: from.toISOString(),
             end_date: to.toISOString()
         }
-
+//@ts-ignore
         const stock = await this.fmp.stock(symbol)
 
         switch (resolution) {
@@ -71,7 +72,7 @@ export class FMP implements Types.DataProviderInterface {
                 const eod =  await stock.history(params)
                 return { resolution: 'hour', data:eod.historical}
             default:
-                throw `Resolution ${res} not implemented`
+                throw `Resolution ${resolution} not implemented`
         }
     }
 }

@@ -91,6 +91,7 @@ class DataProvider {
                 case "month":
                     return date.format('yyyy-MM')
                 case "week":
+                    //@ts-ignore
                     return `${date.year()}-WK${date.week()}`
                 case "day":
                     return date.format('yyyy-MM-dd')
