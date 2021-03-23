@@ -50,7 +50,7 @@ export default defineComponent({
         height : 350
       },
       xaxis: {
-        type: 'datetime'
+        type: 'category',
       },
       yaxis: {
         tooltip: {
@@ -87,7 +87,7 @@ export default defineComponent({
 
       const ohlc: CandlestickSeries[] = eod.map(elem => {
         return {
-          x : new Date(elem.date),
+          x : elem.date,
           y : [
             elem.open.toFixed(2), elem.open.toFixed(2), elem.low.toFixed(2), elem.close.toFixed(2)
           ]
