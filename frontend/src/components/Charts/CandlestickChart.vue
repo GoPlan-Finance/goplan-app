@@ -2,16 +2,17 @@
   <label
     v-for="(label, days) in timeScales"
     :key="days"
-    class="inline-flex items-center px-2"
+    :class="currentScale === days ? 'bg-gray-300' : ''"
+    class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
   >
     <input
       v-model="currentScale"
-      :class="`form-radio h-5 w-5 text-green-600`"
+      class="hidden"
       :value="days"
       name="radio"
       type="radio"
     >
-    <span class="ml-2 text-gray-700">{{ label }}</span>
+    <span class="py-1 px-2 text-sm text-gray-700">{{ label }}</span>
   </label>
   <apexchart
     ref="theChart"
@@ -117,11 +118,11 @@ export default defineComponent({
       1     : 'Today',
       7     : 'Week',
       30    : 'Month',
-      90    : '3 Months',
-      365   : '1 yr',
-      1400  : '3 yr',
-      3650  : '10 yr',
-      36500 : 'All Time',
+      90    : '3 M',
+      365   : '1 Y',
+      1400  : '3 Y',
+      3650  : '10 Y',
+      36500 : 'Max',
     })
 
     return {
