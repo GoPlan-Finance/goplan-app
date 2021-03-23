@@ -6,6 +6,7 @@
 import * as Types from '../types'
 import {Dayjs} from 'dayjs'
 // noinspection ES6PreferShortImport
+// @ts-ignore
 import FinancialModelingPrep = require('financialmodelingprep');
 
 // // Simple Examples
@@ -61,16 +62,16 @@ export class FMP implements Types.DataProviderInterface {
 
       switch (resolution) {
         case 'hour':
-          return {resolution: 'hour', data: await stock.history1hour(params)}
+          return {resolution: 'hour', data: (await stock.history1hour(params)).reverse()}
         case 'minute':
-          return {resolution: 'hour', data: await stock.history1min(params)}
+          return {resolution: 'hour', data: (await stock.history1min(params)).reverse()}
         case '15minutes':
-          return {resolution: 'hour', data: await stock.history15min(params)}
+          return {resolution: 'hour', data: (await stock.history15min(params)).reverse()}
         case 'day':
         case 'month':
         case 'week': {
           const eod = await stock.history(params)
-          return {resolution: 'hour', data: eod.historical}
+          return {resolution: 'hour', data: eod.historical.reverse()}
         }
         default:
           throw `Resolution ${resolution} not implemented`
