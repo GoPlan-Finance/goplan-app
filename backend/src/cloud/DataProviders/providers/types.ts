@@ -13,7 +13,16 @@ export interface AssetSymbol {
     exchange: string,
 }
 
-export type SymbolDataResolution = 'minute' | '15minutes' | 'hour' | 'day' | 'week' | 'month'
+export type SymbolDataResolution =
+    'minute'
+    | '5minutes'
+    | '30minutes'
+    | '15minutes'
+    | 'hour'
+    | '4hours'
+    | 'day'
+    | 'week'
+    | 'month'
 
 
 export interface EndOfDayData {

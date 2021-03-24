@@ -80,8 +80,6 @@ class DataProvider {
     private static adjustResolution (
       desiredResolution: Types.SymbolDataResolution,
       currentResolution: Types.SymbolDataResolution,
-      from: dayjs.Dayjs,
-      to: dayjs.Dayjs,
       data: Types.EndOfDayData[]
     ): Types.EndOfDayData[] {
 
@@ -165,8 +163,6 @@ class DataProvider {
       return DataProvider.adjustResolution(
         resolution,
         result.resolution,
-        from,
-        to,
         result.data
       )
     }

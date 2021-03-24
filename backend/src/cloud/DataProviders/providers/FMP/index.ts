@@ -4,9 +4,10 @@
  *
  */
 import * as Types from '../types'
-import {Dayjs} from 'dayjs'
-// noinspection ES6PreferShortImport
+import dayjs, {Dayjs} from 'dayjs'
+
 // @ts-ignore
+// noinspection ES6PreferShortImport
 import FinancialModelingPrep = require('financialmodelingprep');
 
 // // Simple Examples
@@ -60,18 +61,51 @@ export class FMP implements Types.DataProviderInterface {
       //@ts-ignore
       const stock = await this.fmp.stock(symbol)
 
+      const query = async (res: Types.SymbolDataResolution, method: string): Promise<Types.TimeSeriesData> => {
+        return {resolution: res, data: (await stock[method](params)).reverse()}
+      }
+
+      // The day values here are purely from observation of what the API returns. For long term historical data,
+      // we will probably need to fetch from a different source, or cache data.
+
+      // noinspection FallThroughInSwitchStatementJS
       switch (resolution) {
-        case 'hour':
-          return {resolution: 'hour', data: (await stock.history1hour(params)).reverse()}
         case 'minute':
-          return {resolution: 'hour', data: (await stock.history1min(params)).reverse()}
+          if (dayjs().diff(from, 'days') < 2) {
+            return await query('minute', 'history1min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case '5minutes':
+          if (dayjs().diff(from, 'days') < 11) {
+            return await query('5minutes', 'history5min')
+          }
+          // eslint-disable-next-line no-fallthrough
         case '15minutes':
-          return {resolution: 'hour', data: (await stock.history15min(params)).reverse()}
-        case 'day':
-        case 'month':
-        case 'week': {
+          if (dayjs().diff(from, 'days') < 18) {
+            return await query('15minutes', 'history15min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case '30minutes':
+          if (dayjs().isAfter(from.subtract(42, 'days'))) {
+            return await query('30minutes', 'history30min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case 'hour':
+          console.log(dayjs().diff(from, 'days'))
+          if (dayjs().diff(from, 'days') < 48) {
+            return await query('hour', 'history1hour')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case            '4hours'            :
+          if (dayjs().diff(from, 'days') < 85) {
+            return await query('4hours', 'history4hour')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case            'day'            :
+        case            'month'            :
+        case            'week'             : {
           const eod = await stock.history(params)
-          return {resolution: 'hour', data: eod.historical.reverse()}
+          return {resolution: 'day', data: eod.historical.reverse()}
         }
         default:
           throw `Resolution ${resolution} not implemented`
