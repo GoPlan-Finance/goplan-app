@@ -4,10 +4,11 @@
  *
  */
 import * as Types from '../types'
-import {Dayjs} from 'dayjs'
-// noinspection ES6PreferShortImport
+import dayjs, {Dayjs} from 'dayjs'
 
-const FinancialModelingPrep = require('financialmodelingprep')
+// @ts-ignore
+// noinspection ES6PreferShortImport
+import FinancialModelingPrep = require('financialmodelingprep');
 
 // // Simple Examples
 //
@@ -26,9 +27,11 @@ const FinancialModelingPrep = require('financialmodelingprep')
 export class FMP implements Types.DataProviderInterface {
 
     private apiKey: string
+    private fmp: unknown
 
     constructor (apiKey: string) {
       this.apiKey = apiKey
+      this.fmp    = FinancialModelingPrep(this.apiKey)
     }
 
     public name (): string {
@@ -38,23 +41,75 @@ export class FMP implements Types.DataProviderInterface {
 
     async fetchSupportedSymbols (): Promise<Array<Types.AssetSymbol>> {
 
-      const symbols = await FinancialModelingPrep(this.apiKey).list().availableTraded()
+      //@ts-ignore
+      const symbols = await this.fmp.list().availableTraded()
 
       return symbols
     }
 
+    async fetchSymbolTimeSeriesData (
+      symbol: string,
+      from: Dayjs,
+      to: Dayjs,
+      resolution: Types.SymbolDataResolution,
+    ): Promise<Types.TimeSeriesData> {
 
-    async fetchEndOfDay? (symbol: string, from: Dayjs, to: Dayjs): Promise<Types.EndOfDayData[]> {
+      const params = {
+        start_date : from.toISOString(),
+        end_date   : to.toISOString()
+      }
+      //@ts-ignore
+      const stock = await this.fmp.stock(symbol)
 
-      const eod = await FinancialModelingPrep(this.apiKey)
-        .stock(symbol)
-        .history({
-          start_date : from.toISOString(),
-          end_date   : to.toISOString()
-        })
+      const query = async (res: Types.SymbolDataResolution, method: string): Promise<Types.TimeSeriesData> => {
+        return {resolution: res, data: (await stock[method](params)).reverse()}
+      }
 
+      // The day values here are purely from observation of what the API returns. For long term historical data,
+      // we will probably need to fetch from a different source, or cache data.
 
-      return eod.historical
+      // noinspection FallThroughInSwitchStatementJS
+      switch (resolution) {
+        case 'minute':
+          if (dayjs().diff(from, 'days') < 2) {
+            return await query('minute', 'history1min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case '5minutes':
+          if (dayjs().diff(from, 'days') < 11) {
+            return await query('5minutes', 'history5min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case '15minutes':
+          if (dayjs().diff(from, 'days') < 18) {
+            return await query('15minutes', 'history15min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case '30minutes':
+          if (dayjs().isAfter(from.subtract(42, 'days'))) {
+            return await query('30minutes', 'history30min')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case 'hour':
+          console.log(dayjs().diff(from, 'days'))
+          if (dayjs().diff(from, 'days') < 48) {
+            return await query('hour', 'history1hour')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case            '4hours'            :
+          if (dayjs().diff(from, 'days') < 85) {
+            return await query('4hours', 'history4hour')
+          }
+          // eslint-disable-next-line no-fallthrough
+        case            'day'            :
+        case            'month'            :
+        case            'week'             : {
+          const eod = await stock.history(params)
+          return {resolution: 'day', data: eod.historical.reverse()}
+        }
+        default:
+          throw `Resolution ${resolution} not implemented`
+      }
     }
 
 }

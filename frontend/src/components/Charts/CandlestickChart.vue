@@ -1,19 +1,21 @@
 <template>
   <label
-    v-for="(label, days) in timeScales"
-    :key="days"
-    :class="currentScale === days ? 'bg-gray-300' : ''"
+    v-for="(scale) in timeScales"
+    :key="scale.label"
+    :class="currentScaleLabel === scale.label ? 'bg-gray-300' : ''"
     class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
   >
     <input
-      v-model="currentScale"
+      v-model="currentScaleLabel"
+      :value="scale.label"
       class="hidden"
-      :value="days"
       name="radio"
       type="radio"
+      @click="scaleClicked(scale.label)"
     >
-    <span class="py-1 px-2 text-sm text-gray-700">{{ label }}</span>
+    <span class="py-1 px-2 text-sm text-gray-700">{{ scale.label }}</span>
   </label>
+
   <apexchart
     ref="theChart"
     :options="chartOptions"
@@ -24,14 +26,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref, watch} from 'vue'
+import {defineComponent, onMounted, reactive, ref, watch} from 'vue'
 import {AssetSymbol} from '../../../../common/models'
 import * as dayjs from 'dayjs'
+import * as duration from 'dayjs/plugin/duration'
+import {getScaleByLabel, getScaleForRange, loadData, timeScales} from './CandlestickChart'
 
-export type CandlestickSeries = {
-  x: Date,
-  y: [open: number, high: number, low: number, close: number]
-}
+dayjs.extend(duration)
 
 export default defineComponent({
   props: {
@@ -40,26 +41,12 @@ export default defineComponent({
       required : true
     }
   },
-  async setup (props) {
-    const theChart     = ref(null)
-    const currentScale = ref(30)
+  setup (props) {
+    const theChart          = ref(null)
+    const currentScaleLabel = ref('Today')
+    let currentScale        = reactive(getScaleByLabel('Today'))
 
-    const chartOptions = reactive({
-      chart: {
-        type   : 'candlestick',
-        height : 350
-      },
-      xaxis: {
-        type: 'datetime'
-      },
-      yaxis: {
-        tooltip: {
-          enabled: true
-        }
-      }
-    })
-
-    const series = ref(
+    const series       = ref(
       [
         {
           name : 'series-1',
@@ -68,69 +55,101 @@ export default defineComponent({
       ]
     )
 
-    const updateSeriesLine = (data) => {
-      console.log(theChart.value)
-
-      series.value[0].data = data
-      //   theChart.value.$forceUpdate()
-
-
-    }
-
-    const loadData = async () => {
-      const eod = await Parse.Cloud.run('Assets--GetEndOfDay', {
-
-        from        : dayjs().subtract(currentScale.value, 'days').toISOString(),
-        to          : dayjs().toISOString(),
-        assetSymbol : props.assetSymbol.toPointer()
-      })
-
-      const ohlc: CandlestickSeries[] = eod.map(elem => {
-        return {
-          x : new Date(elem.date),
-          y : [
-            elem.open, elem.open, elem.low, elem.close
-          ]
-        } as CandlestickSeries
-      })
+    const reloadData   = async (
+      min: dayjs.Dayjs = undefined,
+      max: dayjs.Dayjs = undefined,
+    ) => {
+      const from = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
+      const to   = max ? max : dayjs()
 
       series.value = [
         {
-          name : 'series-1',
-          data : ohlc
+          data: await loadData(
+            props.assetSymbol,
+            currentScale,
+            from,
+            to,
+          )
         }
       ]
+    }
+    const scaleClicked = async (label: string) => {
+      currentScale            = reactive(getScaleByLabel(label))
+      currentScaleLabel.value = currentScale.label
 
-      console.log(series.value[0].data)
-      //  updateSeriesLine(data)
+      await reloadData()
     }
 
+    const handleZoom = async (min, max) => {
+      console.log('minmax', min, max)
+      const scale             = getScaleForRange({
+        max,
+        min,
+      })
+      console.log('scale', scale)
+      currentScale            = reactive(scale)
+      currentScaleLabel.value = currentScale.label
+      await reloadData(dayjs(min), dayjs(max))
+    }
 
-    watch(currentScale, () => loadData())
-    watch(() => props.assetSymbol, () => loadData())
+    const chartOptions = reactive({
+      chart: {
+        animations: {
+          enabled: false,
+        },
+        type   : 'candlestick',
+        height : 350,
+        events : {
+          beforeZoom: (chartContext, {xaxis}) => {
+            return {
+              xaxis: {
+                min : xaxis.min,
+                max : Math.min(xaxis.max, dayjs().valueOf()) // block future time
+              }
+            }
+          },
+          scrolled: async (chartContext, {xaxis}) => {
+            await handleZoom(xaxis.min, xaxis.max)
+          },
 
-    // onMounted(async () => {
-    await loadData()
-    //});
-
-
-    const timeScales = reactive({
-      1     : 'Today',
-      7     : 'Week',
-      30    : 'Month',
-      90    : '3 M',
-      365   : '1 Y',
-      1400  : '3 Y',
-      3650  : '10 Y',
-      36500 : 'Max',
+          zoomed: async (chartContext, {xaxis}) => {
+            await handleZoom(series.value[0].data[xaxis.min].x, series.value[0].data[xaxis.max].x)
+          }
+        },
+      },
+      xaxis: {
+        type   : 'category',
+        labels : {
+          formatter (value /*, timestamp, opts*/) {
+            return value
+            // return dayjs(value).toISOString()
+          }
+        }
+      },
+      yaxis: {
+        tooltip: {
+          enabled: true
+        }
+      }
     })
 
+
+    watch(() => props.assetSymbol, () => reloadData())
+
+    onMounted(async () => {
+      await reloadData()
+    })
+
+
     return {
-      chartOptions,
-      series,
       theChart,
       timeScales,
+      scaleClicked,
       currentScale,
+      currentScaleLabel,
+
+      chartOptions,
+      series,
     }
   },
 })
