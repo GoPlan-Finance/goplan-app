@@ -79,7 +79,7 @@ export const timeScales: TimeScaleInterface[] = [
 export const getScaleForRange = ({min, max}: TimeRange): TimeScaleInterface => {
   const delta = dayjs.duration(dayjs(max).diff(dayjs(min)))
 
-  console.log(delta.toISOString())
+  console.log('delta', dayjs(max))
   const scale = timeScales.find(s => delta.asMilliseconds() < s.visible.asMilliseconds())
 
   if (!scale) {

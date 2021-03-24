@@ -81,10 +81,12 @@ export default defineComponent({
     }
 
     const handleZoom = async (min, max) => {
+      console.log('minmax', min, max)
       const scale             = getScaleForRange({
         max,
         min,
       })
+      console.log('scale', scale)
       currentScale            = reactive(scale)
       currentScaleLabel.value = currentScale.label
       await reloadData(dayjs(min), dayjs(max))
@@ -111,7 +113,7 @@ export default defineComponent({
           },
 
           zoomed: async (chartContext, {xaxis}) => {
-            await handleZoom(xaxis.min, xaxis.max)
+            await handleZoom(series.value[0].data[xaxis.min].x, series.value[0].data[xaxis.max].x)
           }
         },
       },
