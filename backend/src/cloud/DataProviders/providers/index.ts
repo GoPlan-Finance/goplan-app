@@ -88,18 +88,21 @@ class DataProvider {
       }
       const getDateId = (resolution: Types.SymbolDataResolution, date: dayjs.Dayjs): string => {
         switch (resolution) {
-          case 'month':
-            return date.format('YYYY-MM')
+          case 'minute':
+          case '5minutes':
+          case '15minutes':
+          case '30minutes':
+            return date.format('YYYY-MM-DD HH:mm')
+          case 'hour':
+          case '4hours':
+            return date.format('YYYY-MM-DD HH')
+          case 'day':
+            return date.format('YYYY-MM-DD')
           case 'week':
             //@ts-ignore
             return `${date.year()}-WK${date.week()}`
-          case 'day':
-            return date.format('YYYY-MM-dd')
-          case 'hour':
-            return date.format('YYYY-MM-dd HH')
-          case 'minute':
-          case '15minutes':
-            return date.format('YYYY-MM-dd HH:mm')
+          case 'month':
+            return date.format('YYYY-MM')
         }
 
         throw `Invalid resolution ${resolution}`

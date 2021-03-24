@@ -62,7 +62,7 @@ export const timeScales: TimeScaleInterface[] = [
   {
     label      : '3 Y',
     visible    : dayjs.duration(3, 'year'),
-    resolution : 'day',
+    resolution : 'week',
   },
   {
     label      : '10 Y',
