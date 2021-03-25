@@ -16,6 +16,9 @@
         :asset-symbol="assetSymbol"
       />
     </div>
+    <CompanyInfo
+      :asset-symbol="assetSymbol"
+    />
   </template>
 </template>
 
@@ -27,9 +30,12 @@ import AssetPrice from '../components/AssetPrice.vue'
 import {findOneBy} from '../../../common/models/objectUtils'
 import {Currencies, Money} from 'ts-money'
 import {AssetSymbol} from '../../../common/models'
+import CompanyInfo from '../components/CompanyInfo.vue'
+
 
 export default defineComponent({
   components: {
+    CompanyInfo,
     AssetPrice,
     CandlestickChart
   },
