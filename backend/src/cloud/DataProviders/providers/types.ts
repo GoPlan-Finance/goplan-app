@@ -14,7 +14,7 @@ export interface AssetSymbol {
 }
 
 export type SymbolDataResolution =
-    'minute'
+    '1minute'
     | '5minutes'
     | '30minutes'
     | '15minutes'

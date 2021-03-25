@@ -88,7 +88,7 @@ class DataProvider {
       }
       const getDateId = (resolution: Types.SymbolDataResolution, date: dayjs.Dayjs): string => {
         switch (resolution) {
-          case 'minute':
+          case '1minute':
           case '5minutes':
           case '15minutes':
           case '30minutes':

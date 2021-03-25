@@ -8,7 +8,8 @@ import dayjs, {Dayjs} from 'dayjs'
 
 // @ts-ignore
 // noinspection ES6PreferShortImport
-import FinancialModelingPrep = require('financialmodelingprep');
+import * as FMPApi from 'financialmodelingprep-openapi'
+
 
 // // Simple Examples
 //
@@ -26,90 +27,83 @@ import FinancialModelingPrep = require('financialmodelingprep');
 
 export class FMP implements Types.DataProviderInterface {
 
-    private apiKey: string
-    private fmp: unknown
+    private config: FMPApi.Configuration
 
-    constructor (apiKey: string) {
-      this.apiKey = apiKey
-      this.fmp    = FinancialModelingPrep(this.apiKey)
+    constructor(apiKey: string) {
+        this.config = new FMPApi.Configuration({
+            apiKey: apiKey
+        })
     }
 
-    public name (): string {
-      return 'FMP'
+    public name(): string {
+        return 'FMP'
     }
 
 
-    async fetchSupportedSymbols (): Promise<Array<Types.AssetSymbol>> {
+    async fetchSupportedSymbols(): Promise<Array<Types.AssetSymbol>> {
 
-      //@ts-ignore
-      const symbols = await this.fmp.list().availableTraded()
+        //@ts-ignore
+        const listApi = new FMPApi.ListApi(this.config)
 
-      return symbols
+        const response = await listApi.listSymbols('available-traded')
+        return response.data
     }
 
-    async fetchSymbolTimeSeriesData (
-      symbol: string,
-      from: Dayjs,
-      to: Dayjs,
-      resolution: Types.SymbolDataResolution,
+    async fetchSymbolTimeSeriesData(
+        symbol: string,
+        from: Dayjs,
+        to: Dayjs,
+        resolution: Types.SymbolDataResolution,
     ): Promise<Types.TimeSeriesData> {
 
-      const params = {
-        start_date : from.toISOString(),
-        end_date   : to.toISOString()
-      }
-      //@ts-ignore
-      const stock = await this.fmp.stock(symbol)
+        //@ts-ignore
+        const historyApi = new FMPApi.HistoryApi(this.config)
 
-      const query = async (res: Types.SymbolDataResolution, method: string): Promise<Types.TimeSeriesData> => {
-        return {resolution: res, data: (await stock[method](params)).reverse()}
-      }
-
-      // The day values here are purely from observation of what the API returns. For long term historical data,
-      // we will probably need to fetch from a different source, or cache data.
-
-      // noinspection FallThroughInSwitchStatementJS
-      switch (resolution) {
-        case 'minute':
-          if (dayjs().diff(from, 'days') < 2) {
-            return await query('minute', 'history1min')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case '5minutes':
-          if (dayjs().diff(from, 'days') < 11) {
-            return await query('5minutes', 'history5min')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case '15minutes':
-          if (dayjs().diff(from, 'days') < 18) {
-            return await query('15minutes', 'history15min')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case '30minutes':
-          if (dayjs().isAfter(from.subtract(42, 'days'))) {
-            return await query('30minutes', 'history30min')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case 'hour':
-          console.log(dayjs().diff(from, 'days'))
-          if (dayjs().diff(from, 'days') < 48) {
-            return await query('hour', 'history1hour')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case            '4hours'            :
-          if (dayjs().diff(from, 'days') < 85) {
-            return await query('4hours', 'history4hour')
-          }
-          // eslint-disable-next-line no-fallthrough
-        case            'day'            :
-        case            'month'            :
-        case            'week'             : {
-          const eod = await stock.history(params)
-          return {resolution: 'day', data: eod.historical.reverse()}
+        const query = async (out: Types.SymbolDataResolution, res: "1min" | "5min" | "15min" | "30min" | "1hour" | "4hour") => {
+            const response = await historyApi.intraDayPrices(symbol, res)
+            return {resolution: out, data: response.data.reverse()}
         }
-        default:
-          throw `Resolution ${resolution} not implemented`
-      }
+
+        switch (resolution) {
+            case '1minute':
+                if (dayjs().diff(from, 'days') < 2) {
+                    return await query('1minute', '1min')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case '5minutes':
+                if (dayjs().diff(from, 'days') < 11) {
+                    return await query('5minutes', '5min')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case '15minutes':
+                if (dayjs().diff(from, 'days') < 18) {
+                    return await query('15minutes', '15min')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case '30minutes':
+                if (dayjs().isAfter(from.subtract(42, 'days'))) {
+                    return await query('30minutes', '30min')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case 'hour':
+                if (dayjs().diff(from, 'days') < 48) {
+                    return await query('hour', '1hour')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case            '4hours'            :
+                if (dayjs().diff(from, 'days') < 85) {
+                    return await query('4hours', '4hour')
+                }
+            // eslint-disable-next-line no-fallthrough
+            case            'day'            :
+            case            'month'            :
+            case            'week'             : {
+                const eod = await historyApi.dailyPrices(symbol, from.toISOString(), to.toISOString())
+                return {resolution: 'day', data: eod.data.historical.reverse()}
+            }
+            default:
+                throw `Resolution ${resolution} not implemented`
+        }
     }
 
 }
