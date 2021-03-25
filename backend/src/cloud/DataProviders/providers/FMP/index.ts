@@ -64,6 +64,9 @@ export class FMP implements Types.DataProviderInterface {
         return {resolution: out, data: response.data.reverse()}
       }
 
+      // The day values here are purely from observation of what the API returns. For long term historical data,
+      // we will probably need to fetch from a different source, or cache data.
+
       switch (resolution) {
         case '1minute':
           if (dayjs().diff(from, 'days') < 2) {
