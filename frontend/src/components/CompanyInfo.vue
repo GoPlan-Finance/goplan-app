@@ -1,18 +1,18 @@
 <template>
   <div class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
     <h3 class="mb-4 font-bold">
-      Company Information
+      {{ $t('details.company_information') }}
     </h3>
     <DataField
       v-for="(detail, index) in details"
       :key="index"
-      :label="detail.label"
+      :label="$t('details.' + detail.label)"
       :data="detail.data"
       class="mb-2"
     />
 
     <h3 class="mt-4 mb-2 font-bold">
-      Description
+      {{ $t('details.description') }}
     </h3>
     <p class="text-sm text-gray-500">
       {{ info.description }}
@@ -71,51 +71,51 @@ export default defineComponent({
 
     const details = ref([
       {
-        label : 'Company Name',
+        label : 'company_name',
         data  : info.companyName
       },
       {
-        label : 'Symbol',
+        label : 'symbol',
         data  : info.symbol
       },
       {
-        label : 'ISIN',
+        label : 'isin',
         data  : info.isin
       },
       {
-        label : 'Exchange',
+        label : 'exchange',
         data  : info.exchange
       },
       {
-        label : 'Sector',
+        label : 'sector',
         data  : info.sector
       },
       {
-        label : 'Industry',
+        label : 'industry',
         data  : info.industry
       },
       {
-        label : 'Country',
+        label : 'country',
         data  : info.country
       },
       {
-        label : 'Address',
+        label : 'address',
         data  : `${info.address}, ${info.zip} ${info.city}`
       },
       {
-        label : 'Full Time Employees',
+        label : 'full_time_employees',
         data  : Number(info.fullTimeEmployees).toLocaleString()
       },
       {
-        label : 'CEO',
+        label : 'ceo',
         data  : info.ceo
       },
       {
-        label : 'Website',
+        label : 'website',
         data  : `<a href="${info.website}">${info.website}</a>`
       },
       {
-        label : 'IPO Date',
+        label : 'ipo_date',
         data  : info.ipoDate
       },
     ])
