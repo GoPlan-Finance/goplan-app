@@ -14,6 +14,7 @@ import * as dayjs from 'dayjs'
 
 
 import * as duration from 'dayjs/plugin/duration'
+import i18n from './i18n'
 
 dayjs.extend(duration)
 
@@ -24,7 +25,7 @@ app.use(VueGapi, {
   clientId : '625813000498-2etprn7qf2ca8d3hpg0v1if77ihlp231.apps.googleusercontent.com',
   scope    : 'profile',
 })
-
+app.use(i18n)
 app.use(VueApexCharts)
 
 const authStore = new AuthStore()

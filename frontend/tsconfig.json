@@ -6,6 +6,9 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "@intlify/vite-plugin-vue-i18n/client"
+    ]
   }
 }

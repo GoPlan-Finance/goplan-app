@@ -39,10 +39,12 @@
     "vue-class-store": "github:sadortun/vue-class-store#build",
     "vue-feather": "^2.0.0-beta",
     "vue-gapi": "next",
+    "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.5",
     "vue3-apexcharts": "^1.2.1"
   },
   "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^2.0.4",
     "@tailwindcss/forms": "^0.2.1",
     "@types/concurrently": "^6.0.1",
     "@types/crypto-js": "^4.0.1",

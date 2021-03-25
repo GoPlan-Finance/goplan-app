@@ -24,6 +24,7 @@
       class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       placeholder="Search"
       type="text"
+      @keyup.enter="selectElement"
     >
 
     <ul
@@ -70,7 +71,7 @@ export default defineComponent({
     const {push} = useRouter()
 
     const tickerName = ref('')
-    const symbols    = reactive({data: []})
+    const symbols: {data: AssetSymbol[]}    = reactive({data: []})
 
     watch(tickerName, async tickerName => {
       symbols.data = await getSymbols(tickerName)
@@ -89,11 +90,15 @@ export default defineComponent({
       })
     }
 
+    function selectElement() {
+      click(symbols.data[0])
+    }
 
     return {
       click,
       symbols,
       tickerName,
+      selectElement
     }
   }
 
