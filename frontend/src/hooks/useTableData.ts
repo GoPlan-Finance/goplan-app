@@ -23,7 +23,7 @@ export interface IWideTableData {
     role: string;
 }
 
-export function useTableData (): void {
+export function useTableData () {
   const simpleTableData = ref<ISimpleTableData[]>([
     {city: 'New York', totalOrders: '200,120'},
     {city: 'Manchester', totalOrders: '632,310'},

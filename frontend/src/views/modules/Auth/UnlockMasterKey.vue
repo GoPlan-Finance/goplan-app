@@ -55,16 +55,17 @@ export default defineComponent({
   emits: [
     'keyValid'
   ],
-  async setup (props, {emit}) {
+  setup (props, {emit}) {
     const authStore        = inject < AuthStore >('$authStore')
     const masterKey        = ref('')
-    const isMasterKeyValid = ref(null)
+    const isMasterKeyValid = ref(false)
     const acceptTesting    = ref(false)
 
     const unlockMasterKey = async () => {
 
       try {
 
+        //@ts-ignore @todo replace store
         await authStore.decryptClientKey(masterKey.value)
 
         emit('keyValid')

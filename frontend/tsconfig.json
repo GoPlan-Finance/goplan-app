@@ -7,6 +7,14 @@
     "importHelpers": true,
     "isolatedModules": true,
     "noEmit": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@/common": [
+        "../common/*"
+      ]
+    },
     "types": [
       "@intlify/vite-plugin-vue-i18n/client"
     ]

@@ -10,15 +10,15 @@
       <br>
       <br>
 
-      <div v-if="hasClientKey === null">
+      <div v-if="hasClientKey === 'anonymous'">
         <center>
           <google-button @clicked="signInGoogle" />
         </center>
       </div>
-      <div v-else-if="hasClientKey === true">
+      <div v-else-if="hasClientKey === 'yes'">
         <unlock-master-key @keyValid="clientKeyValid" />
       </div>
-      <div v-else-if="hasClientKey === false">
+      <div v-else-if="hasClientKey === 'no'">
         <create-master-key @keyValid="clientKeyValid" />
       </div>
     </div>
@@ -46,10 +46,12 @@ export default defineComponent({
   setup () {
 
     const app          = getCurrentInstance()
+    // @ts-ignore
     const gapi         = app.appContext.config.globalProperties.$gapi
     const router       = useRouter()
-    const authStore    = inject('$authStore')
-    const hasClientKey = ref(null)
+    const authStore = inject('$authStore') as AuthStore
+
+    const hasClientKey = ref('anonymous')
 
 
     const signInGoogle = async () => {
@@ -87,7 +89,7 @@ export default defineComponent({
           return
         }
 
-        hasClientKey.value = await authStore.hasClientKey()
+        hasClientKey.value = await authStore.hasClientKey() ? 'yes' : 'no'
 
 
       } catch (error) {

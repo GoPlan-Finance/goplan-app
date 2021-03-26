@@ -7,11 +7,10 @@ import * as dayjs from 'dayjs'
 import * as duration from 'dayjs/plugin/duration'
 import {AssetSymbol} from '../../../../common/models'
 
-export type CandlestickSeries = {
-    x: Date,
-    y: [open: number, high: number, low: number, close: number]
-}
+export type CandleOHCLV = [timestamp: number, open: number, high: number, low: number, close: number]
+export type CandlestickSeries = CandleOHCLV[]
 
+type CandleData = { date: dayjs.ConfigType | undefined; open: any; high: any; low: any; close: any; volume: any }
 
 dayjs.extend(duration)
 
@@ -37,7 +36,7 @@ export const timeScales: TimeScaleInterface[] = [
   {
     label      : 'Today',
     visible    : dayjs.duration(1, 'day'),
-    resolution : 'minute',
+    resolution : '1minute',
   },
   {
     label      : 'Week',
@@ -120,17 +119,17 @@ export const loadData = async (
     to            : to.toISOString(),
     assetSymbolId : assetSymbol.id
   })
+  // [ 1551128400000, 33,  37.1, 14,  14,  196 ],
+  const data = eod.map((elem: CandleData) => {
 
-  const data = eod.map(elem => {
-    return {
-      x : elem.date,
-      y : [
-        elem.open.toFixed(2),
-        elem.open.toFixed(2),
-        elem.low.toFixed(2),
-        elem.close.toFixed(2),
+    return [
+      dayjs(elem.date).valueOf(),
+      elem.open,
+      elem.high,
+      elem.low,
+      elem.close,
+      elem.volume
       ]
-    } as CandlestickSeries
   })
 
   console.log('Received ', data.length)

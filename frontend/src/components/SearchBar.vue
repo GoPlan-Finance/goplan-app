@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts">
+
 import {defineComponent, reactive, ref, watch} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import {useRouter} from 'vue-router'
@@ -90,7 +91,7 @@ export default defineComponent({
       })
     }
 
-    function selectElement() {
+    function selectElement () {
       click(symbols.data[0])
     }
 

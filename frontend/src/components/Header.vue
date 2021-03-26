@@ -93,13 +93,14 @@ import {defineComponent, inject, ref} from 'vue'
 import {useSidebar} from '../hooks/useSidebar'
 import {useRouter} from 'vue-router'
 import SearchBar from './SearchBar.vue'
+import {AuthStore} from "@/store";
 
 export default defineComponent({
   components: {SearchBar},
   // eslint-disable-next-line no-unused-vars
   setup () {
     const {push: pushRoute} = useRouter()
-    const authStore         = inject(('$authStore'))
+    const authStore         = inject(('$authStore')) as AuthStore
     const dropdownOpen      = ref(false)
     const {isOpen}          = useSidebar()
 

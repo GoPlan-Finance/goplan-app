@@ -203,52 +203,52 @@ import {defineComponent, ref} from 'vue'
 import {ExternalDataProvider, User} from '../../../models'
 
 export default defineComponent({
-  async setup () {
-    const user = await User.currentAsync()
+  setup () {
+    let user: Parse.User | null = null
 
-    const email = ref(user.get('email') || 'test@test.com')
-
-    const profileInfo = user.get('profileInfo') || {}
-
-    const apiToken             = ref('')
-    const firstName            = ref(profileInfo.firstName || 'test')
-    const lastName             = ref(profileInfo.lastName || 'test')
-    const plannedRetirementAge = ref(profileInfo.plannedRetirementAge || 60)
-    const yearBorn             = ref(profileInfo.yearBorn || 1990)
+    const email                = ref('')
+    const firstName            = ref('')
+    const lastName             = ref('')
+    const plannedRetirementAge = ref(60)
+    const yearBorn             = ref(1990)
 
 
-    const getApiTokenProvider = async (): Promise<ExternalDataProvider | null> => {
+    // const getApiTokenProvider = async (): Promise<ExternalDataProvider | null> => {
+    //
+    //   const q = new Parse.Query('ExternalDataProvider')
+    //   q.equalTo('name', 'tingo')
+    //   const provider = await q.first()
+    //
+    //   if (!provider) {
+    //     return null
+    //   }
+    //
+    //   return provider
+    // }
 
-      const q        = new Parse.Query('ExternalDataProvider')
-      q.equalTo('name', 'tingo')
-      const provider = await q.first()
 
-      if (!provider) {
-        return null
-      }
-
-      return provider
-    }
-
-
-    const saveApiToken = async () => {
-
-      let apiProvider = await getApiTokenProvider()
-
-      if (!apiProvider) {
-        apiProvider = new ExternalDataProvider()
-        apiProvider.set('name', 'tingo')
-        apiProvider.set('isActive', true)
-      }
-
-      apiProvider.set('credentials', apiToken.value)
-      await apiProvider.save()
-    }
+    // const saveApiToken = async () => {
+    //
+    //   let apiProvider = await getApiTokenProvider()
+    //
+    //   if (!apiProvider) {
+    //     apiProvider = new ExternalDataProvider()
+    //     apiProvider.set('name', 'tingo')
+    //     apiProvider.set('isActive', true)
+    //   }
+    //
+    //   apiProvider.set('credentials', apiToken.value)
+    //   await apiProvider.save()
+    // }
 
     const save = async () => {
 
-      if (apiToken.value.length) {
-        await saveApiToken()
+      // if (apiToken.value.length) {
+      //   await saveApiToken()
+      // }
+
+      if (!user) {
+        return
       }
 
       user.set('profileInfo', {
@@ -259,16 +259,33 @@ export default defineComponent({
       })
       await user.save()
     }
+    onMounted(async () => {
+      user = await User.currentAsync()
+
+      if (!user) {
+        return
+      }
+
+      const email = ref(user.get('email') || 'test@test.com')
+
+      const profileInfo = user.get('profileInfo') || {}
+
+      firstName.value            = ref(profileInfo.firstName || 'test')
+      lastName.value             = ref(profileInfo.lastName || 'test')
+      plannedRetirementAge.value = ref(profileInfo.plannedRetirementAge || 60)
+      yearBorn.value             = ref(profileInfo.yearBorn || 1990)
 
 
-    const tingo = await getApiTokenProvider()
-    if (tingo) {
-      apiToken.value = tingo.get('credentials')
-    }
+    })
+
+    // const tingo = await getApiTokenProvider()
+    // if (tingo) {
+    //   apiToken.value = tingo.get('credentials')
+    // }
 
 
     return {
-      apiToken,
+      // apiToken,
       yearBorn,
       plannedRetirementAge,
       save,

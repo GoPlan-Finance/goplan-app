@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
     <div class="text-5xl font-bold">
-      {{ currentPrice.toDecimal().toFixed(2) }}
+      {{ price.toDecimal().toFixed(2) }}
     </div>
     <div class="text-gray-400 font-bold">
-      {{ currentPrice.getCurrency() }}
+      {{ price.getCurrency() }}
     </div>
     <div
       class="p-3 ml-3 text-xl rounded-lg font-bold"
@@ -43,28 +43,31 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue'
+import {computed, defineComponent, ref} from 'vue'
 import {Money} from 'ts-money'
 
 export default defineComponent({
   props: {
     currentPrice: {
-      type     : Object as Money,
+      type     : Money,
       required : true
     },
     previousPrice: {
-      type    : Object as Money,
+      type    : Money,
       default : null
     },
   },
   setup (props) {
-    const change: Money = computed(() => props.currentPrice.subtract(props.previousPrice))
+    const price = ref(props.currentPrice)
 
-    const changeIsPositive: Money = computed(() => change.value.toDecimal() >= 0)
+    const change = computed(() => props.currentPrice.subtract(props.previousPrice))
 
-    const percent: number = computed(() => (change.value.getAmount() / props.currentPrice.getAmount()) * 100)
+    const changeIsPositive = computed(() => change.value.toDecimal() >= 0)
+
+    const percent = computed(() => (change.value.getAmount() / props.currentPrice.getAmount()) * 100)
 
     return {
+      price,
       change,
       percent,
       changeIsPositive

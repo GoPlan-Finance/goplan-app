@@ -5,7 +5,7 @@ function sleep (ms: number): Promise<void> {
 
 const processBatch = async <T, U>(
   data: Array<T>, func: (elem: T) => U,
-  statusFunc: (curIndex: number, len: number, result: U) => boolean | undefined = null,
+  statusFunc: (curIndex: number, len: number, result: U) => boolean | undefined | null,
   nbParallel = 8): Promise<U[]> => {
 
   const results: Array<U> = []
@@ -14,7 +14,7 @@ const processBatch = async <T, U>(
   let abortAll            = false
 
   const runOne = async (curIndex: number) => {
-    let result: U = null
+    let result: U
     try {
       result = await func(data[curIndex])
     } catch (error) {
@@ -33,7 +33,7 @@ const processBatch = async <T, U>(
     ++iCompleted
   }
 
-  const runLoop = async () => {
+  const runLoop = async (): Promise<void> => {
     while (!abortAll
         && iCompleted < data.length
         && index < data.length) {
@@ -46,7 +46,7 @@ const processBatch = async <T, U>(
   }
 
   // start first iteration
-  const threads = []
+  const threads: Promise<void>[] = []
   while (--nbParallel >= 0) {
     threads.push(runLoop())
   }
@@ -61,3 +61,4 @@ export {
   sleep,
   processBatch,
 }
+

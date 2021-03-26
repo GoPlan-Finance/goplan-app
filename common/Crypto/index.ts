@@ -38,7 +38,7 @@ export class Crypto {
     }
   }
 
-  static PBKDF2 (key:string, salt :unknown) : unknown {
+  static PBKDF2 (key:string, salt: string | CryptoJS.lib.WordArray)  {
     const keySize    = 256
     const iterations = 1000
 
@@ -48,7 +48,7 @@ export class Crypto {
     })
   }
 
-  static decrypt (key:string, cypherObject: EncryptedValue) : unknown {
+  static decrypt<T> (key:string, cypherObject: EncryptedValue) :T {
 
     const salt      = CryptoJS.enc.Hex.parse(cypherObject.s)
     const iv        = CryptoJS.enc.Hex.parse(cypherObject.iv)

@@ -4,7 +4,7 @@ const state = reactive({
   isOpen: false,
 })
 
-export function useSidebar () :void {
+export function useSidebar ()  {
   return {
     ...toRefs(state),
   }
