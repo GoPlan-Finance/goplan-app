@@ -35,6 +35,7 @@ import GoogleButton from './googleButton.vue'
 import {User} from '../../../models'
 import {sleep} from '../../../../../common/utils'
 import GoPlanLogo from '../../../components/GoPlanLogo.vue'
+import {AuthStore} from '../../../store'
 
 export default defineComponent({
   components: {
@@ -47,8 +48,8 @@ export default defineComponent({
 
     const app          = getCurrentInstance()
     // @ts-ignore
-    const gapi         = app.appContext.config.globalProperties.$gapi
-    const router       = useRouter()
+    const gapi      = app.appContext.config.globalProperties.$gapi
+    const router    = useRouter()
     const authStore = inject('$authStore') as AuthStore
 
     const hasClientKey = ref('anonymous')

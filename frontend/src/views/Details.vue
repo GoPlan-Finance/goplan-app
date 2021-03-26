@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs, onMounted,watch} from 'vue'
+import {defineComponent, reactive, toRefs, onMounted, watch} from 'vue'
 import {useRoute} from 'vue-router'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import AssetPrice from '../components/AssetPrice.vue'
@@ -39,7 +39,7 @@ export default defineComponent({
     CandlestickChart
   },
 
-  setup() {
+  setup () {
     const route = useRoute()
 
     const data: {
@@ -48,10 +48,10 @@ export default defineComponent({
       currentPrice: Money,
       previousPrice: Money,
     } = reactive({
-      loading: false,
-      assetSymbol: null,
-      currentPrice: Money.fromDecimal(14, Currencies.USD),
-      previousPrice: Money.fromDecimal(12, Currencies.USD)
+      loading       : false,
+      assetSymbol   : null,
+      currentPrice  : Money.fromDecimal(14, Currencies.USD),
+      previousPrice : Money.fromDecimal(12, Currencies.USD)
     })
 
     const loadAssetSymbol = (async () => {
@@ -65,8 +65,8 @@ export default defineComponent({
 
     watch(() => route.params, loadAssetSymbol)
 
-    onMounted( async () => {
-    await loadAssetSymbol()
+    onMounted(async () => {
+      await loadAssetSymbol()
     })
 
     return {

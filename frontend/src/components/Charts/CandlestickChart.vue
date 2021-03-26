@@ -16,7 +16,10 @@
     <span class="py-1 px-2 text-sm text-gray-700">{{ scale.label }}</span>
   </label>
   <div>
-    <trading-vue v-if="series.ohlcv.length" :data="series" />
+    <trading-vue
+      v-if="series.ohlcv.length"
+      :data="series"
+    />
   </div>
 </template>
 
@@ -47,26 +50,26 @@ export default defineComponent({
     let currentScale        = reactive(getScaleByLabel('Today'))
 
     const series       = ref(
-        {
+      {
         ohlcv: []
-        }
+      }
     )
 
     const reloadData   = async (
       min?: Dayjs,
       max?: Dayjs,
     ) => {
-      const from = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
-      const to   = max ? max : dayjs()
+      const from   = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
+      const to     = max ? max : dayjs()
       series.value = {
         // @ts-ignore
         ohlcv: await loadData(
-            props.assetSymbol,
-            currentScale,
-            from,
-            to,
-          )
-        }
+          props.assetSymbol,
+          currentScale,
+          from,
+          to,
+        )
+      }
 
 
     }

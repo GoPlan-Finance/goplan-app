@@ -42,7 +42,7 @@ export class SecureObject extends Parse.Object {
 
         if (!encryptionKey) {
           throw 'Encryption key not set"'
-      }
+        }
 
         const encryptedValue = Crypto.encrypt(encryptionKey, value)
 

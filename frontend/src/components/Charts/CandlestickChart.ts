@@ -129,7 +129,7 @@ export const loadData = async (
       elem.low,
       elem.close,
       elem.volume
-      ]
+    ]
   })
 
   console.log('Received ', data.length)

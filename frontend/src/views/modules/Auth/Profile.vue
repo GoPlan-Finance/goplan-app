@@ -199,8 +199,8 @@
 
 <script lang="ts">
 
-import {defineComponent, ref} from 'vue'
-import {ExternalDataProvider, User} from '../../../models'
+import {defineComponent, ref, onMounted} from 'vue'
+import { User} from '../../../models'
 
 export default defineComponent({
   setup () {
@@ -266,7 +266,7 @@ export default defineComponent({
         return
       }
 
-      const email = ref(user.get('email') || 'test@test.com')
+      email.value = user.get('email')
 
       const profileInfo = user.get('profileInfo') || {}
 
