@@ -14,9 +14,11 @@ import * as dayjs from 'dayjs'
 
 
 import * as duration from 'dayjs/plugin/duration'
+import * as relativeTime from 'dayjs/plugin/relativeTime'
 import i18n from './i18n'
 
 dayjs.extend(duration)
+dayjs.extend(relativeTime)
 
 
 const app = createApp(App)
