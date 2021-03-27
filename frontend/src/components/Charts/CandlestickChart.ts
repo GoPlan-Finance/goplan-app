@@ -7,10 +7,7 @@ import * as dayjs from 'dayjs'
 import * as duration from 'dayjs/plugin/duration'
 import {AssetSymbol} from '../../../../common/models'
 
-export type CandleOHCLV = [timestamp: number, open: number, high: number, low: number, close: number]
-export type CandlestickSeries = CandleOHCLV[]
-
-type CandleData = { date: dayjs.ConfigType | undefined; open: any; high: any; low: any; close: any; volume: any }
+export type CandleData = { date: dayjs.Dayjs | undefined; open: any; high: any; low: any; close: any; volume: any }
 
 dayjs.extend(duration)
 
@@ -66,17 +63,19 @@ export const timeScales: TimeScaleInterface[] = [
   {
     label      : '10 Y',
     visible    : dayjs.duration(10, 'year'),
-    resolution : 'month',
+    resolution : 'week',
+    //resolution : 'month',
   },
   {
     label      : 'All Time',
     visible    : dayjs.duration(1000, 'year'),
-    resolution : 'month',
+    resolution : 'week',
+    //resolution : 'month',
   },
 ]
 
-export const getScaleForRange = ({min, max}: TimeRange): TimeScaleInterface => {
-  const delta = dayjs.duration(dayjs(max).diff(dayjs(min)))
+export const getScaleForRange = (min :dayjs.Dayjs, max: dayjs.Dayjs): TimeScaleInterface => {
+  const delta = dayjs.duration(max.diff(min))
 
   console.log('delta', dayjs(max))
   const scale = timeScales.find(s => delta.asMilliseconds() < s.visible.asMilliseconds())
@@ -104,7 +103,7 @@ export const loadData = async (
   currentScale: TimeScaleInterface,
   from: dayjs.Dayjs,
   to: dayjs.Dayjs,
-): Promise<CandlestickSeries[]> => {
+): Promise<CandleData[]> => {
 
   console.log('Assets--GetEndOfDay', {
     resolution    : currentScale.resolution,
@@ -120,19 +119,19 @@ export const loadData = async (
     assetSymbolId : assetSymbol.id
   })
   // [ 1551128400000, 33,  37.1, 14,  14,  196 ],
-  const data = eod.map((elem: CandleData) => {
+  // const data = eod.map((elem: CandleData) => {
+  //
+  //   return [
+  //     dayjs(elem.date).valueOf(),
+  //     elem.open,
+  //     elem.high,
+  //     elem.low,
+  //     elem.close,
+  //     elem.volume
+  //   ]
+  // })
 
-    return [
-      dayjs(elem.date).valueOf(),
-      elem.open,
-      elem.high,
-      elem.low,
-      elem.close,
-      elem.volume
-    ]
-  })
-
-  console.log('Received ', data.length)
+  console.log('Received ', eod.length)
   // console.table(data )
-  return data
+  return eod
 }
