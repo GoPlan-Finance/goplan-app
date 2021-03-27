@@ -63,9 +63,8 @@ export default defineComponent({
   emits: [
     'keyValid'
   ],
-  async setup (props, {emit}) {
-    const authStore = inject < AuthStore >('$authStore')
-    const user      = await User.currentAsync()
+  setup (props, {emit}) {
+    const authStore = inject < AuthStore >('$authStore') as AuthStore
 
     const acceptTesting = ref(false)
     const masterKey     = ref('')
@@ -73,6 +72,8 @@ export default defineComponent({
 
 
     const createKey = async () => {
+      const user      = await User.currentAsync() as Parse.User
+
       const clientKey = await authStore.createMasterKey(masterKey.value)
       user.set('clientKey', clientKey)
       await user.save()

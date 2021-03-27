@@ -29,7 +29,7 @@ export default defineComponent({
   components : {DataField},
   props      : {
     assetSymbol: {
-      type     : Object as AssetSymbol,
+      type     : AssetSymbol,
       required : true
     },
   },

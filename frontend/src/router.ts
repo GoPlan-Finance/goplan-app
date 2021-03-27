@@ -3,6 +3,7 @@ import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Forms from './views/Forms.vue'
 import Tables from './views/Tables.vue'
+import Watchlists from './views/Watchlists.vue'
 import UIElements from './views/UIElements.vue'
 // import Login from "./views/Login.vue";
 import Auth from './views/modules/Auth/Auth.vue'
@@ -28,6 +29,11 @@ const routes: RouteRecordRaw[] = [
     path      : '/profile',
     name      : 'profile',
     component : Profile,
+  },
+  {
+    path      : '/watchlists',
+    name      : 'watchlists',
+    component : Watchlists,
   },
   {
     path      : '/dashboard',

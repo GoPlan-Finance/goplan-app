@@ -58,8 +58,8 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, reactive, toRefs} from 'vue'
-import {PriceHistoryItem} from '../interfaces/ApplicationInterfaces'
-import {apiLoader} from '../api/ApiLoader'
+import {PriceHistoryItem} from '@/interfaces/ApplicationInterfaces'
+// import {apiLoader} from '@/api/ApiLoader'
 
 export default defineComponent({
   setup () {
@@ -76,10 +76,11 @@ export default defineComponent({
     onMounted(async () => {
       data.isLoading = true
       try {
-        const apiResponse = await apiLoader.getPrices('AAPL')
-        data.prices       = apiLoader.resolveApiResponse(apiResponse)
+        // const apiResponse = await apiLoader.getPrices('AAPL')
+        // data.prices       = apiLoader.resolveApiResponse(apiResponse)
       } catch (e) {
         console.error(e)
+        //@ts-ignore
         data.error.value = e
       } finally {
         data.isLoading = false

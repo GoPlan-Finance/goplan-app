@@ -13,3 +13,6 @@ details:
   sector: 'Sector'
   symbol: 'Symbol'
   website: 'Website'
+watchlists:
+  updated: Updated
+  show_more: 'Show More'

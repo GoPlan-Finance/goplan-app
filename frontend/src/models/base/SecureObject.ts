@@ -5,8 +5,7 @@ import {Session} from '../../store/auth'
 
 export class SecureObject extends Parse.Object {
 
-    private secureFields = []
-    private decryptedFields = {}
+    private secureFields: string[] = []
 
     constructor (className: string, secureFields: string[]) {
       super(className)
@@ -14,25 +13,20 @@ export class SecureObject extends Parse.Object {
       this.secureFields = secureFields
     }
 
-    public get<T> (attr:string): T {
+    public get<T> (attr: string): T {
       const val = super.get(attr)
 
       if (!this.secureFields.includes(attr)) {
         return val
       }
 
-      if (this.decryptedFields[attr] !== undefined) {
-        // @todo need more testing
-        //return this.decryptedFields[attr]
-      }
+      const encryptionKey = Session.get('encryptionKey') as string
 
-      this.decryptedFields[attr] = Crypto.decrypt(Session.get('encryptionKey'), val)
-
-      return this.decryptedFields[attr]
+      return Crypto.decrypt<T>(encryptionKey, val)
     }
 
 
-    public set (key: string | unknown, value = undefined, options = undefined) : this {
+    public set<T> (key: string | unknown, value: T | undefined, options = undefined): this | false {
 
       if (key && typeof key === 'object') {
 
@@ -42,15 +36,21 @@ export class SecureObject extends Parse.Object {
             throw `When setting Secure Fields, you need to perform a separate "set('${k}', value )"`
           }
         }
-      } else if (typeof key === 'string') {
+      } else if (typeof key === 'string' && this.secureFields.includes(key)) {
 
-        value = Crypto.encrypt(Session.get('encryptionKey'), value)
+        const encryptionKey = Session.get<string>('encryptionKey')
 
-      } else {
-        throw 'Unexpected key type for set()'
+        if (!encryptionKey) {
+          throw 'Encryption key not set"'
+        }
+
+        const encryptedValue = Crypto.encrypt(encryptionKey, value)
+
+        return super.set(encryptionKey, encryptedValue, options)
+
       }
 
-      return super.set(key, value, options)
+      return super.set(key as string, value, options)
     }
 
 }

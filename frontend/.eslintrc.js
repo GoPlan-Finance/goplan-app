@@ -10,6 +10,9 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     '../common/.eslintrc.js',
   ],
+  ignorePatterns: [
+    'src/components/Charts/TradingVue/*'
+  ],
   plugins: [
     'vue',
   ],

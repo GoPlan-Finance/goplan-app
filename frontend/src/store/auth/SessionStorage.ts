@@ -3,10 +3,12 @@
 export class Session {
 
 
-  public static get<T> (key: string, defaultValue : T = null) : T {
+  public static get<T> (key: string, defaultValue? : T) : T|undefined {
     const value = window.sessionStorage.getItem(key)
 
-    if (value === null) return defaultValue
+    if (value === null) {
+      return defaultValue
+    }
 
     return JSON.parse(value)
   }
