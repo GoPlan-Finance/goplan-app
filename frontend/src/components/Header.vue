@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex items-center py-4 px-6"
+    class="flex items-center py-4 px-6 xl:container xl:mx-auto"
   >
     <div class="flex items-center flex-1">
       <button
