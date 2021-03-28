@@ -1,14 +1,12 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-medium">
-      Modal
-    </h3>
-    <button
-      class="mt-3 px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
+    <div
       @click="open = true"
     >
-      Open Modal
-    </button>
+      <slot
+        name="button"
+      />
+    </div>
 
     <div
       :class="`modal ${
@@ -44,7 +42,7 @@
           <!--Title-->
           <div class="flex justify-between items-center pb-3">
             <p class="text-2xl font-bold">
-              Modal Title
+              {{ title }}
             </p>
             <div
               class="modal-close cursor-pointer z-50"
@@ -65,22 +63,18 @@
           </div>
 
           <!--Body-->
-          <p>Modal content.</p>
+          <slot name="content" />
 
           <!--Footer-->
-          <div class="flex justify-end pt-2">
-            <button
-              class="px-6 py-3 bg-transparent p-3 rounded-lg text-blue-500 hover:bg-gray-100 hover:text-blue-400 mr-2"
+          <div class="flex justify-end pt-2 gap-4 flex-wrap">
+            <ButtonDefault
+              label="Close"
               @click="open = false"
-            >
-              Close
-            </button>
-            <button
-              class="px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
+            />
+            <ButtonDefault
+              label="Action"
               @click="open = false"
-            >
-              Action
-            </button>
+            />
           </div>
         </div>
       </div>
@@ -88,11 +82,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
+import ButtonDefault from '../components/base/ButtonDefault.vue'
+
 
 export default defineComponent({
-  setup () {
+  components: {
+    ButtonDefault
+  },
+  props: {
+    title: {
+      type     : String,
+      required : true
+    }
+  },
+  setup (props) {
     const open = ref(false)
     return {
       open,
