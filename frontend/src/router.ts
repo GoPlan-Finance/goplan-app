@@ -49,6 +49,7 @@ const appRoutes: RouteRecordRaw[] = [
     path      : '/details/:ticker',
     name      : 'ticker_details',
     component : Details,
+    props     : true,
   },
   {
     path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound

@@ -54,7 +54,7 @@ export class BaseObject extends Parse.Object {
     }
 
     for (const object of await q.find()) {
-      replace(object)
+     await replace(object)
     }
 
     const subscription = await q.subscribe()

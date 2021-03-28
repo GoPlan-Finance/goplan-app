@@ -3,6 +3,7 @@
     <h1 class="text-gray-700 text-3xl font-bold mb-6">
       {{ assetSymbol.get('symbol').toUpperCase() }} - <small>{{ assetSymbol.get('name') }}</small>
     </h1>
+
     <select @change="addToWatchlist($event)">
       <option
         selected
@@ -11,7 +12,7 @@
         ---
       </option>
       <option
-        v-for="{watchlist, index} in watchlists"
+        v-for="(watchlist, index) in watchlists"
         :key="index"
         :value="watchlist.id"
       >
@@ -38,8 +39,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, onUnmounted, reactive, toRefs, watch} from 'vue'
-import {useRoute} from 'vue-router'
+import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch} from 'vue'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import AssetPrice from '../components/AssetPrice.vue'
 import {findOneBy} from '../../../common/models/objectUtils'
@@ -55,9 +55,12 @@ export default defineComponent({
     AssetPrice,
     CandlestickChart
   },
-
-  setup () {
-    const route          = useRoute()
+  props: {
+    ticker: {
+      type: String,
+    }
+  },
+  setup (props) {
     let liveSubscription = null
 
     const data: {
@@ -74,14 +77,14 @@ export default defineComponent({
       watchlists    : [],
     })
 
-    const loadAssetSymbol = (async () => {
+    const loadAssetSymbol = async () => {
       data.loading     = true
       data.assetSymbol = await findOneBy('AssetSymbol', {
-        symbol: route.params.ticker as string
+        symbol: props.ticker
       }) || null
 
       data.loading = false
-    })
+    }
 
     const addToWatchlist = async event => {
       const selected = event.target.value
@@ -96,16 +99,15 @@ export default defineComponent({
       alert('added')
     }
 
-    watch(() => route.params, loadAssetSymbol)
+    watch(() => props.ticker, loadAssetSymbol)
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
       await loadAssetSymbol()
 
       const q = new Parse.Query(Watchlist)
 
       liveSubscription = await Watchlist.liveQuery(q, data.watchlists)
     })
-
 
     onUnmounted(async () => {
       if (liveSubscription) {
