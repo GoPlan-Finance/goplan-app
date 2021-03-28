@@ -23,7 +23,7 @@
         </svg>
       </button>
 
-      <SearchBar />
+      <SearchBar class="mx-4" />
     </div>
 
     <div class="flex items-center">
@@ -71,6 +71,12 @@
             to="profile"
           >
             Profile
+          </router-link>
+          <router-link
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
+            to="styleguide"
+          >
+            Styleguide
           </router-link>
           <a
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"

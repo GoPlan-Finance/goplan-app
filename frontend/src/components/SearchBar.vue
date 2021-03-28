@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative mx-4 lg:mx-0 sm:w-96 active::min-w-full"
+    class="relative lg:mx-0 sm:w-96 active::min-w-full"
   >
     <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
       <svg
@@ -21,7 +21,7 @@
     <!--suppress HtmlFormInputWithoutLabel -->
     <input
       v-model="tickerName"
-      class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+      class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       placeholder="Search"
       type="text"
       @keyup.enter="selectElement"
