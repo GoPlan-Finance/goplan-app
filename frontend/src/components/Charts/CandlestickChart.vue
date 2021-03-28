@@ -180,7 +180,7 @@ export default defineComponent({
             label: {
               normal: {
                 formatter (param) {
-                  return param != null ? Math.round(param.value) : ''
+                  return param !== null ? Math.round(param.value) : ''
                 }
               }
             },
@@ -281,7 +281,7 @@ export default defineComponent({
       min?: Dayjs,
       max?: Dayjs,
     ) => {
-      const from = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
+      // const from = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
       const to   = max ? max : dayjs()
       const data = await loadData(
         props.assetSymbol,

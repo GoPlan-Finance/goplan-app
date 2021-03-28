@@ -14,7 +14,7 @@ const processBatch = async <T, U>(
   let abortAll            = false
 
   const runOne = async (curIndex: number) => {
-    let result: U
+    let result: U|null = null
     try {
       result = await func(data[curIndex])
     } catch (error) {

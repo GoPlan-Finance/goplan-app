@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, toRefs } from 'vue'
 import ButtonDefault from '../components/base/ButtonDefault.vue'
 
 
@@ -94,6 +94,7 @@ export default defineComponent({
   setup (props) {
     const open = ref(false)
     return {
+      ...toRefs(props),
       open,
     }
   },

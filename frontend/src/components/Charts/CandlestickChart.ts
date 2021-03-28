@@ -17,12 +17,10 @@ export interface TimeScaleInterface {
     resolution: string  // @todo use Backend Type.Resoulution
 }
 
-
-interface TimeRange {
-    min: number
-    max: number
-}
-
+// interface TimeRange {
+//     min: number
+//     max: number
+// }
 
 export const timeScales: TimeScaleInterface[] = [
   // {

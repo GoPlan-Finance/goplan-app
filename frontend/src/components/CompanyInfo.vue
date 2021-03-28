@@ -52,7 +52,6 @@ export default defineComponent({
   },
   setup (props) {
 
-    const details = ref([])
     const data    = reactive({
       info    : {},
       details : [],

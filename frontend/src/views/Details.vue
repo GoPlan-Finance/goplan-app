@@ -11,7 +11,8 @@
         ---
       </option>
       <option
-        v-for="watchlist in watchlists"
+        v-for="{watchlist, index} in watchlists"
+        :key="index"
         :value="watchlist.id"
       >
         {{ watchlist.get('name') }}

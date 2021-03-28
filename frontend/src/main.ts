@@ -1,7 +1,7 @@
 import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue'
 
+// eslint-disable-next-line init-declarations
 declare let Parse
-
 
 import {createApp} from 'vue'
 import App from './App.vue'
