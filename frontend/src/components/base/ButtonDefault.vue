@@ -1,6 +1,10 @@
 <template>
   <button
-    class="flex gap-2 px-6 py-3 bg-blue-300 rounded-lg text-blue-600 font-bold tracking-wide hover:bg-blue-400"
+    class="flex gap-2 px-6 py-3 rounded-lg font-bold tracking-wide"
+    :class="{
+      'text-blue-600 bg-blue-200 hover:bg-blue-300': type === ButtonType.PRIMARY,
+      'text-gray-600 bg-gray-300 hover:bg-gray-400': type === ButtonType.SECONDARY,
+    }"
     @click="$emit('click', $event)"
   >
     <slot
@@ -14,6 +18,10 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 
+export enum ButtonType {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+}
 
 export default defineComponent({
   props: {
@@ -21,9 +29,18 @@ export default defineComponent({
       type     : String,
       required : true,
     },
+    type: {
+      type    : String,
+      default : ButtonType.PRIMARY
+    }
   },
   emits: [
     'click'
   ],
+  setup (props) {
+    return {
+      ButtonType
+    }
+  }
 })
 </script>

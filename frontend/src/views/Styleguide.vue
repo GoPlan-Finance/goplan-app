@@ -14,7 +14,12 @@
     Buttons
   </h3>
   <ButtonDefault
-    label="Default Button"
+    label="Primary Button"
+    class="mb-4"
+  />
+  <ButtonDefault
+    label="Secondary Button"
+    :type="ButtonType.SECONDARY"
     class="mb-4"
   />
   <ButtonDefault
@@ -106,7 +111,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ButtonDefault from '../components/base/ButtonDefault.vue'
+import ButtonDefault, {ButtonType} from '../components/base/ButtonDefault.vue'
 import SearchBar from '../components/SearchBar.vue'
 import DataField from '../components/base/DataField.vue'
 import Modal from '../components/Modal.vue'
@@ -120,6 +125,7 @@ export default defineComponent({
     return {
       currentPrice  : Money.fromDecimal(18, Currencies.USD),
       previousPrice : Money.fromDecimal(19, Currencies.USD),
+      ButtonType
     }
   }
 })
