@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {AssetSymbol} from '../../../common/models'
 
 export default defineComponent({
   props: {
