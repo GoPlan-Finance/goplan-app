@@ -42,7 +42,6 @@
 import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch} from 'vue'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import AssetPrice from '../components/AssetPrice.vue'
-import {findOneBy} from '../../../common/models/objectUtils'
 import {Currencies, Money} from 'ts-money'
 import {AssetSymbol} from '../../../common/models'
 import CompanyInfo from '../components/CompanyInfo.vue'
@@ -79,7 +78,7 @@ export default defineComponent({
 
     const loadAssetSymbol = async () => {
       data.loading     = true
-      data.assetSymbol = await findOneBy('AssetSymbol', {
+      data.assetSymbol = await AssetSymbol.findOneBy( {
         symbol: props.ticker
       }) || null
 
