@@ -1,4 +1,4 @@
-import StyleguideLayout from './layouts/StyleguideLayout.vue'
+import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue'
 
 declare let Parse
 

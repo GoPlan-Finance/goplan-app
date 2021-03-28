@@ -1,11 +1,7 @@
 <template>
   <div>
-    <div
-      @click="open = true"
-    >
-      <slot
-        name="button"
-      />
+    <div @click="open = true">
+      <slot name="button" />
     </div>
 
     <div
@@ -15,14 +11,10 @@
     >
       <div
         class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
+        @click="open = false"
       />
-
-      <div
-        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto"
-      >
-        <div
-          class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50"
-        >
+      <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
           <svg
             class="fill-current text-white"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,14 +59,16 @@
 
           <!--Footer-->
           <div class="flex justify-end pt-2 gap-4 flex-wrap">
-            <ButtonDefault
-              label="Close"
-              @click="open = false"
-            />
-            <ButtonDefault
-              label="Action"
-              @click="open = false"
-            />
+            <slot name="actions">
+              <ButtonDefault
+                label="Close"
+                @click="open = false"
+              />
+              <ButtonDefault
+                label="Action"
+                @click="open = false"
+              />
+            </slot>
           </div>
         </div>
       </div>
