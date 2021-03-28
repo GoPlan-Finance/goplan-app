@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
-    "apexcharts": "^3.26.0",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
     "echarts": "^5.0.2",
@@ -42,8 +41,7 @@
     "vue-feather": "^2.0.0-beta",
     "vue-gapi": "next",
     "vue-i18n": "^9.0.0",
-    "vue-router": "^4.0.5",
-    "vue3-apexcharts": "^1.2.1"
+    "vue-router": "^4.0.5"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^2.0.4",

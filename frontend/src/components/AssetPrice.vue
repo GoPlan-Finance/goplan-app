@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
     <div class="text-5xl font-bold">
-      {{ price.toDecimal().toFixed(2) }}
+      {{ currentPrice.toDecimal().toFixed(2) }}
     </div>
     <div class="text-gray-400 font-bold">
-      {{ price.getCurrency() }}
+      {{ currentPrice.getCurrency() }}
     </div>
     <div
       class="p-3 ml-3 text-xl rounded-lg font-bold"
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref} from 'vue'
+import {computed, defineComponent, toRef} from 'vue'
 import {Money} from 'ts-money'
 
 export default defineComponent({
@@ -58,8 +58,6 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const price = ref(props.currentPrice)
-
     const change = computed(() => props.currentPrice.subtract(props.previousPrice))
 
     const changeIsPositive = computed(() => change.value.toDecimal() >= 0)
@@ -67,7 +65,7 @@ export default defineComponent({
     const percent = computed(() => (change.value.getAmount() / props.currentPrice.getAmount()) * 100)
 
     return {
-      price,
+      currentPrice: props.currentPrice,
       change,
       percent,
       changeIsPositive

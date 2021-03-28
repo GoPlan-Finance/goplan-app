@@ -48,6 +48,14 @@ export class FMP implements Types.DataProviderInterface {
       const response = await listApi.listSymbols('available-traded')
       return response.data
     }
+    async getCompanyProfile (symbol :string): Promise<Types.CompanyProfile> {
+
+      const api = new FMPApi.CompanyValuationApi(this.config)
+
+      const response = await api.profile(symbol)
+
+      return response.data.pop()
+    }
 
     async fetchSymbolTimeSeriesData (
       symbol: string,

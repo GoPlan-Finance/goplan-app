@@ -65,7 +65,9 @@ const parseConfig = {
   },
   serverStartComplete: async () => {
 
+    console.log('Running Migrations')
     await makeSchemas()
+    console.log('Running Migrations ... Done')
   }
 }
 

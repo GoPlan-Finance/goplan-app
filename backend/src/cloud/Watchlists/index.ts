@@ -7,3 +7,4 @@
  */
 
 
+require('./triggers/beforeSave')

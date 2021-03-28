@@ -11,6 +11,7 @@ import dayjs, {Dayjs} from 'dayjs'
 import {FMP} from './FMP'
 
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+
 dayjs.extend(weekOfYear)
 
 export interface ProviderConfigInterface {
@@ -170,6 +171,17 @@ class DataProvider {
       )
     }
 
+    async getCompanyProfile (
+      assetSymbol: AssetSymbol
+    ): Promise<Types.CompanyProfile> {
+
+      const result = await DataProvider
+        .getProviderFor(assetSymbol)
+        .getCompanyProfile(
+          assetSymbol.get('symbol')
+        )
+      return result
+    }
 
 }
 

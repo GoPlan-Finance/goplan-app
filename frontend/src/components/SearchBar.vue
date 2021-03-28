@@ -84,7 +84,7 @@ export default defineComponent({
       tickerName.value = '' // this triggers the watch
 
       push({
-        name   : 'Details',
+        name   : 'ticker_details',
         params : {
           ticker: symbol.get('symbol')
         }
