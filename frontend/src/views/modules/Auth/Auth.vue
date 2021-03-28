@@ -46,8 +46,7 @@ export default defineComponent({
   },
   setup () {
 
-    const app          = getCurrentInstance()
-    // @ts-ignore
+    const app       = getCurrentInstance()
     const gapi      = app.appContext.config.globalProperties.$gapi
     const router    = useRouter()
     const authStore = inject('$authStore') as AuthStore

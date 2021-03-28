@@ -76,7 +76,7 @@ export default defineComponent({
 
     const show = async (watchlist: Watchlist) => {
 
-      watchlist.percentChange = Math.random() * 10 - 3.5
+      watchlist.percentChange = (Math.random() * 10) - 3.5
       watchlist.symbols       = await watchlist.relation('symbols').query().find()
     }
 

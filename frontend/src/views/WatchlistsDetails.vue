@@ -5,7 +5,10 @@
         {{ watchlist.get('name') }}
       </h1>
 
-      <li v-for="symbol in symbols">
+      <li
+        v-for="{symbol, index} in symbols"
+        :key="index"
+      >
         <appLink
           :ticker="symbol.get('symbol')"
           to="ticker_details"
@@ -18,11 +21,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount,onUnmounted, ref} from 'vue'
+import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
 import {Watchlist} from '../../../common/models/Watchlist'
-import {AssetSymbol} from '../../../common/models'
-
 
 export default defineComponent({
   props: {

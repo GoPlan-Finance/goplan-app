@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, toRefs} from 'vue'
 
 export enum ButtonType {
   PRIMARY = 'primary',
@@ -39,6 +39,7 @@ export default defineComponent({
   ],
   setup (props) {
     return {
+      ...toRefs(props),
       ButtonType
     }
   }
