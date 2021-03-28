@@ -30,6 +30,11 @@ const appRoutes: RouteRecordRaw[] = [
     },
   },
   {
+    path      : '/',
+    name      : 'home',
+    component : Watchlists,
+  },
+  {
     path      : '/watchlists',
     name      : 'watchlists',
     component : Watchlists,
