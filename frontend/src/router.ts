@@ -8,13 +8,14 @@ import Watchlists from './views/Watchlists.vue'
 import WatchlistsDetails from './views/WatchlistsDetails.vue'
 import UIElements from './views/UIElements.vue'
 import Auth from './views/modules/Auth/Auth.vue'
-import Modal from './views/Modal.vue'
+import Modal from './components/Modal.vue'
 import Card from './views/Card.vue'
 import Test from './views/Test.vue'
 import Charts from './views/Charts.vue'
 import NotFound from './views/Error404.vue'
 import Profile from './views/modules/Auth/Profile.vue'
 import Details from './views/Details.vue'
+import Styleguide from './views/Styleguide.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -86,6 +87,14 @@ const routes: RouteRecordRaw[] = [
     path      : '/details/:ticker',
     name      : 'ticker_details',
     component : Details,
+  },
+  {
+    path      : '/styleguide',
+    name      : 'styleguide',
+    component : Styleguide,
+    meta      : {
+      layout: 'styleguide'
+    }
   },
   {
     path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound

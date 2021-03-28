@@ -1,3 +1,5 @@
+import StyleguideLayout from './layouts/StyleguideLayout.vue'
+
 declare let Parse
 
 
@@ -36,6 +38,8 @@ const authStore = new AuthStore()
 
 app.component('DefaultLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
+app.component('StyleguideLayout', StyleguideLayout)
+
 app.provide('$authStore', authStore)
 
 
