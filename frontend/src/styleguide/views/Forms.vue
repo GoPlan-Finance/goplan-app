@@ -5,9 +5,9 @@
     </h3>
 
     <div class="mt-4">
-      <h4 class="text-gray-600">
+      <h3 class="text-gray-700 text-xl font-bold mb-6">
         Model Form
-      </h4>
+      </h3>
 
       <div class="mt-4">
         <div
@@ -84,9 +84,9 @@
     </div>
 
     <div class="mt-8">
-      <h4 class="text-gray-600">
+      <h3 class="text-gray-700 text-xl font-bold mb-6">
         Forms
-      </h4>
+      </h3>
 
       <div class="mt-4">
         <div class="p-6 bg-white rounded-lg shadow-md">
@@ -156,11 +156,33 @@
         </div>
       </div>
     </div>
+    <h3 class="text-gray-700 text-xl font-bold my-6">
+      SearchBar
+    </h3>
+    <SearchBar class="mb-6" />
+
+    <h3 class="text-gray-700 text-xl font-bold mb-6">
+      Data Field
+    </h3>
+    <div class="p-6 bg-white rounded-lg shadow-md">
+      <DataField
+        data="Data"
+        label="Label"
+        class="mb-2"
+      />
+      <DataField
+        data="Data"
+        label="Label"
+        class="mb-2"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import SearchBar from '../../components/SearchBar.vue'
+import DataField from '../../components/base/DataField.vue'
 
 interface User {
   username: string;
@@ -170,6 +192,7 @@ interface User {
 }
 
 export default defineComponent({
+  components: {DataField, SearchBar},
   setup () {
     const user = ref<User>({
       username : '',

@@ -1,14 +1,8 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-medium">
-      Modal
-    </h3>
-    <button
-      class="mt-3 px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
-      @click="open = true"
-    >
-      Open Modal
-    </button>
+    <div @click="open = true">
+      <slot name="button" />
+    </div>
 
     <div
       :class="`modal ${
@@ -17,14 +11,10 @@
     >
       <div
         class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
+        @click="open = false"
       />
-
-      <div
-        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto"
-      >
-        <div
-          class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50"
-        >
+      <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
           <svg
             class="fill-current text-white"
             xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +34,7 @@
           <!--Title-->
           <div class="flex justify-between items-center pb-3">
             <p class="text-2xl font-bold">
-              Modal Title
+              {{ title }}
             </p>
             <div
               class="modal-close cursor-pointer z-50"
@@ -65,22 +55,20 @@
           </div>
 
           <!--Body-->
-          <p>Modal content.</p>
+          <slot name="content" />
 
           <!--Footer-->
-          <div class="flex justify-end pt-2">
-            <button
-              class="px-6 py-3 bg-transparent p-3 rounded-lg text-blue-500 hover:bg-gray-100 hover:text-blue-400 mr-2"
-              @click="open = false"
-            >
-              Close
-            </button>
-            <button
-              class="px-6 py-3 bg-blue-600 rounded-lg text-white font-medium tracking-wide hover:bg-blue-500"
-              @click="open = false"
-            >
-              Action
-            </button>
+          <div class="flex justify-end pt-2 gap-4 flex-wrap">
+            <slot name="actions">
+              <ButtonDefault
+                label="Close"
+                @click="open = false"
+              />
+              <ButtonDefault
+                label="Action"
+                @click="open = false"
+              />
+            </slot>
           </div>
         </div>
       </div>
@@ -88,11 +76,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
+import ButtonDefault from '../components/base/ButtonDefault.vue'
+
 
 export default defineComponent({
-  setup () {
+  components: {
+    ButtonDefault
+  },
+  props: {
+    title: {
+      type     : String,
+      required : true
+    }
+  },
+  setup (props) {
     const open = ref(false)
     return {
       open,
