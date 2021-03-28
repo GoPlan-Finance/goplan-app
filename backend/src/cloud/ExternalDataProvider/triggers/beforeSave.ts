@@ -5,17 +5,10 @@
  */
 // const USE_MASTER_KEY = { useMasterKey: true }
 // import { assertEncrypted } from '../../../../common/Auth'
+import {assertUser} from "../../Auth";
 
-
-const assertUser = (user: Parse.User) => {
-  if (!user) {
-    throw new Parse.Error(Parse.Error.OPERATION_FORBIDDEN, 'Please log-in')
-  }
-}
-
-// @ts-ignore
 Parse.Cloud.beforeSave('ExternalDataProvider', async (request) => {
-  assertUser(request.user)
+  assertUser(request)
   // @todo
   // assertEncrypted(request.object, 'credentials')
 

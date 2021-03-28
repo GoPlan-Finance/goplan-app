@@ -1,15 +1,18 @@
+declare var Parse
+
+
 import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import './assets/main.css'
 import DashboardLayout from './layouts/DashboardLayout.vue'
 import EmptyLayout from './layouts/EmptyLayout.vue'
+import LinkComponent from './components/router/link.vue'
 
 import VueGapi from 'vue-gapi'
 import {AuthStore} from './store'
 
 import './parseConfig'
-import VueApexCharts from 'vue3-apexcharts'
 import * as dayjs from 'dayjs'
 
 
@@ -28,13 +31,15 @@ app.use(VueGapi, {
   scope    : 'profile',
 })
 app.use(i18n)
-app.use(VueApexCharts)
 
 const authStore = new AuthStore()
 
 app.component('DefaultLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
 app.provide('$authStore', authStore)
+
+
+app.component('AppLink', LinkComponent)
 
 
 // @todo move to router.ts

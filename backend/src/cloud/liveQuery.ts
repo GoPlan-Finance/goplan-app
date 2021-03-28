@@ -1,7 +1,6 @@
-
-
 export default [
-  'Watchlist',
-  // '',
-  // '',
+    'Watchlist',
+    'AssetSymbol',
+    // '',
+    // '',
 ]

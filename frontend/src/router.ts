@@ -1,11 +1,12 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 
+// import Login from "./views/Login.vue";
 import Dashboard from './views/Dashboard.vue'
 import Forms from './views/Forms.vue'
 import Tables from './views/Tables.vue'
 import Watchlists from './views/Watchlists.vue'
+import WatchlistsDetails from './views/WatchlistsDetails.vue'
 import UIElements from './views/UIElements.vue'
-// import Login from "./views/Login.vue";
 import Auth from './views/modules/Auth/Auth.vue'
 import Modal from './views/Modal.vue'
 import Card from './views/Card.vue'
@@ -34,6 +35,12 @@ const routes: RouteRecordRaw[] = [
     path      : '/watchlists',
     name      : 'watchlists',
     component : Watchlists,
+  },
+  {
+    path      : '/watchlists/:watchlistId',
+    name      : 'watchlist',
+    props: true,
+    component : WatchlistsDetails,
   },
   {
     path      : '/dashboard',
@@ -77,7 +84,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path      : '/details/:ticker',
-    name      : 'Details',
+    name      : 'ticker_details',
     component : Details,
   },
   {
