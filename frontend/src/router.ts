@@ -18,6 +18,7 @@ import Buttons from './styleguide/views/Buttons.vue'
 import StyleguideModals from './styleguide/views/Modals.vue'
 import StyleguideDetail from './styleguide/views/StyleguideDetail.vue'
 import Styleguide from './styleguide/views/Styleguide.vue'
+import DataTables from './styleguide/views/DataTables.vue'
 
 const appRoutes: RouteRecordRaw[] = [
   {
@@ -107,6 +108,11 @@ const styleguideRoutes: RouteRecordRaw[] = [
     path      : '/styleguide/buttons',
     name      : 'buttons',
     component : Buttons,
+  },
+  {
+    path      : '/styleguide/data-tables',
+    name      : 'data-tables',
+    component : DataTables,
   },
   {
     path      : '/styleguide/details',
