@@ -8,14 +8,14 @@ export const Watchlist = {
     updatedAt: {
       type: 'Date',
     },
-    ACL              : {type: 'ACL'},
-    name             : {type: 'String'},
-    createdBy         : {type: 'Pointer', targetClass: '_User'},
-    symbols         : {type: 'Relation', targetClass: 'AssetSymbol'},
+    ACL       : {type: 'ACL'},
+    name      : {type: 'String'},
+    createdBy : {type: 'Pointer', targetClass: '_User'},
+    symbols   : {type: 'Relation', targetClass: 'AssetSymbol'},
   },
   indexes: {
     objectId : {objectId: 1},
-    name   : {name: 1}
+    name     : {name: 1}
   },
   classLevelPermissions: {
     find            : {requiresAuthentication: true},

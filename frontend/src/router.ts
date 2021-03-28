@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
   {
     path      : '/watchlists/:watchlistId',
     name      : 'watchlist',
-    props: true,
+    props     : true,
     component : WatchlistsDetails,
   },
   {

@@ -229,8 +229,6 @@ export interface CompanyProfile {
 }
 
 
-
-
 export interface TimeSeriesData {
     resolution: SymbolDataResolution
     data: EndOfDayData[]

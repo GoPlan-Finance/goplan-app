@@ -65,7 +65,7 @@ export default defineComponent({
     const percent = computed(() => (change.value.getAmount() / props.currentPrice.getAmount()) * 100)
 
     return {
-      currentPrice : props.currentPrice,
+      currentPrice: props.currentPrice,
       change,
       percent,
       changeIsPositive

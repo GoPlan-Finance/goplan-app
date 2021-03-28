@@ -6,7 +6,7 @@
 // noinspection ES6PreferShortImport
 import {AssetSymbol} from '../../../../../common/models'
 import dayjs from 'dayjs'
-import {assertUser} from "../../Auth";
+import {assertUser} from '../../Auth'
 
 const USE_MASTER_KEY = {useMasterKey: true}
 

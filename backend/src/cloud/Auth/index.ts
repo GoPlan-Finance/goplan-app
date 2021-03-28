@@ -13,14 +13,14 @@ interface RequestInterface{
     user? :Parse.User,
 }
 
-export const assertUser = ({master , user} : RequestInterface) => {
-    if(master){
-        return
-    }
+export const assertUser = ({master, user} : RequestInterface) => {
+  if (master) {
+    return
+  }
 
-    if (user) {
-        return
-    }
+  if (user) {
+    return
+  }
 
-    throw new Parse.Error(Parse.Error.OPERATION_FORBIDDEN, 'Please log-in')
+  throw new Parse.Error(Parse.Error.OPERATION_FORBIDDEN, 'Please log-in')
 }

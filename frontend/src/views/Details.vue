@@ -4,26 +4,35 @@
       {{ assetSymbol.get('symbol').toUpperCase() }} - <small>{{ assetSymbol.get('name') }}</small>
     </h1>
     <select @change="addToWatchlist($event)">
-      <option selected value="">---</option>
-      <option v-for="watchlist in watchlists" :value="watchlist.id">{{ watchlist.get('name') }}</option>
+      <option
+        selected
+        value=""
+      >
+        ---
+      </option>
+      <option
+        v-for="watchlist in watchlists"
+        :value="watchlist.id"
+      >
+        {{ watchlist.get('name') }}
+      </option>
     </select>
     <br>
 
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
-          :current-price="currentPrice"
-          :previous-price="previousPrice"
+        :current-price="currentPrice"
+        :previous-price="previousPrice"
       />
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
       <CandlestickChart
-          :asset-symbol="assetSymbol"
+        :asset-symbol="assetSymbol"
       />
     </div>
     <CompanyInfo
-        :asset-symbol="assetSymbol"
+      :asset-symbol="assetSymbol"
     />
-    
   </template>
 </template>
 
@@ -36,7 +45,7 @@ import {findOneBy} from '../../../common/models/objectUtils'
 import {Currencies, Money} from 'ts-money'
 import {AssetSymbol} from '../../../common/models'
 import CompanyInfo from '../components/CompanyInfo.vue'
-import {Watchlist} from "../../../common/models/Watchlist";
+import {Watchlist} from '../../../common/models/Watchlist'
 
 
 export default defineComponent({
@@ -46,8 +55,8 @@ export default defineComponent({
     CandlestickChart
   },
 
-  setup() {
-    const route = useRoute()
+  setup () {
+    const route          = useRoute()
     let liveSubscription = null
 
     const data: {
@@ -57,15 +66,15 @@ export default defineComponent({
       previousPrice: Money,
       watchlists: Watchlist[],
     } = reactive({
-      loading: false,
-      assetSymbol: null,
-      currentPrice: Money.fromDecimal(14, Currencies.USD),
-      previousPrice: Money.fromDecimal(12, Currencies.USD),
-      watchlists: [],
+      loading       : false,
+      assetSymbol   : null,
+      currentPrice  : Money.fromDecimal(14, Currencies.USD),
+      previousPrice : Money.fromDecimal(12, Currencies.USD),
+      watchlists    : [],
     })
 
     const loadAssetSymbol = (async () => {
-      data.loading = true
+      data.loading     = true
       data.assetSymbol = await findOneBy('AssetSymbol', {
         symbol: route.params.ticker as string
       }) || null

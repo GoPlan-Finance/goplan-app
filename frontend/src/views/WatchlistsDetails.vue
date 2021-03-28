@@ -6,35 +6,37 @@
       </h1>
 
       <li v-for="symbol in symbols">
-        <appLink :ticker="symbol.get('symbol')" to="ticker_details">
+        <appLink
+          :ticker="symbol.get('symbol')"
+          to="ticker_details"
+        >
           {{ symbol.get('name') }}
         </appLink>
       </li>
-
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, ref} from 'vue'
+import {defineComponent, onBeforeMount,onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
-import {Watchlist} from "../../../common/models/Watchlist";
-import {AssetSymbol} from "../../../common/models";
+import {Watchlist} from '../../../common/models/Watchlist'
+import {AssetSymbol} from '../../../common/models'
 
 
 export default defineComponent({
   props: {
     watchlistId: {
-      type: String,
-      required: true,
+      type     : String,
+      required : true,
     },
   },
-  setup(props) {
+  setup (props) {
     const newWatchlistName = ref('')
-    const watchlist = ref(null)
-    const symbols = ref([])
-    let liveSubscription = null
-    const createList = async () => {
+    const watchlist        = ref(null)
+    const symbols          = ref([])
+    let liveSubscription   = null
+    const createList       = async () => {
 
       const watchlist = new Watchlist()
 
@@ -47,10 +49,16 @@ export default defineComponent({
       const q = new Parse.Query(Watchlist)
       q.get(props.watchlistId)
 
-      liveSubscription = await Watchlist.liveQuery(q, null , async wl => {
-        symbols.value = await wl.relation('symbols').query().find()
+      liveSubscription = await Watchlist.liveQuery(q, null, async wl => {
+        symbols.value   = await wl.relation('symbols').query().find()
         watchlist.value = wl
       })
+    })
+
+    onUnmounted(async () => {
+      if (liveSubscription) {
+        await liveSubscription.unsubscribe()
+      }
     })
 
     return {

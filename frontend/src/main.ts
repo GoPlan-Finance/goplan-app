@@ -1,4 +1,4 @@
-declare var Parse
+declare let Parse
 
 
 import {createApp} from 'vue'
