@@ -14,9 +14,10 @@ import Charts from './styleguide/views/Charts.vue'
 import NotFound from './views/Error404.vue'
 import Profile from './views/modules/Auth/Profile.vue'
 import Details from './views/Details.vue'
-import Styleguide from './styleguide/views/Styleguide.vue'
 import Buttons from './styleguide/views/Buttons.vue'
 import StyleguideModals from './styleguide/views/Modals.vue'
+import StyleguideDetail from './styleguide/views/StyleguideDetail.vue'
+import Styleguide from './styleguide/views/Styleguide.vue'
 
 const appRoutes: RouteRecordRaw[] = [
   {
@@ -100,6 +101,11 @@ const styleguideRoutes: RouteRecordRaw[] = [
     path      : '/styleguide/buttons',
     name      : 'buttons',
     component : Buttons,
+  },
+  {
+    path      : '/styleguide/details',
+    name      : 'details',
+    component : StyleguideDetail,
   },
   {
     path      : '/styleguide/modals',
