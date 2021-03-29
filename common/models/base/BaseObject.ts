@@ -89,12 +89,12 @@ export class BaseObject extends Parse.Object {
     return await query.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
   }
 
-  public static async get<T extends BaseObject> (
+  public static async get (
     docId: string,
     useMasterKey = false
   ): Promise<BaseObject> {
 
-    const doc = await this.getOrNull<T>(docId, useMasterKey)
+    const doc = await this.getOrNull(docId, useMasterKey)
 
     if (doc) {
       return doc
