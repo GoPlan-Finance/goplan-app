@@ -5,7 +5,7 @@ export class Watchlist extends BaseObject {
     static className = 'Watchlist'
 
     constructor() {
-        super('Watchlist')
+        super(Watchlist.className)
     }
 
 }

@@ -5,7 +5,7 @@ export class AssetSymbol extends BaseObject {
   static className = 'AssetSymbol'
 
   constructor () {
-    super('AssetSymbol')
+    super(AssetSymbol.className)
   }
 
 }

@@ -1,4 +1,3 @@
-// @todo move to common/models/user.ts
 
 import {Crypto} from '../../../../common/Crypto'
 import {Session} from '../../store/auth'

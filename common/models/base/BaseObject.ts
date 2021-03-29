@@ -5,19 +5,13 @@
  */
 type LiveQueryUpdateFn<T> = (obj: T) => void
 
-type StaticThis<T> = {
-    new(): T,
-};
-
-
 const USE_MASTER_KEY = {useMasterKey: true}
-
 
 export class BaseObject extends Parse.Object {
 
-  constructor (className: string) {
-    super(className)
-  }
+    constructor(className: string) {
+        super(className)
+    }
 
     /**
      * Run a query on a collection
@@ -50,7 +44,7 @@ export class BaseObject extends Parse.Object {
             }
         }
 
-        const remove = (object: T) => {
+        const remove = (object: BaseObject) => {
 
             if (objects !== null) {
                 const index = objects.findIndex(o => o.id === object.id)
@@ -62,19 +56,19 @@ export class BaseObject extends Parse.Object {
         }
 
         for (const object of await q.find()) {
-            await replace(object)
+            replace(object)
         }
 
         const subscription = await q.subscribe()
 
         subscription.on('create', item => {
 
-            replace(item)
+            replace(item as T)
         })
 
         subscription.on('update', item => {
 
-            replace(item)
+            replace(item as T)
         })
 
         subscription.on('delete', item => {
@@ -128,7 +122,7 @@ export class BaseObject extends Parse.Object {
     public static async findOneBy<T extends BaseObject>(
         params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
         useMasterKey = false
-    ): Promise<T | undefined> {
+    ): Promise<BaseObject | undefined> {
 
         const query = new Parse.Query(this)
 
@@ -146,12 +140,16 @@ export class BaseObject extends Parse.Object {
         params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
         useMasterKey = false): Promise<BaseObject> {
 
-        const obj = await this.findOneBy( params, useMasterKey)
+        const obj = await this.findOneBy(params, useMasterKey)
 
         if (obj) {
             return obj
         }
 
+        // debugger
+        //         const ctor = this.constructor as typeof BaseObject;
+        //         console.log(ctor.className); // true
+        // @ts-ignore
         const obj2 = new this(this.className) // the `this` in `this.className` refer to the static child class
 
         obj2.set(params)

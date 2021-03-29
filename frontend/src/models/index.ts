@@ -3,10 +3,9 @@
  *
  *
  */
-import {User} from './User'
-import {ExternalDataProvider} from './ExternalDataProvider'
+import {Transaction} from './Transaction'
+
 
 export {
-  User,
-  ExternalDataProvider,
+  Transaction,
 }

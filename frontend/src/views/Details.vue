@@ -78,7 +78,7 @@ export default defineComponent({
 
     const loadAssetSymbol = async () => {
       data.loading     = true
-      data.assetSymbol = await AssetSymbol.findOneBy( {
+      data.assetSymbol = await AssetSymbol.findOneBy({
         symbol: props.ticker
       }) || null
 
