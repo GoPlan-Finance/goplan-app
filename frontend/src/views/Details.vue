@@ -3,6 +3,7 @@
     <h1 class="text-gray-700 text-3xl font-bold mb-6">
       {{ assetSymbol.get('symbol').toUpperCase() }} - <small>{{ assetSymbol.get('name') }}</small>
     </h1>
+    <buy-sell-asset :asset-symbol="assetSymbol" />
 
     <select @change="addToWatchlist($event)">
       <option
@@ -45,6 +46,7 @@ import AssetPrice from '../components/AssetPrice.vue'
 import {Currencies, Money} from 'ts-money'
 import {AssetSymbol} from '../../../common/models'
 import CompanyInfo from '../components/CompanyInfo.vue'
+import BuySellAsset from '../components/BuySellAsset.vue'
 import {Watchlist} from '../../../common/models/Watchlist'
 
 
@@ -52,11 +54,13 @@ export default defineComponent({
   components: {
     CompanyInfo,
     AssetPrice,
-    CandlestickChart
+    CandlestickChart,
+    BuySellAsset,
   },
   props: {
     ticker: {
-      type: String,
+      type     : String,
+      required : true,
     }
   },
   setup (props) {

@@ -13,7 +13,7 @@ interface RequestInterface{
     user? :Parse.User,
 }
 
-export const assertUser = ({master, user} : RequestInterface) => {
+export const assertUser = ({master, user} : RequestInterface) :void => {
   if (master) {
     return
   }

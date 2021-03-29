@@ -34,13 +34,16 @@
               <span v-if="watchlist.percentChange >= 0">+</span>{{ watchlist.percentChange.toFixed(2) }} %
             </div>
           </div>
-          <app-link
+          <AppLink
+            :id="watchlist.id"
             to="watchlist"
-            :watchlistId="watchlist.id"
-            class="block px-6 py-4 bg-gray-50 text-gray-500"
           >
-            {{ $t('watchlists.show_more') }}
-          </app-link>
+            <span
+              class="block px-6 py-4 bg-gray-50 text-gray-500"
+            >
+              {{ $t('watchlists.show_more') }}
+            </span>
+          </AppLink>
         </div>
       </div>
     </div>
@@ -55,9 +58,9 @@ import {Watchlist} from '../../../common/models/Watchlist'
 
 export default defineComponent({
   setup () {
-    const watchlists = ref<Watchlist[]>([])
-    const newWatchlistName        = ref('')
-    let liveSubscription          = null
+    const watchlists       = ref<Watchlist[]>([])
+    const newWatchlistName = ref('')
+    let liveSubscription   = null
 
     const createList = async () => {
 

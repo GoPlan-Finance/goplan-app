@@ -6,15 +6,15 @@
       </h1>
 
       <li
-        v-for="{symbol, index} in symbols"
-        :key="index"
+        v-for="symbol in symbols"
+        :key="symbol.id"
       >
-        <appLink
+        <app-Link
           :ticker="symbol.get('symbol')"
           to="ticker_details"
         >
           {{ symbol.get('name') }}
-        </appLink>
+        </app-Link>
       </li>
     </template>
   </div>
@@ -27,7 +27,7 @@ import {Watchlist} from '../../../common/models/Watchlist'
 
 export default defineComponent({
   props: {
-    watchlistId: {
+    id: {
       type     : String,
       required : true,
     },
@@ -48,7 +48,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const q = new Parse.Query(Watchlist)
-      q.get(props.watchlistId)
+      q.get(props.id)
 
       liveSubscription = await Watchlist.liveQuery(q, null, async wl => {
         symbols.value   = await wl.relation('symbols').query().find()

@@ -37,8 +37,8 @@ export class Crypto {
       aVer : 1,
     }
   }
-
-  static PBKDF2 (key:string, salt: string | CryptoJS.lib.WordArray)  {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static PBKDF2 (key:string, salt: string | CryptoJS.lib.WordArray) :any  {
     const keySize    = 256
     const iterations = 1000
 

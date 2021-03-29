@@ -2,6 +2,7 @@ import {BaseObject} from './base/BaseObject'
 
 
 export class AssetSymbol extends BaseObject {
+
   static className = 'AssetSymbol'
 
   constructor () {
@@ -9,3 +10,5 @@ export class AssetSymbol extends BaseObject {
   }
 
 }
+
+AssetSymbol.register()
