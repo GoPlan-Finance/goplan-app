@@ -8,7 +8,8 @@ export class Transaction extends SecureObject {
     constructor () {
       super(Transaction.className, [
         'quantity',
-        'price'
+        'price',
+        'type',
       ])
     }
 

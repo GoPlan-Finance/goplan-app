@@ -12,26 +12,50 @@ const assertEncrypted = (value: EncryptedValue): void => {
     throw 'Invalid encrypted field value'
   }
 
-  const {ct, iv, s} = value
+  const keys = {
+    ct   : 'string',
+    s    : 'string',
+    iv   : 'string',
+    kVer : 'number',
+    aVer : 'number',
+  }
 
-  if (typeof s !== 'number') {
-    throw '"salt" invalid'
+  // All required keys are OK
+  for (const [
+    k, t
+  ] of Object.entries(keys)) {
+
+    // @ts-ignore
+    if (typeof value[k] !== t) {
+      throw `Invalid type for "${k}"`
+    }
   }
-  if (typeof iv !== 'number') {
-    throw '"iv" invalid'
+
+  const kk     = Object.keys(keys)
+  const extras = Object.keys(value).filter(k => !kk.includes(k))
+
+  if (extras.length) {
+    throw `Extra parameters "${extras.join(',')}" are not allowed`
   }
-  if (typeof ct !== 'string') {
-    throw '"cypherText" field invalid'
-  }
+
 }
 
-const assertEncryptedField = (object: Parse.Object, fieldName: string) :void => {
+const assertEncryptedField = (object: Parse.Object, fieldName: string): void => {
 
   const value = object.get(fieldName)
   assertEncrypted(value)
 }
 
+const assertEncryptedFields = (object: Parse.Object, fieldNames: string[]): void => {
+
+  for (const fieldName in fieldNames) {
+    assertEncryptedField(object, fieldName)
+  }
+}
+
+
 export {
   assertEncrypted,
   assertEncryptedField,
+  assertEncryptedFields,
 }

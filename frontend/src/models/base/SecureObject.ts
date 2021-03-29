@@ -1,8 +1,8 @@
-
 import {Crypto} from '../../../../common/Crypto'
 import {Session} from '../../store/auth'
+import {BaseObject} from '../../../../common/models/base/BaseObject'
 
-export class SecureObject extends Parse.Object {
+export class SecureObject extends BaseObject {
 
     private secureFields: string[] = []
 
@@ -37,6 +37,9 @@ export class SecureObject extends Parse.Object {
         }
       } else if (typeof key === 'string' && this.secureFields.includes(key)) {
 
+        if (value instanceof Parse.Object) {
+          throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
+        }
         const encryptionKey = Session.get<string>('encryptionKey')
 
         if (!encryptionKey) {
@@ -45,7 +48,7 @@ export class SecureObject extends Parse.Object {
 
         const encryptedValue = Crypto.encrypt(encryptionKey, value)
 
-        return super.set(encryptionKey, encryptedValue, options)
+        return super.set(key, encryptedValue, options)
 
       }
 

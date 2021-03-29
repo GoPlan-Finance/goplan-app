@@ -9,7 +9,7 @@ import router from './router'
 import './assets/main.css'
 import DashboardLayout from './layouts/DashboardLayout.vue'
 import EmptyLayout from './layouts/EmptyLayout.vue'
-import LinkComponent from './components/router/link.vue'
+import LinkComponent from './components/router/AppLink.vue'
 
 import VueGapi from 'vue-gapi'
 import {AuthStore} from './store'
