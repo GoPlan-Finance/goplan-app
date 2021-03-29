@@ -13,6 +13,11 @@ export class BaseObject extends Parse.Object {
     super(className)
   }
 
+  public static register(){
+    Parse.Object.registerSubclass(this.className, this)
+  }
+
+  
   /**
      * Run a query on a collection
      * @param q The query

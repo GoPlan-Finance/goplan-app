@@ -10,3 +10,6 @@ export class StockExchange extends BaseObject {
   }
 
 }
+
+StockExchange.register()
+

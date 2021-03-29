@@ -14,3 +14,5 @@ export class Transaction extends SecureObject {
     }
 
 }
+
+Transaction.register()

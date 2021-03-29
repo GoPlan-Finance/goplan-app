@@ -10,3 +10,5 @@ export class AssetSymbol extends BaseObject {
   }
 
 }
+
+AssetSymbol.register()
