@@ -13,7 +13,8 @@ export class BaseObject extends Parse.Object {
     super(className)
   }
 
-  public static register(){
+  public static register () {
+    // @ts-ignore
     Parse.Object.registerSubclass(this.className, this)
   }
 
@@ -98,7 +99,6 @@ export class BaseObject extends Parse.Object {
     docId: string,
     useMasterKey = false
   ): Promise<BaseObject> {
-
     const doc = await this.getOrNull(docId, useMasterKey)
 
     if (doc) {

@@ -1,5 +1,8 @@
 <template>
-  <div class="hidden lg:grid grid-cols-1 lg:grid-cols-8 gap-2 px-4 py-4 text-gray-400 text-sm">
+  <div
+    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-4 text-gray-400 text-sm"
+    :class="`lg:grid-cols-${columnCount}`"
+  >
     <span
       v-for="(row, rowIndex) in config.headers"
       :key="rowIndex"
@@ -14,45 +17,53 @@
         }"
       >{{ item.label }}</span>
     </span>
-    <span />
+    <span v-if="config.settings?.actions" />
   </div>
   <div
     v-for="(row, rowIndex) in config.rows"
     :key="rowIndex"
-    class="mb-2 grid grid-cols-1 lg:grid-cols-8 gap-2 bg-white rounded-lg px-4 py-4 whitespace-nowrap"
+    class="mb-2 grid grid-cols-1 sm:grid-cols-2  gap-2 bg-white rounded-lg px-4 py-4"
+    :class="`lg:grid-cols-${columnCount}`"
   >
     <span
-      v-for="(cell, cellIndex) in row"
+      v-for="(cell, cellIndex) in config.headers"
       :key="cellIndex"
       class="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-1 gap-1 items-center"
     >
       <span
-        v-for="(item, itemIndex) in cell"
-        :key="itemIndex"
+        v-for="(header, headerIndex) in cell"
+        :key="headerIndex"
         :class="[
-          config.headers[cellIndex][itemIndex]?.classes,
+          header.classes,
           {
-            'lg:text-right': config.headers[cellIndex][itemIndex]?.justify === 'right',
-            'lg:text-center': config.headers[cellIndex][itemIndex]?.justify === 'center'
+            'lg:text-right': header.justify === 'right',
+            'lg:text-center': header.justify === 'center'
           }
         ]"
       >
         <span
           class="block lg:hidden text-sm font-light text-gray-500"
         >
-          {{ config.headers[cellIndex][itemIndex]?.label }}
+          {{ header.label }}
         </span>
-        <template v-if="config.headers[cellIndex][itemIndex]?.type === TableCellType.IMAGE">
+        <template v-if="header.type === TableCellType.IMAGE">
           <img
-            :src="item"
+            :src="row[header.label]"
           >
         </template>
+        <template v-if="header.type === TableCellType.CUSTOM">
+          <slot
+            :name="header.label"
+            :row="row"
+          />
+        </template>
         <template v-else>
-          {{ item }}
+          {{ row[header.label] }}
         </template>
       </span>
     </span>
     <span
+      v-if="config.settings?.actions"
       class="grid items-center"
     >
       <slot
@@ -64,11 +75,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, computed} from 'vue'
 
 export enum TableCellType {
   STRING = 'string',
-  IMAGE = 'image'
+  IMAGE = 'image',
+  LINK = 'link',
+  CUSTOM = 'custom',
 }
 
 export interface TableHeader {
@@ -80,7 +93,10 @@ export interface TableHeader {
 
 export interface TableConfig {
   headers: TableHeader[][],
-  rows: string[][][]
+  rows: Record<string, any>[]
+  settings?: {
+    actions: boolean
+  },
 }
 
 export default defineComponent({
@@ -91,8 +107,14 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const columnCount = computed(() => {
+      const actions = props.config.settings.actions ? 1 : 0
+      return props.config.headers.length + actions
+    })
+
     return {
-      TableCellType
+      TableCellType,
+      columnCount
     }
   }
 })
