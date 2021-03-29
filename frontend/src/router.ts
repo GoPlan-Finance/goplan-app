@@ -19,6 +19,7 @@ import StyleguideModals from './styleguide/views/Modals.vue'
 import StyleguideDetail from './styleguide/views/StyleguideDetail.vue'
 import Styleguide from './styleguide/views/Styleguide.vue'
 import DataTables from './styleguide/views/DataTables.vue'
+import Transactions from './views/Transactions.vue'
 
 const appRoutes: RouteRecordRaw[] = [
   {
@@ -45,6 +46,12 @@ const appRoutes: RouteRecordRaw[] = [
     name      : 'watchlist',
     props     : true,
     component : WatchlistsDetails,
+  },
+  {
+    path      : '/transactions',
+    name      : 'transactions',
+    props     : true,
+    component : Transactions,
   },
   {
     path      : '/details/:ticker',
