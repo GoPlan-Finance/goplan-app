@@ -64,7 +64,7 @@ export default defineComponent({
     const addTransaction = async (type: 'buy' | 'sell') => {
 
       const t = new Transaction()
-      debugger
+
       t.set('quantity', quantity.value)
       t.set('price', price.value)
       t.set('date', date.value)
