@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-gray-700 text-3xl font-medium mb-6">
-      Watchlists
+      Transactions
     </h1>
 
     Create list <input
@@ -13,34 +13,27 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <div
-        v-for="watchlist of watchlists"
-        :key="watchlist.id"
+        v-for="transaction of transactions"
+        :key="transaction.id"
       >
         <div class="shadow-md overflow-hidden rounded-lg">
           <div class="bg-white px-6 py-4">
             <div class="text-gray-900 font-bold text-xl mb-1">
-              {{ watchlist.get('name') }} <small class="font-normal text-xs">({{ watchlist.symbols.length }} stocks)</small>
+              {{ transaction.get('name') }} <small class="font-normal text-xs">({{ transaction.symbols.length }} stocks)</small>
             </div>
 
             <div class="text-gray-500  text-sm mb-2">
-              {{ $t('watchlists.updated') }} {{ dayjs(watchlist.get('updatedAt')).fromNow() }}
+              {{ $t('transaction.updated') }} {{ dayjs(transaction.get('updatedAt')).fromNow() }}
             </div>
 
 
             <div
-              :class="watchlist.percentChange >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+              :class="transaction.percentChange >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
               class="min-w-min p-3 text-xl rounded-lg font-bold"
             >
-              <span v-if="watchlist.percentChange >= 0">+</span>{{ watchlist.percentChange.toFixed(2) }} %
+              <span v-if="transaction.percentChange >= 0">+</span>{{ transaction.percentChange.toFixed(2) }} %
             </div>
           </div>
-          <app-link
-            to="watchlist"
-            :watchlistId="watchlist.id"
-            class="block px-6 py-4 bg-gray-50 text-gray-500"
-          >
-            {{ $t('watchlists.show_more') }}
-          </app-link>
         </div>
       </div>
     </div>
@@ -48,14 +41,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
+import {defineComponent, onMounted, onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
 import {Watchlist} from '../../../common/models/Watchlist'
 
 
 export default defineComponent({
   setup () {
-    const watchlists = ref<Watchlist[]>([])
+    const watchlists: Watchlist[] = ref([])
     const newWatchlistName        = ref('')
     let liveSubscription          = null
 
@@ -75,7 +68,7 @@ export default defineComponent({
     }
 
 
-    onBeforeMount(async () => {
+    onMounted(async () => {
       const q = new Parse.Query(Watchlist)
 
       liveSubscription = await Watchlist.liveQuery(q, watchlists.value,  show)

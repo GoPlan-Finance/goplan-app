@@ -200,7 +200,7 @@
 <script lang="ts">
 
 import {defineComponent, ref, onMounted} from 'vue'
-import { User} from '../../../models'
+import { User} from '../../../../../common/models'
 
 export default defineComponent({
   setup () {

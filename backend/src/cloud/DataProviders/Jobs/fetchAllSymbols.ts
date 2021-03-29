@@ -10,9 +10,6 @@ import {processBatch} from '../../../../../common/utils'
 import * as DataProviderInterfaces from '../providers/types'
 import {ProviderSymbols} from '../providers'
 
-// noinspection ES6PreferShortImport
-import {findOrCreate} from '../../../../../common/models/objectUtils'
-
 import {Mutex} from 'async-mutex'
 
 const USE_MASTER_KEY = {useMasterKey: true}
@@ -30,7 +27,7 @@ const getExchange = async (name: string): Promise<StockExchange> => {
   }
 
   await getExchangeMutex.runExclusive(async () => {
-    exchanges[name] = await findOrCreate('StockExchange', {
+    exchanges[name] = await StockExchange.findOrCreate({
       name
     }, true)
   })

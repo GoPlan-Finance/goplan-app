@@ -67,7 +67,7 @@ export class FMP implements Types.DataProviderInterface {
       //@ts-ignore
       const historyApi = new FMPApi.HistoryApi(this.config)
 
-      const query = async (out: Types.SymbolDataResolution, res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour') => {
+      const query = async (out: Types.SymbolDataResolution, res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour') :Promise<Types.TimeSeriesData> => {
         const response = await historyApi.intraDayPrices(symbol, res)
         return {resolution: out, data: response.data.reverse()}
       }

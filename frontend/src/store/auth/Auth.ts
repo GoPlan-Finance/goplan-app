@@ -1,5 +1,5 @@
 import VueStore from 'vue-class-store'
-import {User} from '../../models'
+import {User} from '../../../../common/models'
 
 import {Crypto, EncryptedValue} from '../../../../common/Crypto'
 import {Session} from './index'

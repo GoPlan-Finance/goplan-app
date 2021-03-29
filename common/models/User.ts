@@ -1,5 +1,3 @@
-// @todo move to common/models/user.ts
-
 
 Parse.User.allowCustomUserClass(true)
 
