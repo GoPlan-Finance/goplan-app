@@ -44,8 +44,8 @@
 
 import {defineComponent, ref} from 'vue'
 import {AssetSymbol} from '../../../common/models'
-import ButtonDefault from './base/ButtonDefault.vue'
 import {Transaction} from '../models'
+import dayjs from 'dayjs'
 
 
 export default defineComponent({
@@ -58,7 +58,7 @@ export default defineComponent({
   setup (props) {
     const quantity = ref(null)
     const price    = ref(null)
-    const date     = ref(new Date())
+    const date     = ref(dayjs().format('YYYY-MM-DD'))
 
 
     const addTransaction = async (type: 'buy' | 'sell') => {
@@ -67,14 +67,16 @@ export default defineComponent({
 
       t.set('quantity', quantity.value)
       t.set('price', price.value)
-      t.set('date', date.value)
+      t.set('date', dayjs(date.value).toDate())
       t.set('type', type.toUpperCase())
       t.set('symbol', props.assetSymbol)
-      await t.save()
 
-      // quantity.value = 100
-      // price.value = 0
-      // date.value = new Date()
+      await t.save()
+      alert('saved :)')
+
+      quantity.value = null
+      price.value    = null
+      date.value     = dayjs().format('YYYY-MM-DD')
     }
 
 
