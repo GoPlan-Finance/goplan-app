@@ -1,5 +1,4 @@
 import {BaseObject} from './base/BaseObject'
-import {User} from "./User";
 
 
 export class Watchlist extends BaseObject {
