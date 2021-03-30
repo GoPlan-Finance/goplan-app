@@ -47,7 +47,7 @@
 
 <script lang="ts">
 
-import {defineComponent, toRefs, onBeforeMount, onUnmounted, reactive} from 'vue'
+import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
@@ -65,11 +65,7 @@ export default defineComponent({
   setup (props) {
     let liveSubscription = null
 
-    const data: {
-      watchlists: Watchlist[],
-    }                    = reactive({
-      watchlists: []
-    })
+    const watchlists: Watchlist[] = ref([])
 
     const addToWatchlist = async watchlist => {
       watchlist.relation('symbols').add(props.assetSymbol)
@@ -79,7 +75,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Watchlist)
-      liveSubscription = await Watchlist.liveQuery(q, data.watchlists)
+      liveSubscription = await Watchlist.liveQuery(q, watchlists.value)
     })
 
     onUnmounted(async () => {
@@ -90,7 +86,7 @@ export default defineComponent({
 
 
     return {
-      ...toRefs(data),
+      watchlists,
       addToWatchlist
     }
   }
