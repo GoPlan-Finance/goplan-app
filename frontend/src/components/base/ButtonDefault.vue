@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex gap-2 px-6 py-3 rounded-lg font-bold tracking-wide"
+    class="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold tracking-wide"
     :class="{
       'text-blue-600 bg-blue-200 hover:bg-blue-300': type === ButtonType.PRIMARY,
       'text-gray-600 bg-gray-300 hover:bg-gray-400': type === ButtonType.SECONDARY,
