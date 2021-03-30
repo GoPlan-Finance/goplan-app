@@ -36,6 +36,12 @@
         </div>
       </div>
     </template>
+    <template #actions="slotProps">
+      <ButtonDefault
+        label="Close"
+        @click="slotProps.close()"
+      />
+    </template>
   </Modal>
 </template>
 
