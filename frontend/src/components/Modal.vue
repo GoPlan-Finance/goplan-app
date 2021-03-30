@@ -59,13 +59,12 @@
 
           <!--Footer-->
           <div class="flex justify-end pt-2 gap-4 flex-wrap">
-            <slot name="actions">
+            <slot
+              name="actions"
+              :close="close"
+            >
               <ButtonDefault
                 label="Close"
-                @click="open = false"
-              />
-              <ButtonDefault
-                label="Action"
                 @click="open = false"
               />
             </slot>
@@ -93,9 +92,15 @@ export default defineComponent({
   },
   setup (props) {
     const open = ref(false)
+
+    function close () {
+      open.value = false
+    }
+
     return {
       ...toRefs(props),
       open,
+      close
     }
   },
 })
