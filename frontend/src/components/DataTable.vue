@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-4 text-gray-400 text-sm"
+    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
     :class="`lg:grid-cols-${columnCount}`"
   >
     <span
@@ -15,14 +15,14 @@
           'lg:text-right': item.justify === 'right',
           'lg:text-center': item.justify === 'center'
         }"
-      >{{ item.label }}</span>
+      >{{ $t(config.settings.translationPrefix + '.' + item.key) }}</span>
     </span>
     <span v-if="config.settings?.actions" />
   </div>
   <div
     v-for="(row, rowIndex) in config.rows"
     :key="rowIndex"
-    class="mb-2 grid grid-cols-1 sm:grid-cols-2  gap-2 bg-white rounded-lg px-4 py-4"
+    class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
     :class="`lg:grid-cols-${columnCount}`"
   >
     <span
@@ -44,21 +44,21 @@
         <span
           class="block lg:hidden text-sm font-light text-gray-500"
         >
-          {{ header.label }}
+          {{ $t(config.settings.translationPrefix + '.' + header.key) }}
         </span>
         <template v-if="header.type === TableCellType.IMAGE">
           <img
-            :src="row[header.label]"
+            :src="row[header.key]"
           >
         </template>
         <template v-if="header.type === TableCellType.CUSTOM">
           <slot
-            :name="header.label"
+            :name="header.key"
             :row="row"
           />
         </template>
         <template v-else>
-          {{ row[header.label] }}
+          {{ row[header.key] }}
         </template>
       </span>
     </span>
@@ -80,22 +80,22 @@ import {defineComponent, computed} from 'vue'
 export enum TableCellType {
   STRING = 'string',
   IMAGE = 'image',
-  LINK = 'link',
   CUSTOM = 'custom',
 }
 
 export interface TableHeader {
-  label?: string,
+  key?: string,
   classes?: string,
   justify?: 'left'|'right'|'center',
-  type?: TableCellType
+  type?: TableCellType,
 }
 
 export interface TableConfig {
   headers: TableHeader[][],
   rows: Record<string, any>[]
   settings?: {
-    actions: boolean
+    actions: boolean,
+    translationPrefix: string
   },
 }
 
