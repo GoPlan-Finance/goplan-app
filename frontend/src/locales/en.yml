@@ -16,3 +16,14 @@ details:
 watchlists:
   updated: Updated
   show_more: 'Show More'
+transactions:
+  headline: Transactions
+  table:
+    buy: Buy
+    date: Date
+    position: Position
+    price: Price
+    quantity: Quantity
+    sell: Sell
+    type: Type
+    value: Value
