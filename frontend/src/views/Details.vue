@@ -10,23 +10,6 @@
       </div>
     </div>
 
-    <select @change="addToWatchlist($event)">
-      <option
-        selected
-        value=""
-      >
-        ---
-      </option>
-      <option
-        v-for="(watchlist, index) in watchlists"
-        :key="index"
-        :value="watchlist.id"
-      >
-        {{ watchlist.get('name') }}
-      </option>
-    </select>
-    <br>
-
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
         :current-price="currentPrice"
