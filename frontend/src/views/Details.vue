@@ -4,11 +4,16 @@
       <h1 class="text-gray-700 text-3xl font-bold mb-6">
         {{ assetSymbol.symbol.toUpperCase() }} - <small>{{ assetSymbol.name }}</small>
       </h1>
-      <WatchAssetModal :asset-symbol="assetSymbol" />
+      <div class="flex gap-2">
+        <buy-sell-asset :asset-symbol="assetSymbol" />
+        <WatchAssetModal :asset-symbol="assetSymbol" />
+      </div>
     </div>
+
     <buy-sell-asset :asset-symbol="assetSymbol" />
 
     <br>
+
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
         :current-price="currentPrice"
