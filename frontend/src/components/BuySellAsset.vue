@@ -30,7 +30,7 @@
           </div>
           <input
             v-model="date"
-            class="py-2 px-4 rounded min-w-full"
+            class="rounded w-full"
             placeholder="QTY"
             type="date"
           >
@@ -41,7 +41,7 @@
           </div>
           <input
             v-model="quantity"
-            class="py-2 px-4 rounded min-w-full"
+            class="rounded w-full"
             placeholder="QTY"
             type="number"
           >
@@ -52,7 +52,7 @@
           </div>
           <input
             v-model="price"
-            class="py-2 px-4 rounded min-w-full"
+            class="rounded w-full"
             placeholder="$$$"
             type="number"
           >
