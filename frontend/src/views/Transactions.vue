@@ -67,7 +67,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const q          = new Parse.Query(Transaction)
-      q.descending('createdAt')
+      q.descending('date')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, transactions)
     })
