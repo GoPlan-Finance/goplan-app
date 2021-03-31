@@ -6,26 +6,26 @@
 
     <DataTable :config="data">
       <template
-        #position="slotProps"
+        #position="{ row }"
       >
         <AppLink
-          :ticker="slotProps.row['ticker']"
+          :ticker="row['ticker']"
           to="ticker_details"
         >
-          {{ slotProps.row['position'] }}
+          {{ row['position'] }}
         </AppLink>
       </template>
       <template
-        #type="slotProps"
+        #type="{ row }"
       >
         <div
           class="flex gap-2"
-          :class="slotProps.row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
+          :class="row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
-            :class="slotProps.row['type'] ==='BUY'? 'transform rotate-180' : ''"
+            :class="row['type'] ==='BUY'? 'transform rotate-180' : ''"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -35,7 +35,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          {{ $t(data.settings.translationPrefix + '.' + slotProps.row['type'].toLowerCase()) }}
+          {{ $t(data.settings.translationPrefix + '.' + row['type'].toLowerCase()) }}
         </div>
       </template>
     </DataTable>
@@ -48,6 +48,16 @@ import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
+
+enum Column {
+  POSITION = 'position',
+  TICKER = 'ticker',
+  DATE = 'date',
+  QUANTITY = 'quantity',
+  PRICE = 'price',
+  TYPE = 'type',
+  VALUE = 'value',
+}
 
 export default defineComponent({
   components: {AppLink, DataTable},
@@ -65,13 +75,13 @@ export default defineComponent({
     const data: TableConfig = computed(() => {
       const rows = transactions.map(transaction => {
         return {
-          'position' : transaction.symbol.name,
-          'ticker'   : transaction.symbol.symbol,
-          'date'     : dayjs(transaction.date).format('YYYY-MM-DD'),
-          'quantity' : transaction.quantity.toFixed(2),
-          'price'    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,
-          'type'     : transaction.type,
-          'value'    : `${transaction.value.toDecimal().toFixed(2).toLocaleString()} ${transaction.currency}`
+          [Column.POSITION] : transaction.symbol.name,
+          [Column.TICKER]   : transaction.symbol.symbol,
+          [Column.DATE]     : dayjs(transaction.date).format('YYYY-MM-DD'),
+          [Column.QUANTITY] : transaction.quantity.toFixed(2),
+          [Column.PRICE]    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,
+          [Column.TYPE]     : transaction.type,
+          [Column.VALUE]    : `${transaction.value.toDecimal().toFixed(2).toLocaleString()} ${transaction.currency}`
         }
       })
 
@@ -80,38 +90,38 @@ export default defineComponent({
             [
               [
                 {
-                  key  : 'type',
+                  key  : Column.TYPE,
                   type : TableCellType.CUSTOM
                 }
               ],
               [
                 {
-                  key     : 'position',
+                  key     : Column.POSITION,
                   type    : TableCellType.CUSTOM,
                   classes : 'font-bold'
                 }
               ],
               [
                 {
-                  key     : 'date',
+                  key     : Column.DATE,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'quantity',
+                  key     : Column.QUANTITY,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'price',
+                  key     : Column.PRICE,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'value',
+                  key     : Column.VALUE,
                   justify : 'right'
                 }
               ],
@@ -134,7 +144,8 @@ export default defineComponent({
     return {
       dayjs,
       transactions,
-      data
+      data,
+      Column
     }
   },
 })
