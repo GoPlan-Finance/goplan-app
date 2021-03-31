@@ -10,10 +10,6 @@
       </div>
     </div>
 
-    <buy-sell-asset :asset-symbol="assetSymbol" />
-
-    <br>
-
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
         :current-price="currentPrice"
