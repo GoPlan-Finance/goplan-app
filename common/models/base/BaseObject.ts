@@ -3,6 +3,7 @@
  *
  *
  */
+
 type LiveQueryUpdateFn<T> = (obj: T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
@@ -11,6 +12,14 @@ export class BaseObject extends Parse.Object {
 
   constructor (className: string) {
     super(className)
+  }
+
+  get createdAt (): Date {
+    return this.get('createdAt')
+  }
+
+  get updatedAt (): Date {
+    return this.get('updatedAt')
   }
 
   public static register () {
@@ -85,21 +94,21 @@ export class BaseObject extends Parse.Object {
   }
 
 
-  public static async getOrNull (
+  public static async getOrNull<T extends BaseObject> (
     docId: string,
     useMasterKey = false
-  ): Promise<BaseObject> {
+  ): Promise<T> {
 
     const query = new Parse.Query(this)
 
-    return await query.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
+    return query.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
   }
 
-  public static async get (
+  public static async getObjectById<T extends BaseObject> (
     docId: string,
     useMasterKey = false
-  ): Promise<BaseObject> {
-    const doc = await this.getOrNull(docId, useMasterKey)
+  ): Promise<T> {
+    const doc = await this.getOrNull<T>(docId, useMasterKey)
 
     if (doc) {
       return doc
@@ -162,5 +171,11 @@ export class BaseObject extends Parse.Object {
     return obj2.save(null, useMasterKey ? USE_MASTER_KEY : undefined)
   }
 
+  public async maybeFetchPointer<T extends BaseObject> (
+    param: Parse.Pointer|BaseObject,
+  ): Promise<T> {
+    // @ts-ignore
+    return this.fetch(param.objectId)
+  }
 
 }
