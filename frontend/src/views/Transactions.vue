@@ -3,28 +3,29 @@
     <h1 class="text-gray-700 text-3xl font-medium mb-6">
       {{ $t('transactions.headline') }}
     </h1>
+
     <DataTable :config="data">
       <template
-        #position="slotProps"
+        #position="{ row }"
       >
         <AppLink
-          :ticker="slotProps.row['ticker']"
+          :ticker="row['ticker']"
           to="ticker_details"
         >
-          {{ slotProps.row['position'] }}
+          {{ row['position'] }}
         </AppLink>
       </template>
       <template
-        #type="slotProps"
+        #type="{ row }"
       >
         <div
           class="flex gap-2"
-          :class="slotProps.row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
+          :class="row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
-            :class="slotProps.row['type'] ==='BUY'? 'transform rotate-180' : ''"
+            :class="row['type'] ==='BUY'? 'transform rotate-180' : ''"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -34,7 +35,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          {{ $t(data.settings.translationPrefix + '.' + slotProps.row['type'].toLowerCase()) }}
+          {{ $t(data.settings.translationPrefix + '.' + row['type'].toLowerCase()) }}
         </div>
       </template>
     </DataTable>
@@ -47,7 +48,16 @@ import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
-import {Money, Currencies} from 'ts-money'
+
+enum Column {
+  POSITION = 'position',
+  TICKER = 'ticker',
+  DATE = 'date',
+  QUANTITY = 'quantity',
+  PRICE = 'price',
+  TYPE = 'type',
+  VALUE = 'value',
+}
 
 export default defineComponent({
   components: {AppLink, DataTable},
@@ -57,24 +67,21 @@ export default defineComponent({
 
     onMounted(async () => {
       const q          = new Parse.Query(Transaction)
-      q.descending('createdAt')
+      q.descending('date')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, transactions)
     })
 
     const data: TableConfig = computed(() => {
       const rows = transactions.map(transaction => {
-        const price: Money = Money.fromDecimal(transaction.get('price'), Currencies.USD)
-        const quantity     = Number(transaction.get('quantity'))
-        const currency     = price.getCurrencyInfo().symbol
         return {
-          'position' : transaction.get('symbol').get('name'),
-          'ticker'   : transaction.get('symbol').get('symbol'),
-          'date'     : dayjs(transaction.get('createdAt')).format('YYYY-MM-DD'),
-          'quantity' : quantity.toFixed(2),
-          'price'    : `${price.toDecimal().toFixed(2)} ${currency}`,
-          'type'     : transaction.get('type'),
-          'value'    : `${price.multiply(quantity).toDecimal().toFixed(2).toLocaleString()} ${currency}`
+          [Column.POSITION] : transaction.symbol.name,
+          [Column.TICKER]   : transaction.symbol.symbol,
+          [Column.DATE]     : dayjs(transaction.date).format('YYYY-MM-DD'),
+          [Column.QUANTITY] : transaction.quantity.toFixed(2),
+          [Column.PRICE]    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,
+          [Column.TYPE]     : transaction.type,
+          [Column.VALUE]    : `${transaction.value.toDecimal().toFixed(2).toLocaleString()} ${transaction.currency}`
         }
       })
 
@@ -83,38 +90,38 @@ export default defineComponent({
             [
               [
                 {
-                  key  : 'type',
+                  key  : Column.TYPE,
                   type : TableCellType.CUSTOM
                 }
               ],
               [
                 {
-                  key     : 'position',
+                  key     : Column.POSITION,
                   type    : TableCellType.CUSTOM,
                   classes : 'font-bold'
                 }
               ],
               [
                 {
-                  key     : 'date',
+                  key     : Column.DATE,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'quantity',
+                  key     : Column.QUANTITY,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'price',
+                  key     : Column.PRICE,
                   justify : 'right'
                 }
               ],
               [
                 {
-                  key     : 'value',
+                  key     : Column.VALUE,
                   justify : 'right'
                 }
               ],
@@ -137,7 +144,8 @@ export default defineComponent({
     return {
       dayjs,
       transactions,
-      data
+      data,
+      Column
     }
   },
 })
