@@ -3,6 +3,7 @@
     <h1 class="text-gray-700 text-3xl font-medium mb-6">
       {{ $t('transactions.headline') }}
     </h1>
+
     <DataTable :config="data">
       <template
         #position="slotProps"
@@ -47,7 +48,6 @@ import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
-import {Money, Currencies} from 'ts-money'
 
 export default defineComponent({
   components: {AppLink, DataTable},
@@ -64,17 +64,14 @@ export default defineComponent({
 
     const data: TableConfig = computed(() => {
       const rows = transactions.map(transaction => {
-        const price: Money = Money.fromDecimal(transaction.get('price'), Currencies.USD)
-        const quantity     = Number(transaction.get('quantity'))
-        const currency     = price.getCurrencyInfo().symbol
         return {
-          'position' : transaction.get('symbol').get('name'),
-          'ticker'   : transaction.get('symbol').get('symbol'),
-          'date'     : dayjs(transaction.get('createdAt')).format('YYYY-MM-DD'),
-          'quantity' : quantity.toFixed(2),
-          'price'    : `${price.toDecimal().toFixed(2)} ${currency}`,
-          'type'     : transaction.get('type'),
-          'value'    : `${price.multiply(quantity).toDecimal().toFixed(2).toLocaleString()} ${currency}`
+          'position' : transaction.symbol.get('name'),
+          'ticker'   : transaction.symbol.get('symbol'),
+          'date'     : dayjs(transaction.date).format('YYYY-MM-DD'),
+          'quantity' : transaction.quantity.toFixed(2),
+          'price'    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,
+          'type'     : transaction.type,
+          'value'    : `${transaction.value.toDecimal().toFixed(2).toLocaleString()} ${transaction.currency}`
         }
       })
 
