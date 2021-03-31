@@ -65,8 +65,8 @@ export default defineComponent({
     const data: TableConfig = computed(() => {
       const rows = transactions.map(transaction => {
         return {
-          'position' : transaction.symbol.get('name'),
-          'ticker'   : transaction.symbol.get('symbol'),
+          'position' : transaction.symbol.name,
+          'ticker'   : transaction.symbol.symbol,
           'date'     : dayjs(transaction.date).format('YYYY-MM-DD'),
           'quantity' : transaction.quantity.toFixed(2),
           'price'    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,

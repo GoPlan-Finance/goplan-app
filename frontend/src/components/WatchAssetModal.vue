@@ -5,6 +5,7 @@
     <template #button>
       <ButtonDefault
         label="Watch"
+        :type="ButtonType.SECONDARY"
       >
         <template #before>
           <svg
@@ -49,7 +50,7 @@
 
 import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import {AssetSymbol} from '../../../common/models'
-import ButtonDefault from './base/ButtonDefault.vue'
+import ButtonDefault, {ButtonType} from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
 import {Watchlist} from '../../../common/models/Watchlist'
 
@@ -87,7 +88,8 @@ export default defineComponent({
 
     return {
       watchlists,
-      addToWatchlist
+      addToWatchlist,
+      ButtonType
     }
   }
 

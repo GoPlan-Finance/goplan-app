@@ -9,6 +9,10 @@ export class StockExchange extends BaseObject {
     super(StockExchange.className)
   }
 
+  get name (): string {
+    return this.get('name')
+  }
+
 }
 
 StockExchange.register()
