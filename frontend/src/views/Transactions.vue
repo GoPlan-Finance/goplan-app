@@ -1,39 +1,40 @@
 <template>
   <div>
     <h1 class="text-gray-700 text-3xl font-medium mb-6">
-      Transactions
+      {{ $t('transactions.headline') }}
     </h1>
     <DataTable :config="data">
       <template
-        #Position="slotProps"
+        #position="slotProps"
       >
         <AppLink
-          :ticker="slotProps.row['Ticker']"
+          :ticker="slotProps.row['ticker']"
           to="ticker_details"
         >
-          {{ slotProps.row['Position'] }}
+          {{ slotProps.row['position'] }}
         </AppLink>
       </template>
       <template
-        #Type="slotProps"
+        #type="slotProps"
       >
-        <div class="flex gap-2">
+        <div
+          class="flex gap-2"
+          :class="slotProps.row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
+        >
           <svg
-            class="h-6 w-6"
-            :class="slotProps.row['Type'] === 'BUY' ? 'transform rotate-180 text-yellow-500' : 'text-blue-500'"
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            class="h-6 w-6"
+            :class="slotProps.row['type'] ==='BUY'? 'transform rotate-180' : ''"
+            viewBox="0 0 20 20"
+            fill="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+              clip-rule="evenodd"
             />
           </svg>
-          {{ slotProps.row['Type'] }}
+          {{ $t(data.settings.translationPrefix + '.' + slotProps.row['type'].toLowerCase()) }}
         </div>
       </template>
     </DataTable>
@@ -46,6 +47,7 @@ import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
+import {Money, Currencies} from 'ts-money'
 
 export default defineComponent({
   components: {AppLink, DataTable},
@@ -62,13 +64,17 @@ export default defineComponent({
 
     const data: TableConfig = computed(() => {
       const rows = transactions.map(transaction => {
+        const price: Money = Money.fromDecimal(transaction.get('price'), Currencies.USD)
+        const quantity     = Number(transaction.get('quantity'))
+        const currency     = price.getCurrencyInfo().symbol
         return {
-          'Position' : transaction.get('symbol').get('name'),
-          'Ticker'   : transaction.get('symbol').get('symbol'),
-          'Date'     : dayjs(transaction.get('createdAt')).format('YYYY-MM-DD'),
-          'Quantity' : transaction.get('quantity'),
-          'Price'    : transaction.get('price'),
-          'Type'     : transaction.get('type')
+          'position' : transaction.get('symbol').get('name'),
+          'ticker'   : transaction.get('symbol').get('symbol'),
+          'date'     : dayjs(transaction.get('createdAt')).format('YYYY-MM-DD'),
+          'quantity' : quantity.toFixed(2),
+          'price'    : `${price.toDecimal().toFixed(2)} ${currency}`,
+          'type'     : transaction.get('type'),
+          'value'    : `${price.multiply(quantity).toDecimal().toFixed(2).toLocaleString()} ${currency}`
         }
       })
 
@@ -77,39 +83,46 @@ export default defineComponent({
             [
               [
                 {
-                  label : 'Type',
-                  type  : TableCellType.CUSTOM
+                  key  : 'type',
+                  type : TableCellType.CUSTOM
                 }
               ],
               [
                 {
-                  label   : 'Position',
-                  type    : TableCellType.LINK,
+                  key     : 'position',
+                  type    : TableCellType.CUSTOM,
                   classes : 'font-bold'
                 }
               ],
               [
                 {
-                  label   : 'Date',
+                  key     : 'date',
                   justify : 'right'
                 }
               ],
               [
                 {
-                  label   : 'Quantity',
+                  key     : 'quantity',
                   justify : 'right'
                 }
               ],
               [
                 {
-                  label   : 'Price',
+                  key     : 'price',
+                  justify : 'right'
+                }
+              ],
+              [
+                {
+                  key     : 'value',
                   justify : 'right'
                 }
               ],
             ],
         rows,
         settings: {
-          actions: false
+          actions           : false,
+          translationPrefix : 'transactions.table'
         }
       }
     })
