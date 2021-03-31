@@ -41,7 +41,7 @@
           </div>
           <input
             v-model="quantity"
-            class="rounded w-full"
+            class="rounded min-w-min"
             placeholder="QTY"
             type="number"
           >
@@ -52,7 +52,7 @@
           </div>
           <input
             v-model="price"
-            class="rounded w-full"
+            class="rounded"
             placeholder="$$$"
             type="number"
           >

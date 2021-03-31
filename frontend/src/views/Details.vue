@@ -2,7 +2,7 @@
   <template v-if="!loading && assetSymbol">
     <div class="flex flex-wrap justify-between">
       <h1 class="text-gray-700 text-3xl font-bold mb-6">
-        {{ assetSymbol.get('symbol').toUpperCase() }} - <small>{{ assetSymbol.get('name') }}</small>
+        {{ assetSymbol.symbol.toUpperCase() }} - <small>{{ assetSymbol.name }}</small>
       </h1>
       <div class="flex gap-2">
         <buy-sell-asset :asset-symbol="assetSymbol" />
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch} from 'vue'
+import {defineComponent, onBeforeMount, reactive, toRefs, watch} from 'vue'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import AssetPrice from '../components/AssetPrice.vue'
 import {Currencies, Money} from 'ts-money'
@@ -36,7 +36,6 @@ import {AssetSymbol} from '../../../common/models'
 import CompanyInfo from '../components/CompanyInfo.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import WatchAssetModal from '../components/WatchAssetModal.vue'
-
 
 export default defineComponent({
   components: {
@@ -67,11 +66,8 @@ export default defineComponent({
 
     const loadAssetSymbol = async () => {
       data.loading     = true
-      data.assetSymbol = await AssetSymbol.findOneBy({
-        symbol: props.ticker
-      }) || null
-
-      data.loading = false
+      data.assetSymbol = await AssetSymbol.fetchSymbolByTicker(props.ticker)
+      data.loading     = false
     }
 
     watch(() => props.ticker, loadAssetSymbol)
