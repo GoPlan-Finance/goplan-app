@@ -1,12 +1,12 @@
 // vite.config.js
-import path from 'path'
+import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 import pluginRewriteAll from 'vite-plugin-rewrite-all'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
-
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
-export default {
+export default defineConfig({
   esmExternals : true,
   optimizeDeps : {
     exclude: [
@@ -15,11 +15,16 @@ export default {
       // 'crypto-js', // @todo check if ok to ignore
     ]
   },
+  resolve: {
+    alias: {
+      '@/': resolve(__dirname, 'src')
+    },
+  },
   plugins: [
     vue(),
     pluginRewriteAll(), // we need  this to allow dot(.) in path
     vueI18n({
-      include: path.resolve(__dirname, './src/locales/**')
-    })
+      include: resolve(__dirname, './src/locales/**')
+    }),
   ]
-}
+})

@@ -79,11 +79,11 @@
 <script lang="ts">
 
 import {defineComponent, ref} from 'vue'
-import {AssetSymbol} from '../../../common/models'
-import {Transaction} from '../models'
+import {Transaction} from '@/models'
 import dayjs from 'dayjs'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
+import {AssetSymbol} from '../../../common/models'
 
 
 export default defineComponent({
