@@ -4,7 +4,10 @@
 
 We seek to create a financial planning platform for the general public. Allocation dashboards, investment management tools, portfolio allocation, optimization, risk assessment, simulation, and forecasting. The tools of quantitative analysts and financial planners in hands of the regular investor and general public.
 
-## Planned Features
+
+# Roadmap 
+Feel free to submit a PR if you want to add items to the Roadmap!
+
 ### Version 1.0 (MVP)
 
 - [ ] LandingPage #9
@@ -20,7 +23,9 @@ We seek to create a financial planning platform for the general public. Allocati
 - [ ] Transactions #7
     - Show all buy/sell/split transactions
     - Actions: Add/Edit/Delete
-- [ ] Holdings #7
+- [ ] Holdings
+    - shares, purchase date, average price, initial value, current price, current value, increase value, increase percentage, percentage of portfolio
+    - actions: Buy/Sell/View
 - [ ] Stock Detail Page
 - [ ] Fund Detail Page
 - [ ] Settings
@@ -28,10 +33,14 @@ We seek to create a financial planning platform for the general public. Allocati
     - Download/Backup personal Data
     - Delete Account
 
-### Additional Features
+### Version 1.1
 - [ ] CSV import/export of holdings
 - [ ] Multiple Accounts  #6
+    - Show all accounts by this user
+    - Actions: Add/Edit/Delete
 - [ ] Non-financial/custom assets #3
+
+### Version 1.2
 - [ ] Allocations
     - Type (stock, bond, cash ...)
     - Industry (Tech, Consumer goods ...) 
@@ -41,7 +50,7 @@ We seek to create a financial planning platform for the general public. Allocati
     - Diversity #51 
     - Performance
 
-### Long Term Features
+### Planned Features
 - [ ] Notifications #47 
 - [ ] Stock bundles #45 
 - [ ] Compare Assets #44 
@@ -54,6 +63,7 @@ We seek to create a financial planning platform for the general public. Allocati
 - [ ] Market research
 - [ ] Advanced analytics
 - [ ] Integrations with brokers
+
 
 ## Notes
 
