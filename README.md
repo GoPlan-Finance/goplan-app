@@ -1,5 +1,4 @@
 <h1 align="center">
-  <br>
   <a href="http://goplan.finance/"><img src="https://github.com/GoPlan-Finance/GoPlan-app/raw/master/frontend/public/images/logos/logo-full.png" alt="Markdownify" width="400"></a>
   <br>
   GoPlan Finance
