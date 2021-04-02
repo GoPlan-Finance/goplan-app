@@ -8,13 +8,16 @@
 <h4 align="center">An intuitive portofilio mangaer !</h4>
 
 <p align="center">
+
 <a href="https://discord.gg/pG7BKV9WMg">
     <img src="https://img.shields.io/discord/814937752956698650.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"
          alt="Discord">
   </a>
 </p>
 
-
+<p align="center">
+  :star: Star us on GitHub — it helps!
+</p>
 
 
 
@@ -28,9 +31,6 @@
 
 ![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/sadortun-patch-1/.github/screenshoot-goplan.png)
 
-
-
-:star: Star us on GitHub — it helps!
 
 
 # Roadmap 
