@@ -29,7 +29,7 @@
 </p>
 
 
-![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/sadortun-patch-1/.github/screenshoot-goplan.png)
+![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/master/.github/screenshoot-goplan.png)
 
 
 
