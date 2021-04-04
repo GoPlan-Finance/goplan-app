@@ -1,17 +1,17 @@
 <template>
   <template v-if="watchlist">
     <h1 class="text-gray-700 text-3xl font-medium mb-6">
-      {{ watchlist.get('name') }}
+      {{ watchlist.name }}
     </h1>
 
     <DataTable :config="data">
       <template #name="{row}">
-        <app-Link
+        <AppLink
           :ticker="row.symbol"
           to="ticker_details"
         >
           {{ row.name }}
-        </app-Link>
+        </AppLink>
       </template>
     </DataTable>
   </template>
@@ -23,6 +23,7 @@ import dayjs from 'dayjs'
 import {Watchlist} from '../../../common/models/Watchlist'
 import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
 import {AssetSymbol} from '../../../common/models'
+import AppLink from '../components/router/AppLink.vue'
 
 enum Column {
   NAME = 'name',
@@ -30,7 +31,7 @@ enum Column {
 }
 
 export default defineComponent({
-  components : {DataTable},
+  components : {AppLink, DataTable},
   props      : {
     id: {
       type     : String,
