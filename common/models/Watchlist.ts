@@ -1,4 +1,6 @@
 import {BaseObject} from './base/BaseObject'
+import {User} from './User'
+import {AssetSymbol} from './AssetSymbol'
 
 
 export class Watchlist extends BaseObject {
@@ -7,6 +9,16 @@ export class Watchlist extends BaseObject {
 
     constructor () {
       super(Watchlist.className)
+    }
+
+    get name (): string {
+      return this.get('name')
+    }
+    get createdBy (): User {
+      return this.get('createdBy')
+    }
+    get symbols (): AssetSymbol[] {
+      return this.get('symbols')
     }
 
 }

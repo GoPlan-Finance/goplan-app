@@ -1,50 +1,47 @@
 <template>
-  <div>
-    <template v-if="watchlist">
-      <h1 class="text-gray-700 text-3xl font-medium mb-6">
-        {{ watchlist.get('name') }}
-      </h1>
+  <template v-if="watchlist">
+    <h1 class="text-gray-700 text-3xl font-medium mb-6">
+      {{ watchlist.name }}
+    </h1>
 
-      <li
-        v-for="symbol in symbols"
-        :key="symbol.id"
-      >
-        <app-Link
-          :ticker="symbol.get('symbol')"
+    <DataTable :config="data">
+      <template #name="{row}">
+        <AppLink
+          :ticker="row.symbol"
           to="ticker_details"
         >
-          {{ symbol.get('name') }}
-        </app-Link>
-      </li>
-    </template>
-  </div>
+          {{ row.name }}
+        </AppLink>
+      </template>
+    </DataTable>
+  </template>
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
+import {computed, defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
 import {Watchlist} from '../../../common/models/Watchlist'
+import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
+import {AssetSymbol} from '../../../common/models'
+import AppLink from '../components/router/AppLink.vue'
+
+enum Column {
+  NAME = 'name',
+  SYMBOL = 'symbol'
+}
 
 export default defineComponent({
-  props: {
+  components : {AppLink, DataTable},
+  props      : {
     id: {
       type     : String,
       required : true,
     },
   },
   setup (props) {
-    const newWatchlistName = ref('')
-    const watchlist        = ref(null)
-    const symbols          = ref([])
-    let liveSubscription   = null
-    const createList       = async () => {
-
-      const watchlist = new Watchlist()
-
-      watchlist.set('name', newWatchlistName.value)
-      await watchlist.save()
-      newWatchlistName.value = ''
-    }
+    const watchlist      = ref(null)
+    const symbols        = ref<AssetSymbol[]>([])
+    let liveSubscription = null
 
     onBeforeMount(async () => {
       const q = new Parse.Query(Watchlist)
@@ -62,12 +59,41 @@ export default defineComponent({
       }
     })
 
+    const data: TableConfig = computed(() => {
+      const rows = symbols.value.map(symbol => {
+        return {
+          [Column.NAME]   : symbol,
+          [Column.SYMBOL] : symbol.symbol
+        }
+      })
+
+      return {
+        headers:
+            [
+              [
+                {
+                  key  : Column.NAME,
+                  type : TableCellType.CUSTOM
+                },
+                {
+                  key     : Column.SYMBOL,
+                  classes : 'lg:text-gray-500'
+                }
+              ],
+            ],
+        rows,
+        settings: {
+          actions           : false,
+          translationPrefix : 'watchlist.table'
+        }
+      }
+    })
+
     return {
       dayjs,
       watchlist,
       symbols,
-      newWatchlistName,
-      createList,
+      data,
     }
   },
 })
