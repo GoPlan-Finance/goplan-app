@@ -27,3 +27,6 @@ transactions:
     sell: Sell
     type: Type
     value: Value
+watchlist:
+  table:
+    name: Name
