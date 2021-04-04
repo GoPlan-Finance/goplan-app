@@ -30,3 +30,4 @@ transactions:
 watchlist:
   table:
     name: Name
+    symbol: Symbol

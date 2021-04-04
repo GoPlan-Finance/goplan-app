@@ -25,7 +25,8 @@ import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue
 import {AssetSymbol} from '../../../common/models'
 
 enum Column {
-  NAME = 'name'
+  NAME = 'name',
+  SYMBOL = 'symbol'
 }
 
 export default defineComponent({
@@ -60,7 +61,8 @@ export default defineComponent({
     const data: TableConfig = computed(() => {
       const rows = symbols.value.map(symbol => {
         return {
-          [Column.NAME]: symbol
+          [Column.NAME]   : symbol,
+          [Column.SYMBOL] : symbol.symbol
         }
       })
 
@@ -71,6 +73,10 @@ export default defineComponent({
                 {
                   key  : Column.NAME,
                   type : TableCellType.CUSTOM
+                },
+                {
+                  key     : Column.SYMBOL,
+                  classes : 'lg:text-gray-500'
                 }
               ],
             ],
