@@ -104,24 +104,28 @@ export default defineComponent({
               [
                 {
                   key     : Column.DATE,
+                  type    : TableCellType.STRING,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.QUANTITY,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.PRICE,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.VALUE,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
