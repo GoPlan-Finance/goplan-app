@@ -55,7 +55,10 @@
           </div>
 
           <!--Body-->
-          <slot name="content" />
+          <slot
+            name="content"
+            :close="close"
+          />
 
           <!--Footer-->
           <div class="flex justify-end pt-2 gap-4 flex-wrap">
