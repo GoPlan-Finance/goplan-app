@@ -31,10 +31,10 @@
         #position="{ row }"
       >
         <AppLink
-          :ticker="row['ticker']"
+          :ticker="row.symbol"
           to="ticker_details"
         >
-          {{ row['position'] }}
+          {{ row.name }}
         </AppLink>
       </template>
       <template
@@ -42,12 +42,12 @@
       >
         <div
           class="flex gap-2"
-          :class="row['type'] ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
+          :class="row ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
-            :class="row['type'] ==='BUY'? 'transform rotate-180' : ''"
+            :class="row ==='BUY'? 'transform rotate-180' : ''"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -57,7 +57,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          {{ $t(data.settings.translationPrefix + '.' + row['type'].toLowerCase()) }}
+          {{ $t(data.settings.translationPrefix + '.' + row?.toLowerCase()) }}
         </div>
       </template>
     </DataTable>
@@ -112,10 +112,16 @@ export default defineComponent({
     })
 
     const data: TableConfig = computed(() => {
+<<<<<<< HEAD
       let rows = transactions.map(transaction => {
         const row: TableRow = {
           [Column.POSITION] : transaction.symbol.name,
           [Column.TICKER]   : transaction.symbol.symbol,
+=======
+      const rows = transactions.map(transaction => {
+        return {
+          [Column.POSITION] : transaction.symbol,
+>>>>>>> b482979 (Fix transaction table)
           [Column.DATE]     : dayjs(transaction.date).format('YYYY-MM-DD'),
           [Column.QUANTITY] : transaction.quantity.toFixed(2),
           [Column.PRICE]    : `${transaction.price.toDecimal().toFixed(2)} ${transaction.currency}`,
