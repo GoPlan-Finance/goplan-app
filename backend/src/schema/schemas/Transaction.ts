@@ -1,14 +1,7 @@
-export const Transaction = {
-  className : 'Transaction',
+import {requiresAuthentication, schema} from "./base/defaults";
+
+export const Transaction = schema('Transaction',{
   fields    : {
-    objectId  : {type: 'String'},
-    createdAt : {
-      type: 'Date',
-    },
-    updatedAt: {
-      type: 'Date',
-    },
-    ACL        : {type: 'ACL'},
     createdBy  : {type: 'Pointer', targetClass: '_User'},
     symbol     : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},
     executedAt : { type: 'Date', required: true},
@@ -18,20 +11,14 @@ export const Transaction = {
     type       : { type: 'Object', required: true},
   },
   indexes: {
-    objectId: {objectId: 1},
   },
   classLevelPermissions: {
-    find            : {requiresAuthentication: true},
-    count           : {},
-    get             : {requiresAuthentication: true},
-    update          : {requiresAuthentication: true},
-    create          : {requiresAuthentication: true},
-    delete          : {requiresAuthentication: true},
-    addField        : {},
+    ...requiresAuthentication(['find','get' ,'update','create','delete']),
+
     protectedFields : {
       // '*': [
       //     'symbol',
       // ],
     },
   },
-}
+})

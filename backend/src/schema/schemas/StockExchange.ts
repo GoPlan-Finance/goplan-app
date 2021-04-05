@@ -1,32 +1,19 @@
-export const StockExchange = {
-  className : 'StockExchange',
+import {requiresAuthentication, schema} from "./base/defaults";
+
+export const StockExchange = schema('StockExchange',{
   fields    : {
-    objectId  : {type: 'String'},
-    createdAt : {
-      type: 'Date',
-    },
-    updatedAt: {
-      type: 'Date',
-    },
-    ACL  : {type: 'ACL'},
     name : {type: 'String'},
   },
   indexes: {
-    objectId : {objectId: 1},
     name     : {name: 1},
   },
   classLevelPermissions: {
-    find            : {requiresAuthentication: true},
-    count           : {},
-    get             : {requiresAuthentication: true},
-    update          : {},
-    create          : {},
-    delete          : {},
-    addField        : {},
+    ...requiresAuthentication(['find','get' ]),
+
     protectedFields : {
       '*': [
         'name',
       ],
     },
   },
-}
+})
