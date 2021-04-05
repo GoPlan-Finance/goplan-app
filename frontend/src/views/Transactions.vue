@@ -4,6 +4,28 @@
       {{ $t('transactions.headline') }}
     </h1>
 
+    <div class="flex justify-end mb-4">
+      <label>
+        <div class="text-gray-500 text-sm mb-2">
+          Type
+        </div>
+        <select
+          id="type"
+          v-model="typeFilter.value"
+          name="type"
+          class="rounded border-0"
+        >
+          <option
+            v-for="option in typeFilter.options"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.display }}
+          </option>
+        </select>
+      </label>
+    </div>
+
     <DataTable :config="data">
       <template
         #position="{ row }"
@@ -46,7 +68,7 @@
 import {computed, defineComponent, onMounted, onUnmounted, reactive} from 'vue'
 import {Transaction} from '../models'
 import dayjs from 'dayjs'
-import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
+import DataTable, {TableCellType, TableConfig, TableRow} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
 
 enum Column {
@@ -64,6 +86,23 @@ export default defineComponent({
   setup () {
     const transactions: Transaction[] = reactive([])
     let liveSubscription              = null
+    const typeFilter                  = reactive({
+      value   : '',
+      options : [
+        {
+          value   : '',
+          display : 'All',
+        },
+        {
+          value   : 'BUY',
+          display : 'Buy',
+        },
+        {
+          value   : 'SELL',
+          display : 'Sell',
+        },
+      ]
+    })
 
     onMounted(async () => {
       const q          = new Parse.Query(Transaction)
@@ -73,8 +112,8 @@ export default defineComponent({
     })
 
     const data: TableConfig = computed(() => {
-      const rows = transactions.map(transaction => {
-        return {
+      let rows = transactions.map(transaction => {
+        const row: TableRow = {
           [Column.POSITION] : transaction.symbol.name,
           [Column.TICKER]   : transaction.symbol.symbol,
           [Column.DATE]     : dayjs(transaction.date).format('YYYY-MM-DD'),
@@ -83,6 +122,14 @@ export default defineComponent({
           [Column.TYPE]     : transaction.type,
           [Column.VALUE]    : `${transaction.value.toDecimal().toFixed(2).toLocaleString()} ${transaction.currency}`
         }
+        return row
+      })
+
+      rows = rows.filter(row => {
+        if (typeFilter.value !== '') {
+          return row.type === typeFilter.value
+        }
+        return true
       })
 
       return {
@@ -104,24 +151,28 @@ export default defineComponent({
               [
                 {
                   key     : Column.DATE,
+                  type    : TableCellType.STRING,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.QUANTITY,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.PRICE,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
               [
                 {
                   key     : Column.VALUE,
+                  type    : TableCellType.NUMBER,
                   justify : 'right'
                 }
               ],
@@ -145,7 +196,8 @@ export default defineComponent({
       dayjs,
       transactions,
       data,
-      Column
+      Column,
+      typeFilter
     }
   },
 })
