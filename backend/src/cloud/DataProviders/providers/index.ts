@@ -5,7 +5,6 @@
  *
  */
 import * as Types from './types'
-// noinspection ES6PreferShortImport
 import {AssetSymbol} from '../../../../../common/models'
 import dayjs, {Dayjs} from 'dayjs'
 import {FMP} from './FMP'
@@ -21,6 +20,7 @@ export interface ProviderConfigInterface {
 
 const providers: Array<Types.DataProviderInterface> = []
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 for (const provider: ProviderConfigInterface of global.weHateGlobals_dataProviders) {
   if (provider.name.toLowerCase() === 'fmp') {
@@ -31,7 +31,7 @@ for (const provider: ProviderConfigInterface of global.weHateGlobals_dataProvide
 
 export type ProviderSymbols = { [key: string]: Types.AssetSymbol[] }
 
-class DataProvider {
+class GlobalProvider {
 
     name: 'GlobalProvider'
 
@@ -48,8 +48,10 @@ class DataProvider {
 
       for (const provider of providers) {
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         if (provider[method] !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           return await provider[method](...args)
         }
@@ -63,8 +65,10 @@ class DataProvider {
 
       const data = {}
       for (const provider of providers) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         if (provider[method] !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore @todo figure out the proper way
           data[provider.name()] = await provider[method](...args)
         }
@@ -75,7 +79,7 @@ class DataProvider {
 
     async fetchSupportedSymbols (): Promise<ProviderSymbols> {
 
-      return await DataProvider.callAll('fetchSupportedSymbols')
+      return await GlobalProvider.callAll('fetchSupportedSymbols')
     }
 
     private static adjustResolution (
@@ -100,7 +104,6 @@ class DataProvider {
           case 'day':
             return date.format('YYYY-MM-DD')
           case 'week':
-            //@ts-ignore
             return `${date.year()}-WK${date.week()}`
           case 'month':
             return date.format('YYYY-MM')
@@ -145,7 +148,7 @@ class DataProvider {
       resolution: Types.SymbolDataResolution
     ): Promise<Types.EndOfDayData[]> {
 
-      const result = await DataProvider
+      const result = await GlobalProvider
         .getProviderFor(assetSymbol)
         .fetchSymbolTimeSeriesData(
           assetSymbol.get('symbol'),
@@ -164,7 +167,7 @@ class DataProvider {
         return true
       })
 
-      return DataProvider.adjustResolution(
+      return GlobalProvider.adjustResolution(
         resolution,
         result.resolution,
         result.data
@@ -175,7 +178,7 @@ class DataProvider {
       assetSymbol: AssetSymbol
     ): Promise<Types.CompanyProfile> {
 
-      const result = await DataProvider
+      const result = await GlobalProvider
         .getProviderFor(assetSymbol)
         .getCompanyProfile(
           assetSymbol.get('symbol')
@@ -183,10 +186,22 @@ class DataProvider {
       return result
     }
 
+
+    async getCompanyQuote (
+      assetSymbol: AssetSymbol
+    ): Promise<Types.CompanyQuote> {
+
+      const result = await GlobalProvider
+        .getProviderFor(assetSymbol)
+        .getCompanyQuote(
+          assetSymbol.get('symbol')
+        )
+
+      return result
+    }
+
 }
 
 
-module.exports = {
-  DataProvider: new DataProvider()
-}
+export const DataProvider = new GlobalProvider()
 

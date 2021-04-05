@@ -9,6 +9,7 @@ convict.addFormat({
     }
 
     for (const source of sources) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       convict(schema.children).load(source).validate()
     }

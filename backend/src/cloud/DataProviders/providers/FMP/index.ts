@@ -6,8 +6,6 @@
 import * as Types from '../types'
 import dayjs, {Dayjs} from 'dayjs'
 
-// @ts-ignore
-// noinspection ES6PreferShortImport
 import * as FMPApi from 'financialmodelingprep-openapi'
 
 
@@ -42,7 +40,6 @@ export class FMP implements Types.DataProviderInterface {
 
     async fetchSupportedSymbols (): Promise<Array<Types.AssetSymbol>> {
 
-      //@ts-ignore
       const listApi = new FMPApi.ListApi(this.config)
 
       const response = await listApi.listSymbols('available-traded')
@@ -50,11 +47,39 @@ export class FMP implements Types.DataProviderInterface {
     }
     async getCompanyProfile (symbol :string): Promise<Types.CompanyProfile> {
 
+      const data = await this.getCompanyProfiles([
+        symbol
+      ])
+
+      return data.pop()
+    }
+
+    async getCompanyProfiles (symbol : string[]): Promise<Types.CompanyProfile[]> {
+
       const api = new FMPApi.CompanyValuationApi(this.config)
 
-      const response = await api.profile(symbol)
+      const response = await api.profile(symbol.join(','))
 
-      return response.data.pop()
+      return response.data
+    }
+
+
+    async getCompanyQuote (symbol :string): Promise<Types.CompanyQuote> {
+
+      const data = await this.getCompanyQuotes([
+        symbol
+      ])
+
+      return data.pop()
+    }
+
+    async getCompanyQuotes (symbol :string[]): Promise<Types.CompanyQuote[]> {
+
+      const api = new FMPApi.CompanyValuationApi(this.config)
+
+      const response = await api.quote(symbol.join(','))
+
+      return response.data
     }
 
     async fetchSymbolTimeSeriesData (
@@ -64,7 +89,7 @@ export class FMP implements Types.DataProviderInterface {
       resolution: Types.SymbolDataResolution,
     ): Promise<Types.TimeSeriesData> {
 
-      //@ts-ignore
+
       const historyApi = new FMPApi.HistoryApi(this.config)
 
       const query = async (out: Types.SymbolDataResolution, res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour') :Promise<Types.TimeSeriesData> => {

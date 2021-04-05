@@ -8,7 +8,7 @@
 
 import {assertUser} from '../../Auth'
 import {assertEncrypted} from '../../../../../common/Auth'
-import {EncryptedValue} from 'Crypto'
+import {EncryptedValue} from '../../../../../common/Crypto'
 
 Parse.Cloud.beforeSave('Transaction', async (request) => {
   assertUser(request)
@@ -21,6 +21,7 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
     request.object.setACL(new Parse.ACL(request.user))
   }
 },
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 {
   fields: {

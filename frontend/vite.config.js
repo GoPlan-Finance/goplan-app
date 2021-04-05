@@ -11,8 +11,6 @@ export default {
   optimizeDeps : {
     exclude: [
       'parse', // @todo check if ok to ignore
-      'vue-class-store', // @todo check if ok to ignore
-      // 'crypto-js', // @todo check if ok to ignore
     ]
   },
   plugins: [

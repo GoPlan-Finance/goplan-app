@@ -27,3 +27,20 @@ transactions:
     sell: Sell
     type: Type
     value: Value
+quote:
+  open: Open
+  previousClose: Previous Close
+  change_percent: Change %
+  change: Change
+  dayRange: Day Range
+  yearRange: Year Range
+  marketCap: Market Cap
+  priceAvg50: Avg 50 days
+  priceAvg200: Avg 200 Days
+  volume: Volume
+  avgVolume: Avg. Volume
+  exchange: Exchange
+  eps: EPS
+  pe: PE
+  earningsAnnouncement: Earning date
+  sharesOutstanding: Shares Outstanding
