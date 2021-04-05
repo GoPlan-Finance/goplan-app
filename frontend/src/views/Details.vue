@@ -1,6 +1,6 @@
 <template>
   <template v-if="!loading && assetSymbol">
-    <div class="flex flex-wrap justify-between">
+    <HeadlineActions>
       <h1 class="text-gray-700 text-3xl font-bold mb-6">
         {{ assetSymbol.symbol.toUpperCase() }} - <small>{{ assetSymbol.name }}</small>
       </h1>
@@ -8,8 +8,7 @@
         <buy-sell-asset :asset-symbol="assetSymbol" />
         <WatchAssetModal :asset-symbol="assetSymbol" />
       </div>
-    </div>
-
+    </HeadlineActions>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
         :current-price="currentPrice"
@@ -49,10 +48,12 @@ import CompanyInfo from '../components/CompanyInfo.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import WatchAssetModal from '../components/WatchAssetModal.vue'
 import CompanyQuote from '../components/CompanyQuote.vue'
+import HeadlineActions from '../components/HeadlineActions.vue'
 
 export default defineComponent({
   components: {
     CompanyQuote,
+    HeadlineActions,
     WatchAssetModal,
     CompanyInfo,
     AssetPrice,

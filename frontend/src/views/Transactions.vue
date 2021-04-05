@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h1 class="text-gray-700 text-3xl font-medium mb-6">
-      {{ $t('transactions.headline') }}
-    </h1>
+    <HeadlineActions>
+      <h1 class="text-gray-700 text-3xl font-medium mb-6">
+        {{ $t('transactions.headline') }}
+      </h1>
+    </HeadlineActions>
 
     <div class="flex justify-end mb-4">
       <label>
@@ -70,6 +72,7 @@ import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable, {TableCellType, TableConfig, TableRow} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
+import HeadlineActions from '../components/HeadlineActions.vue'
 
 enum Column {
   POSITION = 'position',
@@ -82,7 +85,7 @@ enum Column {
 }
 
 export default defineComponent({
-  components: {AppLink, DataTable},
+  components: {HeadlineActions, AppLink, DataTable},
   setup () {
     const transactions: Transaction[] = reactive([])
     let liveSubscription              = null
