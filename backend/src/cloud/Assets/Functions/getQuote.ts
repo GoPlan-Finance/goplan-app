@@ -7,9 +7,10 @@
 import {AssetSymbol} from '../../../../../common/models'
 import {assertUser} from '../../Auth'
 
+
 import {DataProvider} from '../../DataProviders/providers'
 
-Parse.Cloud.define('Assets--GetProfile', async (request) => {
+Parse.Cloud.define('Assets--GetQuote', async (request) => {
   assertUser(request)
 
   const {assetSymbolId} = request.params
@@ -20,7 +21,7 @@ Parse.Cloud.define('Assets--GetProfile', async (request) => {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Symbol ${assetSymbolId} not found`)
   }
 
-  const result = await DataProvider.getCompanyProfile(
+  const result = await DataProvider.getCompanyQuote(
     assetSymbol,
   )
 

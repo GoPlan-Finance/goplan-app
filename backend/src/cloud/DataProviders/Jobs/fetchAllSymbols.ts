@@ -8,19 +8,17 @@ import {AssetSymbol, StockExchange} from '../../../../../common/models'
 import {processBatch} from '../../../../../common/utils'
 
 import * as DataProviderInterfaces from '../providers/types'
-import {ProviderSymbols} from '../providers'
+import {DataProvider, ProviderSymbols} from '../providers'
 
 import {Mutex} from 'async-mutex'
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
-const {DataProvider} = require('../providers')
-
 const getExchangeMutex = new Mutex()
 
 const exchanges: { [key: string]: Parse.Object } = {}
 
-const getExchange = async (name: string): Promise<StockExchange> => {
+const getExchange = async (name: string): Promise<Parse.Object<Parse.Attributes>> => {
 
   if (exchanges[name]) {
     return exchanges[name]
@@ -41,6 +39,8 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
   // headers: from the request that triggered the job
   // log: the ParseServer logger passed in the request
   // message: a function to update the status message of the job object
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const {/*params, headers,*/ log, message} = request
 

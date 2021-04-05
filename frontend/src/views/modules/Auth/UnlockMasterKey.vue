@@ -64,8 +64,6 @@ export default defineComponent({
     const unlockMasterKey = async () => {
 
       try {
-
-        //@ts-ignore @todo replace store
         await authStore.decryptClientKey(masterKey.value)
 
         emit('keyValid')

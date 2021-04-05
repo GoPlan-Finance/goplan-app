@@ -15,7 +15,9 @@ Parse.Cloud.beforeSave('ExternalDataProvider', async (request) => {
   request.object.set('user', request.user)
   request.object.setACL(new Parse.ACL(request.user))
 
-}, // @ts-ignore
+},
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 {
   fields: {
     credentials: {

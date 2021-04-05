@@ -80,8 +80,7 @@ export default defineComponent({
         // data.prices       = apiLoader.resolveApiResponse(apiResponse)
       } catch (e) {
         console.error(e)
-        //@ts-ignore
-        data.error.value = e
+        data.error = e
       } finally {
         data.isLoading = false
       }

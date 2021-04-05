@@ -1,4 +1,3 @@
-import VueStore from 'vue-class-store'
 import {User} from '../../../../common/models'
 
 import {Crypto, EncryptedValue} from '../../../../common/Crypto'
@@ -8,7 +7,7 @@ interface ClientKeyInterface {
     encryptionKey: string,
 }
 
-export class Auth {
+export class AuthStore {
 
   public async signOut () : Promise<Parse.User> {
 
@@ -111,9 +110,3 @@ export class Auth {
 
 }
 
-
-@VueStore
-export class AuthStore extends Auth {
-
-
-}
