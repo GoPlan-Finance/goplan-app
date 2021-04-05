@@ -5,6 +5,7 @@
 import CryptoJS from 'crypto-js'
 
 export interface EncryptedValue {
+    [index: string]: string | number,
     ct: string,
     iv: string,
     s: string,

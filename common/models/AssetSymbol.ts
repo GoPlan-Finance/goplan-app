@@ -34,7 +34,7 @@ export class AssetSymbol extends BaseObject {
   }
 
   async getExchange (): Promise<StockExchange> {
-    return this.maybeFetchPointer<StockExchange>(this.get('exchange'))
+    return this.maybeFetchPointer('exchange')
   }
 
 }

@@ -3,9 +3,7 @@
  *
  *
  */
-
 type LiveQueryUpdateFn<T> = (obj: T) => void
-import * as dayjs from 'dayjs'
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
@@ -23,8 +21,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     return this.get('updatedAt')
   }
 
-  public static register () {
-    // @ts-ignore
+  public static register () : void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     Parse.Object.registerSubclass(this.className, this)
   }
 
@@ -118,7 +117,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
 
-  public static async findBy <T extends BaseObject>(
+  public static async findBy <T extends BaseObject> (
     params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false
   ): Promise<BaseObject[]> {
@@ -128,6 +127,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     for (const [
       k, v
     ] of Object.entries(params)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       query.equalTo(k, v)
     }
@@ -164,7 +164,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
 
     //         const ctor = this.constructor as typeof BaseObject;
     //         console.log(ctor.className); // true
-    // @ts-ignore
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     const obj2 = new this(this.className) // the `this` in `this.className` refer to the static child class
 
     obj2.set(params)
@@ -173,10 +175,15 @@ export /*abstract*/ class BaseObject extends Parse.Object {
   }
 
   public async maybeFetchPointer<T extends BaseObject> (
-    param: Parse.Pointer|BaseObject,
+    param: string,
   ): Promise<T> {
-    // @ts-ignore
-    return this.fetch(param.objectId)
+    const value : T | Parse.Pointer = this.get(param)
+
+    if (value instanceof BaseObject) {
+      return value as T
+    }
+
+    return BaseObject.getObjectById<T>(value.objectId)
   }
 
 }
