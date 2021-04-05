@@ -228,6 +228,226 @@ export interface CompanyProfile {
     ipoDate?: string;
 }
 
+/**
+ *
+ * @export
+ * @interface CompanyQuote
+ */
+export interface CompanyQuote {
+    /**
+     *
+     * @type {string}
+     * @memberof CompanyQuote
+     */
+    symbol: string;
+    /**
+     *
+     * @type {string}
+     * @memberof CompanyQuote
+     */
+    name: string;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    price: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    changesPercentage: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    change: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    dayLow: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    dayHigh: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    yearHigh: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    yearLow: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    marketCap: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    priceAvg50: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    priceAvg200: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    volume: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    avgVolume: number;
+    /**
+     *
+     * @type {string}
+     * @memberof CompanyQuote
+     */
+    exchange: string;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    open: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    previousClose: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    eps: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    pe: number;
+    /**
+     *
+     * @type {string}
+     * @memberof CompanyQuote
+     */
+    earningsAnnouncement: string;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    sharesOutstanding?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof CompanyQuote
+     */
+    timestamp: number;
+}
+
+
+/**
+ *
+ * @export
+ * @interface EndOfDayPrice
+ */
+export interface EndOfDayPrice {
+    /**
+     *
+     * @type {string}
+     * @memberof EndOfDayPrice
+     */
+    date: string;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    open: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    high: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    low: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    close: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    adjClose?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    volume: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    unadjustedVolume?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    change?: number;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    vwap?: number;
+    /**
+     *
+     * @type {string}
+     * @memberof EndOfDayPrice
+     */
+    label?: string;
+    /**
+     *
+     * @type {number}
+     * @memberof EndOfDayPrice
+     */
+    changeOverTime?: number;
+}
 
 export interface TimeSeriesData {
     resolution: SymbolDataResolution
@@ -251,6 +471,10 @@ export interface DataProviderInterface {
     getCompanyProfile?(
         symbol: string
     ) : Promise<CompanyProfile>
+
+    getCompanyQuote(
+        symbol: string
+    ) : Promise<CompanyQuote>
 
 
     test1234?(): void

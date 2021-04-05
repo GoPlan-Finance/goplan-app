@@ -20,9 +20,21 @@
         :asset-symbol="assetSymbol"
       />
     </div>
-    <CompanyInfo
-      :asset-symbol="assetSymbol"
-    />
+
+    <div class="grid grid-cols-4 gap-4">
+      <div>
+        <CompanyQuote
+          :asset-symbol="assetSymbol"
+        />
+      </div>
+      <div
+        class="col-span-3"
+      >
+        <CompanyInfo
+          :asset-symbol="assetSymbol"
+        />
+      </div>
+    </div>
   </template>
 </template>
 
@@ -35,10 +47,12 @@ import {AssetSymbol} from '../../../common/models'
 import CompanyInfo from '../components/CompanyInfo.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import WatchAssetModal from '../components/WatchAssetModal.vue'
+import CompanyQuote from '../components/CompanyQuote.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 
 export default defineComponent({
   components: {
+    CompanyQuote,
     HeadlineActions,
     WatchAssetModal,
     CompanyInfo,

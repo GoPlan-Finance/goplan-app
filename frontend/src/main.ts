@@ -35,7 +35,9 @@ app.use(VueGapi, {
 app.use(i18n)
 
 const authStore = new AuthStore()
+import { createPinia } from 'pinia'
 
+app.use(createPinia())
 app.component('DefaultLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
 app.component('StyleguideLayout', StyleguideLayout)

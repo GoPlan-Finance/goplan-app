@@ -23,6 +23,7 @@
     <DataField
       v-for="(detail, index) in data.details"
       :key="index"
+      :type="detail.type"
       :data="detail.data"
       :label="$t('details.' + detail.label)"
       class="mb-2"
@@ -99,18 +100,21 @@ export default defineComponent({
           data  : `${info.address}, ${info.zip} ${info.city}`
         },
         {
+          type  : 'number',
           label : 'full_time_employees',
-          data  : Number(info.fullTimeEmployees).toLocaleString()
+          data  : info.fullTimeEmployees,
         },
         {
           label : 'ceo',
           data  : info.ceo
         },
         {
+          type  : 'url',
           label : 'website',
-          data  : `<a target="_blank" href="${info.website}">${info.website}</a>`
+          data  : info.website,
         },
         {
+          type  : 'date',
           label : 'ipo_date',
           data  : info.ipoDate
         },

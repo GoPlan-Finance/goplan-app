@@ -8,7 +8,7 @@ type LiveQueryUpdateFn<T> = (obj: T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
-export class BaseObject extends Parse.Object {
+export /*abstract*/ class BaseObject extends Parse.Object {
 
   constructor (className: string) {
     super(className)
@@ -27,7 +27,7 @@ export class BaseObject extends Parse.Object {
     Parse.Object.registerSubclass(this.className, this)
   }
 
-  
+
   /**
      * Run a query on a collection
      * @param q The query
@@ -87,7 +87,7 @@ export class BaseObject extends Parse.Object {
     })
 
     subscription.on('delete', item => {
-      remove(item)
+      remove(item as BaseObject)
     })
 
     return subscription
@@ -99,7 +99,7 @@ export class BaseObject extends Parse.Object {
     useMasterKey = false
   ): Promise<T> {
 
-    const query = new Parse.Query(this)
+    const query = new Parse.Query<T>(this)
 
     return query.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
   }
@@ -117,16 +117,17 @@ export class BaseObject extends Parse.Object {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
 
-  public static async findBy (
+  public static async findBy <T extends BaseObject>(
     params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false
   ): Promise<BaseObject[]> {
 
-    const query = new Parse.Query(this)
+    const query = new Parse.Query<T>(this)
 
     for (const [
       k, v
     ] of Object.entries(params)) {
+      // @ts-ignore
       query.equalTo(k, v)
     }
 

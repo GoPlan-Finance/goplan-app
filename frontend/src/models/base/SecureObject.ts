@@ -2,11 +2,11 @@ import {Crypto} from '../../../../common/Crypto'
 import {Session} from '../../store/auth'
 import {BaseObject} from '../../../../common/models/base/BaseObject'
 
-export class SecureObject extends BaseObject {
+export abstract class SecureObject extends BaseObject {
 
     private secureFields: string[] = []
 
-    constructor (className: string, secureFields: string[]) {
+    protected constructor (className: string, secureFields: string[]) {
       super(className)
 
       this.secureFields = secureFields
