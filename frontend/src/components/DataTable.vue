@@ -54,7 +54,7 @@
         <template v-if="header.type === TableCellType.CUSTOM">
           <slot
             :name="header.key"
-            :row="row"
+            :row="row[header.key]"
           />
         </template>
         <template v-else>

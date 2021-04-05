@@ -27,6 +27,10 @@ transactions:
     sell: Sell
     type: Type
     value: Value
+watchlist:
+  table:
+    name: Name
+    symbol: Symbol
 quote:
   open: Open
   previousClose: Previous Close
