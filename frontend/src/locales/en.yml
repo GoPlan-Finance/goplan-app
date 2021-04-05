@@ -13,9 +13,11 @@ details:
   sector: 'Sector'
   symbol: 'Symbol'
   website: 'Website'
+
 watchlists:
   updated: Updated
   show_more: 'Show More'
+
 transactions:
   headline: Transactions
   table:
@@ -47,4 +49,8 @@ quote:
   eps: EPS
   pe: PE
   earningsAnnouncement: Earning date
-  sharesOutstanding: Shares Outstanding
+  sharesOutstanding: Shares Outstandingwatchlist:
+  table:
+    name: Name
+    symbol: Symbol
+
