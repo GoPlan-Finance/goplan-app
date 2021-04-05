@@ -2,7 +2,7 @@
   <router-link
     :class="[$route.name === title ? activeClass : inactiveClass]"
     :to="to"
-    class="flex items-center duration-200 mt-4 mx-4 py-2 px-6 rounded-lg"
+    class="flex items-center duration-200 mt-2 mx-4 py-2 px-6 rounded-lg"
   >
     <slot />
 
