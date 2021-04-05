@@ -5,6 +5,7 @@
  */
 
 type LiveQueryUpdateFn<T> = (obj: T) => void
+import * as dayjs from 'dayjs'
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
@@ -161,7 +162,6 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       return obj
     }
 
-    // debugger
     //         const ctor = this.constructor as typeof BaseObject;
     //         console.log(ctor.className); // true
     // @ts-ignore

@@ -25,19 +25,10 @@ export abstract class SecureObject extends BaseObject {
     }
 
 
-    public set<T> (key: string | unknown, value: T | undefined, options = undefined): this | false {
+    public set<T> (key: string | unknown, value: T | undefined = undefined, options = undefined): this | false {
 
-      if (key && typeof key === 'object') {
-
-        for (const k in key) {
-          // Avoid  set({a : 1 , b:2 , c:3}) when one field need to be encrypted
-          if (this.secureFields.includes(k)) {
-            throw `When setting Secure Fields, you need to perform a separate "set('${k}', value )"`
-          }
-        }
-      } else if (typeof key === 'string' && this.secureFields.includes(key)) {
-
-        if (value instanceof Parse.Object) {
+      const encrypt = (k, v) => {
+        if (v instanceof Parse.Object) {
           throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
         }
         const encryptionKey = Session.get<string>('encryptionKey')
@@ -46,9 +37,26 @@ export abstract class SecureObject extends BaseObject {
           throw 'Encryption key not set"'
         }
 
-        const encryptedValue = Crypto.encrypt(encryptionKey, value)
+        const encryptedValue = Crypto.encrypt(encryptionKey, v)
 
-        return super.set(key, encryptedValue, options)
+        return super.set(k, encryptedValue, options)
+      }
+
+      if (key && typeof key === 'object') {
+
+        for (const k in key) {
+
+          if (this.secureFields.includes(k)) {
+            encrypt(k, key[k])
+          } else {
+            super.set(k as string, key[k], options)
+          }
+        }
+
+        return this
+      } else if (typeof key === 'string' && this.secureFields.includes(key)) {
+
+        return encrypt(key, value)
 
       }
 

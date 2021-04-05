@@ -1,6 +1,7 @@
 import {SecureObject} from './base/SecureObject'
 import {AssetSymbol} from '../../../common/models'
 import {Currencies, Currency, Money } from 'ts-money'
+import * as dayjs from 'dayjs'
 
 
 export class Transaction extends SecureObject {
@@ -18,25 +19,53 @@ export class Transaction extends SecureObject {
     get symbol (): AssetSymbol {
       return this.get('symbol')
     }
-    get date (): Date {
-      return this.get('date')
+
+    set symbol (value: AssetSymbol) {
+      this.set('symbol', value.toPointer())
     }
-    get price (): Money {
-      return Money.fromDecimal(Number(this.get('price')), Currencies.USD)
+
+    get executedAt (): Date {
+      return this.get('executedAt')
     }
+
+    set executedAt (value: Date) {
+      this.set('executedAt', value)
+    }
+
+    get price (): number {
+      return this.get('price') //Money.fromDecimal(Number(this.get('price')), this.get('currency'))
+    }
+
+    set price (value) {
+      this.set('price', value)
+    }
+
     get quantity (): number {
       return Number(this.get('quantity'))
     }
+
+    set quantity (value) {
+      this.set('quantity', value)
+    }
+
     get type (): string {
       return this.get('type')
     }
 
-    get value (): Money {
-      return this.price.multiply(this.quantity)
+    set type (value) {
+      this.set('type', value.toUpperCase())
+    }
+
+    get value ():number {
+      return this.price * this.quantity //this.price.multiply(this.quantity)
     }
 
     get currency (): string {
-      return this.price.getCurrencyInfo().symbol
+      return this.get('currency')
+    }
+
+    set currency (value) {
+      this.set('currency', value.toUpperCase())
     }
 
 }
