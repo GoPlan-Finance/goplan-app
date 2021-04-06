@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "description": "a financial planning platform for the general public.",
   "scripts": {
+    "pre-commit": "npm run lint-fix && cd ../backend && npm run lint-fix && npm run build && cd ../frontend && npm run lint-fix && npm run build",
+    "build": "cd ../backend && npm i && npm run build && cd ../frontend &&  npm i && npm run build",
     "lint": "eslint --cache .  --ext ts --ext js ",
     "lint-fix": "eslint --cache --fix .  --ext ts --ext js "
   },
@@ -24,7 +26,8 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
-    "crypto-js": "^4.0.0"
+    "crypto-js": "^4.0.0",
+    "ts-money": "^0.4.6"
   },
   "devDependencies": {
     "@types/node": "^14.14.32",

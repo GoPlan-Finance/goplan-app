@@ -52,9 +52,10 @@
         </span>
         <slot
           :name="header.key"
-          :row="row[header.key]"
+          :row="row"
+          :value="row[header.key]"
         >
-          {{ formatValue(row[header.key]) }}
+          {{ formatValue(header,{value: row[header.key] , row}) }}
         </slot>
       </span>
     </span>
@@ -73,14 +74,18 @@
 <script lang="ts">
 import {Money} from 'ts-money'
 import {computed, defineComponent, reactive, toRefs} from 'vue'
+import * as dayjs from 'dayjs'
 
 export type TableRow = Record<string, unknown>
+
+type FormatFn = (row: unknown, value: unknown) => void
 
 export interface TableHeader {
   key?: string,
   classes?: string,
   justify?: 'left' | 'right' | 'center',
   sortKey?: string
+  format? : 'date' | 'datetime' | 'time' | FormatFn
 }
 
 export interface TableConfig {
@@ -128,6 +133,7 @@ export default defineComponent({
       key, header
     ] of Object.entries(props.config.headers)) {
       let headerArr = header
+
       if (!Array.isArray(header)) {
         header.key = key
         headerArr  = [
@@ -138,13 +144,30 @@ export default defineComponent({
       config.headers.push(headerArr)
     }
 
-    function formatValue (value) {
-      if (value instanceof Money) {
-        return `${value.toDecimal().toFixed(2)} ${value.getCurrencyInfo().symbol}`
-      } else if (!isNaN(Number(value))) {
-        return Number(value).toFixed(2)
+    function formatValue (header : TableHeader, {value, row}) {
+
+      if (!header.format) {
+        return value
       }
-      return value
+
+      if (typeof header.format === 'function') {
+        return header.format(value, row)
+      }
+
+      if (header.format === 'date') {
+        return dayjs(value).format('YYYY-MM-DD')
+      }
+
+      if (header.format === 'datetime') {
+        return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+      }
+
+      if (header.format === 'time') {
+        return dayjs(value).format('HH:mm:ss')
+      }
+
+
+      throw `Unknown table dataformatter "${header.format}`
     }
 
     const rowsInternal = computed(() => {
