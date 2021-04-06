@@ -20,9 +20,8 @@
 <script lang="ts">
 import {computed, defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
-import {Watchlist} from '../../../common/models/Watchlist'
-import DataTable, {TableCellType, TableConfig} from '../components/DataTable.vue'
-import {AssetSymbol} from '../../../common/models'
+import {AssetSymbol, Watchlist} from '../../../common/models'
+import DataTable, {TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
 
 enum Column {

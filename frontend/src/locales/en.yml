@@ -20,7 +20,7 @@ transactions:
   headline: Transactions
   table:
     buy: Buy
-    date: Date
+    executedAt: Date
     position: Position
     price: Price
     quantity: Quantity
