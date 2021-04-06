@@ -147,7 +147,7 @@ export default defineComponent({
     }
 
     const rowsInternal = computed(() => {
-      const rows: unknown[] = props.rows
+      const rows: TableRow[] = props.rows
 
       if (sort.header) {
         rows.sort((a: TableRow, b: TableRow) => {
@@ -160,7 +160,7 @@ export default defineComponent({
             valueB = valueB[sort.header.sortKey]
           }
 
-          if (valueA instanceof Money) {
+          if (valueA instanceof Money && valueB instanceof Money) {
             return (valueA.toDecimal() < valueB.toDecimal()) ? order : (order * -1)
           } else if (valueA instanceof String) {
             const textA = (valueA as string).toUpperCase()
