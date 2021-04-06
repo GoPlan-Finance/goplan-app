@@ -4,13 +4,20 @@
       <h1 class="text-gray-700 text-3xl font-medium">
         {{ $t('transactions.headline') }}
       </h1>
-      <div>
+      <div class="flex gap-2">
+        <label>
+          <input
+            v-model="search"
+            type="text"
+            class="rounded-lg border-0"
+          >
+        </label>
         <label>
           <select
             id="type"
             v-model="typeFilter.value"
             name="type"
-            class="rounded border-0"
+            class="rounded-lg border-0"
           >
             <option
               v-for="option in typeFilter.options"
@@ -58,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
+import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, ref} from 'vue'
 import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable from '../components/DataTable.vue'
@@ -98,7 +105,7 @@ export default defineComponent({
             justify: 'right'
           },
           value: {
-            justify: 'right'
+            justify: 'right',
           }
         },
         settings: {
@@ -126,6 +133,8 @@ export default defineComponent({
       ]
     })
 
+    const search = ref('')
+
     let liveSubscription = null
 
     const rows = computed(() => {
@@ -144,10 +153,21 @@ export default defineComponent({
         if (typeFilter.value !== '') {
           return row.type === typeFilter.value
         }
+        if (search.value !== '') {
+          return Object.entries(row).some(([
+            key, value
+          ]) => {
+            const sortKey = data.config.headers[key].sortKey
+            if (sortKey) {
+              value = value[sortKey]
+            }
+            return String(value).toLowerCase().includes(search.value.toLowerCase())
+          })
+        }
         return true
       })
 
-      console.log('SET ROWS', rows)
+      // console.log('SET ROWS', rows)
       return mappedRows
     })
 
@@ -170,7 +190,8 @@ export default defineComponent({
       ...toRefs(data),
       Column,
       rows,
-      typeFilter
+      typeFilter,
+      search
     }
   },
 })
