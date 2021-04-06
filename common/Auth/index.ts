@@ -14,7 +14,6 @@ const assertEncrypted = (value: EncryptedValue): void => {
 
   const keys = {
     ct   : 'string',
-    s    : 'string',
     iv   : 'string',
     kVer : 'number',
     aVer : 'number',

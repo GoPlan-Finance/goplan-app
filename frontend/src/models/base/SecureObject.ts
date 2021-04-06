@@ -1,4 +1,4 @@
-import {Crypto} from '../../../../common/Crypto'
+import {Crypto, DerivedKey} from '../../../../common/Crypto'
 import {Session} from '../../store/auth'
 import {BaseObject} from '../../../../common/models/base/BaseObject'
 
@@ -19,9 +19,9 @@ export abstract class SecureObject extends BaseObject {
         return val
       }
 
-      const encryptionKey = Session.get('encryptionKey') as string
+      const derivedKey = Session.get('derivedKey') as DerivedKey
 
-      return Crypto.decrypt<T>(encryptionKey, val)
+      return Crypto.decrypt<T>(derivedKey, val)
     }
 
 
@@ -31,13 +31,13 @@ export abstract class SecureObject extends BaseObject {
         if (v instanceof Parse.Object) {
           throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
         }
-        const encryptionKey = Session.get<string>('encryptionKey')
+        const derivedKey = Session.get<DerivedKey>('derivedKey')
 
-        if (!encryptionKey) {
+        if (!derivedKey) {
           throw 'Encryption key not set"'
         }
 
-        const encryptedValue = Crypto.encrypt(encryptionKey, v)
+        const encryptedValue = Crypto.encrypt(derivedKey, v)
 
         return super.set(k, encryptedValue, options)
       }

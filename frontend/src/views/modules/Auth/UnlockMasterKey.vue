@@ -76,10 +76,6 @@ export default defineComponent({
 
     }
 
-    // watch(masterKey, async key => {
-    // })
-
-
     return {
       acceptTesting,
       masterKey,

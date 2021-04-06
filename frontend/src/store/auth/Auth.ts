@@ -1,11 +1,8 @@
 import {User} from '../../../../common/models'
 
-import {Crypto, EncryptedValue} from '../../../../common/Crypto'
+import {Crypto, DecryptedKey, EncryptedKey} from '../../../../common/Crypto'
 import {Session} from './index'
 
-interface ClientKeyInterface {
-    encryptionKey: string,
-}
 
 export class AuthStore {
 
@@ -27,11 +24,11 @@ export class AuthStore {
 
   public async isConnected (): Promise<boolean> {
 
-    return !!Session.get('encryptionKey')
+    return !!Session.get('encryptionKey') && !!Session.get('encryptionSalt')
   }
 
 
-  public async isMasterKeyValid (masterKey :string): Promise<boolean> {
+  public async isMasterKeyValid (masterKey :DecryptedKey): Promise<boolean> {
     try {
       await this.decryptClientKey(masterKey)
       return true
@@ -48,16 +45,19 @@ export class AuthStore {
     if (!user || !await this.hasClientKey()) {
       throw 'No client key'
     }
+    debugger
+    const clientKey = user.get('clientKey') as EncryptedKey
 
-    const clientKey = user.get('clientKey')
-    const key       = Crypto.decrypt(masterKey, clientKey) as ClientKeyInterface
+    const derived = Crypto.PBKDF2(masterKey, clientKey.s)
+
+    const key       = Crypto.decrypt(derived, clientKey) as DecryptedKey
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key'
     }
 
     // @todo ensure SessionStorage is safe storage for tokens
-    Session.set('encryptionKey', key.encryptionKey)
+    Session.set('derivedKey', derived)
   }
 
 
@@ -82,7 +82,7 @@ export class AuthStore {
     return false
   }
 
-  public async createMasterKey (newMasterKey: string) : Promise<EncryptedValue> {
+  public async createMasterKey (newMasterKey: string) : Promise<EncryptedKey> {
     if (await this.hasClientKey()) {
       throw 'Master Key already exists'
     }
@@ -96,10 +96,18 @@ export class AuthStore {
 
     // 2. We generate our super secret key that we will use to actually encrypt the user's data
     const encryptionKey = Crypto.randomWords(128 / 8)
+    const salt          = Crypto.randomSalt()
 
-    return Crypto.encrypt(newMasterKey, {
+    const derived = Crypto.PBKDF2(newMasterKey, salt)
+
+    const encryptedKey = Crypto.encrypt(derived, {
       encryptionKey
     })
+
+    return {
+      ...encryptedKey,
+      s: salt.toString()
+    }
   }
 
 
