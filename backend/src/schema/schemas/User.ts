@@ -1,7 +1,7 @@
-import {requiresAnonymous, requiresAuthentication, schema} from "./base/defaults";
+import {requiresAnonymous, requiresAuthentication, schema} from './base/defaults'
 
-export const User = schema('_User',{
-  fields    : {
+export const User = schema('_User', {
+  fields: {
     email         : {type: 'String'},
     authData      : {type: 'Object'},
     emailVerified : {type: 'Boolean'},
@@ -11,16 +11,19 @@ export const User = schema('_User',{
     // lastname: {type: 'String'},
     profileInfo   : {type: 'Object'},
     clientKey     : {type: 'Object'},
-
   },
   indexes: {
   },
   classLevelPermissions: {
-    ...requiresAuthentication(['update']),
+    ...requiresAuthentication([
+      'update'
+    ]),
 
-    ...requiresAnonymous(['create']),
+    ...requiresAnonymous([
+      'create'
+    ]),
 
-    protectedFields : {
+    protectedFields: {
       '*': [
         'email',
         'authData',

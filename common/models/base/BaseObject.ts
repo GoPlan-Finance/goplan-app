@@ -29,16 +29,18 @@ export /*abstract*/ class BaseObject extends Parse.Object {
 
 
   /**
-     * Run a query on a collection
-     * @param q The query
-     * @param objects The array where objects will be added
-     * @param updateFn A function that take a single object, that can be used to manipulate the object before it is added
-     *                 to the array
-     */
+   * Run a query on a collection
+   * @param q The query
+   * @param objects The array where objects will be added
+   * @param updateFn A function that take a single object, that can be used to manipulate the object before it is added
+   *                 to the array
+   * @param removeFn
+   */
   public static async liveQuery<T extends BaseObject> (
     q: Parse.Query<T>,
     objects: T[] | null,
-    updateFn?: LiveQueryUpdateFn<T>
+    updateFn?: LiveQueryUpdateFn<T>,
+    removeFn?: LiveQueryUpdateFn<T>,
   ): Promise<Parse.LiveQuerySubscription> {
 
     const replace = async (object: T) => {
@@ -59,7 +61,11 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       }
     }
 
-    const remove = (object: BaseObject) => {
+    const remove = async (object: T) => {
+
+      if (removeFn) {
+        await removeFn(object)
+      }
 
       if (objects !== null) {
         const index = objects.findIndex(o => o.id === object.id)
@@ -87,7 +93,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     })
 
     subscription.on('delete', item => {
-      remove(item as BaseObject)
+      remove(item as T)
     })
 
     return subscription

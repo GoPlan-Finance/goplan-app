@@ -14,7 +14,11 @@
         <div class="shadow-md overflow-hidden rounded-lg">
           <div class="bg-white px-6 py-4">
             <div class="text-gray-900 font-bold text-xl mb-1">
-              {{ watchlist.get('name') }} <small class="font-normal text-xs">({{ watchlist.symbols.length }} stocks)</small>
+              {{ watchlist.get('name') }}
+              <small
+                v-if="watchlist.symbolsCount"
+                class="font-normal text-xs"
+              >({{ watchlist.symbolsCount }} stocks)</small>
             </div>
 
             <div class="text-gray-500  text-sm mb-2">
@@ -79,8 +83,9 @@ export default defineComponent({
     let liveSubscription = null
 
     const show = async (watchlist: Watchlist) => {
+      console.log(watchlist.symbols)
       watchlist.percentChange = (Math.random() * 10) - 3.5
-      watchlist.symbols       = await watchlist.relation('symbols').query().find()
+      watchlist.symbolsCount  = await watchlist.relation('symbols').query().count()
     }
 
     async function remove (watchlist: Watchlist) {

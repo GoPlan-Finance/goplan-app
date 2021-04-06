@@ -1,28 +1,24 @@
-import { defineStore } from 'pinia'
-import {IndexedDB} from "./base/IndexedDB";
-import {AssetSymbol} from "../../../common/models";
-import {Transaction} from "../models";
+import {defineStore} from 'pinia'
+import {IndexedDB} from './base/IndexedDB'
+import {Transaction} from '../models'
 
 const db = new IndexedDB('companyProfile')
 
 
 export const useTransactionStore = defineStore({
   // name of the store
-  id    : 'transaction',
+  id: 'transaction',
 
-  state : () => ({
+  state: () => ({
     subscription : null,
-    transactions: [],
+    transactions : [],
   }),
   // optional getters
   getters: {
-    get (asset : AssetSymbol) {
-
-
-
-
-
-    },
+    // get (asset : AssetSymbol) {
+    //
+    //
+    // },
     // use getters in other getters
     doubleCountPlusOne () {
       return this.doubleCount * 2
@@ -30,13 +26,13 @@ export const useTransactionStore = defineStore({
   },
   // optional actions
   actions: {
-    async subscribe(){
-      if(this.subscription){
+    async subscribe () {
+      if (this.subscription) {
         await this.subscription.unsubscribe()
       }
 
-      this.subscription = await Transaction.liveQuery(new Parse.Query(Transaction) ,  this.transactions  ,obj => {
-
+      this.subscription = await Transaction.liveQuery(new Parse.Query(Transaction), this.transactions, obj => {
+        console.log('updated ', obj)
       })
 
     },

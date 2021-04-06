@@ -135,17 +135,18 @@ export default defineComponent({
       rows     : [],
     })
 
-    for (let [
+    for (const [
       key, header
     ] of Object.entries(props.config.headers)) {
+      let headerArr = header
       if (!Array.isArray(header)) {
         header.key = key
-        header     = [
+        headerArr  = [
           header
         ]
       }
 
-      config.headers.push(header)
+      config.headers.push(headerArr)
     }
 
     watch(() => props.rows, () => {
