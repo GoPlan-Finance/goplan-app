@@ -30,7 +30,6 @@
   "dependencies": {
     "@heroicons/vue": "^1.0.0",
     "crypto-js": "^4.0.0",
-    "csv-parse": "^4.15.3",
     "dayjs": "^1.10.4",
     "echarts": "^5.0.2",
     "feather-icons": "^4.28.0",
@@ -44,7 +43,7 @@
     "vue-feather": "^2.0.0-beta",
     "vue-gapi": "next",
     "vue-i18n": "^9.0.0",
-    "vue-router": "^4.0.5"
+    "vue-router": "^4.0.6"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^2.0.4",

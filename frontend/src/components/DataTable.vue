@@ -124,24 +124,25 @@ export default defineComponent({
     })
 
 
-    for (let [
+    for (const [
       key, header
     ] of Object.entries(props.config.headers)) {
+      let headerArr = header
       if (!Array.isArray(header)) {
         header.key = key
-        header     = [
+        headerArr  = [
           header
         ]
       }
 
-      config.headers.push(header)
+      config.headers.push(headerArr)
     }
 
     function formatValue (value) {
       if (value instanceof Money) {
         return `${value.toDecimal().toFixed(2)} ${value.getCurrencyInfo().symbol}`
       } else if (!isNaN(Number(value))) {
-        return value.toFixed(2)
+        return Number(value).toFixed(2)
       }
       return value
     }

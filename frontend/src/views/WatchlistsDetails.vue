@@ -23,6 +23,7 @@ import dayjs from 'dayjs'
 import {AssetSymbol, Watchlist} from '../../../common/models'
 import DataTable, {TableConfig} from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
+import {TableCellType} from '../components/DataTable2.vue'
 
 enum Column {
   NAME = 'name',

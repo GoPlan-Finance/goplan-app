@@ -29,10 +29,12 @@ transactions:
     sell: Sell
     type: Type
     value: Value
+
 watchlist:
   table:
     name: Name
     symbol: Symbol
+
 quote:
   open: Open
   previousClose: Previous Close
@@ -49,8 +51,4 @@ quote:
   eps: EPS
   pe: PE
   earningsAnnouncement: Earning date
-  sharesOutstanding: Shares Outstandingwatchlist:
-  table:
-    name: Name
-    symbol: Symbol
-
+  sharesOutstanding: Shares Outstanding

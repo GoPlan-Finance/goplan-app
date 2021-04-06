@@ -12,9 +12,57 @@ type FieldType =
     | 'Pointer'
     | 'Relation';
 
-function CPL (ops: CPLType, value: unknown): { [key: string]: unknown } {
 
-  const v: { [key: string]: unknown } = {}
+interface FieldInterface {
+    type: FieldType
+    targetClass?: string
+    required?: boolean
+}
+
+interface CPLInterface {
+    requiresAuthentication?: boolean
+    '*'?: boolean
+}
+
+interface IndexInterface {
+    [key: string]: number
+}
+
+
+interface FieldsInterface {
+    [key: string]: FieldInterface
+}
+
+interface ProtectedFieldsInterface {
+    [key: string]: string[]
+}
+
+interface IndexesInterface {
+    [key: string]: IndexInterface
+}
+
+interface CPLsInterface {
+    find?            : CPLInterface,
+    count?           : CPLInterface,
+    get?             : CPLInterface,
+    update?          : CPLInterface,
+    create?          : CPLInterface,
+    delete?          : CPLInterface,
+    addField?        : CPLInterface,
+    protectedFields? : ProtectedFieldsInterface
+}
+
+
+interface SchemaInterface {
+    fields: FieldsInterface
+    indexes: IndexesInterface
+    classLevelPermissions: CPLsInterface
+}
+
+
+function CPL (ops: CPLType, value: CPLInterface):  CPLsInterface  {
+
+  const v: CPLsInterface = {}
 
   if (ops === '*') {
     ops = [
@@ -30,47 +78,14 @@ function CPL (ops: CPLType, value: unknown): { [key: string]: unknown } {
 }
 
 
-export function requiresAuthentication (ops: CPLType): { [key: string]: unknown } {
+export function requiresAuthentication (ops: CPLType): CPLsInterface {
 
   return CPL(ops, {requiresAuthentication: true})
 }
 
-export function requiresAnonymous (ops: CPLType): { [key: string]: unknown } {
+export function requiresAnonymous (ops: CPLType): CPLsInterface {
 
   return CPL(ops, {'*': true})
-}
-
-interface FieldInterface {
-    type: FieldType
-    targetClass?: string
-    required?: boolean
-}
-
-interface CPLInterface {
-    [key: string]: boolean
-}
-
-interface IndexInterface {
-    [key: string]: number
-}
-
-interface FieldsInterface {
-    [key: string]: FieldInterface
-}
-
-interface IndexesInterface {
-    [key: string]: IndexInterface
-}
-
-interface CPLsInterface {
-    [key: string]: CPLInterface
-
-}
-
-interface SchemaInterface {
-    fields: FieldsInterface
-    indexes: CPLsInterface
-    classLevelPermissions: IndexesInterface
 }
 
 export function schema (className: string, schema: SchemaInterface): unknown {
