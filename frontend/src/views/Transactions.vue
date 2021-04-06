@@ -5,13 +5,9 @@
         {{ $t('transactions.headline') }}
       </h1>
       <div class="flex gap-2">
-        <label>
-          <input
-            v-model="search"
-            type="text"
-            class="rounded-lg border-0"
-          >
-        </label>
+        <SearchField
+          v-model="search"
+        />
         <label>
           <select
             id="type"
@@ -65,13 +61,14 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, ref} from 'vue'
+import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs} from 'vue'
 import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import DataTable from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
 import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
 import HeadlineActions from '../components/HeadlineActions.vue'
+import SearchField from '../components/base/SearchField.vue'
 
 enum Column {
   POSITION = 'position',
@@ -83,7 +80,7 @@ enum Column {
 }
 
 export default defineComponent({
-  components: {HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon},
+  components: {SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon},
   setup () {
     const data = reactive({
       transactions : [],
@@ -138,7 +135,7 @@ export default defineComponent({
     let liveSubscription = null
 
     const rows = computed(() => {
-      let mappedRows = data.transactions.map(transaction => {
+      return data.transactions.map(transaction => {
         return {
           [Column.POSITION] : transaction.symbol,
           [Column.DATE]     : dayjs(transaction.executedAt).format('YYYY-MM-DD'),
@@ -149,9 +146,15 @@ export default defineComponent({
         }
       })
 
-      mappedRows = mappedRows.filter(row => {
+
+    })
+
+    const sortedRows = computed(() => {
+      return rows.value.filter(row => {
         if (typeFilter.value !== '') {
-          return row.type === typeFilter.value
+          if (row.type !== typeFilter.value) {
+            return false
+          }
         }
         if (search.value !== '') {
           return Object.entries(row).some(([
@@ -166,11 +169,7 @@ export default defineComponent({
         }
         return true
       })
-
-      // console.log('SET ROWS', rows)
-      return mappedRows
     })
-
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Transaction)
@@ -189,7 +188,7 @@ export default defineComponent({
       dayjs,
       ...toRefs(data),
       Column,
-      rows,
+      rows: sortedRows,
       typeFilter,
       search
     }
