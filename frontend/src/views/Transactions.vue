@@ -1,11 +1,28 @@
 <template>
   <div>
-    <div class="flex flex-wrap justify-between">
-      <h1 class="text-gray-700 text-3xl font-medium mb-6">
+    <HeadlineActions>
+      <h1 class="text-gray-700 text-3xl font-medium">
         {{ $t('transactions.headline') }}
       </h1>
-    </div>
-
+      <div>
+        <label>
+          <select
+            id="type"
+            v-model="typeFilter.value"
+            name="type"
+            class="rounded border-0"
+          >
+            <option
+              v-for="option in typeFilter.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.display }}
+            </option>
+          </select>
+        </label>
+      </div>
+    </HeadlineActions>
 
     <DataTable
       :config="config"
@@ -28,19 +45,10 @@
           :class="row ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
           class="flex gap-2"
         >
-          <svg
-            :class="row ==='BUY'? 'transform rotate-180' : ''"
+          <ArrowCircleLeftIcon
             class="h-6 w-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
-              fill-rule="evenodd"
-            />
-          </svg>
+            :class="row ==='BUY'? 'transform rotate-180' : ''"
+          />
 
           {{ $t(config.settings.translationPrefix + '.' + row.toLowerCase()) }}
         </div>
@@ -50,11 +58,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch} from 'vue'
+import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
 import {Transaction} from '../models'
 import dayjs from 'dayjs'
-import DataTable, {TableConfig} from '../components/DataTable.vue'
+import DataTable from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
+import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
+import HeadlineActions from '../components/HeadlineActions.vue'
 
 enum Column {
   POSITION = 'position',
@@ -66,9 +76,9 @@ enum Column {
 }
 
 export default defineComponent({
-  components: {DataTable, AppLink},
+  components: {HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon},
   setup () {
-    const data: TableConfig = reactive({
+    const data = reactive({
       transactions : [],
       rows         : [],
       config       : {
@@ -97,10 +107,28 @@ export default defineComponent({
       }
     })
 
+    const typeFilter                  = reactive({
+      value   : '',
+      options : [
+        {
+          value   : '',
+          display : 'All Types',
+        },
+        {
+          value   : 'BUY',
+          display : 'Buy',
+        },
+        {
+          value   : 'SELL',
+          display : 'Sell',
+        },
+      ]
+    })
+
     let liveSubscription = null
 
-    const updateTable = () => {
-      const rows = data.transactions.map(transaction => {
+    const rows = computed(() => {
+      let mappedRows = data.transactions.map(transaction => {
         return {
           [Column.POSITION] : transaction.symbol,
           [Column.DATE]     : dayjs(transaction.executedAt).format('YYYY-MM-DD'),
@@ -111,17 +139,23 @@ export default defineComponent({
         }
       })
 
+      mappedRows = mappedRows.filter(row => {
+        if (typeFilter.value !== '') {
+          return row.type === typeFilter.value
+        }
+        return true
+      })
+
       console.log('SET ROWS', rows)
-      data.rows = rows
-    }
+      return mappedRows
+    })
+
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Transaction)
       q.descending('executedAt')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, data.transactions)
-
-      updateTable()
     })
 
     onUnmounted(async () => {
@@ -130,12 +164,12 @@ export default defineComponent({
       }
     })
 
-    watch(() => data.transactions, () => updateTable())
-
     return {
       dayjs,
       ...toRefs(data),
-      Column
+      Column,
+      rows,
+      typeFilter
     }
   },
 })
