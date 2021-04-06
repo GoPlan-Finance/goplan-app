@@ -1,4 +1,4 @@
-import {Crypto} from '../../../../common/Crypto'
+import {Crypto, DerivedKey} from '../../../../common/Crypto'
 import {Session} from '../../store/auth'
 import {BaseObject} from '../../../../common/models/base/BaseObject'
 
@@ -19,36 +19,44 @@ export abstract class SecureObject extends BaseObject {
         return val
       }
 
-      const encryptionKey = Session.get('encryptionKey') as string
+      const derivedKey = Session.get('derivedKey') as DerivedKey
 
-      return Crypto.decrypt<T>(encryptionKey, val)
+      return Crypto.decrypt<T>(derivedKey, val)
     }
 
 
-    public set<T> (key: string | unknown, value: T | undefined, options = undefined): this | false {
+    public set<T> (key: string | unknown, value: T | undefined = undefined, options = undefined): this | false {
+
+      const encrypt = (k, v) => {
+        if (v instanceof Parse.Object) {
+          throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
+        }
+        const derivedKey = Session.get<DerivedKey>('derivedKey')
+
+        if (!derivedKey) {
+          throw 'Encryption key not set"'
+        }
+
+        const encryptedValue = Crypto.encrypt(derivedKey, v)
+
+        return super.set(k, encryptedValue, options)
+      }
 
       if (key && typeof key === 'object') {
 
         for (const k in key) {
-          // Avoid  set({a : 1 , b:2 , c:3}) when one field need to be encrypted
+
           if (this.secureFields.includes(k)) {
-            throw `When setting Secure Fields, you need to perform a separate "set('${k}', value )"`
+            encrypt(k, key[k])
+          } else {
+            super.set(k as string, key[k], options)
           }
         }
+
+        return this
       } else if (typeof key === 'string' && this.secureFields.includes(key)) {
 
-        if (value instanceof Parse.Object) {
-          throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
-        }
-        const encryptionKey = Session.get<string>('encryptionKey')
-
-        if (!encryptionKey) {
-          throw 'Encryption key not set"'
-        }
-
-        const encryptedValue = Crypto.encrypt(encryptionKey, value)
-
-        return super.set(key, encryptedValue, options)
+        return encrypt(key, value)
 
       }
 

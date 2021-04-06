@@ -13,6 +13,7 @@
       >Your Master Key</span>
       <input
         v-model="masterKey"
+        autocomplete="new-password"
         class="form-input mt-2 bg-gray-100 border-1 border-gray-300 block w-full rounded-md focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
         type="password"
       >
@@ -22,6 +23,7 @@
       <span class="text-gray-700 text-sm font-bold">Confirm your key</span>
       <input
         v-model="masterKey2"
+        autocomplete="new-password"
         class="form-input mt-2 bg-gray-100 border-1 border-gray-300 block w-full rounded-md focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
         type="password"
       >
@@ -84,6 +86,7 @@ export default defineComponent({
         emit('keyValid')
         return
       } catch (err) {
+        console.error(err)
         throw 'tbd: The key you created cannot be decrypted :('
       }
 

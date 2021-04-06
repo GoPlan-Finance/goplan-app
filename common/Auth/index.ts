@@ -14,7 +14,6 @@ const assertEncrypted = (value: EncryptedValue): void => {
 
   const keys = {
     ct   : 'string',
-    s    : 'string',
     iv   : 'string',
     kVer : 'number',
     aVer : 'number',
@@ -25,7 +24,6 @@ const assertEncrypted = (value: EncryptedValue): void => {
     k, t
   ] of Object.entries(keys)) {
 
-    // @ts-ignore
     if (typeof value[k] !== t) {
       throw `Invalid type for "${k}"`
     }

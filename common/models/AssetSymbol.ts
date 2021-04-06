@@ -12,7 +12,7 @@ export class AssetSymbol extends BaseObject {
 
   static async fetchSymbolByTicker (ticker: string): Promise<AssetSymbol> {
     const query      = new Parse.Query(AssetSymbol)
-    query.equalTo('symbol', ticker)
+    query.equalTo('symbol', ticker.toUpperCase())
     query.include('exchange')
     return query.first()
   }
@@ -34,7 +34,7 @@ export class AssetSymbol extends BaseObject {
   }
 
   async getExchange (): Promise<StockExchange> {
-    return this.maybeFetchPointer<StockExchange>(this.get('exchange'))
+    return this.maybeFetchPointer('exchange')
   }
 
 }

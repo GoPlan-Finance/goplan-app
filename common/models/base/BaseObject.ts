@@ -3,7 +3,6 @@
  *
  *
  */
-
 type LiveQueryUpdateFn<T> = (obj: T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
@@ -22,23 +21,26 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     return this.get('updatedAt')
   }
 
-  public static register () {
-    // @ts-ignore
+  public static register () : void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     Parse.Object.registerSubclass(this.className, this)
   }
 
 
   /**
-     * Run a query on a collection
-     * @param q The query
-     * @param objects The array where objects will be added
-     * @param updateFn A function that take a single object, that can be used to manipulate the object before it is added
-     *                 to the array
-     */
+   * Run a query on a collection
+   * @param q The query
+   * @param objects The array where objects will be added
+   * @param updateFn A function that take a single object, that can be used to manipulate the object before it is added
+   *                 to the array
+   * @param removeFn
+   */
   public static async liveQuery<T extends BaseObject> (
     q: Parse.Query<T>,
     objects: T[] | null,
-    updateFn?: LiveQueryUpdateFn<T>
+    updateFn?: LiveQueryUpdateFn<T>,
+    removeFn?: LiveQueryUpdateFn<T>,
   ): Promise<Parse.LiveQuerySubscription> {
 
     const replace = async (object: T) => {
@@ -59,7 +61,11 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       }
     }
 
-    const remove = (object: BaseObject) => {
+    const remove = async (object: T) => {
+
+      if (removeFn) {
+        await removeFn(object)
+      }
 
       if (objects !== null) {
         const index = objects.findIndex(o => o.id === object.id)
@@ -87,7 +93,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     })
 
     subscription.on('delete', item => {
-      remove(item as BaseObject)
+      remove(item as T)
     })
 
     return subscription
@@ -117,7 +123,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
 
-  public static async findBy <T extends BaseObject>(
+  public static async findBy <T extends BaseObject> (
     params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false
   ): Promise<BaseObject[]> {
@@ -127,6 +133,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     for (const [
       k, v
     ] of Object.entries(params)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       query.equalTo(k, v)
     }
@@ -161,10 +168,11 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       return obj
     }
 
-    // debugger
     //         const ctor = this.constructor as typeof BaseObject;
     //         console.log(ctor.className); // true
-    // @ts-ignore
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     const obj2 = new this(this.className) // the `this` in `this.className` refer to the static child class
 
     obj2.set(params)
@@ -173,10 +181,15 @@ export /*abstract*/ class BaseObject extends Parse.Object {
   }
 
   public async maybeFetchPointer<T extends BaseObject> (
-    param: Parse.Pointer|BaseObject,
+    param: string,
   ): Promise<T> {
-    // @ts-ignore
-    return this.fetch(param.objectId)
+    const value : T | Parse.Pointer = this.get(param)
+
+    if (value instanceof BaseObject) {
+      return value as T
+    }
+
+    return BaseObject.getObjectById<T>(value.objectId)
   }
 
 }

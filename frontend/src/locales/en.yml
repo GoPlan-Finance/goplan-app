@@ -13,9 +13,11 @@ details:
   sector: 'Sector'
   symbol: 'Symbol'
   website: 'Website'
+
 watchlists:
   updated: Updated
   show_more: 'Show More'
+
 transactions:
   headline: Transactions
   table:
@@ -27,10 +29,12 @@ transactions:
     sell: Sell
     type: Type
     value: Value
+
 watchlist:
   table:
     name: Name
     symbol: Symbol
+
 quote:
   open: Open
   previousClose: Previous Close

@@ -1,14 +1,7 @@
-export const User = {
-  className : '_User',
-  fields    : {
-    objectId  : {type: 'String'},
-    createdAt : {
-      type: 'Date',
-    },
-    updatedAt: {
-      type: 'Date',
-    },
-    ACL           : {type: 'ACL'},
+import {requiresAnonymous, requiresAuthentication, schema} from './base/defaults'
+
+export const User = schema('_User', {
+  fields: {
     email         : {type: 'String'},
     authData      : {type: 'Object'},
     emailVerified : {type: 'Boolean'},
@@ -18,20 +11,19 @@ export const User = {
     // lastname: {type: 'String'},
     profileInfo   : {type: 'Object'},
     clientKey     : {type: 'Object'},
-
   },
   indexes: {
-    objectId: {objectId: 1}
   },
   classLevelPermissions: {
-    find            : {},
-    count           : {},
-    get             : {},
-    update          : {requiresAuthentication: true},
-    create          : {'*': true},
-    delete          : {requiresAuthentication: true},
-    addField        : {},
-    protectedFields : {
+    ...requiresAuthentication([
+      'update'
+    ]),
+
+    ...requiresAnonymous([
+      'create'
+    ]),
+
+    protectedFields: {
       '*': [
         'email',
         'authData',
@@ -43,4 +35,4 @@ export const User = {
       ],
     },
   },
-}
+})

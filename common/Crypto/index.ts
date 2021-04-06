@@ -5,60 +5,81 @@
 import CryptoJS from 'crypto-js'
 
 export interface EncryptedValue {
+    [index: string]: string | number,
     ct: string,
     iv: string,
-    s: string,
     kVer: number,
     aVer: number,
 }
 
+export interface EncryptedKey extends EncryptedValue {
+    s: string,
+}
+
+export interface DecryptedKey {
+    salt: string,
+    encryptionKey: string,
+}
+
+export interface DerivedKey {
+    PBKDF2: string,
+}
+
+
 export class Crypto {
 
-  static encrypt (key :string, data :unknown|string|number|null): EncryptedValue {
+  public static randomSalt () :string {
+    const size = 128
+    return CryptoJS.lib.WordArray.random(size / 8).toString()
+  }
 
-    const ivSize = 128
+  private static randomIv () {
+    const size = 128
+    return CryptoJS.lib.WordArray.random(size / 8)
+  }
 
-    const salt = CryptoJS.lib.WordArray.random(ivSize / 8)
-    const iv   = CryptoJS.lib.WordArray.random(ivSize / 8)
+  static encrypt (derivedKey: DerivedKey, data: unknown | string | number | null): EncryptedValue {
+    const iv = Crypto.randomIv()
 
-    const derivedKey = Crypto.PBKDF2(key, salt)
-
-    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), derivedKey, {
-      iv,
-      padding : CryptoJS.pad.Pkcs7,
-      mode    : CryptoJS.mode.CBC
-    })
+    const encrypted = CryptoJS.AES.encrypt(
+      JSON.stringify(data),
+      CryptoJS.enc.Hex.parse(derivedKey.PBKDF2), {
+        iv,
+        padding : CryptoJS.pad.Pkcs7,
+        mode    : CryptoJS.mode.CBC
+      })
 
     return {
       iv   : iv.toString(),
-      s    : salt.toString(),
       ct   : encrypted.toString(),
       kVer : 1,
       aVer : 1,
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static PBKDF2 (key:string, salt: string | CryptoJS.lib.WordArray) :any  {
+
+  static PBKDF2 (key: string, salt: string): DerivedKey {
+
     const keySize    = 256
     const iterations = 1000
 
-    return CryptoJS.PBKDF2(key, salt, {
-      keySize: keySize / 32,
-      iterations
-    })
+    return {
+      PBKDF2: CryptoJS.PBKDF2(key,
+        CryptoJS.enc.Hex.parse(salt), {
+          keySize: keySize / 32,
+          iterations
+        }).toString()
+    }
   }
 
-  static decrypt<T> (key:string, cypherObject: EncryptedValue) :T {
+  static decrypt<T> (derivedKey: DerivedKey, cypherObject: EncryptedValue): T {
 
-    const salt      = CryptoJS.enc.Hex.parse(cypherObject.s)
+    const key       = CryptoJS.enc.Hex.parse(derivedKey.PBKDF2)
     const iv        = CryptoJS.enc.Hex.parse(cypherObject.iv)
     const encrypted = cypherObject.ct
 
-    const derivedKey = Crypto.PBKDF2(key, salt)
-
     const decrypted = CryptoJS.AES.decrypt(
       encrypted,
-      derivedKey, {
+      key, {
         iv,
         padding : CryptoJS.pad.Pkcs7,
         mode    : CryptoJS.mode.CBC
