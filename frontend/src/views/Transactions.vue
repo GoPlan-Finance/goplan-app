@@ -85,7 +85,8 @@ export default defineComponent({
         headers: {
           type     : {},
           position : {
-            classes: 'font-bold'
+            classes : 'font-bold',
+            sortKey : 'name'
           },
           executedAt: {
             justify: 'right'

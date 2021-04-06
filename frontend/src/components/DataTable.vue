@@ -71,8 +71,8 @@
 </template>
 
 <script lang="ts">
-import { Money } from 'ts-money'
-import {computed, defineComponent, reactive, ref, toRefs, watch} from 'vue'
+import {Money} from 'ts-money'
+import {computed, defineComponent, reactive, toRefs} from 'vue'
 
 export type TableRow = Record<string, unknown>
 
@@ -80,6 +80,7 @@ export interface TableHeader {
   key?: string,
   classes?: string,
   justify?: 'left' | 'right' | 'center',
+  sortKey?: string
 }
 
 export interface TableConfig {
@@ -150,9 +151,15 @@ export default defineComponent({
 
       if (sort.header) {
         rows.sort((a: TableRow, b: TableRow) => {
-          const valueA = a[sort.header.key]
-          const valueB = b[sort.header.key]
-          const order  = sort.order ? -1 : 1
+          let valueA  = a[sort.header.key]
+          let valueB  = b[sort.header.key]
+          const order = sort.order ? -1 : 1
+
+          if (sort.header.sortKey) {
+            valueA = valueA[sort.header.sortKey]
+            valueB = valueB[sort.header.sortKey]
+          }
+
           if (valueA instanceof Money) {
             return (valueA.toDecimal() < valueB.toDecimal()) ? order : (order * -1)
           } else if (valueA instanceof String) {
