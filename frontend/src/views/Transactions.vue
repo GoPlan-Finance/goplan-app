@@ -142,18 +142,18 @@ export default defineComponent({
     let liveSubscription = null
 
     const sortedRows = computed(() => {
-      return data.transactions.filter(row => {
+      return data.transactions.filter(transaction => {
         if (typeFilter.value !== '') {
-          if (row.type !== typeFilter.value) {
+          if (transaction.type !== typeFilter.value) {
             return false
           }
         }
         if (search.value !== '') {
           const searchVal = search.value.toLowerCase()
 
-          return row.position.name.toLowerCase().includes(searchVal)
-              || row.position.symbol.toLowerCase().startsWith(searchVal)
-              || row.executedAt.toLowerCase().startsWith(searchVal)
+          return transaction.symbol.name.toLowerCase().includes(searchVal)
+              || transaction.symbol.symbol.toLowerCase().startsWith(searchVal)
+              || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
 
 
           // return Object.entries(row).some(([
