@@ -1,6 +1,6 @@
 import {requiresAuthentication, schema} from './base/defaults'
 
-export const Watchlist = schema('Watchlist', {
+export default schema('Watchlist', {
   fields: {
     name      : {type: 'String'},
     createdBy : {type: 'Pointer', targetClass: '_User'},

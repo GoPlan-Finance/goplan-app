@@ -1,10 +1,11 @@
-import {BaseObject} from './base/BaseObject'
 import {StockExchange} from './StockExchange'
+import {CacheableObject} from './base/CacheableObject'
 
 
-export class AssetSymbol extends BaseObject {
+export class AssetSymbol extends CacheableObject {
 
   static className = 'AssetSymbol'
+
 
   constructor () {
     super(AssetSymbol.className)
@@ -31,6 +32,10 @@ export class AssetSymbol extends BaseObject {
 
   get exchange (): StockExchange {
     return this.get('exchange')
+  }
+
+  get currency ():string {
+    return this.get('currency')
   }
 
   async getExchange (): Promise<StockExchange> {

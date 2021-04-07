@@ -23,9 +23,9 @@
     <DataField
       v-for="(detail, index) in data.details"
       :key="index"
-      :type="detail.type"
       :data="detail.data"
       :label="$t('details.' + detail.label)"
+      :type="detail.type"
       class="mb-2"
     />
 
@@ -42,6 +42,7 @@
 import {defineComponent, onBeforeMount, reactive} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import DataField from './base/DataField.vue'
+import {AssetProfile} from '../../../common/models/AssetProfile'
 
 export default defineComponent({
   components : {DataField},
@@ -53,43 +54,41 @@ export default defineComponent({
   },
   setup (props) {
 
-    const data    = reactive({
+    const data = reactive({
       info    : {},
       details : [],
     })
 
     onBeforeMount(async () => {
 
-      const info = await Parse.Cloud.run('Assets--GetProfile', {
-        assetSymbolId: props.assetSymbol.id
-      })
+      const info = await AssetProfile.fetchBySymbol(props.assetSymbol)
 
       data.info = info
 
       data.details = [
         {
           label : 'company_name',
-          data  : info.companyName
+          data  : info.name
         },
         {
           label : 'symbol',
-          data  : info.symbol
+          data  : info.symbol.symbol
         },
-        {
-          label : 'isin',
-          data  : info.isin
-        },
+        // {
+        //   label : 'isin',
+        //   data  : info.isin
+        // },
         {
           label : 'exchange',
-          data  : info.exchange
+          data  : info.exchange.name
         },
         {
           label : 'sector',
-          data  : info.sector
+          data  : info.sector.name
         },
         {
           label : 'industry',
-          data  : info.industry
+          data  : info.industry.name
         },
         {
           label : 'country',

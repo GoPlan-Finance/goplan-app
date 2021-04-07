@@ -10,6 +10,7 @@ import dayjs, {Dayjs} from 'dayjs'
 import {FMP} from './FMP'
 
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+import {sleep} from '../../../../../common/utils'
 
 dayjs.extend(weekOfYear)
 
@@ -34,6 +35,8 @@ export type ProviderSymbols = { [key: string]: Types.AssetSymbol[] }
 class GlobalProvider {
 
     name: 'GlobalProvider'
+
+    static retryTimeoutMs = 2000
 
     // constructor () {
     //
@@ -135,7 +138,6 @@ class GlobalProvider {
         const k = getDateId(desiredResolution, dayjs(elem.date))
 
         output[k] = merge(output[k] || null, elem)
-
       }
 
       return Object.values(output)
@@ -174,18 +176,63 @@ class GlobalProvider {
       )
     }
 
+    static async handleThrottle<T> (provider: Types.DataProviderInterface, fn: () => Promise<T>): Promise<T> {
+      const THROTTLE_COOLDOWN = 30 * 1000
+
+      if ((THROTTLE_COOLDOWN + provider.throttleRequestQuotaMs) > dayjs().valueOf()) {
+        console.debug('THROTTLING : ON')
+        return await provider.mutex.runExclusive<T>(async () => {
+          return GlobalProvider.handleRetries<T>(provider, fn)
+        })
+      }
+
+      return GlobalProvider.handleRetries<T>(provider, fn)
+    }
+
+
+    static async handleRetries<T> (provider: Types.DataProviderInterface, fn: () => Promise<T>): Promise<T> {
+      const timeoutMs = dayjs().valueOf() + GlobalProvider.retryTimeoutMs
+
+      while (provider.throttleRequestQuotaMs < timeoutMs) {
+        try {
+
+          const throttleMs = Math.max(0, provider.throttleRequestQuotaMs - dayjs().valueOf())
+          if (throttleMs > 0) {
+            console.warn(`Quota exceeded, retrying in ${throttleMs} ms`)
+
+            await sleep(throttleMs)
+          }
+
+          return await fn()
+
+        } catch (error) {
+          if (!(error instanceof Types.APIError) || error.type !== Types.APIErrorType.QUOTA_ERROR) {
+            throw error
+          }
+
+          provider.throttleRequestQuotaMs = Math.max(
+            provider.throttleRequestQuotaMs,
+            dayjs().valueOf() + (error.retryAfterSeconds * 1000)
+          )
+        }
+      }
+
+      throw new Types.APIError(Types.APIErrorType.TIMEOUT_ERROR)
+    }
+
     async getCompanyProfile (
       assetSymbol: AssetSymbol
     ): Promise<Types.CompanyProfile> {
 
-      const result = await GlobalProvider
-        .getProviderFor(assetSymbol)
-        .getCompanyProfile(
-          assetSymbol.get('symbol')
+      const provider = GlobalProvider.getProviderFor(assetSymbol)
+      return GlobalProvider.handleThrottle(provider, async () => {
+        return await provider.getCompanyProfile(
+          assetSymbol.symbol
         )
-      return result
-    }
 
+      })
+
+    }
 
     async getCompanyQuote (
       assetSymbol: AssetSymbol

@@ -46,6 +46,13 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
       },
       error: 'Invalid type'
     },
+    currency: {
+      required : true,
+      options  : (value: string) => {
+        return value.length > 1
+      },
+      error: 'Invalid type'
+    },
 
   }
 })
