@@ -1,6 +1,6 @@
 import {requiresAuthentication, schema} from './base/defaults'
 
-export const Transaction = schema('Transaction', {
+export default schema('Transaction', {
   fields: {
     createdBy  : {type: 'Pointer', targetClass: '_User'},
     symbol     : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},

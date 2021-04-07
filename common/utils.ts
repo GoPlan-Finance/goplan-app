@@ -1,9 +1,12 @@
 import {Currencies, Currency, Money} from 'ts-money'
+import * as Types from '../backend/src/cloud/DataProviders/providers/types'
 
 
 function sleep (ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+type StringKeys<T> = Extract<keyof T, string>;
 
 
 const processBatch = async <T, U>(
@@ -96,5 +99,6 @@ export {
   sleep,
   processBatch,
   formatCurrency,
+  StringKeys,
 }
 

@@ -5,6 +5,7 @@
  *
  */
 import {Dayjs} from 'dayjs'
+import {Mutex} from 'async-mutex'
 
 
 export interface AssetSymbol {
@@ -24,6 +25,26 @@ export type SymbolDataResolution =
     | 'week'
     | 'month'
 
+
+export enum APIErrorType {
+    QUOTA_ERROR= 1,
+    TIMEOUT_ERROR,
+    UNKNOWN_ERROR,
+}
+
+export class APIError {
+
+    type:  APIErrorType
+    error: unknown
+    retryAfterSeconds :number
+
+
+    constructor (type : APIErrorType, error :unknown = null) {
+      this.type  = type
+      this.error = error
+    }
+
+}
 
 export interface EndOfDayData {
     date: string,
@@ -455,6 +476,9 @@ export interface TimeSeriesData {
 }
 
 export interface DataProviderInterface {
+
+    throttleRequestQuotaMs: number
+    mutex: Mutex
 
     name(): string
 

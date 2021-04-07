@@ -42,6 +42,7 @@
 import {defineComponent, onBeforeMount, reactive} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import DataField from './base/DataField.vue'
+import {AssetProfile} from '../../../common/models/AssetProfile'
 
 export default defineComponent({
   components : {DataField},
@@ -60,9 +61,10 @@ export default defineComponent({
 
     onBeforeMount(async () => {
 
-      const info = await Parse.Cloud.run('Assets--GetProfile', {
-        assetSymbolId: props.assetSymbol.id
+      const info = await AssetProfile.findOneBy({
+        symbol: props.assetSymbol.toPointer(),
       })
+
 
       data.info = info
 

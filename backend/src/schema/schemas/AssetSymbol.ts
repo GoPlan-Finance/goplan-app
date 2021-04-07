@@ -1,11 +1,12 @@
 import {requiresAuthentication, schema} from './base/defaults'
 
 
-export const AssetSymbol = schema('AssetSymbol', {
+export default schema('AssetSymbol', {
   fields: {
     name             : {type: 'String'},
     symbol           : {type: 'String'},
     dataProviderName : {type: 'String'},
+    currency         : {type: 'String'},
     exchange         : {type: 'Pointer', targetClass: 'StockExchange'},
   },
   indexes: {
