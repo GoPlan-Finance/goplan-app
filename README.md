@@ -5,7 +5,7 @@
   <br>
 </h1>
 
-<h4 align="center">An intuitive portofilio mangaer !</h4>
+<h4 align="center">An intuitive portfolio manager!</h4>
 
 <p align="center">
 
@@ -44,7 +44,7 @@ Feel free to submit a PR if you want to add items to the Roadmap!
 - [ ] LandingPage #9
 - [x] Login #2
 - [x] Onboarding #25 
-- [ ] Search for securities
+- [x] Search for securities
 - [ ] Watchlist #8
     - Actions: Add/Delete
 - [ ] Dashboard 
