@@ -4,7 +4,7 @@
 
 <script lang="ts">
 
-import {defineComponent, reactive, ref, watch} from 'vue'
+import {computed, defineComponent, ref} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import {useRouter} from 'vue-router'
 import AssetSearch from './AssetSearch.vue'
@@ -15,26 +15,22 @@ export default defineComponent({
   setup () {
     const {push} = useRouter()
 
-    const assetSymbol : AssetSymbol                     = ref(null)
-
-    watch(assetSymbol, async () => {
-
-      if (!assetSymbol.value) {
-        return
+    const _assetSymbol : AssetSymbol = ref(null)
+    const assetSymbol: AssetSymbol   = computed({
+      get () {
+        return _assetSymbol
+      },
+      set (symbol: AssetSymbol) {
+        _assetSymbol.value = symbol
+        push({
+          name   : 'ticker_details',
+          params : {
+            ticker: symbol.symbol
+          }
+        })
       }
 
-      const symbol      = assetSymbol.value
-      assetSymbol.value = null
-
-      push({
-        name   : 'ticker_details',
-        params : {
-          ticker: symbol.symbol
-        }
-      })
-
     })
-
 
     return {
       assetSymbol

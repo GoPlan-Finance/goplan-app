@@ -2,31 +2,10 @@
   <div
     class="relative lg:mx-0 sm:w-96 active::min-w-full"
   >
-    <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-      <svg
-        class="h-5 w-5 text-gray-300"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-        />
-      </svg>
-    </span>
-
-    <!--suppress HtmlFormInputWithoutLabel -->
-    <input
-      v-model="tickerName"
-      class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
-      placeholder="Search"
-      type="text"
-      @keyup.enter="selectElement"
-    >
-
+    <SearchField
+      v-model="input"
+      @keyup.enter="selectElement()"
+    />
     <ul
       v-if="symbols.data.length && isOpen"
       class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-10"
@@ -38,7 +17,7 @@
         <a
           class="hover:bg-gray-100 block px-4 py-2"
           href="#"
-          @click.prevent="click(symbol)"
+          @click.prevent="selectElement(symbol)"
         >
           <div class="w-14 min-w-min">{{ symbol.get('symbol') }}</div>
           <div class="text-gray-500 text-sm">{{ symbol.get('name') }}</div>
@@ -50,8 +29,9 @@
 
 <script lang="ts">
 
-import {defineComponent, reactive, ref, watch} from 'vue'
+import {defineComponent, reactive, ref, watch, computed} from 'vue'
 import {AssetSymbol} from '../../../common/models'
+import SearchField from '../components/base/SearchField.vue'
 
 const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
   if (tickerName.length < 2) {
@@ -67,60 +47,56 @@ const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
 }
 
 export default defineComponent({
-  props: {
+  components : {SearchField},
+  props      : {
     modelValue: {
-      type: [
-        AssetSymbol
-      ],
+      type     : AssetSymbol,
+      required : true
     }
   },
   emits: [
-    'selected'
+    'update:modelValue'
   ],
   setup (props, {emit}) {
-    const tickerName                       = ref(props.modelValue ? props.modelValue.symbol : '')
+    const tickerName                       = ref('')
     const isOpen                           = ref(false)
     const symbols: { data: AssetSymbol[] } = reactive({data: []})
 
     const update = async () => {
-
       if (!tickerName.value) {
         return
       }
-
       if (props.modelValue && tickerName.value === props.modelValue.symbol) {
         symbols.data = []
         return
       }
-
       isOpen.value = true
-
       symbols.data = await getSymbols(tickerName.value)
     }
 
-    watch(tickerName, async () => update())
-    watch(() => props.modelValue, async () => {
-      console.log('props.modelValue', props.modelValue)
-      update()
+    const input: string = computed({
+      get () {
+        return tickerName.value
+      },
+      set (param) {
+        tickerName.value = param
+        update()
+      }
+
     })
 
-
-    const click = (symbol: AssetSymbol) => {
-
+    function selectElement (symbol?: AssetSymbol|undefined) {
+      if (!symbol) {
+        symbol = symbols.data[0]
+      }
       symbols.data     = []
       tickerName.value = symbol ? symbol.symbol : ''
-
-      isOpen.value = false
-
+      isOpen.value     = false
       emit('update:modelValue', symbol)
     }
 
-    function selectElement () {
-      click(symbols.data[0])
-    }
-
     return {
-      click,
+      input,
       symbols,
       tickerName,
       isOpen,
