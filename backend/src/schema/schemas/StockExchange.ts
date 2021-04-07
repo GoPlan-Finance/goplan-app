@@ -13,9 +13,9 @@ export default schema('StockExchange', {
     ]),
 
     protectedFields: {
-      '*': [
-        'name',
-      ],
+    //   '*': [
+    //     'name',
+    //   ],
     },
   },
 })

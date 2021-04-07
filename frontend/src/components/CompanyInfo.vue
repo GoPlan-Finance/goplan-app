@@ -23,9 +23,9 @@
     <DataField
       v-for="(detail, index) in data.details"
       :key="index"
-      :type="detail.type"
       :data="detail.data"
       :label="$t('details.' + detail.label)"
+      :type="detail.type"
       class="mb-2"
     />
 
@@ -54,44 +54,41 @@ export default defineComponent({
   },
   setup (props) {
 
-    const data    = reactive({
+    const data = reactive({
       info    : {},
       details : [],
     })
 
     onBeforeMount(async () => {
 
-      const info = await AssetProfile.findOneBy({
-        symbol: props.assetSymbol.toPointer(),
-      })
-
+      const info = await AssetProfile.fetchBySymbol(props.assetSymbol)
 
       data.info = info
 
       data.details = [
         {
           label : 'company_name',
-          data  : info.companyName
+          data  : info.name
         },
         {
           label : 'symbol',
-          data  : info.symbol
+          data  : info.symbol.symbol
         },
-        {
-          label : 'isin',
-          data  : info.isin
-        },
+        // {
+        //   label : 'isin',
+        //   data  : info.isin
+        // },
         {
           label : 'exchange',
-          data  : info.exchange
+          data  : info.exchange.name
         },
         {
           label : 'sector',
-          data  : info.sector
+          data  : info.sector.name
         },
         {
           label : 'industry',
-          data  : info.industry
+          data  : info.industry.name
         },
         {
           label : 'country',

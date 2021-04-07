@@ -103,10 +103,10 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const symbol     = ref(props.assetSymbol)
-    const quantity   = ref(null)
-    const price      = ref(null)
-    const executedAt = ref(dayjs().format('YYYY-MM-DD'))
+    const symbol  :AssetSymbol = ref(props.assetSymbol)
+    const quantity             = ref(null)
+    const price                = ref(null)
+    const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
 
     const addTransaction = async (type: 'buy' | 'sell') => {
@@ -118,6 +118,7 @@ export default defineComponent({
       t.set('executedAt', dayjs(executedAt.value).toDate())
       t.set('type', type.toUpperCase())
       t.set('symbol', symbol.value)
+      t.set('currency', symbol.value.currency)
 
       await t.save()
       alert('saved :)')

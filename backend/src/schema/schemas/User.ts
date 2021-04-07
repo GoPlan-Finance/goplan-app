@@ -25,7 +25,6 @@ export default schema('_User', {
 
     protectedFields: {
       '*': [
-        'email',
         'authData',
         'emailVerified',
         'password',

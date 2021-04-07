@@ -15,6 +15,31 @@ export class AssetProfile extends CacheableObject {
       super(AssetProfile.className)
     }
 
+    static fetchBySymbol (
+      symbol: AssetSymbol
+    ) : Promise<AssetProfile> {
+
+      const q = new Parse.Query(this)
+      q.equalTo('symbol', symbol)
+
+      q.include([
+        'exchange',
+        'industry',
+        'symbol',
+        'industry',
+        'sector',
+        'addressRegion',
+      ])
+
+
+      return AssetProfile.handleCache<AssetProfile>(AssetProfile.className, q.toJSON(), () => {
+        return q.first()
+      })
+    }
+
+    get name (): AssetSymbol {
+      return this.get('name')
+    }
 
     get symbol (): AssetSymbol {
       return this.get('symbol')

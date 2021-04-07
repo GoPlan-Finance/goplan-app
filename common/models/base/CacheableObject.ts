@@ -22,11 +22,11 @@ class CacheableObject extends BaseObject {
 
     private static CACHE: unknown = {}
 
-    private static async handleCache<T> (className: string, params: unknown, fn: HandlerFn<T>): Promise<T> {
+    protected static async handleCache<T> (className: string, params: unknown, fn: HandlerFn<T>): Promise<T> {
 
       const CACHE = CacheableObject.CACHE as CacheItemType<T>
 
-      const hash = CryptoJS.MD5(className + JSON.stringify(params)).toString()
+      const hash  = CryptoJS.MD5(className + JSON.stringify(params)).toString()
 
       if (CACHE[hash]) {
         return CACHE[hash] as Promise<T>
@@ -56,7 +56,7 @@ class CacheableObject extends BaseObject {
 
       // @ts-ignore
       return CacheableObject.handleCache<T>(this.className, arguments, () => {
-        return super.getObjectById(docId, useMasterKey)
+        return super.getObjectById<T>(docId, useMasterKey)
       })
     }
 
