@@ -1,13 +1,20 @@
 <template>
   <template v-if="!loading && assetSymbol">
     <HeadlineActions>
-      <h1 class="text-gray-700 text-3xl font-bold mb-6">
-        {{ assetSymbol.symbol.toUpperCase() }} - <small>{{ assetSymbol.name }}</small>
-      </h1>
-      <div class="flex gap-2">
+      <template #headline>
+        <div class="flex flex-col">
+          <div>
+            {{ assetSymbol.name }}
+          </div>
+          <div class="text-base text-gray-500 font-medium">
+            {{ assetSymbol.symbol.toUpperCase() }}
+          </div>
+        </div>
+      </template>
+      <template #default>
         <buy-sell-asset :asset-symbol="assetSymbol" />
         <WatchAssetModal :asset-symbol="assetSymbol" />
-      </div>
+      </template>
     </HeadlineActions>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
