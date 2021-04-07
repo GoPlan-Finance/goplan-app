@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: TBD !\" && exit 1",
     "dev": "vite",
-    "build": "cross-env NODE_ENV=production vite build",
+    "build": "cross-env NODE_ENV=production vite build  --emptyOutDir=true",
     "lint": "eslint --cache . --ext .js,.ts,.vue",
     "lint-fix": "eslint --cache --fix . --ext .js,.ts,.vue"
   },

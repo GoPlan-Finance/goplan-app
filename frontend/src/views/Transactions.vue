@@ -24,6 +24,8 @@
             </option>
           </select>
         </label>
+
+        <ImportTransactionsModal />
       </div>
     </HeadlineActions>
 
@@ -70,6 +72,7 @@ import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, to
 import {Transaction} from '../models'
 import * as dayjs from 'dayjs'
 import DataTable from '../components/DataTable.vue'
+import ImportTransactionsModal from '../components/ImportTransactionsModal.vue'
 import AppLink from '../components/router/AppLink.vue'
 import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
 import HeadlineActions from '../components/HeadlineActions.vue'
@@ -78,7 +81,7 @@ import {formatCurrency} from '../../../common/utils'
 
 
 export default defineComponent({
-  components: {SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon},
+  components: {SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal},
   setup () {
     const data = reactive({
       transactions : [],
