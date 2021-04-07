@@ -1,11 +1,13 @@
 name: ci
+
 on:
   push:
     branches:
-      - master
+      - '**'
   pull_request:
     branches:
       - '**'
+
 jobs:
   build-common:
     defaults:
@@ -20,7 +22,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '10.14'
+          node-version: '14'
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
@@ -48,7 +50,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '10.14'
+          node-version: '14'
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
@@ -57,9 +59,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: npm ci
-      - run: npm install -g mongodb-runner
-      - run: mongodb-runner start
-#      - run: npm run lint   # @todo figure out why it cannot find the typescript plugin
+      - run: cp config/config.defaults.ts config/config.ts
+#      - run: npm run build
+      - run: npm run lint
+#      - run: npm install -g mongodb-runner
+#      - run: mongodb-runner start
 #    - run: npm test -- --maxWorkers=4
 #    - run: npm run integration
         env:
@@ -78,7 +82,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: '10.14'
+        node-version: '14'
     - name: Cache Node.js modules
       uses: actions/cache@v2
       with:
@@ -87,6 +91,7 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-node-
     - run: npm ci
+#    - run: npm run build
     - run: npm run lint
 #    - run: npm test -- --maxWorkers=4
 #    - run: npm run integration
