@@ -2,7 +2,7 @@
  *
  *
  */
-import CryptoJS from 'crypto-js'
+import * as CryptoJS from 'crypto-js'
 
 export interface EncryptedValue {
     [index: string]: string | number,

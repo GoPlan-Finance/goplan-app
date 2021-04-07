@@ -4,13 +4,23 @@
       {{ watchlist.name }}
     </h1>
 
-    <DataTable :config="data">
-      <template #name="{row}">
+    <DataTable
+      :config="config"
+      :rows="sortedRows"
+    >
+      <template
+        #symbol="{ row }"
+      >
         <AppLink
           :ticker="row.symbol"
           to="ticker_details"
         >
-          {{ row.name }}
+          <p class="mr-3 font-bold">
+            {{ row.symbol }}
+          </p>
+          <p class="font-normal text-sm">
+            {{ row.name }}
+          </p>
         </AppLink>
       </template>
     </DataTable>
@@ -18,17 +28,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
+import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
 import dayjs from 'dayjs'
 import {AssetSymbol, Watchlist} from '../../../common/models'
-import DataTable, {TableConfig} from '../components/DataTable.vue'
+import DataTable from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
-import {TableCellType} from '../components/DataTable2.vue'
 
-enum Column {
-  NAME = 'name',
-  SYMBOL = 'symbol'
-}
 
 export default defineComponent({
   components : {AppLink, DataTable},
@@ -39,17 +44,30 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const watchlist      = ref(null)
-    const symbols        = ref<AssetSymbol[]>([])
     let liveSubscription = null
+
+    const data = reactive({
+      watchlist : null,
+      items     : [],
+      config    : {
+        headers: {
+          symbol: {},
+        },
+        settings: {
+          actions           : false,
+          translationPrefix : 'watchlist.table'
+        }
+      }
+    })
+
 
     onBeforeMount(async () => {
       const q = new Parse.Query(Watchlist)
       q.get(props.id)
 
       liveSubscription = await Watchlist.liveQuery(q, null, async wl => {
-        symbols.value   = await wl.relation('symbols').query().find()
-        watchlist.value = wl
+        data.items     = await wl.relation('symbols').query().find()
+        data.watchlist = wl
       })
     })
 
@@ -59,41 +77,18 @@ export default defineComponent({
       }
     })
 
-    const data: TableConfig = computed(() => {
-      const rows = symbols.value.map(symbol => {
-        return {
-          [Column.NAME]   : symbol,
-          [Column.SYMBOL] : symbol.symbol
-        }
-      })
+    const sortedRows = computed(() => {
+      return data.items.filter(row => {
 
-      return {
-        headers:
-            [
-              [
-                {
-                  key  : Column.NAME,
-                  type : TableCellType.CUSTOM
-                },
-                {
-                  key     : Column.SYMBOL,
-                  classes : 'lg:text-gray-500'
-                }
-              ],
-            ],
-        rows,
-        settings: {
-          actions           : false,
-          translationPrefix : 'watchlist.table'
-        }
-      }
+        return true
+      })
     })
+
 
     return {
       dayjs,
-      watchlist,
-      symbols,
-      data,
+      ...toRefs(data),
+      sortedRows,
     }
   },
 })

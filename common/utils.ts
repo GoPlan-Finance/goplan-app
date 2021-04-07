@@ -1,3 +1,6 @@
+import {Currencies, Currency, Money} from 'ts-money'
+
+
 function sleep (ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -14,7 +17,7 @@ const processBatch = async <T, U>(
   let abortAll            = false
 
   const runOne = async (curIndex: number) => {
-    let result: U|null = null
+    let result: U | null = null
     try {
       result = await func(data[curIndex])
     } catch (error) {
@@ -57,8 +60,41 @@ const processBatch = async <T, U>(
 }
 
 
+const formatCurrency = (value: Money | number, currency: string, fixedDecimals = true) : string => {
+
+  if (!currency) {
+    throw 'Invalid currency'
+  }
+
+  currency = currency.toUpperCase()
+
+  if (!Currencies[currency as keyof typeof Currencies]) {
+    throw `Currency not found ${currency}`
+  }
+
+  const currencyInfo: Currency = Currencies[currency as keyof typeof Currencies] as Currency
+
+  if (value instanceof Money) {
+    value = value.toDecimal()
+  } else if (!isNaN(Number(value))) {
+    value = Number(value)
+  }
+
+  const valueStr = fixedDecimals ? value.toFixed(currencyInfo.decimal_digits) :  value.toString()
+
+  if ([
+    'EUR', 'GBP'
+  ].includes(currency)) {
+    return `${currencyInfo.symbol} ${valueStr}`
+  }
+
+  return `${valueStr} ${currencyInfo.symbol}`
+}
+
+
 export {
   sleep,
   processBatch,
+  formatCurrency,
 }
 

@@ -6,6 +6,9 @@ module.exports = {
     sourceType  : 'module',
     parser      : '@typescript-eslint/parser',
   },
+  ignorePatterns: [
+    'dist/*'
+  ],
   extends: [
     'plugin:vue/vue3-recommended',
     '../common/.eslintrc.js',
