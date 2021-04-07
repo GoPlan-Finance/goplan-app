@@ -25,7 +25,13 @@
           </select>
         </label>
 
-        <ImportTransactionsModal />
+        <span class="pl-4">
+          <ImportTransactionsModal />
+        </span>
+
+        <span class="pl-4">
+          <buy-sell-asset />
+        </span>
       </div>
     </HeadlineActions>
 
@@ -78,10 +84,13 @@ import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
 import HeadlineActions from '../components/HeadlineActions.vue'
 import SearchField from '../components/base/SearchField.vue'
 import {formatCurrency} from '../../../common/utils'
+import BuySellAsset from '../components/BuySellAsset.vue'
 
 
 export default defineComponent({
-  components: {SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal},
+  components: {
+    BuySellAsset,    SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal
+  },
   setup () {
     const data = reactive({
       transactions : [],

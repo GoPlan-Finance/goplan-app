@@ -26,6 +26,13 @@
       <div class="grid grid-cols-2 gap-2">
         <label>
           <div class="text-gray-400 ml-2 mb-1">
+            Asset
+          </div> 
+          <asset-search v-model="symbol" />
+        </label>
+        <label class="col-start-1">
+
+          <div class="text-gray-400 ml-2 mb-1">
             Date
           </div>
           <input
@@ -78,23 +85,25 @@
 
 <script lang="ts">
 
-import {defineComponent, ref} from 'vue'
+import {defineComponent, ref, watch} from 'vue'
 import {AssetSymbol} from '../../../common/models'
 import {Transaction} from '../models'
 import dayjs from 'dayjs'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
+import AssetSearch from '../components/AssetSearch.vue'
 
 
 export default defineComponent({
-  components : {Modal, ButtonDefault},
+  components : {AssetSearch,  Modal, ButtonDefault},
   props      : {
     assetSymbol: {
-      type     : AssetSymbol,
-      required : true,
+      type    : AssetSymbol,
+      default : null
     },
   },
   setup (props) {
+    const symbol   = ref(props.assetSymbol)
     const quantity = ref(null)
     const price    = ref(null)
     const date     = ref(dayjs().format('YYYY-MM-DD'))
@@ -108,7 +117,7 @@ export default defineComponent({
       t.set('price', price.value)
       t.set('date', dayjs(date.value).toDate())
       t.set('type', type.toUpperCase())
-      t.set('symbol', props.assetSymbol)
+      t.set('symbol', symbol.value)
 
       await t.save()
       alert('saved :)')
@@ -118,9 +127,14 @@ export default defineComponent({
       date.value     = dayjs().format('YYYY-MM-DD')
     }
 
+    // watch(symbol, async () => {
+    //
+    // })
+
 
     return {
       addTransaction,
+      symbol,
       date,
       quantity,
       price
