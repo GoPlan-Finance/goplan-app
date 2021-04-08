@@ -36,11 +36,11 @@
       <div
         v-for="(subRow, subRowIndex) in row"
         :key="subRowIndex"
-        class="cursor-pointer hover:text-gray-600 select-none"
         :class="{
-          'lg:text-right': headers[subRow].justify === 'right',
-          'lg:text-center': headers[subRow].justify === 'center'
+          'lg:text-right': fields[subRow].justify === 'right',
+          'lg:text-center': fields[subRow].justify === 'center'
         }"
+        class="cursor-pointer hover:text-gray-600 select-none"
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
@@ -65,8 +65,8 @@
         :class="[
           header.classes,
           {
-            'lg:text-right': headers[header].justify === 'right',
-            'lg:text-center': headers[header].justify === 'center'
+            'lg:text-right': fields[header].justify === 'right',
+            'lg:text-center': fields[header].justify === 'center'
           }
         ]"
       >
@@ -81,7 +81,7 @@
           :row="row"
           :value="row[header]"
         >
-          {{ formatValue(headers[header],{value: row[header] , row}) }}
+          {{ formatValue(fields[header], { value: row[header], row }) }}
         </slot>
       </div>
     </div>
@@ -98,58 +98,63 @@
 </template>
 
 <script lang="ts">
-import {Money} from 'ts-money'
-import {computed, defineComponent, reactive, toRefs, ref} from 'vue'
 import * as dayjs from 'dayjs'
+import { Money } from 'ts-money'
+import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
 import SearchField from '../components/base/SearchField.vue'
+
 
 export type TableRow = Record<string, unknown>
 
-type FormatFn = (row: unknown, value: unknown) => void
-type SearchFn = (value: unknown, searchString: string) => void
+type FormatFn = (row : unknown, value : unknown) => void
+type SearchFn = (value : unknown, searchString : string) => void
+
 
 export interface TableHeader {
-  key?: string,
-  classes?: string,
-  justify?: 'left' | 'right' | 'center',
-  sortKey?: string
+  key? : string,
+  classes? : string,
+  justify? : 'left' | 'right' | 'center',
+  sortKey? : string
   format? : 'date' | 'datetime' | 'time' | FormatFn
 }
 
+
 export interface TableConfig {
-  headers: TableHeader[][],
-  headerLayout: string[]|string[][],
-  settings?: {
-    actions: boolean,
-    translationPrefix: string
+  fields : TableHeader[][],
+  headerLayout : string[] | string[][],
+  settings? : {
+    actions : boolean,
+    translationPrefix : string
   },
-  filters: Record<string, any>,
-  search: {
-    function: SearchFn
+  filters : Record<string, any>,
+  search : {
+    function : SearchFn
   }
 }
 
+
 interface SortSettings {
-  header: TableHeader,
-  order: boolean
+  header : TableHeader,
+  order : boolean
 }
+
 
 export default defineComponent({
   components : {SearchField},
   props      : {
     config: {
       type     : Object as TableConfig,
-      required : true
+      required : true,
     },
     rows: {
       type     : Object as TableRow[],
-      required : true
-    }
+      required : true,
+    },
   },
   setup (props) {
-    const sort: SortSettings = reactive({
+    const sort : SortSettings = reactive({
       header : null,
-      order  : true
+      order  : true,
     })
 
     const columnCount = computed(() => {
@@ -157,12 +162,12 @@ export default defineComponent({
       return Object.keys(props.config.headerLayout).length + actions
     })
 
-    const config: TableConfig = reactive({
-      headers      : props.config.headers,
+    const config : TableConfig = reactive({
+      fields       : props.config.fields,
       headerLayout : [],
-      settings     : props.config.settings,
-      filters      : props.config.filters,
-      search       : props.config.search
+      settings     : props.config.settings || {},
+      filters      : props.config.filters || {},
+      search       : props.config.search || {},
     })
 
     const search = ref('')
@@ -170,15 +175,15 @@ export default defineComponent({
     config.headerLayout = props.config.headerLayout.map(key => {
       if (!Array.isArray(key)) {
         return [
-          key
+          key,
         ]
       }
       return key
     })
 
     config.headerLayout.forEach(layout => layout.map(fieldName => {
-      if(typeof config.headers[fieldName] !== 'object'){
-        throw `The field ${fieldName} is present in "headerLayout", but missing in "headers"`
+      if (typeof config.fields[fieldName] !== 'object') {
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
       }
     }))
 
@@ -208,7 +213,7 @@ export default defineComponent({
     }
 
     const rowsInternal = computed(() => {
-      let rows: TableRow[] = props.rows
+      let rows : TableRow[] = props.rows
 
       rows = rows.filter(row => {
         if (search.value !== '') {
@@ -231,7 +236,7 @@ export default defineComponent({
       })
 
       if (sort.header) {
-        rows.sort((a: TableRow, b: TableRow) => {
+        rows.sort((a : TableRow, b : TableRow) => {
           let valueA  = a[sort.header.key]
           let valueB  = b[sort.header.key]
           const order = sort.order ? -1 : 1
@@ -256,8 +261,8 @@ export default defineComponent({
       return rows
     })
 
-    function setSort (key: string) {
-      const header = config.headers[key]
+    function setSort (key : string) {
+      const header = config.fields[key]
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
@@ -272,8 +277,8 @@ export default defineComponent({
       rowsInternal,
       setSort,
       sort,
-      search
+      search,
     }
-  }
+  },
 })
 </script>

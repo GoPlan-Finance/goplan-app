@@ -59,13 +59,14 @@ export default defineComponent({
       watchlist : null,
       items     : [],
       config    : {
-        headers: {
-          0:
-            {
-              name   : {},
-              symbol : {},
-            }
+        fields: {
+          name   : {},
+          symbol : {},
         },
+        headerLayout: [
+          'name',
+          'symbol',
+        ],
         settings: {
           actions           : false,
           translationPrefix : 'watchlist.table',
