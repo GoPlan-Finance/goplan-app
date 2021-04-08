@@ -36,13 +36,20 @@
       <AppLink
         :ticker="value.symbol"
         to="ticker_details"
+        class="font-bold"
       >
-        <p class="mr-3 font-bold">
-          {{ value.symbol }}
-        </p>
-        <p class="font-normal text-sm">
-          {{ value.name }}
-        </p>
+        {{ value.name }}
+      </AppLink>
+    </template>
+    <template
+      #ticker="{ row }"
+    >
+      <AppLink
+        :ticker="row.symbol.symbol"
+        to="ticker_details"
+        class="lg:text-gray-500"
+      >
+        {{ row.symbol.symbol }}
       </AppLink>
     </template>
     <template
@@ -56,7 +63,6 @@
           :class="value ==='BUY'? 'transform rotate-180' : ''"
           class="h-6 w-6"
         />
-
         {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
       </div>
     </template>
@@ -95,6 +101,9 @@ export default defineComponent({
           symbol: {
             sortKey: 'name'
           },
+          ticker: {
+            sortKey: 'name'
+          },
           quantity: {
             justify : 'right',
             format  : value => {
@@ -114,6 +123,15 @@ export default defineComponent({
             },
           }
         },
+        headerLayout: [
+          'type',
+          [
+            'symbol', 'ticker'
+          ],
+          'quantity',
+          'price',
+          'value'
+        ],
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table'
