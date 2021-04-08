@@ -1,4 +1,26 @@
 <template>
+  <!--  <SearchField-->
+  <!--    v-model="search"-->
+  <!--  />-->
+  <label
+    v-for="filter in filters"
+    :key="filter"
+  >
+    <select
+      v-model="filter.value"
+      class="rounded-lg border-0"
+      name="type"
+    >
+      <option
+        v-for="option in filter.options"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.display }}
+      </option>
+    </select>
+  </label>
+  
   <div
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
@@ -96,6 +118,7 @@ export interface TableConfig {
     actions: boolean,
     translationPrefix: string
   },
+  filters: Record<string, any>
 }
 
 interface SortSettings {
@@ -129,6 +152,7 @@ export default defineComponent({
       headers      : props.config.headers,
       headerLayout : [],
       settings     : props.config.settings,
+      filters      : props.config.filters,
     })
 
     config.headerLayout = props.config.headerLayout.map(key => {
@@ -161,12 +185,24 @@ export default defineComponent({
         return dayjs(value).format('HH:mm:ss')
       }
 
-
       throw `Unknown table dataformatter "${header.format}`
     }
 
     const rowsInternal = computed(() => {
-      const rows: TableRow[] = props.rows
+      let rows: TableRow[] = props.rows
+
+      rows = rows.filter(row => {
+        for (const [
+          key, filter
+        ] of Object.entries(config.filters)) {
+          if (filter.value !== '') {
+            if (row[key] !== filter.value) {
+              return false
+            }
+          }
+        }
+        return true
+      })
 
       if (sort.header) {
         rows.sort((a: TableRow, b: TableRow) => {

@@ -135,6 +135,25 @@ export default defineComponent({
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table'
+        },
+        filters: {
+          type: {
+            value   : '',
+            options : [
+              {
+                value   : '',
+                display : 'All Types',
+              },
+              {
+                value   : 'BUY',
+                display : 'Buy',
+              },
+              {
+                value   : 'SELL',
+                display : 'Sell',
+              },
+            ]
+          }
         }
       }
     })
