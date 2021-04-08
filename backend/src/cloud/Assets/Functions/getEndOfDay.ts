@@ -5,7 +5,7 @@
  */
 // noinspection ES6PreferShortImport
 import { AssetSymbol } from '/common/models'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 
 import { DataProvider } from '../../DataProviders/providers'
 

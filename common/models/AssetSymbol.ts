@@ -31,7 +31,7 @@ export class AssetSymbol extends CacheableObject {
     return this.get('currency')
   }
 
-  static async fetchSymbolByTicker (ticker : string) : Promise<AssetSymbol> {
+  static async fetchSymbolByTicker (ticker : string) : Promise<AssetSymbol | null> {
     const query = new Parse.Query(AssetSymbol)
     query.equalTo('symbol', ticker.toUpperCase())
     query.include('exchange')

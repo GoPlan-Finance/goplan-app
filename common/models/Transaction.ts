@@ -1,7 +1,7 @@
-import { AssetSymbol } from '.'
+import { Account, AssetSymbol } from '.'
 import { SecureObject } from './base/SecureObject'
 
-
+export type TransactionType = 'transfer' | 'buy' | 'sell' |'dividends'| 'fees'
 export class Transaction extends SecureObject {
 
   static className = 'Transaction'
@@ -11,6 +11,9 @@ export class Transaction extends SecureObject {
       'quantity',
       'price',
       'type',
+      'fees',
+      'totalExcludingFees',
+      'importRawData',
     ])
   }
 
@@ -19,7 +22,15 @@ export class Transaction extends SecureObject {
   }
 
   set symbol (value : AssetSymbol) {
-    this.set('symbol', value.toPointer())
+    this.set('symbol', value ? value.toPointer() : null)
+  }
+
+  get account () : Account {
+    return this.get('account')
+  }
+
+  set account (value : Account) {
+    this.set('account', value ? value.toPointer() : null)
   }
 
   get executedAt () : Date {
@@ -65,6 +76,39 @@ export class Transaction extends SecureObject {
   set currency (value) {
     this.set('currency', value.toUpperCase())
   }
+
+  get fees () : number {
+    return this.get('fees')
+  }
+
+  set fees (value) {
+    this.set('fees', value)
+  }
+
+  get totalExcludingFees () : number {
+    return this.get('totalExcludingFees')
+  }
+
+  set totalExcludingFees (value) {
+    this.set('totalExcludingFees', value)
+  }
+
+  get importStatus () : unknown {
+    return this.get('importStatus')
+  }
+
+  set importStatus (value) {
+    this.set('importStatus', value)
+  }
+
+  get importRawData () : unknown {
+    return this.get('importRawData')
+  }
+
+  set importRawData (value) {
+    this.set('importRawData', value)
+  }
+
 
 }
 

@@ -6,9 +6,9 @@
  */
 import { AssetSymbol } from '/common/models'
 import { sleep } from '/common/utils'
-import dayjs, { Dayjs } from 'dayjs'
+import * as dayjs from 'dayjs'
 
-import weekOfYear from 'dayjs/plugin/weekOfYear'
+import * as weekOfYear from 'dayjs/plugin/weekOfYear'
 import { FMP } from './FMP'
 import * as Types from './types'
 
@@ -191,8 +191,8 @@ class GlobalProvider {
 
   async getSymbolTimeSeriesData (
     assetSymbol : AssetSymbol,
-    from : Dayjs,
-    to : Dayjs,
+    from : dayjs.Dayjs,
+    to : dayjs.Dayjs,
     resolution : Types.SymbolDataResolution,
   ) : Promise<Types.EndOfDayData[]> {
 

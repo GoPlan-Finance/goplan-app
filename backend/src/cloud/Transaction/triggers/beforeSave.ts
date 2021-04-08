@@ -6,8 +6,8 @@
 // const USE_MASTER_KEY = { useMasterKey: true }
 // import { assertEncrypted } from '../../../../common/Auth'
 
-import { assertEncrypted } from '../../../../../common/Auth'
-import { EncryptedValue } from '../../../../../common/Crypto'
+import { assertEncrypted } from '/common/Auth'
+import { EncryptedValue } from '/common/Crypto'
 import { assertUser } from '../../Auth'
 
 
@@ -31,29 +31,44 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
-      error: 'Invalid Price',
     },
     quantity: {
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
-      error: 'Invalid quantity',
     },
     type: {
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
-      error: 'Invalid type',
+    },
+    fees: {
+      required : false,
+      options  : (value : EncryptedValue) => {
+        assertEncrypted(value)
+      },
+    },
+    totalExcludingFees: {
+      options: (value : EncryptedValue) => {
+        assertEncrypted(value)
+      },
+    },
+    importRawData: {
+      required : false,
+      options  : (value : EncryptedValue) => {
+        assertEncrypted(value)
+      },
     },
     currency: {
       required : true,
       options  : (value : string) => {
         return value.length > 1
       },
-      error: 'Invalid type',
+      error: 'Invalid currency',
     },
+
 
   },
 })

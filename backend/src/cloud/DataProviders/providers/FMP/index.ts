@@ -6,10 +6,10 @@
 import { Mutex } from 'async-mutex'
 import { AxiosError } from 'axios'
 
-import dayjs, { Dayjs } from 'dayjs'
+import * as dayjs from 'dayjs'
 
 import * as FMPApi from 'financialmodelingprep-openapi'
-import { StringKeys } from '../../../../../../common/utils'
+import { StringKeys } from '/common/utils'
 import * as Types from '../types'
 
 
@@ -62,8 +62,8 @@ export class FMP implements Types.DataProviderInterface {
 
   async fetchSymbolTimeSeriesData (
     symbol : string,
-    from : Dayjs,
-    to : Dayjs,
+    from : dayjs.Dayjs,
+    to : dayjs.Dayjs,
     resolution : Types.SymbolDataResolution,
   ) : Promise<Types.TimeSeriesData> {
 

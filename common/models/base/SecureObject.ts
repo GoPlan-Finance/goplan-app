@@ -4,9 +4,13 @@ import { BaseObject } from './BaseObject'
 
 export abstract class SecureObject extends BaseObject {
 
+  private static isServer         = false
   private static sessionDerivedKey : DerivedKey
   private secureFields : string[] = []
 
+  public static  setServerMode () {
+    SecureObject.isServer = true
+  }
 
   protected constructor (className : string, secureFields : string[]) {
     super(className)
@@ -19,7 +23,12 @@ export abstract class SecureObject extends BaseObject {
   }
 
   public get<T> (attr : string) : T {
+
     const val = super.get(attr)
+
+    if (SecureObject.isServer) {
+      return val
+    }
 
     if (!this.secureFields.includes(attr)) {
       return val
@@ -27,6 +36,10 @@ export abstract class SecureObject extends BaseObject {
 
     if (!SecureObject.sessionDerivedKey) {
       throw 'Encryption key not set"'
+    }
+
+    if (!val) {
+      return val
     }
 
     return Crypto.decrypt<T>(SecureObject.sessionDerivedKey, val)
@@ -37,6 +50,10 @@ export abstract class SecureObject extends BaseObject {
     value : T | undefined = undefined,
     options : unknown     = undefined,
   ) : this | false {
+    if (SecureObject.isServer) {
+      return super.set(key as string, value, options)
+    }
+
 
     const encrypt = (k : string, v : unknown) => {
       if (v instanceof Parse.Object) {

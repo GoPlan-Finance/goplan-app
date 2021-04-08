@@ -3,7 +3,8 @@
  *
  *
  */
-import { AssetProfile, AssetSymbol, Transaction } from '/common/models'
+import { Account, AssetSymbol, Transaction } from '/common/models'
+import { TransactionType } from '/common/models/Transaction'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
@@ -13,14 +14,19 @@ export interface CsvDataInterface {
   date : string
   price : number
   quantity : number
-  type : string
+  fees : number
+  totalExcludingFees : number
+  type : TransactionType,
+  account : Account,
+  accountName : string,
   symbol : string
-  assetSymbol : AssetSymbol | undefined
+  assetSymbol : AssetSymbol | null
 }
 
 
 export class DefaultCSVImporter {
 
+  accounts : Account[] | null = null
 
   parseCSV (file) : Promise<CsvDataInterface[]> {
     return new Promise(resolve => {
@@ -33,81 +39,121 @@ export class DefaultCSVImporter {
           resolve(data as CsvDataInterface[])
         },
       })
-
     })
   }
 
+  private async getOrCreateAccount (name : string) : Promise<Account> {
+
+    if (!this.accounts) {
+      const q = new Parse.Query(Account)
+
+      this.accounts = await q.find()
+    }
+
+    let account = this.accounts.find(account => account.name === name)
+
+    if (account) {
+      return account
+    }
+
+    account      = new Account()
+    account.name = name
+    return await account.save()
+  }
+
+  private async validateRow (row) : Promise<CsvDataInterface> {
+    // date  type  symbol  quantity  price  fees  totalExcludingFees  currency  accountName  description
+
+    if (!row.type || !row.date || !row.currency || !row.accountName) {
+      throw  '"date", "type", "currency", "accountName" fields are mandatory'
+    }
+
+    row.account  = await this.getOrCreateAccount(row.accountName)
+    row.quantity = row.quantity || null
+    row.symbol   = row.symbol ? row.symbol.toUpperCase() : null
+    row.type     = row.type.toLowerCase() as TransactionType
+    row.currency = row.currency.toUpperCase()
+
+    if (!dayjs(row.date).isValid()) {
+      throw 'The date format is invalid'
+    }
+
+    if (row.symbol && row.symbol.length) {
+      row.assetSymbol = await AssetSymbol.fetchSymbolByTicker(row.symbol)
+
+      if (!row.assetSymbol) {
+        //        throw `Notice: Symbol ${row.symbol} not found.`
+      }
+    }
+
+    const types = [
+      'transfer', 'buy', 'sell', 'dividends', 'fees',
+    ]
+    if (!types.includes(row.type)) {
+      throw `'Type must be one of the following "${types.join('", "')}"`
+    }
+
+    if (row.currency && row.assetSymbol && row.assetSymbol.currency !== row.currency) {
+      throw `Currency "${row.currency}" does not match Asset Currency of "${row.assetSymbol.currency}"`
+    }
+
+    if (!row.symbol && [
+      'buy', 'sell', 'dividends',
+    ].includes(row.type)) {
+      throw 'Symbol missing'
+    }
+
+    if (!row.totalExcludingFees && [
+      'dividends', 'transfer',
+    ].includes(row.type)) {
+      throw 'totalExcludingFees missing'
+    }
+
+    if (!row.quantity && [
+      'buy', 'sell',
+    ].includes(row.type)) {
+      throw 'quantity missing'
+    }
+
+    if (!row.price && [
+      'buy', 'sell',
+    ].includes(row.type)) {
+      throw 'price missing'
+    }
+
+    if (!row.fees && [
+      'fees',
+    ].includes(row.type)) {
+      throw 'fees missing'
+    }
+
+    if (row.totalExcludingFees && row.totalExcludingFees !== 0 && [
+      'fees',
+    ].includes(row.type)) {
+      throw 'totalExcludingFees must be empty'
+    }
+
+    if (row.type === 'sell' && row.quantity < 0) {
+      row.quantity = Math.abs(row.quantity)  // Some exports contains SELL -100
+    }
+
+    return row
+  }
 
   async validateCSV (file, logger) : Promise<CsvDataInterface[]> {
 
     const validRows = []
 
     const data : CsvDataInterface[] = await this.parseCSV(file)
-    // currency: "CAD"
-    // date: "2021-02-01 12:00:00 AM"
-    // price: "0"
-    // quantity: "0"
-    // symbol: ""
-    // type: "DEP"
-
     for (const [
       i, row
     ] of Object.entries(data)) {
-
       try {
+        validRows.push(
+          await this.validateRow(row),
+        )
 
-        if (!row.type || !row.type) {
-          //logger(i, 'Type missing')
-          continue
-        }
-
-        row.type = row.type.toLowerCase()
-
-        if ([
-          'buy', 'sell',
-        ].indexOf(row.type) === -1) {
-          logger(i, 'Type must be either BUY or SELL')
-          continue
-        }
-
-        if (!row.price) {
-          logger(i, 'Missing Price')
-          continue
-        }
-        if (!row.quantity) {
-          logger(i, 'Missing Quantity')
-          continue
-        }
-
-        if (row.type === 'sell' && row.quantity < 0) {
-          row.quantity = Math.abs(row.quantity)  // Some exports contains SELL -100
-        }
-
-        const symbol = await AssetSymbol.fetchSymbolByTicker(row.symbol)
-
-        if (!symbol) {
-          logger(i, `Symbol ${row.symbol} not found.`)
-          continue
-        }
-
-        row.assetSymbol = symbol
-
-        const profile = await AssetProfile.fetchBySymbol(symbol)
-
-        if (!profile) {
-          logger(i, `Company profile ${row.symbol} not found.`)
-          continue
-        }
-
-
-        if (row.currency && profile.currency.toLowerCase() !== row.currency.toLowerCase()) {
-          logger(i, `Currency "${row.currency}" does not match Asset Currency of "${profile.currency}"`)
-          continue
-        }
-
-
-        validRows.push(row)
-
+        logger(i, 'Valid')
       } catch (error) {
         logger(i, error)
       }
@@ -119,26 +165,31 @@ export class DefaultCSVImporter {
 
   async importCSV (rows : CsvDataInterface[], logger) {
 
-
     for (const [
       i, row
     ] of Object.entries(rows)) {
       try {
         const transaction = new Transaction()
 
-        // currency: string
-        // date: string
-        // price: number
-        // quantity: number
-        // symbol: string
-        // type: string
+        transaction.executedAt         = dayjs(row.date).toDate()
+        transaction.currency           = row.currency
+        transaction.account            = row.account
+        transaction.price              = row.price
+        transaction.quantity           = row.quantity
+        transaction.fees               = row.fees
+        transaction.totalExcludingFees = row.totalExcludingFees
+        transaction.symbol             = row.assetSymbol
+        transaction.type               = row.type
+        transaction.importRawData      = row
 
-        transaction.currency   = row.currency
-        transaction.executedAt = dayjs(row.date).toDate()
-        transaction.price      = row.price
-        transaction.quantity   = row.quantity
-        transaction.symbol     = row.assetSymbol
-        transaction.type       = row.type
+
+        if (!row.assetSymbol) {
+          transaction.importStatus = {
+            errors: [
+              {missingSymbol: row.symbol},
+            ],
+          }
+        }
 
         await transaction.save()
         logger(i, 'Imported...')
@@ -147,9 +198,6 @@ export class DefaultCSVImporter {
         logger(i, error)
       }
     }
-
-
   }
-
 
 }

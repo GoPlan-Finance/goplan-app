@@ -13,7 +13,7 @@ import {
 } from '/common/models'
 // noinspection ES6PreferShortImport
 import { processBatch } from '/common/utils'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 import { DataProvider, ProviderSymbols } from '../providers'
 
 import * as DataProviderInterfaces from '../providers/types'

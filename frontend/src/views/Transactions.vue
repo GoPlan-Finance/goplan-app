@@ -31,9 +31,10 @@
     :rows="sortedRows"
   >
     <template
-      #symbol="{ value }"
+      #symbol="{ value , row }"
     >
       <AppLink
+        v-if="value"
         :ticker="value.symbol"
         to="ticker_details"
       >
@@ -44,6 +45,12 @@
           {{ value.name }}
         </p>
       </AppLink>
+      <span v-else-if="row.importRawData && row.importRawData.symbol">
+        {{ row.importRawData.symbol }}
+      </span>
+      <span v-else>
+        N/A
+      </span>
     </template>
     <template
       #type="{ value }"
@@ -107,7 +114,13 @@ export default defineComponent({
               return formatCurrency(value, row.currency, false)
             },
           },
-          value: {
+          totalExcludingFees: {
+            justify : 'right',
+            format  : (value, row) => {
+              return formatCurrency(value, row.currency)
+            },
+          },
+          fees: {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
@@ -136,6 +149,18 @@ export default defineComponent({
           value   : 'SELL',
           display : 'Sell',
         },
+        {
+          value   : 'DIVIDENDS',
+          display : 'Dividends',
+        },
+        {
+          value   : 'FEES',
+          display : 'Fees',
+        },
+        {
+          value   : 'TRANSFER',
+          display : 'Transfers',
+        },
       ],
     })
 
@@ -153,9 +178,15 @@ export default defineComponent({
         if (search.value !== '') {
           const searchVal = search.value.toLowerCase()
 
-          return transaction.symbol.name.toLowerCase().includes(searchVal)
-                 || transaction.symbol.symbol.toLowerCase().startsWith(searchVal)
-                 || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
+          if (transaction.symbol
+              && (transaction.symbol.name.toLowerCase().includes(searchVal)
+                  || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
+          ) {
+            return true
+          }
+
+
+          return dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
 
 
           // return Object.entries(row).some(([
@@ -174,6 +205,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Transaction)
+      q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, data.transactions)

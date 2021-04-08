@@ -23,6 +23,10 @@ transactions:
   headline: Transactions
   table:
     buy: Buy
+    fees: Fees
+    transfer: Transfer
+    dividends: Dividends
+    totalExcludingFees: Total Excluding Fees
     executedAt: Date
     symbol: Symbol
     price: Price

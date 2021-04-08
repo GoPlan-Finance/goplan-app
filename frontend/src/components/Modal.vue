@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div @click="open = true">
+    <div @click="open">
       <slot name="button" />
     </div>
 
     <div
       :class="`modal ${
-        !open && 'opacity-0 pointer-events-none'
+        !opened && 'opacity-0 pointer-events-none'
       } z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center`"
     >
       <div
         class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
-        @click="open = false"
+        @click="close(true)"
       />
       <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
@@ -38,7 +38,7 @@
             </p>
             <div
               class="modal-close cursor-pointer z-50"
-              @click="open = false"
+              @click="close"
             >
               <svg
                 class="fill-current text-black"
@@ -68,7 +68,7 @@
             >
               <ButtonDefault
                 label="Close"
-                @click="open = false"
+                @click="close"
               />
             </slot>
           </div>
@@ -92,18 +92,36 @@ export default defineComponent({
       type     : String,
       required : true,
     },
+    canClickOutside: {
+      type    : Boolean,
+      default : true,
+    },
   },
-  setup (props) {
-    const open = ref(false)
+  emits: [
+    'opened', 'closed',
+  ],
+  setup (props, {emit}) {
+    const opened = ref(false)
 
-    function close () {
-      open.value = false
+    function close (isBackdrop = false) {
+      if (!props.canClickOutside && isBackdrop) {
+        return
+      }
+
+      opened.value = false
+      emit('closed')
+    }
+
+    function open () {
+      opened.value = true
+      emit('opened')
     }
 
     return {
       ...toRefs(props),
       open,
       close,
+      opened,
     }
   },
 })

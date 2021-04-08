@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
+    "module": "CommonJS",
+//    "esModuleInterop": true,
+//    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -13,10 +13,9 @@
       "/common/*": [
         "./../../common/*"
       ],
-      "*": [
-        "./*",
-        "./types/*",
-      ],
+      "/*": [
+        "./"
+      ]
     },
   },
   "include": [
