@@ -8,7 +8,7 @@
 
   <DataTable
     :config="config"
-    :rows="sortedRows"
+    :rows="rows"
   >
     <template
       #symbol="{ value }"
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs} from 'vue'
+import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
 import {Transaction} from '../models'
 import * as dayjs from 'dayjs'
 import DataTable from '../components/DataTable.vue'
@@ -58,7 +58,6 @@ import ImportTransactionsModal from '../components/ImportTransactionsModal.vue'
 import AppLink from '../components/router/AppLink.vue'
 import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
 import HeadlineActions from '../components/HeadlineActions.vue'
-import SearchField from '../components/base/SearchField.vue'
 import {formatCurrency} from '../../../common/utils'
 import BuySellAsset from '../components/BuySellAsset.vue'
 
@@ -69,9 +68,8 @@ export default defineComponent({
   },
   setup () {
     const data = reactive({
-      transactions : [],
-      rows         : [],
-      config       : {
+      rows   : [],
+      config : {
         headers: {
           type       : {},
           executedAt : {
@@ -145,57 +143,13 @@ export default defineComponent({
       }
     })
 
-    const typeFilter = reactive({
-      value   : '',
-      options : [
-        {
-          value   : '',
-          display : 'All Types',
-        },
-        {
-          value   : 'BUY',
-          display : 'Buy',
-        },
-        {
-          value   : 'SELL',
-          display : 'Sell',
-        },
-      ]
-    })
-
-    const search = ref('')
-
     let liveSubscription = null
-
-    const sortedRows = computed(() => {
-      return data.transactions.filter(transaction => {
-        if (search.value !== '') {
-          const searchVal = search.value.toLowerCase()
-
-          return transaction.symbol.name.toLowerCase().includes(searchVal)
-              || transaction.symbol.symbol.toLowerCase().startsWith(searchVal)
-              || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
-
-
-          // return Object.entries(row).some(([
-          //   key, value
-          // ]) => {
-          // const sortKey = data.config.headers[key].sortKey
-          // if (sortKey) {
-          //   value = value[sortKey]
-          // }
-          // return String(value).toLowerCase().includes(search.value.toLowerCase())
-          // })
-        }
-        return true
-      })
-    })
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Transaction)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await Transaction.liveQuery(q, data.transactions)
+      liveSubscription = await Transaction.liveQuery(q, data.rows)
     })
 
     onUnmounted(async () => {
@@ -205,11 +159,8 @@ export default defineComponent({
     })
 
     return {
-      dayjs,
       ...toRefs(data),
-      sortedRows,
-      typeFilter,
-      search
+      dayjs,
     }
   },
 })
