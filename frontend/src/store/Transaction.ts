@@ -1,6 +1,6 @@
-import {defineStore} from 'pinia'
 // import {IndexedDB} from './base/IndexedDB'
-import {Transaction} from '/common/models'
+import { Transaction } from '/common/models'
+import { defineStore } from 'pinia'
 
 // const db = new IndexedDB('companyProfile')
 

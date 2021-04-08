@@ -14,8 +14,8 @@
     >
       <div class="flex items-center justify-center mt-8">
         <router-link
-          to="/"
           class="flex items-center"
+          to="/"
         >
           <go-plan-logo />
         </router-link>
@@ -226,9 +226,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import { defineComponent, ref } from 'vue'
 import GoPlanLogo from '../../components/GoPlanLogo.vue'
 import NavigationItem from '../../components/NavigationItem.vue'
+
 
 export default defineComponent({
   components: {GoPlanLogo, NavigationItem},

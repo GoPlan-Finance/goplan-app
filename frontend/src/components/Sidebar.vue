@@ -14,8 +14,8 @@
     >
       <div class="flex items-center justify-center mt-8">
         <router-link
-          to="/"
           class="flex items-center"
+          to="/"
         >
           <go-plan-logo />
         </router-link>
@@ -44,11 +44,12 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {useSidebar} from '../hooks/useSidebar'
-import NavigationItem from './NavigationItem.vue'
+import { RefreshIcon, TrendingUpIcon } from '@heroicons/vue/outline'
+import { defineComponent } from 'vue'
+import { useSidebar } from '../hooks/useSidebar'
 import GoPlanLogo from './GoPlanLogo.vue'
-import { TrendingUpIcon, RefreshIcon } from '@heroicons/vue/outline'
+import NavigationItem from './NavigationItem.vue'
+
 
 export default defineComponent({
   components: {GoPlanLogo, NavigationItem, TrendingUpIcon, RefreshIcon},

@@ -25,14 +25,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, ref, watch} from 'vue'
-import {AssetSymbol} from '/common/models'
-import dayjs, {Dayjs} from 'dayjs'
+import { AssetSymbol } from '/common/models'
+import dayjs, { Dayjs } from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import {CandleData, getScaleByLabel, getScaleForRange, loadData, timeScales} from './CandlestickChart'
-import {use} from 'echarts/core'
-import {CanvasRenderer} from 'echarts/renderers'
-import VChart, {THEME_KEY} from 'vue-echarts'
 
 import {
   BarChart,
@@ -56,7 +51,7 @@ import {
   SunburstChart,
   ThemeRiverChart,
   TreeChart,
-  TreemapChart
+  TreemapChart,
 } from 'echarts/charts'
 import {
   AriaComponent,
@@ -84,8 +79,13 @@ import {
   TransformComponent,
   VisualMapComponent,
   VisualMapContinuousComponent,
-  VisualMapPiecewiseComponent
+  VisualMapPiecewiseComponent,
 } from 'echarts/components' // -----------------
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import VChart, { THEME_KEY } from 'vue-echarts'
+import { CandleData, getScaleByLabel, getScaleForRange, loadData, timeScales } from './CandlestickChart'
 
 
 dayjs.extend(duration)
@@ -98,7 +98,7 @@ use([
   CandlestickChart,
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 ])
 
 
@@ -107,32 +107,32 @@ export default defineComponent({
     VChart,
   },
   provide: {
-    [THEME_KEY]: 'light'
+    [THEME_KEY]: 'light',
   },
   props: {
     assetSymbol: {
       type     : AssetSymbol,
-      required : true
-    }
+      required : true,
+    },
   },
   setup (props) {
     const theChart          = ref(null)
     const currentScaleLabel = ref('Today')
     let currentScale        = reactive(getScaleByLabel('Today'))
 
-    let currentData: CandleData[] = []
+    let currentData : CandleData[] = []
 
     const option = ref({
       tooltip: {
         trigger     : 'axis',
         axisPointer : {
-          type: 'cross'
-        }
+          type: 'cross',
+        },
       },
       grid: {
         left   : '10%',
         right  : '10%',
-        bottom : '15%'
+        bottom : '15%',
       },
       xAxis: {
         type        : 'category',
@@ -143,27 +143,27 @@ export default defineComponent({
         splitLine   : {show: false},
         splitNumber : 20,
         min         : 'dataMin',
-        max         : 'dataMax'
+        max         : 'dataMax',
       },
       yAxis: {
         scale     : true,
         splitArea : {
-          show: true
-        }
+          show: true,
+        },
       },
       dataZoom: [
         {
           type  : 'inside',
           start : 50,
-          end   : 100
+          end   : 100,
         },
         {
           show  : true,
           type  : 'slider',
           top   : '90%',
           start : 50,
-          end   : 100
-        }
+          end   : 100,
+        },
       ],
       series: [
         {
@@ -181,24 +181,24 @@ export default defineComponent({
               normal: {
                 formatter (param) {
                   return param !== null ? Math.round(param.value) : ''
-                }
-              }
+                },
+              },
             },
             data: [
               {
                 name  : 'XX标点',
                 coord : [
-                  '2013/5/31', 2300
+                  '2013/5/31', 2300,
                 ],
                 value     : 2300,
                 itemStyle : {
-                  color: 'rgb(41,60,85)'
-                }
+                  color: 'rgb(41,60,85)',
+                },
               },
               {
                 name     : 'highest value',
                 type     : 'max',
-                valueDim : 'highest'
+                valueDim : 'highest',
               },
               {
                 name     : 'lowest value',
@@ -208,18 +208,18 @@ export default defineComponent({
               {
                 name     : 'average value on close',
                 type     : 'average',
-                valueDim : 'close'
-              }
+                valueDim : 'close',
+              },
             ],
             tooltip: {
               formatter (param) {
-                return `${param.name  }<br>${  param.data.coord || ''}`
-              }
-            }
+                return `${param.name}<br>${param.data.coord || ''}`
+              },
+            },
           },
           markLine: {
             symbol: [
-              'none', 'none'
+              'none', 'none',
             ],
             data: [
               [
@@ -230,13 +230,13 @@ export default defineComponent({
                   symbol     : 'circle',
                   symbolSize : 10,
                   label      : {
-                    show: false
+                    show: false,
                   },
                   emphasis: {
                     label: {
-                      show: false
-                    }
-                  }
+                      show: false,
+                    },
+                  },
                 },
                 {
                   type       : 'max',
@@ -244,14 +244,14 @@ export default defineComponent({
                   symbol     : 'circle',
                   symbolSize : 10,
                   label      : {
-                    show: false
+                    show: false,
                   },
                   emphasis: {
                     label: {
-                      show: false
-                    }
-                  }
-                }
+                      show: false,
+                    },
+                  },
+                },
               ],
               {
                 name     : 'min line on close',
@@ -268,18 +268,18 @@ export default defineComponent({
                   // borderColor: upBorderColor,
                   // borderColor0: downBorderColor
                 },
-              }
-            ]
-          }
+              },
+            ],
+          },
         },
 
-      ]
+      ],
     })
 
 
     const reloadData = async (
-      min?: Dayjs,
-      max?: Dayjs,
+      min? : Dayjs,
+      max? : Dayjs,
     ) => {
       // const from = min ? min : dayjs().subtract(currentScale.visible.asSeconds(), 'seconds')
       const to   = max ? max : dayjs()
@@ -290,9 +290,9 @@ export default defineComponent({
         to,
       )
 
-      const categories: string[] = []
-      const candles: number[][]  = []
-      for (const elem: CandleData of data) {
+      const categories : string[] = []
+      const candles : number[][]  = []
+      for (const elem : CandleData of data) {
 
         categories.push(dayjs(elem.date).toISOString())
 
@@ -311,7 +311,7 @@ export default defineComponent({
     }
 
 
-    const scaleClicked = async (label: string) => {
+    const scaleClicked = async (label : string) => {
       currentScale            = reactive(getScaleByLabel(label))
       currentScaleLabel.value = currentScale.label
 
@@ -326,8 +326,8 @@ export default defineComponent({
         return Math.max(0,
           Math.min(
             idx,
-            len === 0 ? 0 : len - 1 // Do not go negative if len = 0
-          )
+            len === 0 ? 0 : len - 1, // Do not go negative if len = 0
+          ),
         )
       }
 

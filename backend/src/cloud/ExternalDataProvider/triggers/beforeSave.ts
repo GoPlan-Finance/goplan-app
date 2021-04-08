@@ -5,7 +5,8 @@
  */
 // const USE_MASTER_KEY = { useMasterKey: true }
 // import { assertEncrypted } from '../../../../common/Auth'
-import {assertUser} from '../../Auth'
+import { assertUser } from '../../Auth'
+
 
 Parse.Cloud.beforeSave('ExternalDataProvider', async (request) => {
   assertUser(request)
@@ -23,7 +24,7 @@ Parse.Cloud.beforeSave('ExternalDataProvider', async (request) => {
     credentials: {
       required : true,
       type     : Object,
-    }
-  }
+    },
+  },
 })
 

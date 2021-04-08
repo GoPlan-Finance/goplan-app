@@ -11,11 +11,11 @@
       <span
         v-for="(item, itemIndex) in row"
         :key="itemIndex"
-        class="cursor-pointer hover:text-gray-600 select-none"
         :class="{
           'lg:text-right': item.justify === 'right',
           'lg:text-center': item.justify === 'center'
         }"
+        class="cursor-pointer hover:text-gray-600 select-none"
         @click="setSort(item)"
       >
         {{ $t(settings.translationPrefix + '.' + item.key) }}
@@ -55,7 +55,7 @@
           :row="row"
           :value="row[header.key]"
         >
-          {{ formatValue(header,{value: row[header.key] , row}) }}
+          {{ formatValue(header, { value: row[header.key], row }) }}
         </slot>
       </span>
     </span>
@@ -72,50 +72,55 @@
 </template>
 
 <script lang="ts">
-import {Money} from 'ts-money'
-import {computed, defineComponent, reactive, toRefs} from 'vue'
 import * as dayjs from 'dayjs'
+import { Money } from 'ts-money'
+import { computed, defineComponent, reactive, toRefs } from 'vue'
+
 
 export type TableRow = Record<string, unknown>
 
-type FormatFn = (row: unknown, value: unknown) => void
+type FormatFn = (row : unknown, value : unknown) => void
+
 
 export interface TableHeader {
-  key?: string,
-  classes?: string,
-  justify?: 'left' | 'right' | 'center',
-  sortKey?: string
+  key? : string,
+  classes? : string,
+  justify? : 'left' | 'right' | 'center',
+  sortKey? : string
   format? : 'date' | 'datetime' | 'time' | FormatFn
 }
 
+
 export interface TableConfig {
-  headers: TableHeader[][],
-  settings?: {
-    actions: boolean,
-    translationPrefix: string
+  headers : TableHeader[][],
+  settings? : {
+    actions : boolean,
+    translationPrefix : string
   },
 }
 
+
 interface SortSettings {
-  header: TableHeader,
-  order: boolean
+  header : TableHeader,
+  order : boolean
 }
+
 
 export default defineComponent({
   props: {
     config: {
       type     : Object as TableConfig,
-      required : true
+      required : true,
     },
     rows: {
       type     : Object as TableRow[],
-      required : true
-    }
+      required : true,
+    },
   },
   setup (props) {
-    const sort: SortSettings = reactive({
+    const sort : SortSettings = reactive({
       header : null,
-      order  : true
+      order  : true,
     })
 
     const columnCount = computed(() => {
@@ -123,7 +128,7 @@ export default defineComponent({
       return Object.keys(props.config.headers).length + actions
     })
 
-    const config: TableConfig = reactive({
+    const config : TableConfig = reactive({
       headers  : [],
       settings : props.config.settings,
     })
@@ -137,7 +142,7 @@ export default defineComponent({
       if (!Array.isArray(header)) {
         header.key = key
         headerArr  = [
-          header
+          header,
         ]
       }
 
@@ -171,10 +176,10 @@ export default defineComponent({
     }
 
     const rowsInternal = computed(() => {
-      const rows: TableRow[] = props.rows
+      const rows : TableRow[] = props.rows
 
       if (sort.header) {
-        rows.sort((a: TableRow, b: TableRow) => {
+        rows.sort((a : TableRow, b : TableRow) => {
           let valueA  = a[sort.header.key]
           let valueB  = b[sort.header.key]
           const order = sort.order ? -1 : 1
@@ -199,11 +204,11 @@ export default defineComponent({
       return rows
     })
 
-    function setSort (header: TableHeader) {
+    function setSort (header : TableHeader) {
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
-        sort.header   = header
+        sort.header = header
       }
     }
 
@@ -212,8 +217,8 @@ export default defineComponent({
       formatValue,
       columnCount,
       rowsInternal,
-      setSort
+      setSort,
     }
-  }
+  },
 })
 </script>

@@ -26,16 +26,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import DonutChart from '../../components/Charts/DonutChart.vue'
+import { defineComponent } from 'vue'
 import BarChart from '../../components/Charts/BarChart.vue'
 import CandlestickChart from '../../components/Charts/CandlestickChart.vue'
+import DonutChart from '../../components/Charts/DonutChart.vue'
+
 
 export default defineComponent({
   components: {
     DonutChart,
     BarChart,
-    CandlestickChart
+    CandlestickChart,
   },
 })
 

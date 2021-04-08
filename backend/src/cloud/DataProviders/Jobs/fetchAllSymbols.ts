@@ -11,9 +11,9 @@ import {
   AssetSymbol,
   StockExchange,
 } from '/common/models'
-import dayjs from 'dayjs'
 // noinspection ES6PreferShortImport
 import { processBatch } from '/common/utils'
+import dayjs from 'dayjs'
 import { DataProvider, ProviderSymbols } from '../providers'
 
 import * as DataProviderInterfaces from '../providers/types'

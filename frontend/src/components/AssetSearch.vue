@@ -29,11 +29,12 @@
 
 <script lang="ts">
 
-import {defineComponent, reactive, ref, onBeforeMount, computed} from 'vue'
-import {AssetSymbol} from '/common/models'
+import { AssetSymbol } from '/common/models'
+import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue'
 import SearchField from '../components/base/SearchField.vue'
 
-const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
+
+const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
   if (tickerName.length < 2) {
     return []
   }
@@ -51,16 +52,16 @@ export default defineComponent({
   props      : {
     modelValue: {
       type     : AssetSymbol,
-      required : true
-    }
+      required : true,
+    },
   },
   emits: [
-    'update:modelValue'
+    'update:modelValue',
   ],
   setup (props, {emit}) {
-    const tickerName                       = ref('')
-    const isOpen                           = ref(false)
-    const symbols: { data: AssetSymbol[] } = reactive({data: []})
+    const tickerName                         = ref('')
+    const isOpen                             = ref(false)
+    const symbols : { data : AssetSymbol[] } = reactive({data: []})
 
     const update = async () => {
       if (!tickerName.value) {
@@ -79,18 +80,18 @@ export default defineComponent({
 
     })
 
-    const input: string = computed({
+    const input : string = computed({
       get () {
         return tickerName.value
       },
       set (param) {
         tickerName.value = param
         update()
-      }
+      },
 
     })
 
-    function selectElement (symbol?: AssetSymbol|undefined) {
+    function selectElement (symbol? : AssetSymbol | undefined) {
       if (!symbol) {
         symbol = symbols.data[0]
       }
@@ -105,9 +106,9 @@ export default defineComponent({
       symbols,
       tickerName,
       isOpen,
-      selectElement
+      selectElement,
     }
-  }
+  },
 
 
 })

@@ -9,10 +9,10 @@
     </span>
 
     <input
+      :value="$props.modelValue"
       class="w-32 min-w-full max-w-full rounded-lg pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       placeholder="Search"
       type="text"
-      :value="$props.modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
     >
   </div>
@@ -20,19 +20,20 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue'
-import {SearchIcon} from '@heroicons/vue/outline'
+import { SearchIcon } from '@heroicons/vue/outline'
+import { defineComponent } from 'vue'
+
 
 export default defineComponent({
   components : {SearchIcon},
   props      : {
     modelValue: {
       type     : String,
-      required : true
-    }
+      required : true,
+    },
   },
   emits: [
-    'update:modelValue'
-  ]
+    'update:modelValue',
+  ],
 })
 </script>

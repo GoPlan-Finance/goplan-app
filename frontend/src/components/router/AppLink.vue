@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
+
 
 export default defineComponent({
   props: {
     to: {
       type     : String,
-      required : true
+      required : true,
     },
     // params: {
     //   type: Object,
@@ -22,8 +23,8 @@ export default defineComponent({
   setup (props, {attrs}) {
     return {
       props,
-      attrs
+      attrs,
     }
-  }
+  },
 })
 </script>

@@ -8,6 +8,7 @@ type LiveQueryUpdateFn<T> = (obj : T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
+
 /*abstract*/
 export class BaseObject extends Parse.Object {
 

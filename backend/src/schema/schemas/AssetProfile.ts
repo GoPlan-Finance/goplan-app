@@ -1,4 +1,5 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
+
 
 export default schema('AssetProfile', {
   fields: {
@@ -36,12 +37,12 @@ export default schema('AssetProfile', {
     // cusip?: string;
   },
   indexes: {
-    symbol: {symbol: 1}
+    symbol: {symbol: 1},
 
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get'
+      'find', 'get',
     ]),
 
     protectedFields: {

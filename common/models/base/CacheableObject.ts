@@ -11,7 +11,7 @@ import { BaseObject } from './BaseObject'
 
 type LiveQueryUpdateFn<T> = (obj : T) => void
 
-const USE_MASTER_KEY = {useMasterKey : true}
+const USE_MASTER_KEY = {useMasterKey: true}
 
 type CacheItemType<T> = { [key : string] : Promise<T> }
 type HandlerFn<T> = () => Promise<T>

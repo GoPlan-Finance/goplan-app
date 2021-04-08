@@ -1,4 +1,5 @@
-import {requiresAnonymous, requiresAuthentication, schema} from './base/defaults'
+import { requiresAnonymous, requiresAuthentication, schema } from './base/defaults'
+
 
 export default schema('_User', {
   fields: {
@@ -12,15 +13,14 @@ export default schema('_User', {
     profileInfo   : {type: 'Object'},
     clientKey     : {type: 'Object'},
   },
-  indexes: {
-  },
-  classLevelPermissions: {
+  indexes               : {},
+  classLevelPermissions : {
     ...requiresAuthentication([
-      'update'
+      'update',
     ]),
 
     ...requiresAnonymous([
-      'create'
+      'create',
     ]),
 
     protectedFields: {

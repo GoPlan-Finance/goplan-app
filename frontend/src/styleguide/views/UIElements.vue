@@ -131,9 +131,9 @@
             :class="`inline-flex items-center ${index && 'ml-3'}`"
           >
             <input
-              type="radio"
               :class="`form-radio h-5 w-5 text-${c}-600`"
               name="radio"
+              type="radio"
             ><span class="ml-2 text-gray-700">label</span>
           </label>
         </div>
@@ -154,9 +154,9 @@
             :class="`inline-flex items-center ${index && 'ml-3'}`"
           >
             <input
-              type="checkbox"
               :class="`form-checkbox h-5 w-5 text-${c}-600`"
               checked
+              type="checkbox"
             ><span class="ml-2 text-gray-700">label</span>
           </label>
         </div>
@@ -194,24 +194,24 @@
         <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <div class="flex rounded mr-4">
             <a
-              href="#"
               class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 ml-0 rounded-l hover:bg-blue-500 hover:text-white"
+              href="#"
             ><span>Previous</span></a>
             <a
-              href="#"
               class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
+              href="#"
             ><span>1</span></a>
             <a
-              href="#"
               class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
+              href="#"
             ><span>2</span></a>
             <a
-              href="#"
               class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
+              href="#"
             ><span>3</span></a>
             <a
-              href="#"
               class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 rounded-r hover:bg-blue-500 hover:text-white"
+              href="#"
             ><span>Next</span></a>
           </div>
         </div>
@@ -222,6 +222,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+
 
 export default defineComponent({
   setup () {

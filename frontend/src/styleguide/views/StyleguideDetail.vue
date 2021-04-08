@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { Currencies, Money } from 'ts-money'
+import { defineComponent } from 'vue'
 import AssetPrice from '../../components/AssetPrice.vue'
-import {Currencies, Money} from 'ts-money'
 
 
 export default defineComponent({
@@ -22,6 +22,6 @@ export default defineComponent({
       currentPrice  : Money.fromDecimal(18, Currencies.USD),
       previousPrice : Money.fromDecimal(19, Currencies.USD),
     }
-  }
+  },
 })
 </script>

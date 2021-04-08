@@ -1,4 +1,5 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
+
 
 export default schema('StockExchange', {
   fields: {
@@ -9,13 +10,13 @@ export default schema('StockExchange', {
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get'
+      'find', 'get',
     ]),
 
     protectedFields: {
-    //   '*': [
-    //     'name',
-    //   ],
+      //   '*': [
+      //     'name',
+      //   ],
     },
   },
 })

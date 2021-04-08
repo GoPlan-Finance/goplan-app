@@ -57,20 +57,20 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, toRefs} from 'vue'
-import {PriceHistoryItem} from '@/interfaces/ApplicationInterfaces'
+import { PriceHistoryItem } from '@/interfaces/ApplicationInterfaces'
+import { defineComponent, onMounted, reactive, toRefs } from 'vue'
 // import {apiLoader} from '@/api/ApiLoader'
 
 export default defineComponent({
   setup () {
-    const data: {
-      error: unknown|null,
-      isLoading: boolean,
-      prices: PriceHistoryItem[]
+    const data : {
+      error : unknown | null,
+      isLoading : boolean,
+      prices : PriceHistoryItem[]
     } = reactive({
       error     : null,
       isLoading : false,
-      prices    : []
+      prices    : [],
     })
 
     onMounted(async () => {
@@ -86,14 +86,14 @@ export default defineComponent({
       }
     })
 
-    function formatDate (date: string): string {
+    function formatDate (date : string) : string {
       const object = new Date(date)
       return object.toLocaleDateString()
     }
 
     return {
       ...toRefs(data),
-      formatDate
+      formatDate,
     }
   },
 })

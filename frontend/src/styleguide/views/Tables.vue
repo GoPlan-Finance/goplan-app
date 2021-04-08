@@ -30,8 +30,8 @@
               >
                 <svg
                   class="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
@@ -54,8 +54,8 @@
               >
                 <svg
                   class="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
@@ -68,8 +68,8 @@
           <div class="block relative mt-2 sm:mt-0">
             <span class="absolute inset-y-0 left-0 flex items-center pl-2">
               <svg
-                viewBox="0 0 24 24"
                 class="h-4 w-4 fill-current text-gray-500"
+                viewBox="0 0 24 24"
               >
                 <path
                   d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"
@@ -78,8 +78,8 @@
             </span>
 
             <input
-              placeholder="Search"
               class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+              placeholder="Search"
             >
           </div>
         </div>
@@ -124,9 +124,9 @@
                     <div class="flex items-center">
                       <div class="flex-shrink-0 w-10 h-10">
                         <img
-                          class="w-full h-full rounded-full"
                           :src="u.picture"
                           alt
+                          class="w-full h-full rounded-full"
                         >
                       </div>
 
@@ -158,8 +158,8 @@
                       :class="`relative inline-block px-3 py-1 font-semibold text-${u.statusColor}-900 leading-tight`"
                     >
                       <span
-                        aria-hidden
                         :class="`absolute inset-0 bg-${u.statusColor}-200 opacity-50 rounded-full`"
+                        aria-hidden
                       />
                       <span class="relative">{{ u.status }}</span>
                     </span>
@@ -244,9 +244,9 @@
                     <div class="flex items-center">
                       <div class="flex-shrink-0 h-10 w-10">
                         <img
+                          alt
                           class="h-10 w-10 rounded-full"
                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt
                         >
                       </div>
 
@@ -292,8 +292,8 @@
                     class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                   >
                     <a
-                      href="#"
                       class="text-blue-600 hover:text-blue-900"
+                      href="#"
                     >Edit</a>
                   </td>
                 </tr>
@@ -307,9 +307,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
-import {useTableData} from '../../hooks/useTableData'
+import { useTableData } from '../../hooks/useTableData'
+
 
 export default defineComponent({
   setup () {

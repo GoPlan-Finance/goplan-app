@@ -1,4 +1,4 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
 
 
 export default schema('AssetIndustry', {
@@ -6,11 +6,11 @@ export default schema('AssetIndustry', {
     name: {type: 'String'},
   },
   indexes: {
-    name: {name: 1}
+    name: {name: 1},
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get', 'count'
+      'find', 'get', 'count',
     ]),
   },
 })

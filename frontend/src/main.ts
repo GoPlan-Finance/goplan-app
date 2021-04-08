@@ -1,26 +1,27 @@
-import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue'
-
-// eslint-disable-next-line init-declarations
-declare let Parse
-
-import {createApp} from 'vue'
-import App from './App.vue'
-import router from './router'
-import './assets/main.css'
-import DashboardLayout from './layouts/DashboardLayout.vue'
-import EmptyLayout from './layouts/EmptyLayout.vue'
-import LinkComponent from './components/router/AppLink.vue'
-
-import VueGapi from 'vue-gapi'
-import {AuthStore} from './store'
-
-import './parseConfig'
 import * as dayjs from 'dayjs'
 
 
 import * as duration from 'dayjs/plugin/duration'
 import * as relativeTime from 'dayjs/plugin/relativeTime'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+
+import VueGapi from 'vue-gapi'
+import App from './App.vue'
+import './assets/main.css'
+import LinkComponent from './components/router/AppLink.vue'
 import i18n from './i18n'
+import DashboardLayout from './layouts/DashboardLayout.vue'
+import EmptyLayout from './layouts/EmptyLayout.vue'
+
+import './parseConfig'
+import router from './router'
+import { AuthStore } from './store'
+import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue'
+
+// eslint-disable-next-line init-declarations
+declare let Parse
+
 
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
@@ -39,7 +40,6 @@ const authStore = new AuthStore()
 
 AuthStore.maybeLoadDerivedKey()
 
-import { createPinia } from 'pinia'
 
 app.use(createPinia())
 app.component('DefaultLayout', DashboardLayout)

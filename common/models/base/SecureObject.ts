@@ -35,7 +35,7 @@ export abstract class SecureObject extends BaseObject {
   public set<T> (
     key : string | { [key : string] : unknown },
     value : T | undefined = undefined,
-    options : unknown = undefined,
+    options : unknown     = undefined,
   ) : this | false {
 
     const encrypt = (k : string, v : unknown) => {

@@ -3,10 +3,10 @@
  *
  *
  */
-import {EncryptedValue} from '../Crypto'
+import { EncryptedValue } from '../Crypto'
 
 
-const assertEncrypted = (value: EncryptedValue): void => {
+const assertEncrypted = (value : EncryptedValue) : void => {
 
   if (typeof value !== 'object') {
     throw 'Invalid encrypted field value'
@@ -38,13 +38,13 @@ const assertEncrypted = (value: EncryptedValue): void => {
 
 }
 
-const assertEncryptedField = (object: Parse.Object, fieldName: string): void => {
+const assertEncryptedField = (object : Parse.Object, fieldName : string) : void => {
 
   const value = object.get(fieldName)
   assertEncrypted(value)
 }
 
-const assertEncryptedFields = (object: Parse.Object, fieldNames: string[]): void => {
+const assertEncryptedFields = (object : Parse.Object, fieldNames : string[]) : void => {
 
   for (const fieldName in fieldNames) {
     assertEncryptedField(object, fieldName)

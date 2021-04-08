@@ -10,9 +10,9 @@
 
       <div class="max-w-sm rounded bg-white overflow-hidden shadow-lg mt-6">
         <img
+          alt="Sunset in the mountains"
           class="w-full"
           src="https://picsum.photos/id/1016/384/234"
-          alt="Sunset in the mountains"
         >
         <div class="px-6 py-4">
           <div class="text-gray-900 font-bold text-xl mb-2">
@@ -55,8 +55,8 @@
             <p class="text-sm text-gray-600 flex items-center">
               <svg
                 class="fill-current text-gray-500 w-3 h-3 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z"
@@ -75,9 +75,9 @@
           </div>
           <div class="flex items-center">
             <img
+              alt="Avatar of Jonathan Reinink"
               class="w-10 h-10 rounded-full mr-4"
               src="https://via.placeholder.com/50"
-              alt="Avatar of Jonathan Reinink"
             >
             <div class="text-sm">
               <p class="text-gray-900 leading-none">
@@ -97,12 +97,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
+
 interface User {
-  username: string;
-  email: string;
-  password: string;
-  confirm: string;
+  username : string;
+  email : string;
+  password : string;
+  confirm : string;
 }
+
 
 export default defineComponent({
   setup () {

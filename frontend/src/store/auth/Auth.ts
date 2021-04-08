@@ -6,6 +6,22 @@ import { Session } from './index'
 
 export class AuthStore {
 
+  public static maybeLoadDerivedKey () {
+    const derivedKey = Session.get<DerivedKey>('derivedKey')
+    SecureObject.setSessionDerivedKey(derivedKey)
+  }
+
+  public static clearDerivedKey () {
+
+    AuthStore.storeDerivedKey(null)
+  }
+
+  private static storeDerivedKey (derivedKey : DerivedKey) {
+    // @todo ensure SessionStorage is safe storage for tokens
+    Session.set('derivedKey', derivedKey)
+    SecureObject.setSessionDerivedKey(derivedKey)
+  }
+
   public async signOut () : Promise<Parse.User> {
 
     AuthStore.clearDerivedKey()
@@ -17,7 +33,6 @@ export class AuthStore {
     return await Parse.User.currentAsync()
   }
 
-
   public async isAuthenticated () : Promise<boolean> {
 
     return !!await this.currentUser()
@@ -27,7 +42,6 @@ export class AuthStore {
 
     return !!Session.get('encryptionKey') && !!Session.get('encryptionSalt')
   }
-
 
   public async isMasterKeyValid (masterKey : string) : Promise<boolean> {
     try {
@@ -57,23 +71,6 @@ export class AuthStore {
 
     AuthStore.storeDerivedKey(derived)
   }
-
-  private static storeDerivedKey (derivedKey : DerivedKey) {
-    // @todo ensure SessionStorage is safe storage for tokens
-    Session.set('derivedKey', derivedKey)
-    SecureObject.setSessionDerivedKey(derivedKey)
-  }
-
-  public static maybeLoadDerivedKey () {
-    const derivedKey = Session.get<DerivedKey>('derivedKey')
-    SecureObject.setSessionDerivedKey(derivedKey)
-  }
-
-  public static clearDerivedKey () {
-
-    AuthStore.storeDerivedKey(null)
-  }
-
 
   public async hasClientKey () : Promise<boolean> {
     const user = await this.currentUser()

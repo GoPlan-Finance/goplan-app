@@ -59,16 +59,17 @@
 
 <script lang="ts">
 
-import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
-import { DefaultCSVImporter }                                          from './DefaultCSVImporter'
-import ButtonDefault, {ButtonType}                                     from '../base/ButtonDefault.vue'
-import Modal                                                           from '../Modal.vue'
+import { defineComponent, reactive, toRefs } from 'vue'
+import ButtonDefault, { ButtonType } from '../base/ButtonDefault.vue'
+import Modal from '../Modal.vue'
+import { DefaultCSVImporter } from './DefaultCSVImporter'
+
 
 export default defineComponent({
   components : {Modal, ButtonDefault},
   props      : {},
   setup (props) {
-    const data: string[] = reactive({
+    const data : string[] = reactive({
       logs      : [],
       validRows : [],
     })
@@ -76,7 +77,7 @@ export default defineComponent({
     const csvImporter = new DefaultCSVImporter()
 
 
-    const logger = (i: number, msg: string) => {
+    const logger = (i : number, msg : string) => {
       data.logs.push(`Line ${Number.parseInt(i) + 1}: ${msg}`)
     }
 
@@ -110,9 +111,9 @@ export default defineComponent({
       ...toRefs(data),
       fileSelected,
       doImport,
-      ButtonType
+      ButtonType,
     }
-  }
+  },
 
 
 })

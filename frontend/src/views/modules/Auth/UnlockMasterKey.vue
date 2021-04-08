@@ -48,20 +48,23 @@
 
 <script lang="ts">
 
-import {defineComponent, inject, ref} from 'vue'
-import {AuthStore} from '../../../store'
+import { defineComponent, inject, ref } from 'vue'
+import { AuthStore } from '../../../store'
 
-enum KeyState{
+
+enum KeyState {
   UNKNOWN,
   INVALID,
   VALID,
 }
+
+
 export default defineComponent({
   emits: [
-    'keyValid'
+    'keyValid',
   ],
   setup (props, {emit}) {
-    const authStore     = inject < AuthStore >('$authStore')
+    const authStore     = inject<AuthStore>('$authStore')
     const masterKey     = ref('')
     const keyState      = ref(KeyState.UNKNOWN)
     const acceptTesting = ref(false)

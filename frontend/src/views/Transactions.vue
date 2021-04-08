@@ -64,22 +64,22 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs} from 'vue'
-import {Transaction} from '/common/models'
+import { Transaction } from '/common/models'
+import { formatCurrency } from '/common/utils'
+import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import DataTable from '../components/DataTable.vue'
-import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
-import AppLink from '../components/router/AppLink.vue'
-import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
-import HeadlineActions from '../components/HeadlineActions.vue'
+import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs } from 'vue'
 import SearchField from '../components/base/SearchField.vue'
-import {formatCurrency} from '/common/utils'
 import BuySellAsset from '../components/BuySellAsset.vue'
+import DataTable from '../components/DataTable.vue'
+import HeadlineActions from '../components/HeadlineActions.vue'
+import AppLink from '../components/router/AppLink.vue'
+import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
 
 
 export default defineComponent({
   components: {
-    BuySellAsset,    SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal
+    BuySellAsset, SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
   },
   setup () {
     const data = reactive({
@@ -90,10 +90,10 @@ export default defineComponent({
           type       : {},
           executedAt : {
             justify : 'right',
-            format  : 'date'
+            format  : 'date',
           },
           symbol: {
-            sortKey: 'name'
+            sortKey: 'name',
           },
           quantity: {
             justify : 'right',
@@ -112,13 +112,13 @@ export default defineComponent({
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
-          }
+          },
         },
         settings: {
           actions           : false,
-          translationPrefix : 'transactions.table'
-        }
-      }
+          translationPrefix : 'transactions.table',
+        },
+      },
     })
 
     const typeFilter = reactive({
@@ -136,7 +136,7 @@ export default defineComponent({
           value   : 'SELL',
           display : 'Sell',
         },
-      ]
+      ],
     })
 
     const search = ref('')
@@ -154,8 +154,8 @@ export default defineComponent({
           const searchVal = search.value.toLowerCase()
 
           return transaction.symbol.name.toLowerCase().includes(searchVal)
-              || transaction.symbol.symbol.toLowerCase().startsWith(searchVal)
-              || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
+                 || transaction.symbol.symbol.toLowerCase().startsWith(searchVal)
+                 || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
 
 
           // return Object.entries(row).some(([
@@ -190,7 +190,7 @@ export default defineComponent({
       ...toRefs(data),
       sortedRows,
       typeFilter,
-      search
+      search,
     }
   },
 })

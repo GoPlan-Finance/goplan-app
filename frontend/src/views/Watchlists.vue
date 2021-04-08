@@ -37,8 +37,8 @@
           >
             <AppLink
               :id="watchlist.id"
-              to="watchlist"
               class="hover:text-blue-500"
+              to="watchlist"
             >
               {{ $t('watchlists.show_more') }}
             </AppLink>
@@ -47,16 +47,16 @@
               @click="remove(watchlist)"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
                 class="h-6 w-6 stroke-1 stroke-current"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 />
               </svg>
             </div>
@@ -68,9 +68,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
+import { Watchlist } from '/common/models'
 import dayjs from 'dayjs'
-import {Watchlist} from '/common/models'
+import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 import AddWatchlist from '../components/AddWatchlist.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 
@@ -81,19 +81,19 @@ export default defineComponent({
     const watchlists     = ref<Watchlist[]>([])
     let liveSubscription = null
 
-    const show = async (watchlist: Watchlist) => {
+    const show = async (watchlist : Watchlist) => {
       console.log(watchlist.symbols)
       watchlist.percentChange = (Math.random() * 10) - 3.5
       watchlist.symbolsCount  = await watchlist.relation('symbols').query().count()
     }
 
-    async function remove (watchlist: Watchlist) {
+    async function remove (watchlist : Watchlist) {
       watchlist.destroy()
     }
 
     onBeforeMount(async () => {
       const q          = new Parse.Query(Watchlist)
-      liveSubscription = await Watchlist.liveQuery(q, watchlists.value,  show)
+      liveSubscription = await Watchlist.liveQuery(q, watchlists.value, show)
     })
 
     onUnmounted(async () => {
@@ -105,7 +105,7 @@ export default defineComponent({
     return {
       dayjs,
       watchlists,
-      remove
+      remove,
     }
   },
 })

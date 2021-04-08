@@ -4,9 +4,9 @@
 
 <script lang="ts">
 
-import {computed, defineComponent, ref} from 'vue'
-import {AssetSymbol} from '/common/models'
-import {useRouter} from 'vue-router'
+import { AssetSymbol } from '/common/models'
+import { computed, defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AssetSearch from './AssetSearch.vue'
 
 
@@ -16,26 +16,26 @@ export default defineComponent({
     const {push} = useRouter()
 
     const _assetSymbol : AssetSymbol = ref(null)
-    const assetSymbol: AssetSymbol   = computed({
+    const assetSymbol : AssetSymbol  = computed({
       get () {
         return _assetSymbol
       },
-      set (symbol: AssetSymbol) {
+      set (symbol : AssetSymbol) {
         _assetSymbol.value = symbol
         push({
           name   : 'ticker_details',
           params : {
-            ticker: symbol.symbol
-          }
+            ticker: symbol.symbol,
+          },
         })
-      }
+      },
 
     })
 
     return {
-      assetSymbol
+      assetSymbol,
     }
-  }
+  },
 
 
 })

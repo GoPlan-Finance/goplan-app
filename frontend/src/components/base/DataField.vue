@@ -11,31 +11,32 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, ref, watch} from 'vue'
 import * as dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
+
 
 export default defineComponent({
   props: {
     label: {
       type     : String,
-      required : true
+      required : true,
     },
     data: {
       type: [
-        String, Array, Number
+        String, Array, Number,
       ],
-      required: true
+      required: true,
     },
     type: {
       type    : String,
       default : 'string',
-      validator (value: string) {
+      validator (value : string) {
         // The value must match one of these strings
         return [
-          'percent', 'string', 'moneyChange', 'moneyRange', 'money', 'number', 'url', 'date', 'datetime'
+          'percent', 'string', 'moneyChange', 'moneyRange', 'money', 'number', 'url', 'date', 'datetime',
         ].indexOf(value) !== -1
-      }
+      },
     },
   },
   setup (props) {
@@ -78,8 +79,8 @@ export default defineComponent({
 
         case 'moneyRange':
           return `${props.data[0]} $` /* @todo set currency */
-              + ' - '
-              + `${props.data[1]} $` /* @todo set currency */
+                 + ' - '
+                 + `${props.data[1]} $` /* @todo set currency */
 
         default:
           throw `Unknown type ${props.type}`
@@ -94,7 +95,7 @@ export default defineComponent({
       () => props,
       () => {
         formattedValue.value = getValue()
-      }
+      },
     )
 
     return {

@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, reactive} from 'vue'
-import {AssetSymbol, AssetProfile} from '/common/models'
+import { AssetProfile, AssetSymbol } from '/common/models'
+import { defineComponent, onBeforeMount, reactive } from 'vue'
 import DataField from './base/DataField.vue'
 
 
@@ -49,7 +49,7 @@ export default defineComponent({
   props      : {
     assetSymbol: {
       type     : AssetSymbol,
-      required : true
+      required : true,
     },
   },
   setup (props) {
@@ -68,11 +68,11 @@ export default defineComponent({
       data.details = [
         {
           label : 'company_name',
-          data  : info.name
+          data  : info.name,
         },
         {
           label : 'symbol',
-          data  : info.symbol.symbol
+          data  : info.symbol.symbol,
         },
         // {
         //   label : 'isin',
@@ -80,23 +80,23 @@ export default defineComponent({
         // },
         {
           label : 'exchange',
-          data  : info.exchange.name
+          data  : info.exchange.name,
         },
         {
           label : 'sector',
-          data  : info.sector.name
+          data  : info.sector.name,
         },
         {
           label : 'industry',
-          data  : info.industry.name
+          data  : info.industry.name,
         },
         {
           label : 'country',
-          data  : info.country
+          data  : info.country,
         },
         {
           label : 'address',
-          data  : `${info.address}, ${info.zip} ${info.city}`
+          data  : `${info.address}, ${info.zip} ${info.city}`,
         },
         {
           type  : 'number',
@@ -105,7 +105,7 @@ export default defineComponent({
         },
         {
           label : 'ceo',
-          data  : info.ceo
+          data  : info.ceo,
         },
         {
           type  : 'url',
@@ -115,7 +115,7 @@ export default defineComponent({
         {
           type  : 'date',
           label : 'ipo_date',
-          data  : info.ipoDate
+          data  : info.ipoDate,
         },
       ]
     })
@@ -123,6 +123,6 @@ export default defineComponent({
     return {
       data,
     }
-  }
+  },
 })
 </script>

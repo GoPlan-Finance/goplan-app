@@ -199,12 +199,13 @@
 
 <script lang="ts">
 
-import {defineComponent, ref, onMounted} from 'vue'
-import { User} from '/common/models'
+import { User } from '/common/models'
+import { defineComponent, onMounted, ref } from 'vue'
+
 
 export default defineComponent({
   setup () {
-    let user: Parse.User | null = null
+    let user : Parse.User | null = null
 
     const email                = ref('')
     const firstName            = ref('')

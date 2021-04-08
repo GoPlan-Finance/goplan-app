@@ -4,7 +4,8 @@
  *
  */
 
-// @todo  Global Parse instance created in index.html, this is probably bad and we need to make require('parse') work withh vite
+// @todo  Global Parse instance created in index.html, this is probably bad and we need to make require('parse') work
+// withh vite
 
 
 Parse.initialize('goplan-finance')

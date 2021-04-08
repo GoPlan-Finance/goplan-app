@@ -17,10 +17,10 @@
         <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
           <svg
             class="fill-current text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
             height="18"
             viewBox="0 0 18 18"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
@@ -42,10 +42,10 @@
             >
               <svg
                 class="fill-current text-black"
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
                 height="18"
                 viewBox="0 0 18 18"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
@@ -56,15 +56,15 @@
 
           <!--Body-->
           <slot
-            name="content"
             :close="close"
+            name="content"
           />
 
           <!--Footer-->
           <div class="flex justify-end pt-2 gap-4 flex-wrap">
             <slot
-              name="actions"
               :close="close"
+              name="actions"
             >
               <ButtonDefault
                 label="Close"
@@ -85,13 +85,13 @@ import ButtonDefault from '../components/base/ButtonDefault.vue'
 
 export default defineComponent({
   components: {
-    ButtonDefault
+    ButtonDefault,
   },
   props: {
     title: {
       type     : String,
-      required : true
-    }
+      required : true,
+    },
   },
   setup (props) {
     const open = ref(false)
@@ -103,7 +103,7 @@ export default defineComponent({
     return {
       ...toRefs(props),
       open,
-      close
+      close,
     }
   },
 })

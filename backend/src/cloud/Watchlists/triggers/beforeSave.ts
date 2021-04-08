@@ -6,7 +6,8 @@
 // const USE_MASTER_KEY = { useMasterKey: true }
 // import { assertEncrypted } from '../../../../common/Auth'
 
-import {assertUser} from '../../Auth'
+import { assertUser } from '../../Auth'
+
 
 Parse.Cloud.beforeSave('Watchlist', async (request) => {
   assertUser(request)
@@ -26,11 +27,11 @@ Parse.Cloud.beforeSave('Watchlist', async (request) => {
   fields: {
     name: {
       required : true,
-      options  : (name: string) => {
+      options  : (name : string) => {
         return name.length > 1
       },
-      error: 'The name is too short'
-    }
-  }
+      error: 'The name is too short',
+    },
+  },
 })
 

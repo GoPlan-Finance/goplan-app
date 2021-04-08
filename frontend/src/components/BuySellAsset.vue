@@ -8,15 +8,15 @@
       >
         <template #before>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
             class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
               clip-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+              fill-rule="evenodd"
             />
           </svg>
         </template>
@@ -68,15 +68,15 @@
     </template>
     <template #actions>
       <ButtonDefault
-        label="Buy"
         :disabled="!symbol || !price || !executedAt || !quantity"
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
+        label="Buy"
         @click="addTransaction('buy')"
       />
       <ButtonDefault
-        label="Sell"
         :disabled="!price || !executedAt || !quantity"
         class="bg-red-500"
+        label="Sell"
         @click="addTransaction('sell')"
       />
     </template>
@@ -85,30 +85,30 @@
 
 <script lang="ts">
 
-import {defineComponent, ref, watch} from 'vue'
-import {AssetSymbol, Transaction} from '/common/models'
+import { AssetSymbol, Transaction } from '/common/models'
 import dayjs from 'dayjs'
+import { defineComponent, ref } from 'vue'
+import AssetSearch from '../components/AssetSearch.vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
-import AssetSearch from '../components/AssetSearch.vue'
 
 
 export default defineComponent({
-  components : {AssetSearch,  Modal, ButtonDefault},
+  components : {AssetSearch, Modal, ButtonDefault},
   props      : {
     assetSymbol: {
       type    : AssetSymbol,
-      default : null
+      default : null,
     },
   },
   setup (props) {
-    const symbol  :AssetSymbol = ref(props.assetSymbol)
+    const symbol : AssetSymbol = ref(props.assetSymbol)
     const quantity             = ref(null)
     const price                = ref(null)
     const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
     console.log(symbol)
-    const addTransaction = async (type: 'buy' | 'sell') => {
+    const addTransaction = async (type : 'buy' | 'sell') => {
 
       const t = new Transaction()
 
@@ -137,9 +137,9 @@ export default defineComponent({
       symbol,
       executedAt,
       quantity,
-      price
+      price,
     }
-  }
+  },
 
 
 })
