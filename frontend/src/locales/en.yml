@@ -23,7 +23,8 @@ transactions:
   table:
     buy: Buy
     executedAt: Date
-    position: Position
+    symbol: Name
+    ticker: Ticker
     price: Price
     quantity: Quantity
     sell: Sell

@@ -3,25 +3,25 @@
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
   >
-    <span
-      v-for="(row, rowIndex) in headers"
+    <div
+      v-for="(row, rowIndex) in headerLayout"
       :key="rowIndex"
       class="grid items-center"
     >
-      <span
-        v-for="(item, itemIndex) in row"
-        :key="itemIndex"
+      <div
+        v-for="(subRow, subRowIndex) in row"
+        :key="subRowIndex"
         class="cursor-pointer hover:text-gray-600 select-none"
         :class="{
-          'lg:text-right': item.justify === 'right',
-          'lg:text-center': item.justify === 'center'
+          'lg:text-right': headers[subRow].justify === 'right',
+          'lg:text-center': headers[subRow].justify === 'center'
         }"
-        @click="setSort(item)"
+        @click="setSort(subRow)"
       >
-        {{ $t(settings.translationPrefix + '.' + item.key) }}
-      </span>
-    </span>
-    <span v-if="settings?.actions" />
+        {{ $t(settings.translationPrefix + '.' + subRow) }}
+      </div>
+    </div>
+    <div v-if="settings?.actions" />
   </div>
   <div
     v-for="(row, rowIndex) in rowsInternal"
@@ -29,37 +29,38 @@
     :class="`lg:grid-cols-${columnCount}`"
     class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
   >
-    <span
-      v-for="(cell, cellIndex) in headers"
+    <div
+      v-for="(cell, cellIndex) in headerLayout"
       :key="cellIndex"
       class="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-1 gap-1 items-center"
     >
-      <span
+      <div
         v-for="(header, headerIndex) in cell"
         :key="headerIndex"
         :class="[
           header.classes,
           {
-            'lg:text-right': header.justify === 'right',
-            'lg:text-center': header.justify === 'center'
+            'lg:text-right': headers[header].justify === 'right',
+            'lg:text-center': headers[header].justify === 'center'
           }
         ]"
       >
-        <span
-          class="block lg:hidden text-sm font-light text-gray-500"
+        <div
+          class="block lg:hidden text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
+          @click="setSort(header)"
         >
-          {{ $t(settings.translationPrefix + '.' + header.key) }}
-        </span>
+          {{ $t(settings.translationPrefix + '.' + header) }}
+        </div>
         <slot
-          :name="header.key"
+          :name="header"
           :row="row"
-          :value="row[header.key]"
+          :value="row[header]"
         >
-          {{ formatValue(header,{value: row[header.key] , row}) }}
+          {{ formatValue(header,{value: row[header] , row}) }}
         </slot>
-      </span>
-    </span>
-    <span
+      </div>
+    </div>
+    <div
       v-if="settings?.actions"
       class="grid items-center"
     >
@@ -67,7 +68,7 @@
         :row="rowIndex"
         name="actions"
       />
-    </span>
+    </div>
   </div>
 </template>
 
@@ -90,6 +91,7 @@ export interface TableHeader {
 
 export interface TableConfig {
   headers: TableHeader[][],
+  headerLayout: string[]|string[][],
   settings?: {
     actions: boolean,
     translationPrefix: string
@@ -120,32 +122,25 @@ export default defineComponent({
 
     const columnCount = computed(() => {
       const actions = props.config.settings.actions ? 1 : 0
-      return Object.keys(props.config.headers).length + actions
+      return Object.keys(props.config.headerLayout).length + actions
     })
 
     const config: TableConfig = reactive({
-      headers  : [],
-      settings : props.config.settings,
+      headers      : props.config.headers,
+      headerLayout : [],
+      settings     : props.config.settings,
     })
 
-
-    for (const [
-      key, header
-    ] of Object.entries(props.config.headers)) {
-      let headerArr = header
-
-      if (!Array.isArray(header)) {
-        header.key = key
-        headerArr  = [
-          header
+    config.headerLayout = props.config.headerLayout.map(key => {
+      if (!Array.isArray(key)) {
+        return [
+          key
         ]
       }
-
-      config.headers.push(headerArr)
-    }
+      return key
+    })
 
     function formatValue (header : TableHeader, {value, row}) {
-
       if (!header.format) {
         return value
       }
@@ -199,7 +194,8 @@ export default defineComponent({
       return rows
     })
 
-    function setSort (header: TableHeader) {
+    function setSort (key: string) {
+      const header = config.headers[key]
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
@@ -212,7 +208,8 @@ export default defineComponent({
       formatValue,
       columnCount,
       rowsInternal,
-      setSort
+      setSort,
+      sort
     }
   }
 })

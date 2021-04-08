@@ -9,17 +9,26 @@
       :rows="sortedRows"
     >
       <template
+        #name="{ row }"
+      >
+        <AppLink
+          :ticker="row.symbol"
+          to="ticker_details"
+        >
+          <p class="font-normal text-sm">
+            {{ row.name }}
+          </p>
+        </AppLink>
+      </template>
+      <template
         #symbol="{ row }"
       >
         <AppLink
           :ticker="row.symbol"
           to="ticker_details"
         >
-          <p class="mr-3 font-bold">
-            {{ row.symbol }}
-          </p>
           <p class="font-normal text-sm">
-            {{ row.name }}
+            {{ row.symbol }}
           </p>
         </AppLink>
       </template>
@@ -51,7 +60,11 @@ export default defineComponent({
       items     : [],
       config    : {
         headers: {
-          symbol: {},
+          0:
+            {
+              name   : {},
+              symbol : {},
+            }
         },
         settings: {
           actions           : false,
