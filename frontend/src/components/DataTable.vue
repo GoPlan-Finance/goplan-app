@@ -1,4 +1,29 @@
 <template>
+  <div class="flex justify-end gap-2 mb-2">
+    <SearchField
+      v-if="config.search"
+      v-model="search"
+    />
+    <label
+      v-for="filter in filters"
+      :key="filter"
+    >
+      <select
+        v-model="filter.value"
+        class="rounded-lg border-0"
+        name="type"
+      >
+        <option
+          v-for="option in filter.options"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.display }}
+        </option>
+      </select>
+    </label>
+  </div>
+
   <div
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
@@ -74,12 +99,14 @@
 
 <script lang="ts">
 import {Money} from 'ts-money'
-import {computed, defineComponent, reactive, toRefs} from 'vue'
+import {computed, defineComponent, reactive, toRefs, ref} from 'vue'
 import * as dayjs from 'dayjs'
+import SearchField from '../components/base/SearchField.vue'
 
 export type TableRow = Record<string, unknown>
 
 type FormatFn = (row: unknown, value: unknown) => void
+type SearchFn = (value: unknown, searchString: string) => void
 
 export interface TableHeader {
   key?: string,
@@ -96,6 +123,10 @@ export interface TableConfig {
     actions: boolean,
     translationPrefix: string
   },
+  filters: Record<string, any>,
+  search: {
+    function: SearchFn
+  }
 }
 
 interface SortSettings {
@@ -104,7 +135,8 @@ interface SortSettings {
 }
 
 export default defineComponent({
-  props: {
+  components : {SearchField},
+  props      : {
     config: {
       type     : Object as TableConfig,
       required : true
@@ -129,7 +161,11 @@ export default defineComponent({
       headers      : props.config.headers,
       headerLayout : [],
       settings     : props.config.settings,
+      filters      : props.config.filters,
+      search       : props.config.search
     })
+
+    const search = ref('')
 
     config.headerLayout = props.config.headerLayout.map(key => {
       if (!Array.isArray(key)) {
@@ -161,12 +197,31 @@ export default defineComponent({
         return dayjs(value).format('HH:mm:ss')
       }
 
-
       throw `Unknown table dataformatter "${header.format}`
     }
 
     const rowsInternal = computed(() => {
-      const rows: TableRow[] = props.rows
+      let rows: TableRow[] = props.rows
+
+      rows = rows.filter(row => {
+        if (search.value !== '') {
+          const result = config.search.function(row, search.value)
+          if (!result) {
+            return false
+          }
+        }
+
+        for (const [
+          key, filter
+        ] of Object.entries(config.filters)) {
+          if (filter.value !== '') {
+            if (row[key] !== filter.value) {
+              return false
+            }
+          }
+        }
+        return true
+      })
 
       if (sort.header) {
         rows.sort((a: TableRow, b: TableRow) => {
@@ -209,7 +264,8 @@ export default defineComponent({
       columnCount,
       rowsInternal,
       setSort,
-      sort
+      sort,
+      search
     }
   }
 })

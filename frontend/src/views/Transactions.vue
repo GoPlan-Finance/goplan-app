@@ -2,26 +2,6 @@
   <HeadlineActions
     :headline="$t('transactions.headline')"
   >
-    <SearchField
-      v-model="search"
-    />
-    <label>
-      <select
-        id="type"
-        v-model="typeFilter.value"
-        class="rounded-lg border-0"
-        name="type"
-      >
-        <option
-          v-for="option in typeFilter.options"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.display }}
-        </option>
-      </select>
-    </label>
-
     <ImportTransactionsModal />
     <buy-sell-asset />
   </HeadlineActions>
@@ -85,7 +65,7 @@ import BuySellAsset from '../components/BuySellAsset.vue'
 
 export default defineComponent({
   components: {
-    BuySellAsset,    SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal
   },
   setup () {
     const data = reactive({
@@ -135,6 +115,32 @@ export default defineComponent({
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table'
+        },
+        filters: {
+          type: {
+            value   : '',
+            options : [
+              {
+                value   : '',
+                display : 'All Types',
+              },
+              {
+                value   : 'BUY',
+                display : 'Buy',
+              },
+              {
+                value   : 'SELL',
+                display : 'Sell',
+              },
+            ]
+          }
+        },
+        search: {
+          function: (transaction, searchString) => {
+            return transaction.symbol.name.toLowerCase().includes(searchString)
+                || transaction.symbol.symbol.toLowerCase().startsWith(searchString)
+                || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchString)
+          }
         }
       }
     })
@@ -163,11 +169,6 @@ export default defineComponent({
 
     const sortedRows = computed(() => {
       return data.transactions.filter(transaction => {
-        if (typeFilter.value !== '') {
-          if (transaction.type !== typeFilter.value) {
-            return false
-          }
-        }
         if (search.value !== '') {
           const searchVal = search.value.toLowerCase()
 
