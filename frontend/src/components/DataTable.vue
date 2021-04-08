@@ -77,7 +77,7 @@
           {{ $t(settings.translationPrefix + '.' + header) }}
         </div>
         <slot
-          :name="header"
+          :name="`field(${header})`"
           :row="row"
           :value="row[header]"
         >

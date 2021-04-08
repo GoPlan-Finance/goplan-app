@@ -11,7 +11,7 @@
     :rows="rows"
   >
     <template
-      #symbol="{ row }"
+      #field(symbol)="{ row }"
     >
       <AppLink
         v-if="row.symbol"
@@ -31,7 +31,7 @@
       </span>
     </template>
     <template
-      #ticker="{ row }"
+      #field(ticker)="{ row }"
     >
       <AppLink
         v-if="row.symbol"
@@ -54,7 +54,7 @@
       </span>
     </template>
     <template
-      #type="{ value }"
+      #field(type)="{ value }"
     >
       <div
         :class="value ==='BUY'? 'text-blue-500' : 'text-yellow-500'"

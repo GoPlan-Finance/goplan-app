@@ -9,7 +9,7 @@
       :rows="sortedRows"
     >
       <template
-        #name="{ row }"
+        #field(name)="{ row }"
       >
         <AppLink
           :ticker="row.symbol"
@@ -21,7 +21,7 @@
         </AppLink>
       </template>
       <template
-        #symbol="{ row }"
+        #field(symbol)="{ row }"
       >
         <AppLink
           :ticker="row.symbol"
