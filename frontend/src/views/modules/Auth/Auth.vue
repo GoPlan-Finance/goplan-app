@@ -27,15 +27,16 @@
 
 <script lang="ts">
 
-import CreateMasterKey from './CreateMasterKey.vue'
-import UnlockMasterKey from './UnlockMasterKey.vue'
-import {defineComponent, getCurrentInstance, inject, ref} from 'vue'
-import {useRouter} from 'vue-router'
-import GoogleButton from './googleButton.vue'
-import {User} from '../../../../../common/models'
-import {sleep} from '../../../../../common/utils'
+import { User } from '/common/models'
+import { sleep } from '/common/utils'
+import { AuthStore } from 'store'
+import { defineComponent, getCurrentInstance, inject, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import GoPlanLogo from '../../../components/GoPlanLogo.vue'
-import {AuthStore} from '../../../store'
+import CreateMasterKey from './CreateMasterKey.vue'
+import GoogleButton from './googleButton.vue'
+import UnlockMasterKey from './UnlockMasterKey.vue'
+
 
 export default defineComponent({
   components: {
@@ -69,7 +70,7 @@ export default defineComponent({
           authData: {
             id       : currentGoogleUser.getId(),
             id_token : currentGoogleUser.getAuthResponse().id_token,
-          }
+          },
         })
 
         // const profile           = currentGoogleUser.getBasicProfile()
@@ -105,7 +106,7 @@ export default defineComponent({
 
       // @todo Show spinner
       await sleep(1000)
-      await router.push({name: 'dashboard'})
+      await router.push({name: 'transactions'})
     }
 
 

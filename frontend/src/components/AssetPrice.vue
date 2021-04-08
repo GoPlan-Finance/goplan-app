@@ -7,32 +7,32 @@
       {{ currentPrice.getCurrency() }}
     </div>
     <div
-      class="p-3 ml-3 text-xl rounded-lg font-bold"
       :class="changeIsPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+      class="p-3 ml-3 text-xl rounded-lg font-bold"
     >
       <span v-if="changeIsPositive">+</span> {{ percent.toFixed(2) }} %
     </div>
     <div
-      class="flex items-center p-3 ml-3 text-xl rounded-lg font-bold"
       :class="changeIsPositive ? 'text-green-800' : 'text-red-800'"
+      class="flex items-center p-3 ml-3 text-xl rounded-lg font-bold"
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
+        :class="changeIsPositive ? '' : 'transform rotate-180'"
+        class="mr-1"
         fill="none"
+        height="24"
         stroke="currentColor"
-        stroke-width="3"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="mr-1"
-        :class="changeIsPositive ? '' : 'transform rotate-180'"
+        stroke-width="3"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <line
           x1="12"
-          y1="19"
           x2="12"
+          y1="19"
           y2="5"
         />
         <polyline points="5 12 12 5 19 12" />
@@ -43,18 +43,19 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue'
-import {Money} from 'ts-money'
+import { Money } from 'ts-money'
+import { computed, defineComponent } from 'vue'
+
 
 export default defineComponent({
   props: {
     currentPrice: {
       type     : Money,
-      required : true
+      required : true,
     },
     previousPrice: {
       type    : Money,
-      default : null
+      default : null,
     },
   },
   setup (props) {
@@ -67,8 +68,8 @@ export default defineComponent({
     return {
       change,
       percent,
-      changeIsPositive
+      changeIsPositive,
     }
-  }
+  },
 })
 </script>

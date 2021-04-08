@@ -1,9 +1,9 @@
-import convict from 'convict'
+import * as convict from 'convict'
 
 
 convict.addFormat({
   name: 'data-provider-array',
-  validate (sources: unknown, schema: unknown) {
+  validate (sources : unknown, schema : unknown) {
     if (!Array.isArray(sources)) {
       throw new Error('must be of type Array')
     }
@@ -13,7 +13,7 @@ convict.addFormat({
       // @ts-ignore
       convict(schema.children).load(source).validate()
     }
-  }
+  },
 })
 
 
@@ -23,10 +23,10 @@ const config = convict({
   env: {
     doc    : 'The application environment.',
     format : [
-      'production', 'development', 'test'
+      'production', 'development', 'test',
     ],
     default : 'development',
-    env     : 'NODE_ENV'
+    env     : 'NODE_ENV',
   },
   parse: {
     databaseUri: {
@@ -62,14 +62,14 @@ const config = convict({
     mountPath: {
       doc     : 'Parse Mount Path',
       format  : '*',
-      default : '/parse'
+      default : '/parse',
     },
     port: {
       doc     : 'The port to bind.',
       format  : 'port',
       default : 1337,
       env     : 'PORT',
-      arg     : 'port'
+      arg     : 'port',
     },
   },
   dataProviders: {
@@ -80,16 +80,16 @@ const config = convict({
       name: {
         doc    : 'Provider Name',
         format : [
-          'fmp', 'finhub', 'tiingo', 'twelveData', 'alphaVantage', 'yahoo'
+          'fmp', 'finhub', 'tiingo', 'twelveData', 'alphaVantage', 'yahoo',
         ],
-        default: null
+        default: null,
       },
       apiKey: {
         doc     : 'Your API Key',
         format  : '*',
-        default : null
+        default : null,
       },
-    }
+    },
 
   },
 

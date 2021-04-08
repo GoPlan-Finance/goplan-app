@@ -46,16 +46,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, reactive, toRefs, watch} from 'vue'
-import CandlestickChart from '../components/Charts/CandlestickChart.vue'
+import { AssetSymbol } from '/common/models'
+import { Currencies, Money } from 'ts-money'
+import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
 import AssetPrice from '../components/AssetPrice.vue'
-import {Currencies, Money} from 'ts-money'
-import {AssetSymbol} from '../../../common/models'
-import CompanyInfo from '../components/CompanyInfo.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
-import WatchAssetModal from '../components/WatchAssetModal.vue'
+import CandlestickChart from '../components/Charts/CandlestickChart.vue'
+import CompanyInfo from '../components/CompanyInfo.vue'
 import CompanyQuote from '../components/CompanyQuote.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
+import WatchAssetModal from '../components/WatchAssetModal.vue'
+
 
 export default defineComponent({
   components: {
@@ -71,14 +72,14 @@ export default defineComponent({
     ticker: {
       type     : String,
       required : true,
-    }
+    },
   },
   setup (props) {
-    const data: {
-      loading: boolean,
-      assetSymbol: AssetSymbol | null,
-      currentPrice: Money,
-      previousPrice: Money,
+    const data : {
+      loading : boolean,
+      assetSymbol : AssetSymbol | null,
+      currentPrice : Money,
+      previousPrice : Money,
     } = reactive({
       loading       : false,
       assetSymbol   : null,

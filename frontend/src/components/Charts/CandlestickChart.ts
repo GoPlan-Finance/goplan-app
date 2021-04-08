@@ -3,26 +3,29 @@
  *
  *
  */
+import { AssetSymbol } from '/common/models'
 import * as dayjs from 'dayjs'
 import * as duration from 'dayjs/plugin/duration'
-import {AssetSymbol} from '../../../../common/models'
 
-export type CandleData = { date: dayjs.Dayjs | undefined; open: any; high: any; low: any; close: any; volume: any }
+
+export type CandleData = { date : dayjs.Dayjs | undefined; open : any; high : any; low : any; close : any; volume : any }
 
 dayjs.extend(duration)
 
+
 export interface TimeScaleInterface {
-    label: string
-    visible: duration.Duration
-    resolution: string  // @todo use Backend Type.Resoulution
+  label : string
+  visible : duration.Duration
+  resolution : string  // @todo use Backend Type.Resoulution
 }
+
 
 // interface TimeRange {
 //     min: number
 //     max: number
 // }
 
-export const timeScales: TimeScaleInterface[] = [
+export const timeScales : TimeScaleInterface[] = [
   // {
   //     label: 'Hour',
   //     visible: dayjs.duration(1, 'hour'),
@@ -72,7 +75,7 @@ export const timeScales: TimeScaleInterface[] = [
   },
 ]
 
-export const getScaleForRange = (min :dayjs.Dayjs, max: dayjs.Dayjs): TimeScaleInterface => {
+export const getScaleForRange = (min : dayjs.Dayjs, max : dayjs.Dayjs) : TimeScaleInterface => {
   const delta = dayjs.duration(max.diff(min))
 
   console.log('delta', dayjs(max))
@@ -85,7 +88,7 @@ export const getScaleForRange = (min :dayjs.Dayjs, max: dayjs.Dayjs): TimeScaleI
   return scale
 }
 
-export const getScaleByLabel = (label: string): TimeScaleInterface => {
+export const getScaleByLabel = (label : string) : TimeScaleInterface => {
   const scale = timeScales.find(s => label === s.label)
 
   if (!scale) {
@@ -97,24 +100,24 @@ export const getScaleByLabel = (label: string): TimeScaleInterface => {
 
 
 export const loadData = async (
-  assetSymbol: AssetSymbol,
-  currentScale: TimeScaleInterface,
-  from: dayjs.Dayjs,
-  to: dayjs.Dayjs,
-): Promise<CandleData[]> => {
+  assetSymbol : AssetSymbol,
+  currentScale : TimeScaleInterface,
+  from : dayjs.Dayjs,
+  to : dayjs.Dayjs,
+) : Promise<CandleData[]> => {
 
   console.log('Assets--GetEndOfDay', {
     resolution    : currentScale.resolution,
     from          : from.toISOString(),
     to            : to.toISOString(),
-    assetSymbolId : assetSymbol.id
+    assetSymbolId : assetSymbol.id,
   })
 
   const eod = await Parse.Cloud.run('Assets--GetEndOfDay', {
     resolution    : currentScale.resolution,
     from          : from.toISOString(),
     to            : to.toISOString(),
-    assetSymbolId : assetSymbol.id
+    assetSymbolId : assetSymbol.id,
   })
   // [ 1551128400000, 33,  37.1, 14,  14,  196 ],
   // const data = eod.map((elem: CandleData) => {

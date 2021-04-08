@@ -1,4 +1,4 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
 
 
 export default schema('AssetSymbol', {
@@ -10,11 +10,11 @@ export default schema('AssetSymbol', {
     exchange         : {type: 'Pointer', targetClass: 'StockExchange'},
   },
   indexes: {
-    symbol: {symbol: 1}
+    symbol: {symbol: 1},
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get', 'count'
+      'find', 'get', 'count',
     ]),
   },
 })

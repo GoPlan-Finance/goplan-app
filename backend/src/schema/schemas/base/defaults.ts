@@ -1,72 +1,77 @@
 type CPLType = '*' | ('find' | 'count' | 'get' | 'update' | 'create' | 'delete' /*| 'addField'*/)  []
 type FieldType =
-    | 'String'
-    | 'Number'
-    | 'Boolean'
-    | 'Date'
-    | 'File'
-    | 'GeoPoint'
-    | 'Polygon'
-    | 'Array'
-    | 'Object'
-    | 'Pointer'
-    | 'Relation';
+  | 'String'
+  | 'Number'
+  | 'Boolean'
+  | 'Date'
+  | 'File'
+  | 'GeoPoint'
+  | 'Polygon'
+  | 'Array'
+  | 'Object'
+  | 'Pointer'
+  | 'Relation';
 
 
 interface FieldInterface {
-    type: FieldType
-    targetClass?: string
-    required?: boolean
+  type : FieldType
+  targetClass? : string
+  required? : boolean
 }
+
 
 interface CPLInterface {
-    requiresAuthentication?: boolean
-    '*'?: boolean
+  requiresAuthentication? : boolean
+  '*'? : boolean
 }
 
+
 interface IndexInterface {
-    [key: string]: number
+  [key : string] : number
 }
 
 
 interface FieldsInterface {
-    [key: string]: FieldInterface
+  [key : string] : FieldInterface
 }
+
 
 interface ProtectedFieldsInterface {
-    [key: string]: string[]
+  [key : string] : string[]
 }
+
 
 interface IndexesInterface {
-    [key: string]: IndexInterface
+  [key : string] : IndexInterface
 }
 
+
 interface CPLsInterface {
-    find?            : CPLInterface,
-    count?           : CPLInterface,
-    get?             : CPLInterface,
-    update?          : CPLInterface,
-    create?          : CPLInterface,
-    delete?          : CPLInterface,
-    addField?        : CPLInterface,
-    protectedFields? : ProtectedFieldsInterface
+  find? : CPLInterface,
+  count? : CPLInterface,
+  get? : CPLInterface,
+  update? : CPLInterface,
+  create? : CPLInterface,
+  delete? : CPLInterface,
+  addField? : CPLInterface,
+  protectedFields? : ProtectedFieldsInterface
 }
 
 
 interface SchemaInterface {
-    fields: FieldsInterface
-    indexes: IndexesInterface
-    classLevelPermissions: CPLsInterface
+  fields : FieldsInterface
+  indexes : IndexesInterface
+  classLevelPermissions : CPLsInterface
 }
 
 
-function CPL (ops: CPLType, value: CPLInterface):  CPLsInterface  {
+function CPL (ops : CPLType, value : CPLInterface) : CPLsInterface {
 
-  const v: CPLsInterface = {}
+  const v : CPLsInterface = {}
 
   if (ops === '*') {
     ops = [
-      'find', 'count', 'get', 'update', 'create', 'delete'
+      'find', 'count', 'get', 'update', 'create', 'delete',
     ]
   }
 
@@ -78,17 +83,17 @@ function CPL (ops: CPLType, value: CPLInterface):  CPLsInterface  {
 }
 
 
-export function requiresAuthentication (ops: CPLType): CPLsInterface {
+export function requiresAuthentication (ops : CPLType) : CPLsInterface {
 
   return CPL(ops, {requiresAuthentication: true})
 }
 
-export function requiresAnonymous (ops: CPLType): CPLsInterface {
+export function requiresAnonymous (ops : CPLType) : CPLsInterface {
 
   return CPL(ops, {'*': true})
 }
 
-export function schema (className: string, schema: SchemaInterface): unknown {
+export function schema (className : string, schema : SchemaInterface) : unknown {
 
 
   return {

@@ -81,7 +81,7 @@
           :row="row"
           :value="row[header]"
         >
-          {{ formatValue(header,{value: row[header] , row}) }}
+          {{ formatValue(headers[header],{value: row[header] , row}) }}
         </slot>
       </div>
     </div>
@@ -176,7 +176,14 @@ export default defineComponent({
       return key
     })
 
+    config.headerLayout.forEach(layout => layout.map(fieldName => {
+      if(typeof config.headers[fieldName] !== 'object'){
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "headers"`
+      }
+    }))
+
     function formatValue (header : TableHeader, {value, row}) {
+
       if (!header.format) {
         return value
       }
@@ -254,7 +261,7 @@ export default defineComponent({
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
-        sort.header   = header
+        sort.header = header
       }
     }
 

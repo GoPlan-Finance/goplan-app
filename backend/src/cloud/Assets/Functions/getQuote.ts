@@ -4,11 +4,12 @@
  *
  */
 // noinspection ES6PreferShortImport
-import {AssetSymbol} from '../../../../../common/models'
-import {assertUser} from '../../Auth'
+import { AssetSymbol } from '/common/models'
+import { assertUser } from '../../Auth'
 
 
-import {DataProvider} from '../../DataProviders/providers'
+import { DataProvider } from '../../DataProviders/providers'
+
 
 Parse.Cloud.define('Assets--GetQuote', async (request) => {
   assertUser(request)

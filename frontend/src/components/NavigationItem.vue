@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import { defineComponent, ref } from 'vue'
+
 
 export default defineComponent({
   props: {
@@ -28,16 +29,16 @@ export default defineComponent({
   },
   setup () {
     const activeClass   = ref(
-      'bg-gray-600 bg-opacity-25 text-white border-gray-100'
+      'bg-gray-600 bg-opacity-25 text-white border-gray-100',
     )
     const inactiveClass = ref(
-      'text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-white'
+      'text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-white',
     )
 
     return {
       activeClass,
-      inactiveClass
+      inactiveClass,
     }
-  }
+  },
 })
 </script>

@@ -13,8 +13,8 @@
             <div class="p-3 rounded-full bg-blue-600 bg-opacity-75">
               <svg
                 class="h-8 w-8 text-white"
-                viewBox="0 0 28 30"
                 fill="none"
+                viewBox="0 0 28 30"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -62,8 +62,8 @@
             <div class="p-3 rounded-full bg-orange-600 bg-opacity-75">
               <svg
                 class="h-8 w-8 text-white"
-                viewBox="0 0 28 28"
                 fill="none"
+                viewBox="0 0 28 28"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -99,16 +99,16 @@
             <div class="p-3 rounded-full bg-pink-600 bg-opacity-75">
               <svg
                 class="h-8 w-8 text-white"
-                viewBox="0 0 28 28"
                 fill="none"
+                viewBox="0 0 28 28"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   d="M6.99998 11.2H21L22.4 23.8H5.59998L6.99998 11.2Z"
                   fill="currentColor"
                   stroke="currentColor"
-                  stroke-width="2"
                   stroke-linejoin="round"
+                  stroke-width="2"
                 />
                 <path
                   d="M9.79999 8.4C9.79999 6.08041 11.6804 4.2 14 4.2C16.3196 4.2 18.2 6.08041 18.2 8.4V12.6C18.2 14.9197 16.3196 16.8 14 16.8C11.6804 16.8 9.79999 14.9197 9.79999 12.6V8.4Z"
@@ -176,9 +176,9 @@
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
                       <img
+                        alt=""
                         class="h-10 w-10 rounded-full"
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
                       >
                     </div>
 
@@ -222,8 +222,8 @@
                   class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                 >
                   <a
-                    href="#"
                     class="text-blue-600 hover:text-blue-900"
+                    href="#"
                   >Edit</a>
                 </td>
               </tr>
@@ -238,18 +238,20 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
+
 interface User {
-  name: string;
-  email: string;
-  title: string;
-  title2: string;
-  status: string;
-  role: string;
+  name : string;
+  email : string;
+  title : string;
+  title2 : string;
+  status : string;
+  role : string;
 }
+
 
 export default defineComponent({
   setup () {
-    const testUser: User = {
+    const testUser : User = {
       name   : 'John Doe',
       email  : 'john@example.com',
       title  : 'Software Engineer',
@@ -259,7 +261,7 @@ export default defineComponent({
     }
 
     const users = ref<User[]>([
-      ...Array(10).keys()
+      ...Array(10).keys(),
     ].map(() => testUser))
 
     return {

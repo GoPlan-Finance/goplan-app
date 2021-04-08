@@ -1,23 +1,24 @@
-import {BaseObject} from './base/BaseObject'
-import {AssetSymbol} from './AssetSymbol'
+import { AssetSymbol } from './AssetSymbol'
+import { BaseObject } from './base/BaseObject'
 
 
 export class Watchlist extends BaseObject {
 
-    static className = 'Watchlist'
+  static className = 'Watchlist'
 
-    constructor () {
-      super(Watchlist.className)
-    }
+  constructor () {
+    super(Watchlist.className)
+  }
 
-    get name (): string {
-      return this.get('name')
-    }
+  get name () : string {
+    return this.get('name')
+  }
 
-    get symbols (): AssetSymbol[] {
-      return this.get('symbols')
-    }
+  get symbols () : AssetSymbol[] {
+    return this.get('symbols')
+  }
 
 }
+
 
 Watchlist.register()

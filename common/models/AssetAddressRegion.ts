@@ -1,23 +1,24 @@
-import {CacheableObject} from './base/CacheableObject'
+import { CacheableObject } from './base/CacheableObject'
 
 
 export class AssetAddressRegion extends CacheableObject {
 
-    static className = 'AssetAddressRegion'
+  static className = 'AssetAddressRegion'
 
-    constructor () {
-      super(AssetAddressRegion.className)
-    }
+  constructor () {
+    super(AssetAddressRegion.className)
+  }
 
-    get state (): string {
-      return this.get('state')
-    }
+  get state () : string {
+    return this.get('state')
+  }
 
-    get country (): string {
-      return this.get('country')
-    }
+  get country () : string {
+    return this.get('country')
+  }
 
 
 }
+
 
 AssetAddressRegion.register()

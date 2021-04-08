@@ -3,9 +3,10 @@
  *
  *
  */
-import {AuthStore} from './auth'
+import { AuthStore } from './auth'
 
-export  {
+
+export {
   AuthStore,
 
 

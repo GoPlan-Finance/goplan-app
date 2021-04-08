@@ -84,21 +84,22 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, ref} from 'vue'
-import {useSidebar} from '../hooks/useSidebar'
-import {useRouter} from 'vue-router'
-import SearchBar from './SearchBar.vue'
-import {AuthStore} from '@/store'
+import { AuthStore } from '/store'
 import { BellIcon } from '@heroicons/vue/outline'
+import { defineComponent, inject, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useSidebar } from '../hooks/useSidebar'
+import SearchBar from './SearchBar.vue'
+
 
 export default defineComponent({
   components: {SearchBar, BellIcon},
   // eslint-disable-next-line no-unused-vars
   setup () {
-    const {push: pushRoute} = useRouter()
-    const authStore         = inject(('$authStore')) as AuthStore
-    const dropdownOpen      = ref(false)
-    const {isOpen}          = useSidebar()
+    const {push : pushRoute} = useRouter()
+    const authStore          = inject(('$authStore')) as AuthStore
+    const dropdownOpen       = ref(false)
+    const {isOpen}           = useSidebar()
 
     const signOut = async () => {
       await authStore.signOut()

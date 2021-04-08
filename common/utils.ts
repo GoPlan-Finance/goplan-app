@@ -99,6 +99,6 @@ export {
   sleep,
   processBatch,
   formatCurrency,
-  StringKeys,
 }
+export type { StringKeys }
 

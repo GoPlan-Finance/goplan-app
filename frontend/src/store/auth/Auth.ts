@@ -1,34 +1,49 @@
-import {User} from '../../../../common/models'
-
-import {Crypto, DecryptedKey, EncryptedKey} from '../../../../common/Crypto'
-import {Session} from './index'
+import { Crypto, DecryptedKey, DerivedKey, EncryptedKey } from '/common/Crypto'
+import { User } from '/common/models'
+import { SecureObject } from '/common/models/base/SecureObject'
+import { Session } from './index'
 
 
 export class AuthStore {
 
+  public static maybeLoadDerivedKey () {
+    const derivedKey = Session.get<DerivedKey>('derivedKey')
+    SecureObject.setSessionDerivedKey(derivedKey)
+  }
+
+  public static clearDerivedKey () {
+
+    AuthStore.storeDerivedKey(null)
+  }
+
+  private static storeDerivedKey (derivedKey : DerivedKey) {
+    // @todo ensure SessionStorage is safe storage for tokens
+    Session.set('derivedKey', derivedKey)
+    SecureObject.setSessionDerivedKey(derivedKey)
+  }
+
   public async signOut () : Promise<Parse.User> {
 
+    AuthStore.clearDerivedKey()
     return Parse.User.logOut()
   }
 
-  public async currentUser (): Promise<User | null> {
+  public async currentUser () : Promise<User | null> {
 
     return await Parse.User.currentAsync()
   }
 
-
-  public async isAuthenticated (): Promise<boolean> {
+  public async isAuthenticated () : Promise<boolean> {
 
     return !!await this.currentUser()
   }
 
-  public async isConnected (): Promise<boolean> {
+  public async isConnected () : Promise<boolean> {
 
     return !!Session.get('encryptionKey') && !!Session.get('encryptionSalt')
   }
 
-
-  public async isMasterKeyValid (masterKey :DecryptedKey): Promise<boolean> {
+  public async isMasterKeyValid (masterKey : string) : Promise<boolean> {
     try {
       await this.decryptClientKey(masterKey)
       return true
@@ -39,28 +54,25 @@ export class AuthStore {
     return false
   }
 
-  public async decryptClientKey (masterKey: string): Promise<void> {
+  public async decryptClientKey (masterKey : string) : Promise<void> {
     const user = await this.currentUser()
 
     if (!user || !await this.hasClientKey()) {
       throw 'No client key'
     }
+
     const clientKey = user.get('clientKey') as EncryptedKey
-
-    const derived = Crypto.PBKDF2(masterKey, clientKey.s)
-
+    const derived   = Crypto.PBKDF2(masterKey, clientKey.s)
     const key       = Crypto.decrypt(derived, clientKey) as DecryptedKey
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key'
     }
 
-    // @todo ensure SessionStorage is safe storage for tokens
-    Session.set('derivedKey', derived)
+    AuthStore.storeDerivedKey(derived)
   }
 
-
-  public async hasClientKey (): Promise<boolean> {
+  public async hasClientKey () : Promise<boolean> {
     const user = await this.currentUser()
 
     if (!user) {
@@ -72,16 +84,16 @@ export class AuthStore {
 
       // check if anything is missing
       return ![
-        'ct', 's', 'iv'
+        'ct', 's', 'iv',
       ].some(
-        f => typeof clientKey[f] !== 'string' || clientKey[f].length === 0
+        f => typeof clientKey[f] !== 'string' || clientKey[f].length === 0,
       )
     }
 
     return false
   }
 
-  public async createMasterKey (newMasterKey: string) : Promise<EncryptedKey> {
+  public async createMasterKey (newMasterKey : string) : Promise<EncryptedKey> {
     if (await this.hasClientKey()) {
       throw 'Master Key already exists'
     }
@@ -100,12 +112,12 @@ export class AuthStore {
     const derived = Crypto.PBKDF2(newMasterKey, salt)
 
     const encryptedKey = Crypto.encrypt(derived, {
-      encryptionKey
+      encryptionKey,
     })
 
     return {
       ...encryptedKey,
-      s: salt.toString()
+      s: salt.toString(),
     }
   }
 

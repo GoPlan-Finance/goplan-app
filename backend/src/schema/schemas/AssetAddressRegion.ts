@@ -1,4 +1,4 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
 
 
 export default schema('AssetAddressRegion', {
@@ -14,7 +14,7 @@ export default schema('AssetAddressRegion', {
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get', 'count'
+      'find', 'get', 'count',
     ]),
   },
 })

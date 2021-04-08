@@ -8,15 +8,15 @@
       >
         <template #before>
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
             class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
               clip-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+              fill-rule="evenodd"
             />
           </svg>
         </template>
@@ -38,8 +38,8 @@
     </template>
     <template #actions="{close}">
       <ButtonDefault
-        label="Save"
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
+        label="Save"
         @click="createList() && close()"
       />
     </template>
@@ -48,10 +48,10 @@
 
 <script lang="ts">
 
-import {defineComponent, ref} from 'vue'
+import { Watchlist } from '/common/models'
+import { defineComponent, ref } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
-import {Watchlist} from '../../../common/models/Watchlist'
 
 
 export default defineComponent({
@@ -70,7 +70,7 @@ export default defineComponent({
       newWatchlistName,
       createList,
     }
-  }
+  },
 
 
 })

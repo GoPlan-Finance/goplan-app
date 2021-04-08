@@ -87,40 +87,44 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, reactive, watch, toRefs} from 'vue'
+import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
+
 
 export enum TableCellType {
   STRING = 'string',
-  IMAGE = 'image',
+  IMAGE  = 'image',
   CUSTOM = 'custom',
 }
 
+
 export interface TableHeader {
-  key?: string,
-  classes?: string,
-  justify?: 'left' | 'right' | 'center',
-  type?: TableCellType,
+  key? : string,
+  classes? : string,
+  justify? : 'left' | 'right' | 'center',
+  type? : TableCellType,
 }
 
+
 export interface TableConfig {
-  headers: TableHeader[][],
+  headers : TableHeader[][],
   // rows: Record<string, any>[]
-  settings?: {
-    actions: boolean,
-    translationPrefix: string
+  settings? : {
+    actions : boolean,
+    translationPrefix : string
   },
 }
+
 
 export default defineComponent({
   props: {
     config: {
       type     : Object as TableConfig,
-      required : true
+      required : true,
     },
     rows: {
       type     : Object as Record<string, any>[],
-      required : true
-    }
+      required : true,
+    },
   },
   setup (props) {
     const columnCount = computed(() => {
@@ -142,7 +146,7 @@ export default defineComponent({
       if (!Array.isArray(header)) {
         header.key = key
         headerArr  = [
-          header
+          header,
         ]
       }
 
@@ -159,8 +163,8 @@ export default defineComponent({
     return {
       ...toRefs(config),
       TableCellType,
-      columnCount
+      columnCount,
     }
-  }
+  },
 })
 </script>

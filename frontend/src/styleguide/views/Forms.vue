@@ -24,14 +24,14 @@
                 <svg
                   class="h-4 w-4"
                   fill="none"
-                  viewBox="0 0 24 24"
                   stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M6 18L18 6M6 6l12 12"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
               </button>
@@ -47,21 +47,21 @@
                   <svg
                     class="h-6 w-6"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
+                      d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
                     />
                   </svg>
                 </span>
 
                 <input
-                  type="text"
                   class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-blue-600"
+                  type="text"
                 >
               </div>
             </div>
@@ -166,14 +166,14 @@
     </h3>
     <div class="p-6 bg-white rounded-lg shadow-md">
       <DataField
+        class="mb-2"
         data="Data"
         label="Label"
-        class="mb-2"
       />
       <DataField
+        class="mb-2"
         data="Data"
         label="Label"
-        class="mb-2"
       />
     </div>
   </div>
@@ -181,15 +181,17 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import SearchBar from '../../components/SearchBar.vue'
 import DataField from '../../components/base/DataField.vue'
+import SearchBar from '../../components/SearchBar.vue'
+
 
 interface User {
-  username: string;
-  email: string;
-  password: string;
-  confirm: string;
+  username : string;
+  email : string;
+  password : string;
+  confirm : string;
 }
+
 
 export default defineComponent({
   components: {DataField, SearchBar},

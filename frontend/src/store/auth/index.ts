@@ -4,10 +4,11 @@
  *
  *
  */
-import { AuthStore} from './Auth'
-import {Session} from './SessionStorage'
+import { AuthStore } from './Auth'
+import { Session } from './SessionStorage'
+
 
 export {
   AuthStore,
-  Session
+  Session,
 }

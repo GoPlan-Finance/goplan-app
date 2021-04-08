@@ -1,9 +1,7 @@
-
-
 export class Session {
 
 
-  public static get<T> (key: string, defaultValue? : T) : T|undefined {
+  public static get<T> (key : string, defaultValue? : T) : T | undefined {
     const value = window.sessionStorage.getItem(key)
 
     if (value === null) {
@@ -13,16 +11,16 @@ export class Session {
     return JSON.parse(value)
   }
 
-  public static set<T> (key: string, value : T) :void {
+  public static set<T> (key : string, value : T) : void {
 
     window.sessionStorage.setItem(key, JSON.stringify(value))
   }
 
-  public static clear () :void {
+  public static clear () : void {
     window.sessionStorage.clear()
   }
 
-  public static async currentSession (): Promise<Parse.Session | null> {
+  public static async currentSession () : Promise<Parse.Session | null> {
     return await Parse.Session.current()
   }
 

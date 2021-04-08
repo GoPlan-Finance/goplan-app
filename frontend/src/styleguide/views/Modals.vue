@@ -17,16 +17,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
-import ButtonDefault, {ButtonType} from '../../components/base/ButtonDefault.vue'
+import { defineComponent } from 'vue'
+import ButtonDefault, { ButtonType } from '../../components/base/ButtonDefault.vue'
 import Modal from '../../components/Modal.vue'
+
 
 export default defineComponent({
   components: {Modal, ButtonDefault},
   setup () {
     return {
-      ButtonType
+      ButtonType,
     }
-  }
+  },
 })
 </script>

@@ -37,9 +37,9 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
+import { Watchlist } from '/common/models'
 import dayjs from 'dayjs'
-import {AssetSymbol, Watchlist} from '../../../common/models'
+import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import DataTable from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
 
@@ -68,9 +68,9 @@ export default defineComponent({
         },
         settings: {
           actions           : false,
-          translationPrefix : 'watchlist.table'
-        }
-      }
+          translationPrefix : 'watchlist.table',
+        },
+      },
     })
 
 

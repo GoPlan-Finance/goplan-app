@@ -3,26 +3,27 @@
     <DataField
       v-for="(detail, index) in data.details"
       :key="index"
-      :type="detail.type"
       :data="detail.data"
       :label="$t('quote.' + detail.label)"
+      :type="detail.type"
       class="mb-2"
     />
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, reactive} from 'vue'
-import {AssetSymbol} from '../../../common/models'
+import { AssetSymbol } from '/common/models'
+import { defineComponent, onBeforeMount, reactive } from 'vue'
+import { CompanyQuote } from '../../backend/src/cloud/DataProviders/providers/types' // @todo
 import DataField from './base/DataField.vue'
-import {CompanyQuote} from '../../../backend/src/cloud/DataProviders/providers/types'
+
 
 export default defineComponent({
   components : {DataField},
   props      : {
     assetSymbol: {
       type     : AssetSymbol,
-      required : true
+      required : true,
     },
   },
   setup (props) {
@@ -34,8 +35,8 @@ export default defineComponent({
 
     onBeforeMount(async () => {
 
-      const info: CompanyQuote = await Parse.Cloud.run('Assets--GetQuote', {
-        assetSymbolId: props.assetSymbol.id
+      const info : CompanyQuote = await Parse.Cloud.run('Assets--GetQuote', {
+        assetSymbolId: props.assetSymbol.id,
       })
 
       data.info = info
@@ -44,85 +45,85 @@ export default defineComponent({
         {
           type  : 'money',
           label : 'open',
-          data  : info.open
+          data  : info.open,
         },
         {
           type  : 'money',
           label : 'previousClose',
-          data  : info.previousClose
+          data  : info.previousClose,
         },
         {
           type  : 'percent',
           label : 'change_percent',
-          data  : info.changesPercentage
+          data  : info.changesPercentage,
         },
         {
           type  : 'moneyChange',
           label : 'change',
-          data  : info.change
+          data  : info.change,
         },
         {
           type  : 'moneyRange',
           label : 'dayRange',
           data  : [
-            info.dayLow, info.dayHigh
-          ]
+            info.dayLow, info.dayHigh,
+          ],
         },
         {
           type  : 'moneyRange',
           label : 'yearRange',
           data  : [
-            info.yearLow, info.yearHigh
-          ]
+            info.yearLow, info.yearHigh,
+          ],
         },
         {
           type  : 'number',
           label : 'marketCap',
-          data  : info.marketCap
+          data  : info.marketCap,
         },
         {
           type  : 'money',
           label : 'priceAvg50',
-          data  : info.priceAvg50
+          data  : info.priceAvg50,
         },
         {
           type  : 'money',
           label : 'priceAvg200',
-          data  : info.priceAvg200
+          data  : info.priceAvg200,
         },
         {
           type  : 'number',
           label : 'volume',
-          data  : info.volume
+          data  : info.volume,
         },
         {
           type  : 'number',
           label : 'avgVolume',
-          data  : info.avgVolume
+          data  : info.avgVolume,
         },
         {
           label : 'exchange',
-          data  : info.exchange
+          data  : info.exchange,
         },
         {
           type  : 'number',
           label : 'eps',
-          data  : info.eps
+          data  : info.eps,
         },
         {
           type  : 'number',
           label : 'pe',
-          data  : info.pe
+          data  : info.pe,
         },
         {
           type  : 'date',
           label : 'earningsAnnouncement',
-          data  : info.earningsAnnouncement
+          data  : info.earningsAnnouncement,
         },
         {
           type  : 'number',
           label : 'sharesOutstanding',
-          data  : info.sharesOutstanding
+          data  : info.sharesOutstanding,
         },
 
       ]
@@ -131,6 +132,6 @@ export default defineComponent({
     return {
       data,
     }
-  }
+  },
 })
 </script>

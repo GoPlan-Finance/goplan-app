@@ -4,10 +4,11 @@
  *
  */
 // noinspection ES6PreferShortImport
-import {AssetSymbol} from '../../../../../common/models'
-import dayjs from 'dayjs'
+import { AssetSymbol } from '/common/models'
+import * as dayjs from 'dayjs'
 
-import {DataProvider} from '../../DataProviders/providers'
+import { DataProvider } from '../../DataProviders/providers'
+
 
 Parse.Cloud.define('Assets--GetEndOfDay', async (request) => {
   if (!request.user) {

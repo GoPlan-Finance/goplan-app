@@ -46,7 +46,7 @@
     "vue-router": "^4.0.6"
   },
   "devDependencies": {
-    "@intlify/vite-plugin-vue-i18n": "^2.0.4",
+    "@intlify/vite-plugin-vue-i18n": "^2.1.1",
     "@tailwindcss/forms": "^0.3.2",
     "@types/concurrently": "^6.0.1",
     "@types/crypto-js": "^4.0.1",

@@ -1,4 +1,5 @@
-import {requiresAuthentication, schema} from './base/defaults'
+import { requiresAuthentication, schema } from './base/defaults'
+
 
 export default schema('Watchlist', {
   fields: {
@@ -7,11 +8,11 @@ export default schema('Watchlist', {
     symbols   : {type: 'Relation', targetClass: 'AssetSymbol'},
   },
   indexes: {
-    name: {name: 1}
+    name: {name: 1},
   },
   classLevelPermissions: {
     ...requiresAuthentication([
-      'find', 'get', 'update', 'create', 'delete'
+      'find', 'get', 'update', 'create', 'delete',
     ]),
   },
 })

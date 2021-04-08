@@ -4,21 +4,23 @@
  *
  */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-type LiveQueryUpdateFn<T> = (obj: T) => void
+type LiveQueryUpdateFn<T> = (obj : T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
-export /*abstract*/ class BaseObject extends Parse.Object {
 
-  constructor (className: string) {
+/*abstract*/
+export class BaseObject extends Parse.Object {
+
+  constructor (className : string) {
     super(className)
   }
 
-  get createdAt (): Date {
+  get createdAt () : Date {
     return this.get('createdAt')
   }
 
-  get updatedAt (): Date {
+  get updatedAt () : Date {
     return this.get('updatedAt')
   }
 
@@ -37,13 +39,13 @@ export /*abstract*/ class BaseObject extends Parse.Object {
    * @param removeFn
    */
   public static async liveQuery<T extends BaseObject> (
-    q: Parse.Query<T>,
-    objects: T[] | null,
-    updateFn?: LiveQueryUpdateFn<T>,
-    removeFn?: LiveQueryUpdateFn<T>,
-  ): Promise<Parse.LiveQuerySubscription> {
+    q : Parse.Query<T>,
+    objects : T[] | null,
+    updateFn? : LiveQueryUpdateFn<T>,
+    removeFn? : LiveQueryUpdateFn<T>,
+  ) : Promise<Parse.LiveQuerySubscription> {
 
-    const replace = async (object: T) => {
+    const replace = async (object : T) => {
 
       if (updateFn) {
         await updateFn(object)
@@ -61,7 +63,7 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       }
     }
 
-    const remove = async (object: T) => {
+    const remove = async (object : T) => {
 
       if (removeFn) {
         await removeFn(object)
@@ -101,9 +103,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
 
 
   public static async getOrNull<T extends BaseObject> (
-    docId: string,
-    useMasterKey = false
-  ): Promise<T> {
+    docId : string,
+    useMasterKey = false,
+  ) : Promise<T> {
 
     const query = new Parse.Query<T>(this)
 
@@ -111,9 +113,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
   }
 
   public static async getObjectById<T extends BaseObject> (
-    docId: string,
-    useMasterKey = false
-  ): Promise<T> {
+    docId : string,
+    useMasterKey = false,
+  ) : Promise<T> {
     const doc = await this.getOrNull<T>(docId, useMasterKey)
 
     if (doc) {
@@ -123,10 +125,10 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
 
-  public static async findBy <T extends BaseObject> (
-    params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
-    useMasterKey = false
-  ): Promise<BaseObject[]> {
+  public static async findBy<T extends BaseObject> (
+    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+    useMasterKey = false,
+  ) : Promise<BaseObject[]> {
 
     const query = new Parse.Query<T>(this)
 
@@ -140,10 +142,10 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     return query.find(useMasterKey ? USE_MASTER_KEY : undefined)
   }
 
-  public static async findOneBy <T extends BaseObject> (
-    params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
-    useMasterKey = false
-  ): Promise<T | undefined> {
+  public static async findOneBy<T extends BaseObject> (
+    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+    useMasterKey = false,
+  ) : Promise<T | undefined> {
 
     const query = new Parse.Query(this)
 
@@ -158,9 +160,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
 
 
   public static async findOrCreate<T extends BaseObject> (
-    params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
-    useMasterKey = false
-  ): Promise<T> {
+    params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
+    useMasterKey = false,
+  ) : Promise<T> {
 
     const obj = await this.findOneBy<T>(params, useMasterKey)
 
@@ -177,9 +179,9 @@ export /*abstract*/ class BaseObject extends Parse.Object {
   }
 
   public async maybeFetchPointer<T extends BaseObject> (
-    params: string,
+    params : string,
     useMasterKey = false,
-  ): Promise<T> {
+  ) : Promise<T> {
 
     const value : T | Parse.Pointer = this.get(params)
 

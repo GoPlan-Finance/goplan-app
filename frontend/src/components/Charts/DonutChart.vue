@@ -1,14 +1,15 @@
 <template>
   <apexchart
-    type="donut"
-    height="350"
     :options="chartOptions"
     :series="series"
+    height="350"
+    type="donut"
   />
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, toRefs} from 'vue'
+import { defineComponent, reactive, toRefs } from 'vue'
+
 
 export default defineComponent({
   setup () {
@@ -22,17 +23,17 @@ export default defineComponent({
             breakpoint : 480,
             options    : {
               chart: {
-                width: 200
+                width: 200,
               },
               legend: {
-                position: 'bottom'
-              }
-            }
-          }
-        ]
+                position: 'bottom',
+              },
+            },
+          },
+        ],
       },
       series: [
-        44, 55, 41, 17, 15
+        44, 55, 41, 17, 15,
       ],
     })
 

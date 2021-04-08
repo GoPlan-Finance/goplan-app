@@ -2,8 +2,8 @@
   <HeadlineActions
     :headline="$t('transactions.headline')"
   >
-    <ImportTransactionsModal />
-    <buy-sell-asset />
+    <ImportTransactionsModal/>
+    <buy-sell-asset/>
   </HeadlineActions>
 
   <DataTable
@@ -11,26 +11,47 @@
     :rows="rows"
   >
     <template
-      #symbol="{ value }"
+      #symbol="{ row }"
     >
       <AppLink
-        :ticker="value.symbol"
-        to="ticker_details"
+        v-if="row.symbol"
+        :ticker="row.symbol"
         class="font-bold"
+        to="ticker_details"
       >
-        {{ value.name }}
+        <p class="font-normal text-sm">
+          {{ row.name }}
+        </p>
       </AppLink>
+      <span v-else-if="row.importRawData && row.importRawData.description">
+        {{ row.importRawData.description }}
+      </span>
+      <span v-else>
+          <!--N/A-->
+      </span>
     </template>
     <template
       #ticker="{ row }"
     >
       <AppLink
+        v-if="row.symbol"
         :ticker="row.symbol.symbol"
+        class="font-bold"
         to="ticker_details"
-        class="lg:text-gray-500"
       >
-        {{ row.symbol.symbol }}
+        <p class="mr-3 font-bold">
+          {{ row.symbol.symbol }}
+        </p>
+        <p class="font-normal text-sm">
+          {{ row.symbol.name }}
+        </p>
       </AppLink>
+      <span v-else-if="row.importRawData && row.importRawData.symbol">
+        {{ row.importRawData.symbol }}
+      </span>
+      <span v-else>
+          <!--N/A-->
+      </span>
     </template>
     <template
       #type="{ value }"
@@ -50,72 +71,81 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
-import {Transaction} from '../models'
+import { Transaction } from '/common/models'
+import { formatCurrency } from '/common/utils'
+import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import DataTable from '../components/DataTable.vue'
-import ImportTransactionsModal from '../components/ImportTransactionsModal.vue'
-import AppLink from '../components/router/AppLink.vue'
-import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
-import HeadlineActions from '../components/HeadlineActions.vue'
-import {formatCurrency} from '../../../common/utils'
+import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
+import DataTable from '../components/DataTable.vue'
+import HeadlineActions from '../components/HeadlineActions.vue'
+import AppLink from '../components/router/AppLink.vue'
+import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
 
 
 export default defineComponent({
-  components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal
+  components : {
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
   },
   setup () {
     const data = reactive({
       rows   : [],
       config : {
-        headers: {
-          type       : {},
-          executedAt : {
+        headers      : {
+          type               : {},
+          value              : {},
+          executedAt         : {
             justify : 'right',
-            format  : 'date'
+            format  : 'date',
           },
-          symbol: {
-            sortKey: 'name'
+          symbol             : {
+            sortKey : 'name',
           },
-          ticker: {
-            sortKey: 'name'
+          ticker             : {
+            sortKey : 'name',
           },
-          quantity: {
+          quantity           : {
             justify : 'right',
             format  : value => {
               return value % 1 > Number.EPSILON ? value : Number(value).toFixed(0)
             },
           },
-          price: {
+          price              : {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency, false)
             },
           },
-          value: {
+          totalExcludingFees : {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
-          }
+          },
+          fees               : {
+            justify : 'right',
+            format  : (value, row) => {
+              return formatCurrency(value, row.currency)
+            },
+          },
         },
-        headerLayout: [
+        headerLayout : [
           'type',
+          'executedAt',
           [
-            'symbol', 'ticker'
+            'symbol', 'ticker',
           ],
           'quantity',
           'price',
-          'value'
+          ['totalExcludingFees' ],
+          'fees',
         ],
-        settings: {
+        settings     : {
           actions           : false,
-          translationPrefix : 'transactions.table'
+          translationPrefix : 'transactions.table',
         },
-        filters: {
-          type: {
+        filters      : {
+          type : {
             value   : '',
             options : [
               {
@@ -130,23 +160,44 @@ export default defineComponent({
                 value   : 'SELL',
                 display : 'Sell',
               },
-            ]
-          }
+              {
+                value   : 'DIVIDENDS',
+                display : 'Dividends',
+              },
+              {
+                value   : 'FEES',
+                display : 'Fees',
+              },
+              {
+                value   : 'TRANSFER',
+                display : 'Transfers',
+              },
+            ],
+          },
         },
-        search: {
-          function: (transaction, searchString) => {
-            return transaction.symbol.name.toLowerCase().includes(searchString)
-                || transaction.symbol.symbol.toLowerCase().startsWith(searchString)
-                || dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchString)
-          }
-        }
-      }
+        search       : {
+          function : (transaction, searchString) => {
+            const searchVal = searchString.toLowerCase()
+
+            if (transaction.symbol
+                && (transaction.symbol.name.toLowerCase().includes(searchVal)
+                    || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
+            ) {
+              return true
+            }
+
+            return dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
+          },
+        },
+      },
     })
+
 
     let liveSubscription = null
 
     onBeforeMount(async () => {
-      const q          = new Parse.Query(Transaction)
+      const q = new Parse.Query(Transaction)
+      q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, data.rows)

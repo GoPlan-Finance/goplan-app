@@ -57,16 +57,17 @@
 
 <script lang="ts">
 
-import {defineComponent, inject, ref, } from 'vue'
-import {User} from '../../../../../common/models'
-import {AuthStore} from '../../../store'
+import { User } from '/common/models'
+import { AuthStore } from '/store'
+import { defineComponent, inject, ref } from 'vue'
+
 
 export default defineComponent({
   emits: [
-    'keyValid'
+    'keyValid',
   ],
   setup (props, {emit}) {
-    const authStore = inject < AuthStore >('$authStore') as AuthStore
+    const authStore = inject<AuthStore>('$authStore') as AuthStore
 
     const acceptTesting = ref(false)
     const masterKey     = ref('')
@@ -74,7 +75,7 @@ export default defineComponent({
 
 
     const createKey = async () => {
-      const user      = await User.currentAsync() as Parse.User
+      const user = await User.currentAsync() as Parse.User
 
       const clientKey = await authStore.createMasterKey(masterKey.value)
       user.set('clientKey', clientKey)

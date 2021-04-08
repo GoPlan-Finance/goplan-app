@@ -13,10 +13,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import StyleguideSidebar from '../components/StyleguideSidebar.vue'
 
+
 export default defineComponent({
-  components: {StyleguideSidebar}
+  components: {StyleguideSidebar},
 })
 </script>
