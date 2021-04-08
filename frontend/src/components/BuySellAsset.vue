@@ -27,7 +27,7 @@
         <label>
           <div class="text-gray-400 ml-2 mb-1">
             Asset
-          </div> 
+          </div>
           <asset-search v-model="symbol" />
         </label>
         <label class="col-start-1">
@@ -36,7 +36,7 @@
             Date
           </div>
           <input
-            v-model="date"
+            v-model="executedAt"
             class="rounded w-full"
             placeholder="QTY"
             type="date"
@@ -69,13 +69,13 @@
     <template #actions>
       <ButtonDefault
         label="Buy"
-        :disabled="!price || !date || !quantity"
+        :disabled="!price || !executedAt || !quantity"
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
         @click="addTransaction('buy')"
       />
       <ButtonDefault
         label="Sell"
-        :disabled="!price || !date || !quantity"
+        :disabled="!price || !executedAt || !quantity"
         class="bg-red-500"
         @click="addTransaction('sell')"
       />
@@ -103,10 +103,10 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const symbol   = ref(props.assetSymbol)
-    const quantity = ref(null)
-    const price    = ref(null)
-    const date     = ref(dayjs().format('YYYY-MM-DD'))
+    const symbol  :AssetSymbol = ref(props.assetSymbol)
+    const quantity             = ref(null)
+    const price                = ref(null)
+    const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
 
     const addTransaction = async (type: 'buy' | 'sell') => {
@@ -115,16 +115,17 @@ export default defineComponent({
 
       t.set('quantity', quantity.value)
       t.set('price', price.value)
-      t.set('date', dayjs(date.value).toDate())
+      t.set('executedAt', dayjs(executedAt.value).toDate())
       t.set('type', type.toUpperCase())
       t.set('symbol', symbol.value)
+      t.set('currency', symbol.value.currency)
 
       await t.save()
       alert('saved :)')
 
-      quantity.value = null
-      price.value    = null
-      date.value     = dayjs().format('YYYY-MM-DD')
+      quantity.value   = null
+      price.value      = null
+      executedAt.value = dayjs().format('YYYY-MM-DD')
     }
 
     // watch(symbol, async () => {
@@ -135,7 +136,7 @@ export default defineComponent({
     return {
       addTransaction,
       symbol,
-      date,
+      executedAt,
       quantity,
       price
     }

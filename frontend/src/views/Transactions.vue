@@ -1,83 +1,72 @@
 <template>
-  <div>
-    <HeadlineActions>
-      <h1 class="text-gray-700 text-3xl font-medium">
-        {{ $t('transactions.headline') }}
-      </h1>
-      <div class="flex gap-2">
-        <SearchField
-          v-model="search"
-        />
-        <label>
-          <select
-            id="type"
-            v-model="typeFilter.value"
-            class="rounded-lg border-0"
-            name="type"
-          >
-            <option
-              v-for="option in typeFilter.options"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.display }}
-            </option>
-          </select>
-        </label>
+  <HeadlineActions
+    :headline="$t('transactions.headline')"
+  >
+    <SearchField
+      v-model="search"
+    />
+    <label>
+      <select
+        id="type"
+        v-model="typeFilter.value"
+        class="rounded-lg border-0"
+        name="type"
+      >
+        <option
+          v-for="option in typeFilter.options"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.display }}
+        </option>
+      </select>
+    </label>
 
-        <span class="pl-4">
-          <ImportTransactionsModal />
-        </span>
+    <ImportTransactionsModal />
+    <buy-sell-asset />
+  </HeadlineActions>
 
-        <span class="pl-4">
-          <buy-sell-asset />
-        </span>
-      </div>
-    </HeadlineActions>
-
-    <DataTable
-      :config="config"
-      :rows="sortedRows"
+  <DataTable
+    :config="config"
+    :rows="sortedRows"
+  >
+    <template
+      #symbol="{ value }"
     >
-      <template
-        #symbol="{ value }"
+      <AppLink
+        :ticker="value.symbol"
+        to="ticker_details"
+        class="font-bold"
       >
-        <AppLink
-          :ticker="value.symbol"
-          to="ticker_details"
-          class="font-bold"
-        >
-          {{ value.name }}
-        </AppLink>
-      </template>
-      <template
-        #ticker="{ row }"
+        {{ value.name }}
+      </AppLink>
+    </template>
+    <template
+      #ticker="{ row }"
+    >
+      <AppLink
+        :ticker="row.symbol.symbol"
+        to="ticker_details"
+        class="lg:text-gray-500"
       >
-        <AppLink
-          :ticker="row.symbol.symbol"
-          to="ticker_details"
-          class="lg:text-gray-500"
-        >
-          {{ row.symbol.symbol }}
-        </AppLink>
-      </template>
-      <template
-        #type="{ value }"
+        {{ row.symbol.symbol }}
+      </AppLink>
+    </template>
+    <template
+      #type="{ value }"
+    >
+      <div
+        :class="value ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
+        class="flex gap-2"
       >
-        <div
-          :class="value ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
-          class="flex gap-2"
-        >
-          <ArrowCircleLeftIcon
-            :class="value ==='BUY'? 'transform rotate-180' : ''"
-            class="h-6 w-6"
-          />
-
-          {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
-        </div>
-      </template>
-    </DataTable>
-  </div>
+        <ArrowCircleLeftIcon
+          :class="value ==='BUY'? 'transform rotate-180' : ''"
+          class="h-6 w-6"
+        />
+        {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
+      </div>
+    </template>
+  </DataTable>
 </template>
 
 <script lang="ts">

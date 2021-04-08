@@ -1,7 +1,7 @@
-import {BaseObject} from './base/BaseObject'
+import {CacheableObject} from './base/CacheableObject'
 
 
-export class StockExchange extends BaseObject {
+export class StockExchange extends CacheableObject {
 
   static className = 'StockExchange'
 

@@ -1,6 +1,6 @@
 import {requiresAnonymous, requiresAuthentication, schema} from './base/defaults'
 
-export const User = schema('_User', {
+export default schema('_User', {
   fields: {
     email         : {type: 'String'},
     authData      : {type: 'Object'},
@@ -25,7 +25,6 @@ export const User = schema('_User', {
 
     protectedFields: {
       '*': [
-        'email',
         'authData',
         'emailVerified',
         'password',

@@ -45,7 +45,6 @@ export class AuthStore {
     if (!user || !await this.hasClientKey()) {
       throw 'No client key'
     }
-    debugger
     const clientKey = user.get('clientKey') as EncryptedKey
 
     const derived = Crypto.PBKDF2(masterKey, clientKey.s)

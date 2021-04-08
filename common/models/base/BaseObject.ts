@@ -3,6 +3,7 @@
  *
  *
  */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 type LiveQueryUpdateFn<T> = (obj: T) => void
 
 const USE_MASTER_KEY = {useMasterKey: true}
@@ -22,7 +23,6 @@ export /*abstract*/ class BaseObject extends Parse.Object {
   }
 
   public static register () : void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     Parse.Object.registerSubclass(this.className, this)
   }
@@ -133,7 +133,6 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     for (const [
       k, v
     ] of Object.entries(params)) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       query.equalTo(k, v)
     }
@@ -141,10 +140,10 @@ export /*abstract*/ class BaseObject extends Parse.Object {
     return query.find(useMasterKey ? USE_MASTER_KEY : undefined)
   }
 
-  public static async findOneBy (
+  public static async findOneBy <T extends BaseObject> (
     params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false
-  ): Promise<BaseObject | undefined> {
+  ): Promise<T | undefined> {
 
     const query = new Parse.Query(this)
 
@@ -154,42 +153,41 @@ export /*abstract*/ class BaseObject extends Parse.Object {
       query.equalTo(k, v)
     }
 
-    return query.first(useMasterKey ? USE_MASTER_KEY : undefined)
+    return query.first(useMasterKey ? USE_MASTER_KEY : undefined) as Promise<T>
   }
 
 
-  public static async findOrCreate (
+  public static async findOrCreate<T extends BaseObject> (
     params: { [key: string]: string | boolean | number | BaseObject | Parse.Pointer },
-    useMasterKey = false): Promise<BaseObject> {
+    useMasterKey = false
+  ): Promise<T> {
 
-    const obj = await this.findOneBy(params, useMasterKey)
+    const obj = await this.findOneBy<T>(params, useMasterKey)
 
     if (obj) {
       return obj
     }
 
-    //         const ctor = this.constructor as typeof BaseObject;
-    //         console.log(ctor.className); // true
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
-    const obj2 = new this(this.className) // the `this` in `this.className` refer to the static child class
+    const obj2 = new this(this.className) as T// the `this` in `this.className` refer to the static child class
 
     obj2.set(params)
 
-    return obj2.save(null, useMasterKey ? USE_MASTER_KEY : undefined)
+    return obj2.save(null, useMasterKey ? USE_MASTER_KEY : undefined) as Promise<T>
   }
 
   public async maybeFetchPointer<T extends BaseObject> (
-    param: string,
+    params: string,
+    useMasterKey = false,
   ): Promise<T> {
-    const value : T | Parse.Pointer = this.get(param)
+
+    const value : T | Parse.Pointer = this.get(params)
 
     if (value instanceof BaseObject) {
       return value as T
     }
 
-    return BaseObject.getObjectById<T>(value.objectId)
+    return BaseObject.getObjectById<T>(value.objectId, useMasterKey)
   }
 
 }

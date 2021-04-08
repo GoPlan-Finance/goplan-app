@@ -4,9 +4,13 @@
  *
  */
 import * as Types from '../types'
+
 import dayjs, {Dayjs} from 'dayjs'
 
 import * as FMPApi from 'financialmodelingprep-openapi'
+import {AxiosError} from 'axios'
+import {Mutex} from 'async-mutex'
+import {StringKeys} from '../../../../../../common/utils'
 
 
 // // Simple Examples
@@ -25,6 +29,9 @@ import * as FMPApi from 'financialmodelingprep-openapi'
 
 export class FMP implements Types.DataProviderInterface {
 
+    throttleRequestQuotaMs = 0
+    mutex = new Mutex()
+
     private config: FMPApi.Configuration
 
     constructor (apiKey: string) {
@@ -38,6 +45,21 @@ export class FMP implements Types.DataProviderInterface {
     }
 
 
+    private static handleError (error: AxiosError): void {
+      const response = error.response
+
+      if (response.status === 429) {
+        const s  = response.data['X-Rate-Limit-Retry-After-Seconds'] || 0
+        const ms = response.data['X-Rate-Limit-Retry-After-Milliseconds'] || 0
+
+        const err             = new Types.APIError(Types.APIErrorType.QUOTA_ERROR)
+        err.retryAfterSeconds = s + (ms / 1000.0)
+        throw err
+      }
+
+      throw new Types.APIError(Types.APIErrorType.UNKNOWN_ERROR, response)
+    }
+
     async fetchSupportedSymbols (): Promise<Array<Types.AssetSymbol>> {
 
       const listApi = new FMPApi.ListApi(this.config)
@@ -45,26 +67,63 @@ export class FMP implements Types.DataProviderInterface {
       const response = await listApi.listSymbols('available-traded')
       return response.data
     }
-    async getCompanyProfile (symbol :string): Promise<Types.CompanyProfile> {
 
-      const data = await this.getCompanyProfiles([
-        symbol
-      ])
+    async getCompanyProfile (symbol: string): Promise<Types.CompanyProfile> {
 
-      return data.pop()
+      try {
+        const data = await this.getCompanyProfiles([
+          symbol
+        ])
+
+        return data.pop()
+
+      } catch (error) {
+        FMP.handleError(error)
+      }
+
     }
 
-    async getCompanyProfiles (symbol : string[]): Promise<Types.CompanyProfile[]> {
+    async getCompanyProfiles (symbol: string[]): Promise<Types.CompanyProfile[]> {
 
       const api = new FMPApi.CompanyValuationApi(this.config)
 
       const response = await api.profile(symbol.join(','))
 
-      return response.data
+      return response.data.map(profile => {
+
+        profile.fullTimeEmployees = typeof profile.fullTimeEmployees === 'string' ? Number.parseInt(profile.fullTimeEmployees) : null
+
+        const maybeNull = (value: StringKeys<Types.CompanyProfile>) => {
+          const val = profile[value] && String(profile[value]).length ? profile[value]  as string : null
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          profile[value] = val
+        }
+
+        maybeNull('companyName')
+        maybeNull('ceo')
+        maybeNull('currency')
+        maybeNull('description')
+        maybeNull('website')
+        maybeNull('ipoDate')
+        maybeNull('image')
+        maybeNull('zip')
+        maybeNull('industry')
+        maybeNull('sector')
+        maybeNull('phone')
+        maybeNull('address')
+        maybeNull('country')
+        maybeNull('state')
+        maybeNull('city')
+
+
+        return profile
+      })
     }
 
 
-    async getCompanyQuote (symbol :string): Promise<Types.CompanyQuote> {
+    async getCompanyQuote (symbol: string): Promise<Types.CompanyQuote> {
 
       const data = await this.getCompanyQuotes([
         symbol
@@ -73,7 +132,7 @@ export class FMP implements Types.DataProviderInterface {
       return data.pop()
     }
 
-    async getCompanyQuotes (symbol :string[]): Promise<Types.CompanyQuote[]> {
+    async getCompanyQuotes (symbol: string[]): Promise<Types.CompanyQuote[]> {
 
       const api = new FMPApi.CompanyValuationApi(this.config)
 
@@ -92,7 +151,7 @@ export class FMP implements Types.DataProviderInterface {
 
       const historyApi = new FMPApi.HistoryApi(this.config)
 
-      const query = async (out: Types.SymbolDataResolution, res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour') :Promise<Types.TimeSeriesData> => {
+      const query = async (out: Types.SymbolDataResolution, res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour'): Promise<Types.TimeSeriesData> => {
         const response = await historyApi.intraDayPrices(symbol, res)
         return {resolution: out, data: response.data.reverse()}
       }
