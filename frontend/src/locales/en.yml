@@ -28,7 +28,8 @@ transactions:
     dividends: Dividends
     totalExcludingFees: Total Excluding Fees
     executedAt: Date
-    symbol: Symbol
+    symbol: Name
+    ticker: Ticker
     price: Price
     quantity: Quantity
     sell: Sell

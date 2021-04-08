@@ -1,27 +1,52 @@
 <template>
+  <div class="flex justify-end gap-2 mb-2">
+    <SearchField
+      v-if="config.search"
+      v-model="search"
+    />
+    <label
+      v-for="filter in filters"
+      :key="filter"
+    >
+      <select
+        v-model="filter.value"
+        class="rounded-lg border-0"
+        name="type"
+      >
+        <option
+          v-for="option in filter.options"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.display }}
+        </option>
+      </select>
+    </label>
+  </div>
+
   <div
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
   >
-    <span
-      v-for="(row, rowIndex) in headers"
+    <div
+      v-for="(row, rowIndex) in headerLayout"
       :key="rowIndex"
       class="grid items-center"
     >
-      <span
-        v-for="(item, itemIndex) in row"
-        :key="itemIndex"
-        :class="{
-          'lg:text-right': item.justify === 'right',
-          'lg:text-center': item.justify === 'center'
-        }"
+      <div
+        v-for="(subRow, subRowIndex) in row"
+        :key="subRowIndex"
         class="cursor-pointer hover:text-gray-600 select-none"
-        @click="setSort(item)"
+        :class="{
+          'lg:text-right': headers[subRow].justify === 'right',
+          'lg:text-center': headers[subRow].justify === 'center'
+        }"
+        @click="setSort(subRow)"
       >
-        {{ $t(settings.translationPrefix + '.' + item.key) }}
-      </span>
-    </span>
-    <span v-if="settings?.actions" />
+        {{ $t(settings.translationPrefix + '.' + subRow) }}
+      </div>
+    </div>
+    <div v-if="settings?.actions" />
   </div>
   <div
     v-for="(row, rowIndex) in rowsInternal"
@@ -29,37 +54,38 @@
     :class="`lg:grid-cols-${columnCount}`"
     class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
   >
-    <span
-      v-for="(cell, cellIndex) in headers"
+    <div
+      v-for="(cell, cellIndex) in headerLayout"
       :key="cellIndex"
       class="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-1 gap-1 items-center"
     >
-      <span
+      <div
         v-for="(header, headerIndex) in cell"
         :key="headerIndex"
         :class="[
           header.classes,
           {
-            'lg:text-right': header.justify === 'right',
-            'lg:text-center': header.justify === 'center'
+            'lg:text-right': headers[header].justify === 'right',
+            'lg:text-center': headers[header].justify === 'center'
           }
         ]"
       >
-        <span
-          class="block lg:hidden text-sm font-light text-gray-500"
+        <div
+          class="block lg:hidden text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
+          @click="setSort(header)"
         >
-          {{ $t(settings.translationPrefix + '.' + header.key) }}
-        </span>
+          {{ $t(settings.translationPrefix + '.' + header) }}
+        </div>
         <slot
-          :name="header.key"
+          :name="header"
           :row="row"
-          :value="row[header.key]"
+          :value="row[header]"
         >
-          {{ formatValue(header, { value: row[header.key], row }) }}
+          {{ formatValue(headers[header],{value: row[header] , row}) }}
         </slot>
-      </span>
-    </span>
-    <span
+      </div>
+    </div>
+    <div
       v-if="settings?.actions"
       class="grid items-center"
     >
@@ -67,87 +93,94 @@
         :row="rowIndex"
         name="actions"
       />
-    </span>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import {Money} from 'ts-money'
+import {computed, defineComponent, reactive, toRefs, ref} from 'vue'
 import * as dayjs from 'dayjs'
-import { Money } from 'ts-money'
-import { computed, defineComponent, reactive, toRefs } from 'vue'
-
+import SearchField from '../components/base/SearchField.vue'
 
 export type TableRow = Record<string, unknown>
 
-type FormatFn = (row : unknown, value : unknown) => void
-
+type FormatFn = (row: unknown, value: unknown) => void
+type SearchFn = (value: unknown, searchString: string) => void
 
 export interface TableHeader {
-  key? : string,
-  classes? : string,
-  justify? : 'left' | 'right' | 'center',
-  sortKey? : string
+  key?: string,
+  classes?: string,
+  justify?: 'left' | 'right' | 'center',
+  sortKey?: string
   format? : 'date' | 'datetime' | 'time' | FormatFn
 }
 
-
 export interface TableConfig {
-  headers : TableHeader[][],
-  settings? : {
-    actions : boolean,
-    translationPrefix : string
+  headers: TableHeader[][],
+  headerLayout: string[]|string[][],
+  settings?: {
+    actions: boolean,
+    translationPrefix: string
   },
+  filters: Record<string, any>,
+  search: {
+    function: SearchFn
+  }
 }
-
 
 interface SortSettings {
-  header : TableHeader,
-  order : boolean
+  header: TableHeader,
+  order: boolean
 }
 
-
 export default defineComponent({
-  props: {
+  components : {SearchField},
+  props      : {
     config: {
       type     : Object as TableConfig,
-      required : true,
+      required : true
     },
     rows: {
       type     : Object as TableRow[],
-      required : true,
-    },
+      required : true
+    }
   },
   setup (props) {
-    const sort : SortSettings = reactive({
+    const sort: SortSettings = reactive({
       header : null,
-      order  : true,
+      order  : true
     })
 
     const columnCount = computed(() => {
       const actions = props.config.settings.actions ? 1 : 0
-      return Object.keys(props.config.headers).length + actions
+      return Object.keys(props.config.headerLayout).length + actions
     })
 
-    const config : TableConfig = reactive({
-      headers  : [],
-      settings : props.config.settings,
+    const config: TableConfig = reactive({
+      headers      : props.config.headers,
+      headerLayout : [],
+      settings     : props.config.settings,
+      filters      : props.config.filters,
+      search       : props.config.search
     })
 
+    const search = ref('')
 
-    for (const [
-      key, header
-    ] of Object.entries(props.config.headers)) {
-      let headerArr = header
-
-      if (!Array.isArray(header)) {
-        header.key = key
-        headerArr  = [
-          header,
+    config.headerLayout = props.config.headerLayout.map(key => {
+      if (!Array.isArray(key)) {
+        return [
+          key
         ]
       }
+      return key
+    })
 
-      config.headers.push(headerArr)
-    }
+    config.headerLayout.forEach(layout => layout.map(fieldName => {
+      if(typeof config.headers[fieldName] !== 'object'){
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "headers"`
+      }
+    }))
 
     function formatValue (header : TableHeader, {value, row}) {
 
@@ -171,15 +204,34 @@ export default defineComponent({
         return dayjs(value).format('HH:mm:ss')
       }
 
-
       throw `Unknown table dataformatter "${header.format}`
     }
 
     const rowsInternal = computed(() => {
-      const rows : TableRow[] = props.rows
+      let rows: TableRow[] = props.rows
+
+      rows = rows.filter(row => {
+        if (search.value !== '') {
+          const result = config.search.function(row, search.value)
+          if (!result) {
+            return false
+          }
+        }
+
+        for (const [
+          key, filter
+        ] of Object.entries(config.filters)) {
+          if (filter.value !== '') {
+            if (row[key] !== filter.value) {
+              return false
+            }
+          }
+        }
+        return true
+      })
 
       if (sort.header) {
-        rows.sort((a : TableRow, b : TableRow) => {
+        rows.sort((a: TableRow, b: TableRow) => {
           let valueA  = a[sort.header.key]
           let valueB  = b[sort.header.key]
           const order = sort.order ? -1 : 1
@@ -204,7 +256,8 @@ export default defineComponent({
       return rows
     })
 
-    function setSort (header : TableHeader) {
+    function setSort (key: string) {
+      const header = config.headers[key]
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
@@ -218,7 +271,9 @@ export default defineComponent({
       columnCount,
       rowsInternal,
       setSort,
+      sort,
+      search
     }
-  },
+  }
 })
 </script>

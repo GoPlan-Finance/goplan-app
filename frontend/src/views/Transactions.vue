@@ -2,54 +2,55 @@
   <HeadlineActions
     :headline="$t('transactions.headline')"
   >
-    <SearchField
-      v-model="search"
-    />
-    <label>
-      <select
-        id="type"
-        v-model="typeFilter.value"
-        class="rounded-lg border-0"
-        name="type"
-      >
-        <option
-          v-for="option in typeFilter.options"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.display }}
-        </option>
-      </select>
-    </label>
-
-    <ImportTransactionsModal />
-    <buy-sell-asset />
+    <ImportTransactionsModal/>
+    <buy-sell-asset/>
   </HeadlineActions>
 
   <DataTable
     :config="config"
-    :rows="sortedRows"
+    :rows="rows"
   >
     <template
-      #symbol="{ value , row }"
+      #symbol="{ row }"
     >
       <AppLink
-        v-if="value"
-        :ticker="value.symbol"
+        v-if="row.symbol"
+        :ticker="row.symbol"
+        class="font-bold"
+        to="ticker_details"
+      >
+        <p class="font-normal text-sm">
+          {{ row.name }}
+        </p>
+      </AppLink>
+      <span v-else-if="row.importRawData && row.importRawData.description">
+        {{ row.importRawData.description }}
+      </span>
+      <span v-else>
+          <!--N/A-->
+      </span>
+    </template>
+    <template
+      #ticker="{ row }"
+    >
+      <AppLink
+        v-if="row.symbol"
+        :ticker="row.symbol.symbol"
+        class="font-bold"
         to="ticker_details"
       >
         <p class="mr-3 font-bold">
-          {{ value.symbol }}
+          {{ row.symbol.symbol }}
         </p>
         <p class="font-normal text-sm">
-          {{ value.name }}
+          {{ row.symbol.name }}
         </p>
       </AppLink>
       <span v-else-if="row.importRawData && row.importRawData.symbol">
         {{ row.importRawData.symbol }}
       </span>
       <span v-else>
-        N/A
+          <!--N/A-->
       </span>
     </template>
     <template
@@ -63,7 +64,6 @@
           :class="value ==='BUY'? 'transform rotate-180' : ''"
           class="h-6 w-6"
         />
-
         {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
       </div>
     </template>
@@ -75,8 +75,7 @@ import { Transaction } from '/common/models'
 import { formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs } from 'vue'
-import SearchField from '../components/base/SearchField.vue'
+import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
@@ -85,130 +84,123 @@ import ImportTransactionsModal from '../components/Transactions/ImportTransactio
 
 
 export default defineComponent({
-  components: {
-    BuySellAsset, SearchField, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
+  components : {
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
   },
   setup () {
     const data = reactive({
-      transactions : [],
-      rows         : [],
-      config       : {
-        headers: {
-          type       : {},
-          executedAt : {
+      rows   : [],
+      config : {
+        headers      : {
+          type               : {},
+          value              : {},
+          executedAt         : {
             justify : 'right',
             format  : 'date',
           },
-          symbol: {
-            sortKey: 'name',
+          symbol             : {
+            sortKey : 'name',
           },
-          quantity: {
+          ticker             : {
+            sortKey : 'name',
+          },
+          quantity           : {
             justify : 'right',
             format  : value => {
               return value % 1 > Number.EPSILON ? value : Number(value).toFixed(0)
             },
           },
-          price: {
+          price              : {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency, false)
             },
           },
-          totalExcludingFees: {
+          totalExcludingFees : {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
           },
-          fees: {
+          fees               : {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
           },
         },
-        settings: {
+        headerLayout : [
+          'type',
+          'executedAt',
+          [
+            'symbol', 'ticker',
+          ],
+          'quantity',
+          'price',
+          ['totalExcludingFees' ],
+          'fees',
+        ],
+        settings     : {
           actions           : false,
           translationPrefix : 'transactions.table',
+        },
+        filters      : {
+          type : {
+            value   : '',
+            options : [
+              {
+                value   : '',
+                display : 'All Types',
+              },
+              {
+                value   : 'BUY',
+                display : 'Buy',
+              },
+              {
+                value   : 'SELL',
+                display : 'Sell',
+              },
+              {
+                value   : 'DIVIDENDS',
+                display : 'Dividends',
+              },
+              {
+                value   : 'FEES',
+                display : 'Fees',
+              },
+              {
+                value   : 'TRANSFER',
+                display : 'Transfers',
+              },
+            ],
+          },
+        },
+        search       : {
+          function : (transaction, searchString) => {
+            const searchVal = searchString.toLowerCase()
+
+            if (transaction.symbol
+                && (transaction.symbol.name.toLowerCase().includes(searchVal)
+                    || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
+            ) {
+              return true
+            }
+
+            return dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
+          },
         },
       },
     })
 
-    const typeFilter = reactive({
-      value   : '',
-      options : [
-        {
-          value   : '',
-          display : 'All Types',
-        },
-        {
-          value   : 'BUY',
-          display : 'Buy',
-        },
-        {
-          value   : 'SELL',
-          display : 'Sell',
-        },
-        {
-          value   : 'DIVIDENDS',
-          display : 'Dividends',
-        },
-        {
-          value   : 'FEES',
-          display : 'Fees',
-        },
-        {
-          value   : 'TRANSFER',
-          display : 'Transfers',
-        },
-      ],
-    })
-
-    const search = ref('')
 
     let liveSubscription = null
 
-    const sortedRows = computed(() => {
-      return data.transactions.filter(transaction => {
-        if (typeFilter.value !== '') {
-          if (transaction.type !== typeFilter.value) {
-            return false
-          }
-        }
-        if (search.value !== '') {
-          const searchVal = search.value.toLowerCase()
-
-          if (transaction.symbol
-              && (transaction.symbol.name.toLowerCase().includes(searchVal)
-                  || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
-          ) {
-            return true
-          }
-
-
-          return dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
-
-
-          // return Object.entries(row).some(([
-          //   key, value
-          // ]) => {
-          // const sortKey = data.config.headers[key].sortKey
-          // if (sortKey) {
-          //   value = value[sortKey]
-          // }
-          // return String(value).toLowerCase().includes(search.value.toLowerCase())
-          // })
-        }
-        return true
-      })
-    })
-
     onBeforeMount(async () => {
-      const q          = new Parse.Query(Transaction)
+      const q = new Parse.Query(Transaction)
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await Transaction.liveQuery(q, data.transactions)
+      liveSubscription = await Transaction.liveQuery(q, data.rows)
     })
 
     onUnmounted(async () => {
@@ -218,11 +210,8 @@ export default defineComponent({
     })
 
     return {
-      dayjs,
       ...toRefs(data),
-      sortedRows,
-      typeFilter,
-      search,
+      dayjs,
     }
   },
 })
