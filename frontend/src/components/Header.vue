@@ -88,7 +88,7 @@ import {defineComponent, inject, ref} from 'vue'
 import {useSidebar} from '../hooks/useSidebar'
 import {useRouter} from 'vue-router'
 import SearchBar from './SearchBar.vue'
-import {AuthStore} from '@/store'
+import {AuthStore} from '/store'
 import { BellIcon } from '@heroicons/vue/outline'
 
 export default defineComponent({

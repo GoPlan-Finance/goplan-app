@@ -34,7 +34,11 @@ app.use(VueGapi, {
 })
 app.use(i18n)
 
+
 const authStore = new AuthStore()
+
+AuthStore.maybeLoadDerivedKey()
+
 import { createPinia } from 'pinia'
 
 app.use(createPinia())

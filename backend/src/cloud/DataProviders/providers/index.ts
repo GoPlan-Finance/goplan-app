@@ -5,12 +5,12 @@
  *
  */
 import * as Types from './types'
-import {AssetSymbol} from '../../../../../common/models'
+import {AssetSymbol} from '/common/models'
 import dayjs, {Dayjs} from 'dayjs'
 import {FMP} from './FMP'
 
 import weekOfYear from 'dayjs/plugin/weekOfYear'
-import {sleep} from '../../../../../common/utils'
+import {sleep} from '/common/utils'
 
 dayjs.extend(weekOfYear)
 

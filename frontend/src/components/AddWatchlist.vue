@@ -51,7 +51,7 @@
 import {defineComponent, ref} from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
-import {Watchlist} from '../../../common/models/Watchlist'
+import {Watchlist} from '/common/models'
 
 
 export default defineComponent({

@@ -4,7 +4,7 @@
  *
  */
 // noinspection ES6PreferShortImport
-import {AssetSymbol} from '../../../../../common/models'
+import {AssetSymbol} from '/common/models'
 import {assertUser} from '../../Auth'
 
 import {DataProvider} from '../../DataProviders/providers'

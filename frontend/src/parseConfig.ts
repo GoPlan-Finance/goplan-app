@@ -18,5 +18,4 @@ if (import.meta.env.VITE_APP_PARSE_API_LOCATION === 'local') {
 window.Parse.enableLocalDatastore()
 Parse.CoreManager.setStorageController(Parse.IndexedDB)
 
-// @todo move to common/models/User
 

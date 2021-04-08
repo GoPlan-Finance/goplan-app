@@ -58,8 +58,8 @@
 <script lang="ts">
 
 import {defineComponent, inject, ref, } from 'vue'
-import {User} from '../../../../../common/models'
-import {AuthStore} from '../../../store'
+import {User} from '/common/models'
+import {AuthStore} from '/store'
 
 export default defineComponent({
   emits: [

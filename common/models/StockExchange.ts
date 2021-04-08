@@ -1,4 +1,4 @@
-import {CacheableObject} from './base/CacheableObject'
+import { CacheableObject } from './base/CacheableObject'
 
 
 export class StockExchange extends CacheableObject {
@@ -9,11 +9,12 @@ export class StockExchange extends CacheableObject {
     super(StockExchange.className)
   }
 
-  get name (): string {
+  get name () : string {
     return this.get('name')
   }
 
 }
+
 
 StockExchange.register()
 

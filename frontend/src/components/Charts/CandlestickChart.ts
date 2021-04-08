@@ -5,7 +5,7 @@
  */
 import * as dayjs from 'dayjs'
 import * as duration from 'dayjs/plugin/duration'
-import {AssetSymbol} from '../../../../common/models'
+import {AssetSymbol} from '/common/models'
 
 export type CandleData = { date: dayjs.Dayjs | undefined; open: any; high: any; low: any; close: any; volume: any }
 

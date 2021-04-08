@@ -29,8 +29,8 @@
 
 <script lang="ts">
 
-import {defineComponent, reactive, ref, watch, computed} from 'vue'
-import {AssetSymbol} from '../../../common/models'
+import {defineComponent, reactive, ref, onBeforeMount, computed} from 'vue'
+import {AssetSymbol} from '/common/models'
 import SearchField from '../components/base/SearchField.vue'
 
 const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
@@ -73,6 +73,11 @@ export default defineComponent({
       isOpen.value = true
       symbols.data = await getSymbols(tickerName.value)
     }
+
+    onBeforeMount(() => {
+      tickerName.value = props.modelValue ? props.modelValue.symbol : ''
+
+    })
 
     const input: string = computed({
       get () {

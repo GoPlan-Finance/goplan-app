@@ -2,26 +2,33 @@
  *
  *
  */
-import {AssetSymbol} from './AssetSymbol'
-import {AssetSector} from './AssetSector'
-import {AssetAddressRegion} from './AssetAddressRegion'
-import {AssetIndustry} from './AssetIndustry'
-import {AssetProfile} from './AssetProfile'
+import { AssetAddressRegion } from './AssetAddressRegion'
+import { AssetIndustry } from './AssetIndustry'
+import { AssetProfile } from './AssetProfile'
+import { AssetSector } from './AssetSector'
+import { AssetSymbol } from './AssetSymbol'
+import { StockExchange } from './StockExchange'
 
-import {User} from './User'
-import {StockExchange} from './StockExchange'
-import {Watchlist} from './Watchlist'
+import { Transaction } from './Transaction'
+
+import { User } from './User'
+import { Watchlist } from './Watchlist'
 
 
 export {
   AssetSymbol,
+
+  // Cachable
   AssetSector,
   AssetAddressRegion,
   AssetIndustry,
   AssetProfile,
-
   StockExchange,
 
-  User,
+  // SecureObject(s)
+  Transaction,
   Watchlist,
+
+
+  User,
 }

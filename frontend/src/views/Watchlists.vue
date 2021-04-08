@@ -70,7 +70,7 @@
 <script lang="ts">
 import {defineComponent, onBeforeMount, onUnmounted, ref} from 'vue'
 import dayjs from 'dayjs'
-import {Watchlist} from '../../../common/models'
+import {Watchlist} from '/common/models'
 import AddWatchlist from '../components/AddWatchlist.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 

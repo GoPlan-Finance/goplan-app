@@ -1,8 +1,8 @@
 import {defineStore} from 'pinia'
-import {IndexedDB} from './base/IndexedDB'
-import {Transaction} from '../models'
+// import {IndexedDB} from './base/IndexedDB'
+import {Transaction} from '/common/models'
 
-const db = new IndexedDB('companyProfile')
+// const db = new IndexedDB('companyProfile')
 
 
 export const useTransactionStore = defineStore({

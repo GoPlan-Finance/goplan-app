@@ -5,7 +5,7 @@
  *
  */
 
-import {AssetSymbol} from '../../../../common/models'
+import {AssetSymbol} from '/common/models'
 
 require('./Functions/getEndOfDay')
 require('./Functions/getProfile')

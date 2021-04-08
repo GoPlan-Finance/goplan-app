@@ -60,9 +60,9 @@
 <script lang="ts">
 
 import {defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
-import ButtonDefault, {ButtonType} from './base/ButtonDefault.vue'
-import Modal from './Modal.vue'
-import {importCSV, validateCSV} from './ImportTransactionsModal'
+import { DefaultCSVImporter }                                          from './DefaultCSVImporter'
+import ButtonDefault, {ButtonType}                                     from '../base/ButtonDefault.vue'
+import Modal                                                           from '../Modal.vue'
 
 export default defineComponent({
   components : {Modal, ButtonDefault},
@@ -73,14 +73,16 @@ export default defineComponent({
       validRows : [],
     })
 
+    const csvImporter = new DefaultCSVImporter()
+
+
     const logger = (i: number, msg: string) => {
       data.logs.push(`Line ${Number.parseInt(i) + 1}: ${msg}`)
     }
 
     const fileSelected = async ({target}) => {
-
       data.logs      = []
-      data.validRows = await validateCSV(target.files[0], logger)
+      data.validRows = await csvImporter.validateCSV(target.files[0], logger)
     }
 
 
@@ -89,7 +91,7 @@ export default defineComponent({
       const rows     = data.validRows
       data.validRows = []
 
-      await importCSV(rows, logger)
+      await csvImporter.importCSV(rows, logger)
 
       data.logs.push('Completed')
 

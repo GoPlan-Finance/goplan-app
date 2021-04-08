@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, reactive, ref, watch} from 'vue'
-import {AssetSymbol} from '../../../../common/models'
+import {AssetSymbol} from '/common/models'
 import dayjs, {Dayjs} from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import {CandleData, getScaleByLabel, getScaleForRange, loadData, timeScales} from './CandlestickChart'

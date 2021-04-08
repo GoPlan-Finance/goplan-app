@@ -13,6 +13,11 @@ export default {
       'parse', // @todo check if ok to ignore
     ]
   },
+  resolve: {
+    alias: {
+      '/common': path.resolve(__dirname, '../common')
+    },
+  },
   plugins: [
     vue(),
     pluginRewriteAll(), // we need  this to allow dot(.) in path

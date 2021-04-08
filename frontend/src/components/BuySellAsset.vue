@@ -69,7 +69,7 @@
     <template #actions>
       <ButtonDefault
         label="Buy"
-        :disabled="!price || !executedAt || !quantity"
+        :disabled="!symbol || !price || !executedAt || !quantity"
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
         @click="addTransaction('buy')"
       />
@@ -86,8 +86,7 @@
 <script lang="ts">
 
 import {defineComponent, ref, watch} from 'vue'
-import {AssetSymbol} from '../../../common/models'
-import {Transaction} from '../models'
+import {AssetSymbol, Transaction} from '/common/models'
 import dayjs from 'dayjs'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
@@ -108,7 +107,7 @@ export default defineComponent({
     const price                = ref(null)
     const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
-
+    console.log(symbol)
     const addTransaction = async (type: 'buy' | 'sell') => {
 
       const t = new Transaction()

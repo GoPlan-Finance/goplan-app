@@ -3,17 +3,21 @@
  *
  *
  */
-import {AssetSymbol, StockExchange} from '../../../../../common/models'
+import {
+  AssetAddressRegion,
+  AssetIndustry,
+  AssetProfile,
+  AssetSector,
+  AssetSymbol,
+  StockExchange,
+} from '/common/models'
+import dayjs from 'dayjs'
 // noinspection ES6PreferShortImport
-import {processBatch} from '../../../../../common/utils'
+import { processBatch } from '/common/utils'
+import { DataProvider, ProviderSymbols } from '../providers'
 
 import * as DataProviderInterfaces from '../providers/types'
-import {DataProvider, ProviderSymbols} from '../providers'
-import {AssetProfile} from '../../../../../common/models/AssetProfile'
-import {AssetIndustry} from '../../../../../common/models/AssetIndustry'
-import {AssetSector} from '../../../../../common/models/AssetSector'
-import {AssetAddressRegion} from '../../../../../common/models/AssetAddressRegion'
-import dayjs from 'dayjs'
+
 
 const USE_MASTER_KEY = {useMasterKey: true}
 
@@ -42,10 +46,10 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
     log.info(`Processing ${symbols.length} symbols for ${providerName}`)
 
 
-    await processBatch(symbols, async (apiSymbol: DataProviderInterfaces.AssetSymbol) => {
+    await processBatch(symbols, async (apiSymbol : DataProviderInterfaces.AssetSymbol) => {
 
       const exchange = !apiSymbol.exchange ? null : await StockExchange.findOrCreate({
-        name: apiSymbol.exchange
+        name: apiSymbol.exchange,
       }, true)
 
       const symbol = await AssetSymbol.findOrCreate<AssetSymbol>({
@@ -63,10 +67,10 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
       await symbol.save(null, USE_MASTER_KEY)
 
       const industry      = !apiProfile.industry ? null : await AssetIndustry.findOrCreate({
-        name: apiProfile.industry
+        name: apiProfile.industry,
       }, true)
       const sector        = !apiProfile.sector ? null : await AssetSector.findOrCreate({
-        name: apiProfile.sector
+        name: apiProfile.sector,
       }, true)
       const addressRegion = !apiProfile.country ? null : await AssetAddressRegion.findOrCreate({
         state   : apiProfile.state,

@@ -65,15 +65,15 @@
 
 <script lang="ts">
 import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, ref, toRefs} from 'vue'
-import {Transaction} from '../models'
+import {Transaction} from '/common/models'
 import * as dayjs from 'dayjs'
 import DataTable from '../components/DataTable.vue'
-import ImportTransactionsModal from '../components/ImportTransactionsModal.vue'
+import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
 import AppLink from '../components/router/AppLink.vue'
 import {ArrowCircleLeftIcon} from '@heroicons/vue/solid'
 import HeadlineActions from '../components/HeadlineActions.vue'
 import SearchField from '../components/base/SearchField.vue'
-import {formatCurrency} from '../../../common/utils'
+import {formatCurrency} from '/common/utils'
 import BuySellAsset from '../components/BuySellAsset.vue'
 
 

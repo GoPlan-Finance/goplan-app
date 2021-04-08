@@ -30,7 +30,7 @@
 <script lang="ts">
 import {computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs} from 'vue'
 import dayjs from 'dayjs'
-import {AssetSymbol, Watchlist} from '../../../common/models'
+import {AssetSymbol, Watchlist} from '/common/models'
 import DataTable from '../components/DataTable.vue'
 import AppLink from '../components/router/AppLink.vue'
 

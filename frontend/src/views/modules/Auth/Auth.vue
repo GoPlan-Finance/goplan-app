@@ -32,10 +32,10 @@ import UnlockMasterKey from './UnlockMasterKey.vue'
 import {defineComponent, getCurrentInstance, inject, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import GoogleButton from './googleButton.vue'
-import {User} from '../../../../../common/models'
-import {sleep} from '../../../../../common/utils'
+import {User} from '/common/models'
+import {sleep} from '/common/utils'
 import GoPlanLogo from '../../../components/GoPlanLogo.vue'
-import {AuthStore} from '../../../store'
+import {AuthStore} from 'store'
 
 export default defineComponent({
   components: {
@@ -105,7 +105,7 @@ export default defineComponent({
 
       // @todo Show spinner
       await sleep(1000)
-      await router.push({name: 'dashboard'})
+      await router.push({name: 'transactions'})
     }
 
 

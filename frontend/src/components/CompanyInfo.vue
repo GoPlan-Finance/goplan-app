@@ -40,9 +40,9 @@
 
 <script lang="ts">
 import {defineComponent, onBeforeMount, reactive} from 'vue'
-import {AssetSymbol} from '../../../common/models'
+import {AssetSymbol, AssetProfile} from '/common/models'
 import DataField from './base/DataField.vue'
-import {AssetProfile} from '../../../common/models/AssetProfile'
+
 
 export default defineComponent({
   components : {DataField},

@@ -4,7 +4,7 @@
     @submit.prevent="unlockMasterKey"
   >
     <span
-      v-if="isMasterKeyValid === false"
+      v-if="keyState === KeyState.INVALID"
       style="color:red; font-weight: bold;"
     >
       The key you entered is invalid
@@ -51,26 +51,32 @@
 import {defineComponent, inject, ref} from 'vue'
 import {AuthStore} from '../../../store'
 
+enum KeyState{
+  UNKNOWN,
+  INVALID,
+  VALID,
+}
 export default defineComponent({
   emits: [
     'keyValid'
   ],
   setup (props, {emit}) {
-    const authStore        = inject < AuthStore >('$authStore')
-    const masterKey        = ref('')
-    const isMasterKeyValid = ref(false)
-    const acceptTesting    = ref(false)
+    const authStore     = inject < AuthStore >('$authStore')
+    const masterKey     = ref('')
+    const keyState      = ref(KeyState.UNKNOWN)
+    const acceptTesting = ref(false)
 
     const unlockMasterKey = async () => {
 
       try {
         await authStore.decryptClientKey(masterKey.value)
 
+        keyState.value = KeyState.VALID
         emit('keyValid')
         return
 
       } catch (err) {
-        isMasterKeyValid.value = false
+        keyState.value = KeyState.INVALID
       }
 
 
@@ -80,7 +86,8 @@ export default defineComponent({
       acceptTesting,
       masterKey,
       unlockMasterKey,
-      isMasterKeyValid,
+      keyState,
+      KeyState,
     }
   },
 })
