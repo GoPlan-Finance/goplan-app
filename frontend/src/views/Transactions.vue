@@ -11,6 +11,27 @@
     :rows="rows"
   >
     <template
+      #filters(accounts)="{filter}"
+    >
+      <label
+        v-for="(option) in filter.options"
+        :key="option.label"
+        :class="filter.value && filter.value.id === option.value.id? 'bg-gray-300' : ''"
+        class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
+      >
+        <input
+          v-model="filter.value"
+          :text="option.label"
+          :value="option.value"
+          class="hidden"
+          name="radio"
+          type="radio"
+          @click="filter.value = (filter.value && filter.value.id === option.value.id ? null : filter.value)"
+        >
+        <span class="py-1 px-2 text-sm text-gray-700">{{ option.label }}</span>
+      </label>
+    </template>
+    <template
       #field(symbol)="{ row }"
     >
       <AppLink
@@ -71,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { Transaction } from '/common/models'
+import { Account, Transaction } from '/common/models'
 import { formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
@@ -138,7 +159,7 @@ export default defineComponent({
           'quantity',
           'price',
           [
-            'totalExcludingFees'
+            'totalExcludingFees',
           ],
           'fees',
         ],
@@ -147,6 +168,15 @@ export default defineComponent({
           translationPrefix : 'transactions.table',
         },
         filters: {
+          accounts: {
+            align   : 'left',
+            value   : null,
+            options : [],
+            handler : ({row, value} : { row : Transaction, value : Account }) : boolean => {
+              console.log(row.account.id, value.id, row.account.id === value.id)
+              return row.account.id === value.id
+            },
+          },
           type: {
             value   : '',
             options : [
@@ -155,30 +185,30 @@ export default defineComponent({
                 display : 'All Types',
               },
               {
-                value   : 'BUY',
-                display : 'Buy',
+                value : 'BUY',
+                label : 'Buy',
               },
               {
-                value   : 'SELL',
-                display : 'Sell',
+                value : 'SELL',
+                label : 'Sell',
               },
               {
-                value   : 'DIVIDENDS',
-                display : 'Dividends',
+                value : 'DIVIDENDS',
+                label : 'Dividends',
               },
               {
-                value   : 'FEES',
-                display : 'Fees',
+                value : 'FEES',
+                label : 'Fees',
               },
               {
-                value   : 'TRANSFER',
-                display : 'Transfers',
+                value : 'TRANSFER',
+                label : 'Transfers',
               },
             ],
           },
         },
         search: {
-          function: (transaction, searchString) => {
+          handler: (transaction, searchString) => {
             const searchVal = searchString.toLowerCase()
 
             if (transaction.symbol
@@ -203,6 +233,14 @@ export default defineComponent({
       q.descending('executedAt')
       q.include('symbol')
       liveSubscription = await Transaction.liveQuery(q, data.rows)
+
+      const qA                             = new Parse.Query(Account)
+      data.config.filters.accounts.options = (await qA.find()).map(account => {
+        return {
+          value : account,
+          label : account.name,
+        }
+      })
     })
 
     onUnmounted(async () => {

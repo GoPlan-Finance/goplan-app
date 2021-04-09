@@ -1,29 +1,66 @@
 <template>
-  <div class="flex justify-end gap-2 mb-2">
-    <SearchField
-      v-if="config.search"
-      v-model="search"
-    />
-    <label
-      v-for="filter in filters"
-      :key="filter"
-    >
-      <select
-        v-model="filter.value"
-        class="rounded-lg border-0"
-        name="type"
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex justify-start gap-2 mb-2">
+      <label
+        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => filter.align === 'left')"
+        :key="key"
       >
-        <option
-          v-for="option in filter.options"
-          :key="option.value"
-          :value="option.value"
+        <slot
+          :key="key"
+          :filter="filter"
+          :name="`filters(${key})`"
+          :rows="rowsInternal"
         >
-          {{ option.display }}
-        </option>
-      </select>
-    </label>
+          <!--  @todo Move to sub-component-->
+          <select
+            v-model="filter.value"
+            class="rounded-lg border-0"
+            name="type"
+          >
+            <option
+              v-for="option in filter.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </slot>
+      </label>
+    </div>
+    <div class="flex justify-end gap-2 mb-2">
+      <SearchField
+        v-if="config.search"
+        v-model="search"
+      />
+      <label
+        v-for="(filter, index) in Object.values(filters).filter(filter => filter.align !== 'left')"
+        :key="index"
+      >
+        <slot
+          :key="key"
+          :filter="filter"
+          :name="`filters(${key})`"
+          :rows="rowsInternal"
+        >
+          <!--  @todo Move to sub-component-->
+          <select
+            v-model="filter.value"
+            class="rounded-lg border-0"
+            name="type"
+          >
+            <option
+              v-for="option in filter.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </slot>
+      </label>
+    </div>
   </div>
-
   <div
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
@@ -46,7 +83,7 @@
         {{ $t(settings.translationPrefix + '.' + subRow) }}
       </div>
     </div>
-    <div v-if="settings?.actions" />
+    <div v-if="settings?.actions"/>
   </div>
   <div
     v-for="(row, rowIndex) in rowsInternal"
@@ -107,7 +144,7 @@ import SearchField from '../components/base/SearchField.vue'
 export type TableRow = Record<string, unknown>
 
 type FormatFn = (row : unknown, value : unknown) => void
-type SearchFn = (value : unknown, searchString : string) => void
+type SearchFn = (value : unknown, searchString : string) => boolean
 
 
 export interface TableHeader {
@@ -128,7 +165,7 @@ export interface TableConfig {
   },
   filters : Record<string, any>,
   search : {
-    function : SearchFn
+    handler : SearchFn
   }
 }
 
@@ -142,11 +179,11 @@ interface SortSettings {
 export default defineComponent({
   components : {SearchField},
   props      : {
-    config: {
+    config : {
       type     : Object as TableConfig,
       required : true,
     },
-    rows: {
+    rows   : {
       type     : Object as TableRow[],
       required : true,
     },
@@ -217,17 +254,27 @@ export default defineComponent({
 
       rows = rows.filter(row => {
         if (search.value !== '') {
-          const result = config.search.function(row, search.value)
+          if (typeof config.search.handler !== 'function') {
+            throw 'Invalid search.handler()'
+          }
+
+          const result = config.search.handler(row, search.value)
+
           if (!result) {
             return false
           }
         }
 
         for (const [
-          key, filter
-        ] of Object.entries(config.filters)) {
-          if (filter.value !== '') {
-            if (row[key] !== filter.value) {
+                     key, filter
+                   ] of Object.entries(config.filters)) {
+          if (filter.value /* !== ''*/) {
+            if (typeof filter.handler === 'function') {
+              if (filter.handler({row, value : filter.value}) === false) {
+                return false
+              }
+            } else if (row[key] !== filter.value) {
+              console.log(key, false)
               return false
             }
           }
