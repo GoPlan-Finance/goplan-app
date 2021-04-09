@@ -9,7 +9,7 @@
       :rows="sortedRows"
     >
       <template
-        #name="{ row }"
+        #field(name)="{ row }"
       >
         <AppLink
           :ticker="row.symbol"
@@ -21,7 +21,7 @@
         </AppLink>
       </template>
       <template
-        #symbol="{ row }"
+        #field(symbol)="{ row }"
       >
         <AppLink
           :ticker="row.symbol"
@@ -59,13 +59,14 @@ export default defineComponent({
       watchlist : null,
       items     : [],
       config    : {
-        headers: {
-          0:
-            {
-              name   : {},
-              symbol : {},
-            }
+        fields: {
+          name   : {},
+          symbol : {},
         },
+        headerLayout: [
+          'name',
+          'symbol',
+        ],
         settings: {
           actions           : false,
           translationPrefix : 'watchlist.table',

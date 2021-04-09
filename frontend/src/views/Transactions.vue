@@ -2,8 +2,8 @@
   <HeadlineActions
     :headline="$t('transactions.headline')"
   >
-    <ImportTransactionsModal/>
-    <buy-sell-asset/>
+    <ImportTransactionsModal />
+    <buy-sell-asset />
   </HeadlineActions>
 
   <DataTable
@@ -11,7 +11,7 @@
     :rows="rows"
   >
     <template
-      #symbol="{ row }"
+      #field(symbol)="{ row }"
     >
       <AppLink
         v-if="row.symbol"
@@ -27,11 +27,11 @@
         {{ row.importRawData.description }}
       </span>
       <span v-else>
-          <!--N/A-->
+        <!--N/A-->
       </span>
     </template>
     <template
-      #ticker="{ row }"
+      #field(ticker)="{ row }"
     >
       <AppLink
         v-if="row.symbol"
@@ -50,11 +50,11 @@
         {{ row.importRawData.symbol }}
       </span>
       <span v-else>
-          <!--N/A-->
+        <!--N/A-->
       </span>
     </template>
     <template
-      #type="{ value }"
+      #field(type)="{ value }"
     >
       <div
         :class="value ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
@@ -84,52 +84,52 @@ import ImportTransactionsModal from '../components/Transactions/ImportTransactio
 
 
 export default defineComponent({
-  components : {
+  components: {
     BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
   },
   setup () {
     const data = reactive({
       rows   : [],
       config : {
-        headers      : {
-          type               : {},
-          value              : {},
-          executedAt         : {
+        fields: {
+          type       : {},
+          value      : {},
+          executedAt : {
             justify : 'right',
             format  : 'date',
           },
-          symbol             : {
-            sortKey : 'name',
+          symbol: {
+            sortKey: 'name',
           },
-          ticker             : {
-            sortKey : 'name',
+          ticker: {
+            sortKey: 'name',
           },
-          quantity           : {
+          quantity: {
             justify : 'right',
             format  : value => {
               return value % 1 > Number.EPSILON ? value : Number(value).toFixed(0)
             },
           },
-          price              : {
+          price: {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency, false)
             },
           },
-          totalExcludingFees : {
+          totalExcludingFees: {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
           },
-          fees               : {
+          fees: {
             justify : 'right',
             format  : (value, row) => {
               return formatCurrency(value, row.currency)
             },
           },
         },
-        headerLayout : [
+        headerLayout: [
           'type',
           'executedAt',
           [
@@ -137,15 +137,17 @@ export default defineComponent({
           ],
           'quantity',
           'price',
-          ['totalExcludingFees' ],
+          [
+            'totalExcludingFees'
+          ],
           'fees',
         ],
-        settings     : {
+        settings: {
           actions           : false,
           translationPrefix : 'transactions.table',
         },
-        filters      : {
-          type : {
+        filters: {
+          type: {
             value   : '',
             options : [
               {
@@ -175,8 +177,8 @@ export default defineComponent({
             ],
           },
         },
-        search       : {
-          function : (transaction, searchString) => {
+        search: {
+          function: (transaction, searchString) => {
             const searchVal = searchString.toLowerCase()
 
             if (transaction.symbol
@@ -196,7 +198,7 @@ export default defineComponent({
     let liveSubscription = null
 
     onBeforeMount(async () => {
-      const q = new Parse.Query(Transaction)
+      const q          = new Parse.Query(Transaction)
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
