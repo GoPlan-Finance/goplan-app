@@ -83,7 +83,7 @@
         {{ $t(settings.translationPrefix + '.' + subRow) }}
       </div>
     </div>
-    <div v-if="settings?.actions"/>
+    <div v-if="settings?.actions" />
   </div>
   <div
     v-for="(row, rowIndex) in rowsInternal"
@@ -179,11 +179,11 @@ interface SortSettings {
 export default defineComponent({
   components : {SearchField},
   props      : {
-    config : {
+    config: {
       type     : Object as TableConfig,
       required : true,
     },
-    rows   : {
+    rows: {
       type     : Object as TableRow[],
       required : true,
     },
@@ -266,11 +266,11 @@ export default defineComponent({
         }
 
         for (const [
-                     key, filter
-                   ] of Object.entries(config.filters)) {
+          key, filter
+        ] of Object.entries(config.filters)) {
           if (filter.value /* !== ''*/) {
             if (typeof filter.handler === 'function') {
-              if (filter.handler({row, value : filter.value}) === false) {
+              if (filter.handler({row, value: filter.value}) === false) {
                 return false
               }
             } else if (row[key] !== filter.value) {
