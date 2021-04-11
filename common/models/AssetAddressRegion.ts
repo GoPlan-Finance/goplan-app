@@ -1,7 +1,6 @@
-import { CacheableObject } from './base/CacheableObject'
+import { BaseObject } from '/common/models/base/BaseObject'
 
-
-export class AssetAddressRegion extends CacheableObject {
+export class AssetAddressRegion extends BaseObject {
 
   static className = 'AssetAddressRegion'
 

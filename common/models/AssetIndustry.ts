@@ -1,7 +1,7 @@
-import { CacheableObject } from './base/CacheableObject'
+import { BaseObject } from '/common/models/base/BaseObject'
 
 
-export class AssetIndustry extends CacheableObject {
+export class AssetIndustry extends BaseObject {
 
   static className = 'AssetIndustry'
 

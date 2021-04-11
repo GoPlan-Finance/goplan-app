@@ -1,8 +1,9 @@
-import { CacheableObject } from './base/CacheableObject'
+import { BaseObject } from '/common/models/base/BaseObject'
+import { Query } from '/common/Query'
 import { StockExchange } from './StockExchange'
 
 
-export class AssetSymbol extends CacheableObject {
+export class AssetSymbol extends BaseObject {
 
   static className = 'AssetSymbol'
 
@@ -32,7 +33,7 @@ export class AssetSymbol extends CacheableObject {
   }
 
   static async fetchSymbolByTicker (ticker : string) : Promise<AssetSymbol | null> {
-    const query = new Parse.Query(AssetSymbol)
+    const query = new Query(AssetSymbol)
     query.equalTo('symbol', ticker.toUpperCase())
     query.include('exchange')
     return query.first()

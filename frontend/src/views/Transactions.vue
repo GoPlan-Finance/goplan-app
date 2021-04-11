@@ -93,6 +93,7 @@
 
 <script lang="ts">
 import { Account, Transaction } from '/common/models'
+import { Query } from '/common/Query'
 import { formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
@@ -228,13 +229,13 @@ export default defineComponent({
     let liveSubscription = null
 
     onBeforeMount(async () => {
-      const q          = new Parse.Query(Transaction)
+      const q          = new Query(Transaction)
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await Transaction.liveQuery(q, data.rows)
+      liveSubscription = await q.liveQuery( data.rows)
 
-      const qA                             = new Parse.Query(Account)
+      const qA                             = new Query(Account)
       data.config.filters.accounts.options = (await qA.find()).map(account => {
         return {
           value : account,

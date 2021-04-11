@@ -5,6 +5,7 @@
  */
 import { Account, AssetSymbol, Transaction } from '/common/models'
 import { TransactionType } from '/common/models/Transaction'
+import { Query } from '/common/Query'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
@@ -45,7 +46,7 @@ export class DefaultCSVImporter {
   private async getOrCreateAccount (name : string) : Promise<Account> {
 
     if (!this.accounts) {
-      const q = new Parse.Query(Account)
+      const q = new Query(Account)
 
       this.accounts = await q.find()
     }

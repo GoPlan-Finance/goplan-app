@@ -1,5 +1,6 @@
 // import {IndexedDB} from './base/IndexedDB'
 import { Transaction } from '/common/models'
+import { Query } from '/common/Query'
 import { defineStore } from 'pinia'
 
 // const db = new IndexedDB('companyProfile')
@@ -31,7 +32,7 @@ export const useTransactionStore = defineStore({
         await this.subscription.unsubscribe()
       }
 
-      this.subscription = await Transaction.liveQuery(new Parse.Query(Transaction), this.transactions, obj => {
+      this.subscription = await Query.create(Transaction).liveQuery(this.transactions, obj => {
         console.log('updated ', obj)
       })
 

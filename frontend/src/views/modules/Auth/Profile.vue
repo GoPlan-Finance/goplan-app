@@ -216,7 +216,7 @@ export default defineComponent({
 
     // const getApiTokenProvider = async (): Promise<ExternalDataProvider | null> => {
     //
-    //   const q = new Parse.Query('ExternalDataProvider')
+    //   const q = new Query('ExternalDataProvider')
     //   q.equalTo('name', 'tingo')
     //   const provider = await q.first()
     //

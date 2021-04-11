@@ -1,12 +1,13 @@
+import { BaseObject } from '/common/models/base/BaseObject'
+import { CacheableQuery } from '/common/Query/CacheableQuery'
 import { AssetAddressRegion } from './AssetAddressRegion'
 import { AssetIndustry } from './AssetIndustry'
 import { AssetSector } from './AssetSector'
 import { AssetSymbol } from './AssetSymbol'
-import { CacheableObject } from './base/CacheableObject'
 import { StockExchange } from './StockExchange'
 
 
-export class AssetProfile extends CacheableObject {
+export class AssetProfile extends BaseObject {
 
   static className = 'AssetProfile'
 
@@ -95,7 +96,9 @@ export class AssetProfile extends CacheableObject {
     symbol : AssetSymbol,
   ) : Promise<AssetProfile> {
 
-    const q = new Parse.Query(this)
+    const q = new CacheableQuery(this)
+
+
     q.equalTo('symbol', symbol)
 
     q.include([
@@ -108,9 +111,7 @@ export class AssetProfile extends CacheableObject {
     ])
 
 
-    return AssetProfile.handleCache<AssetProfile>(AssetProfile.className, q.toJSON(), () => {
       return q.first()
-    })
   }
 
 
