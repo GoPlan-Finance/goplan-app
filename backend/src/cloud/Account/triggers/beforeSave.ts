@@ -22,8 +22,6 @@ Parse.Cloud.beforeSave('Account', async (request) => {
     request.object.setACL(new Parse.ACL(request.user))
   }
 },
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 {
   fields: {
     name: {

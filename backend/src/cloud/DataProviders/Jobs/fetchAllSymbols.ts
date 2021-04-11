@@ -28,8 +28,6 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
   // log: the ParseServer logger passed in the request
   // message: a function to update the status message of the job object
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const {/*params, headers,*/ log, message} = request
 
 
