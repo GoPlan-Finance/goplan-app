@@ -80,7 +80,7 @@ export default defineComponent({
       const q = new Query(Watchlist)
       q.get(props.id)
 
-      liveSubscription = await q.liveQuery( null, async wl => {
+      liveSubscription = await q.liveQuery(null, async wl => {
         data.items     = await wl.relation('symbols').query().find()
         data.watchlist = wl
       })

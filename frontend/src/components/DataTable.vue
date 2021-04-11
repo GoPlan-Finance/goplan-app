@@ -2,10 +2,12 @@
   <div class="grid grid-cols-2 gap-2">
     <div
       v-for="alignment in ['left', 'right']"
+      :key="alignment"
       class="flex gap-2 mb-2"
-    :class="alignment === 'left' ? 'justify-start' : 'justify-end'">
+      :class="alignment === 'left' ? 'justify-start' : 'justify-end'"
+    >
       <label
-        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => (!filter.align || filter.align === alignment))"
+        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => ((alignment ==='right' && !filter.align) || filter.align === alignment))"
         :key="key"
       >
         <slot
@@ -119,7 +121,7 @@ import SearchField from '../components/base/SearchField.vue'
 
 export type TableRow = Record<string, unknown>
 
-type FormatFn = (row : unknown, value : unknown) => void
+type FormatFn = (value : unknown, row : unknown) => void
 type SearchFn = (value : unknown, searchString : string) => boolean
 
 
@@ -234,7 +236,7 @@ export default defineComponent({
             throw 'Invalid search.handler()'
           }
 
-          const result = config.search.handler(row, search.value)
+          const result = config.search.handler(search.value, row)
 
           if (!result) {
             return false
@@ -246,7 +248,7 @@ export default defineComponent({
         ] of Object.entries(config.filters)) {
           if (filter.value /* !== ''*/) {
             if (typeof filter.handler === 'function') {
-              if (filter.handler({row, value: filter.value}) === false) {
+              if (filter.handler(filter.value, row) === false) {
                 return false
               }
             } else if (row[key] !== filter.value) {

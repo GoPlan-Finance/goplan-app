@@ -63,7 +63,7 @@ router.beforeEach(async (to, _, next) => {
   }
 
   if (await authStore.isAuthenticated() !== true) {
-    next({name : 'auth'})
+    next({name: 'auth'})
     return
   }
   // const currentUser = await authStore.currentUser()

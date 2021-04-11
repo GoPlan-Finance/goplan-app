@@ -3,7 +3,7 @@
     *****
   </template>
   <template v-else>
-    <slot/>
+    <slot />
   </template>
 </template>
 
@@ -23,7 +23,7 @@ export default defineComponent({
     const userStore          = useUserStore()
 
     return {
-      privateMode    : computed(() => userStore.privateMode),
+      privateMode: computed(() => userStore.privateMode),
     }
   },
 })

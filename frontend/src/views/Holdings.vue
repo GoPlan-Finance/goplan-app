@@ -231,7 +231,7 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery( data.rows)
+      liveSubscription = await q.liveQuery(data.rows)
 
       const qA                             = new Query(Account)
       data.config.filters.accounts.options = (await qA.find()).map(account => {

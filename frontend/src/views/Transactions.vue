@@ -90,17 +90,17 @@
     </template>
     <template #field(price)="{value}">
       <Private>
-        {{value}}
+        {{ value }}
       </Private>
     </template>
     <template #field(fees)="{value}">
       <Private>
-        {{value}}
+        {{ value }}
       </Private>
     </template>
     <template #field(totalExcludingFees)="{value}">
       <Private>
-        {{value}}
+        {{ value }}
       </Private>
     </template>
   </DataTable>
@@ -188,7 +188,7 @@ export default defineComponent({
             align   : 'left',
             value   : null,
             options : [],
-            handler : ({row, value} : { row : Transaction, value : Account }) : boolean => {
+            handler : (value, row) => {
               console.log(row.account.id, value.id, row.account.id === value.id)
               return row.account.id === value.id
             },
@@ -224,7 +224,7 @@ export default defineComponent({
           },
         },
         search: {
-          handler: (transaction, searchString) => {
+          handler: (searchString, transaction) => {
             const searchVal = searchString.toLowerCase()
 
             if (transaction.symbol
@@ -248,7 +248,7 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery( data.rows)
+      liveSubscription = await q.liveQuery(data.rows)
 
       const qA                             = new Query(Account)
       data.config.filters.accounts.options = (await qA.find()).map(account => {

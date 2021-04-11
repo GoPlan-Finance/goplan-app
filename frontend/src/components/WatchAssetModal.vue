@@ -76,7 +76,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const q          = new Query(Watchlist)
-      liveSubscription = await q.liveQuery( watchlists.value)
+      liveSubscription = await q.liveQuery(watchlists.value)
     })
 
     onUnmounted(async () => {

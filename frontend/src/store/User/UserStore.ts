@@ -6,7 +6,7 @@ import { AuthStore, Session } from '../auth'
 export const useUserStore = defineStore({
   // name of the store
   // it is used in devtools and allows restoring state
-  id : 'user',
+  id    : 'user',
   // a function that returns a fresh state
   state : () => {
     // const user = await AuthStore.currentUser() as User
@@ -16,20 +16,20 @@ export const useUserStore = defineStore({
 
     console.log(isPrivate)
     return {
-      privateMode : isPrivate,
+      privateMode: isPrivate,
     }
   },
   // optional getters
-  getters : {
+  getters: {
 
   },
 
-  actions : {
+  actions: {
     async setPrivateMode (enabled : boolean) {
 
       this.privateMode = enabled
-      Session.set('privateMode' , enabled)
-      console.log(this.privateMode ,Session.get<boolean>('privateMode') )
+      Session.set('privateMode', enabled)
+      console.log(this.privateMode, Session.get<boolean>('privateMode'))
       // const user = await AuthStore.currentUser()
       //
       // this.privateMode = enabled
