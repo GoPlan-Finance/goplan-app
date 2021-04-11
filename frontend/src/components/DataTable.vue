@@ -1,8 +1,11 @@
 <template>
   <div class="grid grid-cols-2 gap-2">
-    <div class="flex justify-start gap-2 mb-2">
+    <div
+      v-for="alignment in ['left', 'right']"
+      class="flex gap-2 mb-2"
+    :class="alignment === 'left' ? 'justify-start' : 'justify-end'">
       <label
-        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => filter.align === 'left')"
+        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => (!filter.align || filter.align === alignment))"
         :key="key"
       >
         <slot
@@ -27,38 +30,11 @@
           </select>
         </slot>
       </label>
-    </div>
-    <div class="flex justify-end gap-2 mb-2">
+      
       <SearchField
-        v-if="config.search"
+        v-if="config.search && (alignment === 'right')"
         v-model="search"
       />
-      <label
-        v-for="(filter, index) in Object.values(filters).filter(filter => filter.align !== 'left')"
-        :key="index"
-      >
-        <slot
-          :key="key"
-          :filter="filter"
-          :name="`filters(${key})`"
-          :rows="rowsInternal"
-        >
-          <!--  @todo Move to sub-component-->
-          <select
-            v-model="filter.value"
-            class="rounded-lg border-0"
-            name="type"
-          >
-            <option
-              v-for="option in filter.options"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </option>
-          </select>
-        </slot>
-      </label>
     </div>
   </div>
   <div
