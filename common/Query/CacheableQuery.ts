@@ -22,7 +22,7 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     useMasterKey = false,
   ) : Promise<T[]> {
 
-    return this.handleCache<T[]>(this.className, arguments, () => {
+    return this.handleCache<T[]>('findBy', arguments, () => {
       return super.findBy(params, useMasterKey)
     })
   }
@@ -32,7 +32,7 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     useMasterKey = false,
   ) : Promise<T | undefined> {
 
-    return this.handleCache<T>(this.className, arguments, () => {
+    return this.handleCache<T>('findOneBy', arguments, () => {
       return super.findOneBy(params, useMasterKey)
     })
   }
@@ -42,7 +42,7 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     useMasterKey = false,
   ) : Promise<T> {
 
-    return this.handleCache<T>(this.className, arguments, () => {
+    return this.handleCache<T>('findOrCreate', arguments, () => {
       return super.findOrCreate(params, useMasterKey)
     })
   }
@@ -52,7 +52,7 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     useMasterKey = false,
   ) : Promise<T> {
 
-    return this.handleCache<T>(this.className, arguments, () => {
+    return this.handleCache<T>('getObjectById', arguments, () => {
       return super.getObjectById(docId, useMasterKey)
     })
   }
@@ -62,18 +62,18 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
     useMasterKey = false,
   ) : Promise<T> {
 
-    return this.handleCache<T>(this.className, arguments, () => {
+    return this.handleCache<T>('getOrNull', arguments, () => {
       return super.getOrNull(docId, useMasterKey)
     })
 
   }
 
 
-  protected async handleCache<U> (className : string, params : unknown, fn : HandlerFn<U>) : Promise<U> {
+  protected async handleCache<U> (methodName : string, params : unknown, fn : HandlerFn<U>) : Promise<U> {
 
     const CACHE = CacheableQuery.CACHE as CacheItemType<U>
 
-    const hash = CryptoJS.MD5(className + JSON.stringify(params)).toString()
+    const hash = CryptoJS.MD5(methodName + JSON.stringify(params)).toString()
 
     if (CACHE[hash]) {
       return CACHE[hash] as Promise<U>
