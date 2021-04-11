@@ -30,7 +30,7 @@
           </select>
         </slot>
       </label>
-      
+
       <SearchField
         v-if="config.search && (alignment === 'right')"
         v-model="search"
