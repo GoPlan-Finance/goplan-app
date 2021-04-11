@@ -111,7 +111,7 @@ export class AssetProfile extends BaseObject {
     ])
 
 
-      return q.first()
+    return q.first()
   }
 
 

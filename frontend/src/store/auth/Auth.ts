@@ -28,14 +28,14 @@ export class AuthStore {
     return Parse.User.logOut()
   }
 
-  public async currentUser () : Promise<User | null> {
+  public static async currentUser () : Promise<User | null> {
 
     return await Parse.User.currentAsync()
   }
 
   public async isAuthenticated () : Promise<boolean> {
 
-    return !!await this.currentUser()
+    return !!await AuthStore.currentUser()
   }
 
   public async isConnected () : Promise<boolean> {
@@ -55,7 +55,7 @@ export class AuthStore {
   }
 
   public async decryptClientKey (masterKey : string) : Promise<void> {
-    const user = await this.currentUser()
+    const user = await AuthStore.currentUser()
 
     if (!user || !await this.hasClientKey()) {
       throw 'No client key'
@@ -73,7 +73,7 @@ export class AuthStore {
   }
 
   public async hasClientKey () : Promise<boolean> {
-    const user = await this.currentUser()
+    const user = await AuthStore.currentUser()
 
     if (!user) {
       throw false

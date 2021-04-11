@@ -23,10 +23,24 @@
         </svg>
       </button>
 
-      <SearchBar class="mx-4" />
+      <SearchBar class="mx-4"/>
     </div>
 
     <div class="flex items-center">
+
+      <a
+        href="#"
+        @click="setPrivateMode(!privateMode)">
+      <EyeIcon
+        v-if="privateMode !== true"
+        class="h-7 w-7"
+      />
+      <EyeOffIcon
+        v-if="privateMode === true"
+        class="h-7 w-7"
+      />
+      </a>
+
       <button class="flex mx-4 text-gray-600 focus:outline-none">
         <BellIcon
           class="h-7 w-7"
@@ -84,18 +98,21 @@
 </template>
 
 <script lang="ts">
-import { AuthStore } from '/store'
-import { BellIcon } from '@heroicons/vue/outline'
-import { defineComponent, inject, ref } from 'vue'
+import { BellIcon, EyeIcon, EyeOffIcon } from '@heroicons/vue/outline'
+import { defineComponent, computed,inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSidebar } from '../hooks/useSidebar'
+import { AuthStore, useUserStore } from '../store'
 import SearchBar from './SearchBar.vue'
 
 
 export default defineComponent({
-  components: {SearchBar, BellIcon},
+  components : {
+    SearchBar, BellIcon, EyeIcon, EyeOffIcon,
+  },
   // eslint-disable-next-line no-unused-vars
   setup () {
+    const userStore          = useUserStore()
     const {push : pushRoute} = useRouter()
     const authStore          = inject(('$authStore')) as AuthStore
     const dropdownOpen       = ref(false)
@@ -108,6 +125,8 @@ export default defineComponent({
 
 
     return {
+      setPrivateMode : userStore.setPrivateMode,
+      privateMode    : computed(() => userStore.privateMode),
       signOut,
       authStore,
       isOpen,

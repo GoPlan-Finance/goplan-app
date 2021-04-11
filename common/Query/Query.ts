@@ -9,16 +9,16 @@ import { BaseObject } from '/common/models/base/BaseObject'
 
 type LiveQueryUpdateFn<T> = (obj : T) => void
 
-const USE_MASTER_KEY = {useMasterKey : true}
+const USE_MASTER_KEY = {useMasterKey: true}
 
 
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
   constructor (objectClass: string | (new (...args: any[]) => T | BaseObject)) {
-    super(objectClass);
+    super(objectClass)
   }
 
-  static create<U extends BaseObject>(objectClass: string | (new (...args: any[]) => U | BaseObject) ) : Query<U>{
+  static create<U extends BaseObject> (objectClass: string | (new (...args: any[]) => U | BaseObject)) : Query<U> {
     return new Query<U>(objectClass)
   }
 
@@ -121,8 +121,8 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   ) : Promise<T[]> {
 
     for (const [
-                 k, v
-               ] of Object.entries(params)) {
+      k, v
+    ] of Object.entries(params)) {
       // @ts-ignore
       query.equalTo(k, v)
     }
@@ -137,15 +137,15 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
 
     for (const [
-                 k, v
-               ] of Object.entries(params)) {
+      k, v
+    ] of Object.entries(params)) {
       this.equalTo(k, v as any)
     }
 
     return this.first(useMasterKey ? USE_MASTER_KEY : undefined) as Promise<T>
   }
 
-  private createObject() : T {
+  private createObject () : T {
     const className = this.className as any as new (...args: any[]) => T
 
     return new className()

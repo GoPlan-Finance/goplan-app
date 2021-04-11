@@ -1,8 +1,7 @@
 <template>
   <HeadlineActions
-    :headline="$t('transactions.headline')"
+    :headline="$t('holdings.headline')"
   >
-    <ImportTransactionsModal />
     <buy-sell-asset />
   </HeadlineActions>
 
@@ -88,21 +87,6 @@
         {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
       </div>
     </template>
-    <template #field(price)="{value}">
-      <Private>
-        {{value}}
-      </Private>
-    </template>
-    <template #field(fees)="{value}">
-      <Private>
-        {{value}}
-      </Private>
-    </template>
-    <template #field(totalExcludingFees)="{value}">
-      <Private>
-        {{value}}
-      </Private>
-    </template>
   </DataTable>
 </template>
 
@@ -111,19 +95,17 @@ import { Account, Transaction } from '/common/models'
 import { Query } from '/common/Query'
 import { formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
-import Private from '../components/base/Private.vue'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 import AppLink from '../components/router/AppLink.vue'
-import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
 
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon,
   },
   setup () {
     const data = reactive({
@@ -131,6 +113,7 @@ export default defineComponent({
       config : {
         fields: {
           type       : {},
+          value      : {},
           executedAt : {
             justify : 'right',
             format  : 'date',
@@ -181,7 +164,7 @@ export default defineComponent({
         ],
         settings: {
           actions           : false,
-          translationPrefix : 'transactions.table',
+          translationPrefix : 'holdings.table',
         },
         filters: {
           accounts: {

@@ -69,7 +69,6 @@ export class CacheableQuery<T extends BaseObject> extends Query<T> {
   }
 
 
-
   protected async handleCache<U> (className : string, params : unknown, fn : HandlerFn<U>) : Promise<U> {
 
     const CACHE = CacheableQuery.CACHE as CacheItemType<U>
