@@ -42,7 +42,7 @@
     "kerberos": "1.1.5",
     "module-alias": "^2.2.2",
     "node-ts": "^5.1.1",
-    "parse": "3.1.0",
+    "parse": "3.2.0",
     "parse-server": "github:GoPlan-Finance/parse-server#4_5_0",
     "ts-money": "^0.4.6"
   },
