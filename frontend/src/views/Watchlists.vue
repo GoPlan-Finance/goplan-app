@@ -68,7 +68,8 @@
 </template>
 
 <script lang="ts">
-import { Watchlist } from '/common/models'
+import { Transaction, Watchlist } from '/common/models'
+import { Query } from '/common/Query'
 import dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 import AddWatchlist from '../components/AddWatchlist.vue'
@@ -92,8 +93,8 @@ export default defineComponent({
     }
 
     onBeforeMount(async () => {
-      const q          = new Parse.Query(Watchlist)
-      liveSubscription = await Watchlist.liveQuery(q, watchlists.value, show)
+      const q          = new Query(Watchlist)
+      liveSubscription = await q.liveQuery(watchlists.value, show)
     })
 
     onUnmounted(async () => {

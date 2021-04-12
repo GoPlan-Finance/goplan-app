@@ -5,6 +5,7 @@
  */
 // noinspection ES6PreferShortImport
 import { AssetSymbol } from '/common/models'
+import { CacheableQuery } from '/common/Query/CacheableQuery'
 import { assertUser } from '../../Auth'
 
 
@@ -16,7 +17,7 @@ Parse.Cloud.define('Assets--GetQuote', async (request) => {
 
   const {assetSymbolId} = request.params
 
-  const assetSymbol = await AssetSymbol.getObjectById<AssetSymbol>(assetSymbolId, true)
+  const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(assetSymbolId, true)
 
   if (!assetSymbol) {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Symbol ${assetSymbolId} not found`)

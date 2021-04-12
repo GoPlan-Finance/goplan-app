@@ -49,6 +49,7 @@
 <script lang="ts">
 
 import { AssetSymbol, Watchlist } from '/common/models'
+import { Query } from '/common/Query'
 import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue'
 import Modal from './Modal.vue'
@@ -74,8 +75,8 @@ export default defineComponent({
     }
 
     onBeforeMount(async () => {
-      const q          = new Parse.Query(Watchlist)
-      liveSubscription = await Watchlist.liveQuery(q, watchlists.value)
+      const q          = new Query(Watchlist)
+      liveSubscription = await q.liveQuery(watchlists.value)
     })
 
     onUnmounted(async () => {

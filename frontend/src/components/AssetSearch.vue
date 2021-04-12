@@ -30,6 +30,7 @@
 <script lang="ts">
 
 import { AssetSymbol } from '/common/models'
+import { Query } from '/common/Query'
 import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue'
 import SearchField from '../components/base/SearchField.vue'
 
@@ -39,7 +40,7 @@ const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
     return []
   }
 
-  const q = new Parse.Query(AssetSymbol)
+  const q = new Query(AssetSymbol)
   q.startsWith('symbol', tickerName.toUpperCase())
   q.limit(10)
   //q.include(['exchange.name'])

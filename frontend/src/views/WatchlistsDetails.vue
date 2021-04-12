@@ -37,7 +37,8 @@
 </template>
 
 <script lang="ts">
-import { Watchlist } from '/common/models'
+import { Transaction, Watchlist } from '/common/models'
+import { Query } from '/common/Query'
 import dayjs from 'dayjs'
 import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import DataTable from '../components/DataTable.vue'
@@ -76,10 +77,10 @@ export default defineComponent({
 
 
     onBeforeMount(async () => {
-      const q = new Parse.Query(Watchlist)
+      const q = new Query(Watchlist)
       q.get(props.id)
 
-      liveSubscription = await Watchlist.liveQuery(q, null, async wl => {
+      liveSubscription = await q.liveQuery(null, async wl => {
         data.items     = await wl.relation('symbols').query().find()
         data.watchlist = wl
       })

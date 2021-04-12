@@ -3,13 +3,13 @@
  *
  *
  */
+import { StringKeys } from '/common/utils'
 import { Mutex } from 'async-mutex'
 import { AxiosError } from 'axios'
 
 import * as dayjs from 'dayjs'
 
 import * as FMPApi from 'financialmodelingprep-openapi'
-import { StringKeys } from '/common/utils'
 import * as Types from '../types'
 
 
@@ -147,7 +147,7 @@ export class FMP implements Types.DataProviderInterface {
     return data.pop()
   }
 
-  mutex                  = new Mutex()
+  mutex = new Mutex()
 
   public name () : string {
     return 'FMP'

@@ -22,29 +22,34 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
     request.object.setACL(new Parse.ACL(request.user))
   }
 },
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 {
   fields: {
     price: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
     },
     quantity: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
     },
     type: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
     },
-    fees: {
+    fees: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : false,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
@@ -55,13 +60,15 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
         assertEncrypted(value)
       },
     },
-    importRawData: {
+    importRawData: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : false,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)
       },
     },
-    currency: {
+    currency: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : true,
       options  : (value : string) => {
         return value.length > 1

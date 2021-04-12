@@ -1,6 +1,5 @@
 import * as dayjs from 'dayjs'
 
-
 import * as duration from 'dayjs/plugin/duration'
 import * as relativeTime from 'dayjs/plugin/relativeTime'
 import { createPinia } from 'pinia'
@@ -9,6 +8,7 @@ import { createApp } from 'vue'
 import VueGapi from 'vue-gapi'
 import App from './App.vue'
 import './assets/main.css'
+import Private from './components/base/Private.vue'
 import LinkComponent from './components/router/AppLink.vue'
 import i18n from './i18n'
 import DashboardLayout from './layouts/DashboardLayout.vue'
@@ -42,6 +42,7 @@ AuthStore.maybeLoadDerivedKey()
 
 
 app.use(createPinia())
+app.component('Private', Private)
 app.component('DefaultLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
 app.component('StyleguideLayout', StyleguideLayout)

@@ -1,29 +1,44 @@
 <template>
-  <div class="flex justify-end gap-2 mb-2">
-    <SearchField
-      v-if="config.search"
-      v-model="search"
-    />
-    <label
-      v-for="filter in filters"
-      :key="filter"
+  <div class="grid grid-cols-2 gap-2">
+    <div
+      v-for="alignment in ['left', 'right']"
+      :key="alignment"
+      :class="alignment === 'left' ? 'justify-start' : 'justify-end'"
+      class="flex gap-2 mb-2"
     >
-      <select
-        v-model="filter.value"
-        class="rounded-lg border-0"
-        name="type"
+      <label
+        v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => ((alignment ==='right' && !filter.align) || filter.align === alignment))"
+        :key="key"
       >
-        <option
-          v-for="option in filter.options"
-          :key="option.value"
-          :value="option.value"
+        <slot
+          :key="key"
+          :filter="filter"
+          :name="`filters(${key})`"
+          :rows="rowsInternal"
         >
-          {{ option.display }}
-        </option>
-      </select>
-    </label>
-  </div>
+          <!--  @todo Move to sub-component-->
+          <select
+            v-model="filter.value"
+            class="rounded-lg border-0"
+            name="type"
+          >
+            <option
+              v-for="option in filter.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </slot>
+      </label>
 
+      <SearchField
+        v-if="config.search && (alignment === 'right')"
+        v-model="search"
+      />
+    </div>
+  </div>
   <div
     :class="`lg:grid-cols-${columnCount}`"
     class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
@@ -106,8 +121,8 @@ import SearchField from '../components/base/SearchField.vue'
 
 export type TableRow = Record<string, unknown>
 
-type FormatFn = (row : unknown, value : unknown) => void
-type SearchFn = (value : unknown, searchString : string) => void
+type FormatFn = (value : unknown, row : unknown) => void
+type SearchFn = (value : unknown, searchString : string) => boolean
 
 
 export interface TableHeader {
@@ -128,7 +143,7 @@ export interface TableConfig {
   },
   filters : Record<string, any>,
   search : {
-    function : SearchFn
+    handler : SearchFn
   }
 }
 
@@ -143,8 +158,15 @@ export default defineComponent({
   components : {SearchField},
   props      : {
     config: {
-      type     : Object as TableConfig,
-      required : true,
+      type      : Object as TableConfig,
+      required  : true,
+      validator : (config) => {
+        if (config.search
+            && config.search.handler
+            && typeof config.search.handler !== 'function') {
+          throw 'Invalid search.handler()'
+        }
+      },
     },
     rows: {
       type     : Object as TableRow[],
@@ -171,6 +193,14 @@ export default defineComponent({
     })
 
     const search = ref('')
+
+    for (const [
+      key, field
+    ] of Object.entries(config.fields)) {
+      if (!field.key) {
+        field.key = key
+      }
+    }
 
     config.headerLayout = props.config.headerLayout.map(key => {
       if (!Array.isArray(key)) {
@@ -217,7 +247,8 @@ export default defineComponent({
 
       rows = rows.filter(row => {
         if (search.value !== '') {
-          const result = config.search.function(row, search.value)
+          const result = config.search.handler(search.value, row)
+
           if (!result) {
             return false
           }
@@ -226,8 +257,12 @@ export default defineComponent({
         for (const [
           key, filter
         ] of Object.entries(config.filters)) {
-          if (filter.value !== '') {
-            if (row[key] !== filter.value) {
+          if (filter.value /* !== ''*/) {
+            if (typeof filter.handler === 'function') {
+              if (filter.handler(filter.value, row) === false) {
+                return false
+              }
+            } else if (row[key] !== filter.value) {
               return false
             }
           }

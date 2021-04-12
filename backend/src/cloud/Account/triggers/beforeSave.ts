@@ -27,6 +27,8 @@ Parse.Cloud.beforeSave('Account', async (request) => {
 {
   fields: {
     name: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       required : true,
       options  : (value : EncryptedValue) => {
         assertEncrypted(value)

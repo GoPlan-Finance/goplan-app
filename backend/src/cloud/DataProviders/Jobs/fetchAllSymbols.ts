@@ -11,6 +11,7 @@ import {
   AssetSymbol,
   StockExchange,
 } from '/common/models'
+import { CacheableQuery } from '/common/Query/CacheableQuery'
 // noinspection ES6PreferShortImport
 import { processBatch } from '/common/utils'
 import * as dayjs from 'dayjs'
@@ -48,11 +49,11 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
 
     await processBatch(symbols, async (apiSymbol : DataProviderInterfaces.AssetSymbol) => {
 
-      const exchange = !apiSymbol.exchange ? null : await StockExchange.findOrCreate({
+      const exchange = !apiSymbol.exchange ? null : await CacheableQuery.create(StockExchange).findOrCreate({
         name: apiSymbol.exchange,
       }, true)
 
-      const symbol = await AssetSymbol.findOrCreate<AssetSymbol>({
+      const symbol = await CacheableQuery.create(AssetSymbol).findOrCreate({
         symbol           : apiSymbol.symbol,
         dataProviderName : providerName,
         exchange,
@@ -66,17 +67,17 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
 
       await symbol.save(null, USE_MASTER_KEY)
 
-      const industry      = !apiProfile.industry ? null : await AssetIndustry.findOrCreate({
+      const industry      = !apiProfile.industry ? null : await CacheableQuery.create(AssetIndustry).findOrCreate({
         name: apiProfile.industry,
       }, true)
-      const sector        = !apiProfile.sector ? null : await AssetSector.findOrCreate({
+      const sector        = !apiProfile.sector ? null : await CacheableQuery.create(AssetSector).findOrCreate({
         name: apiProfile.sector,
       }, true)
-      const addressRegion = !apiProfile.country ? null : await AssetAddressRegion.findOrCreate({
+      const addressRegion = !apiProfile.country ? null : await CacheableQuery.create(AssetAddressRegion).findOrCreate({
         state   : apiProfile.state,
         country : apiProfile.country,
       }, true)
-      const profile       = await AssetProfile.findOrCreate({
+      const profile       = await CacheableQuery.create(AssetProfile).findOrCreate({
         symbol,
         exchange,
       }, true)
