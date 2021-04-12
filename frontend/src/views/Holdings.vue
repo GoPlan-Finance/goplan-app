@@ -68,7 +68,6 @@
 import { Transaction } from '/common/models'
 import { Query } from '/common/Query'
 import { ArrayUtils, formatCurrency } from '/common/utils'
-import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -111,7 +110,7 @@ export default defineComponent({
         },
         headerLayout: [
           [
-            'ticker', 'symbol'
+            'ticker', 'symbol',
           ],
           'openQty',
           [
@@ -156,7 +155,7 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery(transactions, transactionUpdated)
+      liveSubscription = await q.liveQuery(transactions, /*transactionUpdated*/)
 
       const holdings = ArrayUtils.groupBy<Transaction>(
         transactions.filter(transaction => {
@@ -166,7 +165,7 @@ export default defineComponent({
           }
 
           return [
-            'buy', 'sell'
+            'buy', 'sell',
           ].includes(transaction.type.toLowerCase())
 
         }), transaction => {
@@ -183,7 +182,7 @@ export default defineComponent({
       console.table(holdings)
 
       const rows = Object.entries(holdings).map(([
-        symbolName, transactions
+        symbolName, transactions,
       ]) => {
 
         //const symbol = await CacheableQuery.create(AssetSymbol).getObjectById()
