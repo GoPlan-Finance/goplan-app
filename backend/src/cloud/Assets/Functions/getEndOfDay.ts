@@ -4,7 +4,7 @@
  *
  */
 // noinspection ES6PreferShortImport
-import { AssetAddressRegion, AssetSymbol } from '/common/models'
+import { AssetSymbol } from '/common/models'
 import { CacheableQuery } from '/common/Query/CacheableQuery'
 import * as dayjs from 'dayjs'
 

@@ -3,7 +3,6 @@
  *
  *
  */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Query } from '/common/Query'
 
 
@@ -29,6 +28,7 @@ export class BaseObject extends Parse.Object {
   }
 
   public static register () : void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore  error TS2339: Property 'className' does not exist on type 'typeof BaseObject'.
     Parse.Object.registerSubclass(this.className, this)
   }

@@ -1,6 +1,7 @@
 //from https://github.com/Moumouls/next-atomic-gql-server/
 
-import {schemas} from './schemas'
-import {buildSchemas} from './buildSchemas'
+import { buildSchemas } from './buildSchemas'
+import { schemas } from './schemas'
 
-export const makeSchemas = async (): Promise<void> => buildSchemas(schemas)
+
+export const makeSchemas = async () : Promise<void> => buildSchemas(schemas)

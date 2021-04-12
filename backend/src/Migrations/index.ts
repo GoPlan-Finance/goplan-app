@@ -1,24 +1,25 @@
 
 const requiresAuthenticationCPL = { // @see https://docs.parseplatform.org/js/guide/#clp-and-acl-interaction
   find: {
-    requiresAuthentication: true
+    requiresAuthentication: true,
   },
   create: {
-    requiresAuthentication: true
+    requiresAuthentication: true,
   },
   get: {
-    requiresAuthentication: true
+    requiresAuthentication: true,
   },
   update: {
-    requiresAuthentication: true
+    requiresAuthentication: true,
   },
   addField: {
     // LEAVE EMPTY TO DISABLE
   },
   delete: {
-    requiresAuthentication: true
-  }
+    requiresAuthentication: true,
+  },
 }
+
 
 class BetterThanNothingMigration {
 
@@ -37,10 +38,10 @@ class BetterThanNothingMigration {
     const userSchema = new Parse.Schema('_User')
 
     userSchema.addObject('profileInfo', {
-      defaultValue: {}
+      defaultValue: {},
     })
     userSchema.addObject('clientKey', {
-      defaultValue: {}
+      defaultValue: {},
     })
 
     await userSchema.update()

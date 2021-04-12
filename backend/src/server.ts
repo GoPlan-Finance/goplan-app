@@ -7,22 +7,23 @@
 
 import * as express from 'express'
 
-import {ParseServer} from 'parse-server'
-
-import liveQueryClassNames from './cloud/liveQuery'
-
-import {createServer} from 'http'
-import {makeSchemas} from './schema'
-
-
-import config from './config'
+import { createServer } from 'http'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { ParseServer } from 'parse-server'
+import userConfig from '../config/config'
 
 // Load environment dependent configuration
 //const env = config.get('env');
-
 import defaultConfig from '../config/config.defaults'
-import userConfig from '../config/config'
-import {ProviderConfigInterface} from './cloud/DataProviders/providers'
+import { ProviderConfigInterface } from './cloud/DataProviders/providers'
+
+import liveQueryClassNames from './cloud/liveQuery'
+
+
+import config from './config'
+import { makeSchemas } from './schema'
+
 
 config.load({
   ...defaultConfig,
@@ -51,7 +52,7 @@ if (!config.get('parse.masterKey')) {
 const parseConfig = {
   auth: {
     google: {
-      clientId: config.get('parse.auth.google.clientId') as string
+      clientId: config.get('parse.auth.google.clientId') as string,
     },
   },
   allowClientClassCreation : false,
@@ -68,7 +69,7 @@ const parseConfig = {
     console.log('Running Migrations')
     await makeSchemas()
     console.log('Running Migrations ... Done')
-  }
+  },
 }
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
@@ -84,6 +85,8 @@ const app = express()
 if (!test) {
   const api = new ParseServer(parseConfig)
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   app.use(config.get('parse.mountPath'), api)
 }
 

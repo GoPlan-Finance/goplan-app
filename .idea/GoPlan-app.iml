@@ -9,6 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/inspectionProfiles" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/node_modules1" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/node_modules2" />
     </content>
     <content url="file://$MODULE_DIR$/frontend/node_modules" />
     <orderEntry type="inheritedJdk" />

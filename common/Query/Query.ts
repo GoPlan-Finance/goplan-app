@@ -3,7 +3,6 @@
  *
  *
  */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BaseObject } from '/common/models/base/BaseObject'
 
 
@@ -123,6 +122,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     for (const [
       k, v
     ] of Object.entries(params)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       query.equalTo(k, v)
     }
