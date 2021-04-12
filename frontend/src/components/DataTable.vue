@@ -3,8 +3,8 @@
     <div
       v-for="alignment in ['left', 'right']"
       :key="alignment"
-      class="flex gap-2 mb-2"
       :class="alignment === 'left' ? 'justify-start' : 'justify-end'"
+      class="flex gap-2 mb-2"
     >
       <label
         v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => ((alignment ==='right' && !filter.align) || filter.align === alignment))"
@@ -158,8 +158,15 @@ export default defineComponent({
   components : {SearchField},
   props      : {
     config: {
-      type     : Object as TableConfig,
-      required : true,
+      type      : Object as TableConfig,
+      required  : true,
+      validator : (config) => {
+        if (config.search
+            && config.search.handler
+            && typeof config.search.handler !== 'function') {
+          throw 'Invalid search.handler()'
+        }
+      },
     },
     rows: {
       type     : Object as TableRow[],
@@ -240,10 +247,6 @@ export default defineComponent({
 
       rows = rows.filter(row => {
         if (search.value !== '') {
-          if (typeof config.search.handler !== 'function') {
-            throw 'Invalid search.handler()'
-          }
-
           const result = config.search.handler(search.value, row)
 
           if (!result) {
@@ -272,7 +275,7 @@ export default defineComponent({
           let valueA  = a[sort.header.key]
           let valueB  = b[sort.header.key]
           const order = sort.order ? -1 : 1
-          
+
           if (sort.header.sortKey) {
             valueA = valueA[sort.header.sortKey]
             valueB = valueB[sort.header.sortKey]
