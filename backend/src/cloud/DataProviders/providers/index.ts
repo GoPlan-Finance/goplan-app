@@ -93,6 +93,12 @@ class GlobalProvider {
     return providers.find(provider => provider.name() === assetSymbol.get('dataProviderName'))
   }
 
+  private static getProvider (providerName : string) : Types.DataProviderInterface {
+
+    return providers.find(provider => provider.name() === providerName)
+  }
+
+
   private static async callOne (method : string, ...args : IArguments[]) {
 
     for (const provider of providers) {
@@ -248,6 +254,23 @@ class GlobalProvider {
 
     return result
   }
+
+  async getCompanyQuotes (
+    providerName: string,
+    assetSymbols : AssetSymbol[],
+  ) : Promise<Types.CompanyQuote[]> {
+
+    const tickers = assetSymbols.map(assetSymbol => assetSymbol.symbol)
+
+    const result = await GlobalProvider
+      .getProvider(providerName)
+      .getCompanyQuotes(
+        tickers,
+      )
+
+    return result
+  }
+
 
 }
 

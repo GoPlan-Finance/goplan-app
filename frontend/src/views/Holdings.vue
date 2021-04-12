@@ -59,15 +59,24 @@
         <!--N/A-->
         </span>
       </template>
+
+      <template
+        #field(currentPrice)="{ row}"
+      >
+        <AssetPrice
+          :symbol="row.symbol"
+        />
+      </template>
     </DataTable>
   </template>
 </template>
 
 <script lang="ts">
 
-import { Transaction } from '/common/models'
+import { AssetPrice, Transaction } from '/common/models'
 import { Query } from '/common/Query'
 import { ArrayUtils, formatCurrency } from '/common/utils'
+import AssetPrice2 from '../components/AssetPrice.vue'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -78,7 +87,11 @@ import AppLink from '../components/router/AppLink.vue'
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink,
+    AssetPrice: AssetPrice2,
+    BuySellAsset,
+    HeadlineActions,
+    DataTable,
+    AppLink,
   },
   setup () {
     const data = reactive({
@@ -95,6 +108,7 @@ export default defineComponent({
             // sortKey: 'symbol'
           },
           openQty        : {},
+          currentPrice   : {},
           closeQty       : {},
           openTotalPrice : {
             private : true,
@@ -119,6 +133,9 @@ export default defineComponent({
             'openTotalPrice',
           ],
           'closeQty',
+          [
+            'currentPrice',
+          ],
 
         ],
         settings: {
@@ -180,7 +197,6 @@ export default defineComponent({
 
           return 'N/A'
         })
-      console.table(holdings)
 
       const rows = Object.entries(holdings).map(([
         symbolName, transactions,
@@ -188,8 +204,9 @@ export default defineComponent({
 
         //const symbol = await CacheableQuery.create(AssetSymbol).getObjectById()
         const symbol = transactions.length > 0 ? transactions[0].symbol : null
-        const totals = {
+        const row    = {
           symbol,
+          symbolName,
           currency       : symbol ? symbol.currency : null,
           openQty        : 0,
           closeQty       : 0,
@@ -199,24 +216,21 @@ export default defineComponent({
 
         transactions.forEach(transaction => {
           if (transaction.type.toLowerCase() === 'buy') {
-            totals.openQty        += transaction.quantity
-            totals.openTotalPrice += transaction.totalExcludingFees
+            row.openQty        += transaction.quantity
+            row.openTotalPrice += transaction.totalExcludingFees
           }
 
           if (transaction.type.toLowerCase() === 'sell') {
-            totals.closeQty += transaction.quantity
+            row.closeQty += transaction.quantity
 
-            totals.openQty        -= transaction.quantity
-            totals.openTotalPrice -= transaction.totalExcludingFees
+            row.openQty        -= transaction.quantity
+            row.openTotalPrice -= transaction.totalExcludingFees
           }
         })
 
-        totals.openAvgPrice = totals.openQty !== 0 ? totals.openTotalPrice / totals.openQty : 0
+        row.openAvgPrice = row.openQty !== 0 ? row.openTotalPrice / row.openQty : 0
 
-        return {
-          symbolName,
-          ...totals,
-        }
+        return row
       })
 
 

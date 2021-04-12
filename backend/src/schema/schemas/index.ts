@@ -1,3 +1,4 @@
+import AssetPrice from './AssetPrice'
 import Account from './Account'
 import AssetAddressRegion from './AssetAddressRegion'
 import AssetIndustry from './AssetIndustry'
@@ -22,6 +23,7 @@ export const schemas = [
 
   // has dependencies
   AssetProfile,
+  AssetPrice,
   Account,
   Watchlist,
   Transaction,

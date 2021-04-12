@@ -512,6 +512,11 @@ export interface DataProviderInterface {
   ) : Promise<CompanyQuote>
 
 
+  getCompanyQuotes (
+    symbols : string[],
+  ) : Promise<CompanyQuote[]>
+
+
   test1234? () : void
 
 }

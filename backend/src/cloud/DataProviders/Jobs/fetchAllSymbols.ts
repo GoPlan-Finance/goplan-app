@@ -19,10 +19,6 @@ import { DataProvider, ProviderSymbols } from '../providers'
 
 import * as DataProviderInterfaces from '../providers/types'
 
-
-const USE_MASTER_KEY = {useMasterKey: true}
-
-
 Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
   // params: passed in the job call
   // headers: from the request that triggered the job
@@ -65,7 +61,7 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
         name     : apiSymbol.name,
       })
 
-      await symbol.save(null, USE_MASTER_KEY)
+      await symbol.save(null, AssetSymbol.useMasterKey(true))
 
       const industry      = !apiProfile.industry ? null : await CacheableQuery.create(AssetIndustry).findOrCreate({
         name: apiProfile.industry,
@@ -105,7 +101,7 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async (request) => {
         ceo               : apiProfile.ceo,
       })
 
-      await profile.save(null, USE_MASTER_KEY)
+      await profile.save(null, AssetProfile.useMasterKey(true))
 
 
     }, (i, total) => {

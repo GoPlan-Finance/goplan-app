@@ -101,7 +101,7 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
   return `${valueStr} ${currencyInfo.symbol}`
 }
 
-type groupByFn<T> = (value : T) => string
+type groupByFn<T> = (value : T, index : number) => string
 type groupByResult<T> = { [key : string] : T[] }
 
 
@@ -109,9 +109,9 @@ class ArrayUtils {
 
   public static groupBy<T> (array : T[], keyCb : groupByFn<T>) : groupByResult<T> {
 
-    return array.reduce((result : groupByResult<T>, currentValue) => {
+    return array.reduce((result : groupByResult<T>, currentValue, index) => {
 
-      const key : string = keyCb(currentValue as T)
+      const key : string = keyCb(currentValue as T, index)
 
       result[key] = result[key] || []
 
@@ -121,6 +121,16 @@ class ArrayUtils {
       return result
     }, {})
   }
+
+  public static batches<T> (array: T[], perChunk : number)  : T[][] {
+
+    return Object.values(ArrayUtils.groupBy<T>(array, (value, index) => {
+
+      return Math.ceil(index / perChunk).toString()
+
+    }))
+  }
+
 
 }
 

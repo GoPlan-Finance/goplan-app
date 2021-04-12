@@ -6,9 +6,7 @@
 import { BaseObject } from '/common/models/base/BaseObject'
 
 
-type LiveQueryUpdateFn<T> = (obj : T) => void
-
-const USE_MASTER_KEY = {useMasterKey: true}
+export type LiveQueryUpdateFn<T> = (obj : T) => void
 
 
 export class Query<T extends BaseObject> extends Parse.Query<T> {
@@ -98,7 +96,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   ) : Promise<T> {
 
 
-    return this.get(docId, useMasterKey ? USE_MASTER_KEY : undefined)
+    return this.get(docId, BaseObject.useMasterKey(useMasterKey))
   }
 
   public  async getObjectById (
@@ -127,7 +125,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
       query.equalTo(k, v)
     }
 
-    return this.find(useMasterKey ? USE_MASTER_KEY : undefined)
+    return this.find(BaseObject.useMasterKey(useMasterKey))
   }
 
   public  async findOneBy (
@@ -142,7 +140,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
       this.equalTo(k, v as any)
     }
 
-    return this.first(useMasterKey ? USE_MASTER_KEY : undefined) as Promise<T>
+    return this.first(BaseObject.useMasterKey(useMasterKey)) as Promise<T>
   }
 
   private createObject () : T {
@@ -166,7 +164,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
     obj2.set(params)
 
-    return obj2.save(null, useMasterKey ? USE_MASTER_KEY : undefined) as Promise<T>
+    return obj2.save(null, BaseObject.useMasterKey(useMasterKey)) as Promise<T>
   }
 
 }

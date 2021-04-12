@@ -8,8 +8,6 @@ import { Query } from '/common/Query'
 
 type LiveQueryUpdateFn<T> = (obj : T) => void
 
-const USE_MASTER_KEY = {useMasterKey: true}
-
 
 /*abstract*/
 export class BaseObject extends Parse.Object {
@@ -18,6 +16,9 @@ export class BaseObject extends Parse.Object {
     super(className)
   }
 
+  public static  useMasterKey (use  = false) : { useMasterKey : boolean } | undefined {
+    return use ?  {useMasterKey: true} : undefined
+  }
 
   get createdAt () : Date {
     return this.get('createdAt')

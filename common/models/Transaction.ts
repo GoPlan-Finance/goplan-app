@@ -1,7 +1,10 @@
 import { Account, AssetSymbol } from '.'
 import { SecureObject } from './base/SecureObject'
 
-export type TransactionType = 'transfer' | 'buy' | 'sell' |'dividends'| 'fees'
+
+export type TransactionType = 'transfer' | 'buy' | 'sell' | 'dividends' | 'fees'
+
+
 export class Transaction extends SecureObject {
 
   static className = 'Transaction'
@@ -15,6 +18,10 @@ export class Transaction extends SecureObject {
       'totalExcludingFees',
       'importRawData',
     ])
+
+    this.fees               = null
+    this.totalExcludingFees = null
+    this.importRawData      = null
   }
 
   get symbol () : AssetSymbol {

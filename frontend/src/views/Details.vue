@@ -18,8 +18,7 @@
     </HeadlineActions>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
-        :current-price="currentPrice"
-        :previous-price="previousPrice"
+        :symbol="assetSymbol"
       />
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
@@ -46,10 +45,9 @@
 </template>
 
 <script lang="ts">
-import { AssetSymbol } from '/common/models'
-import { Currencies, Money } from 'ts-money'
-import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
-import AssetPrice from '../components/AssetPrice.vue'
+import { AssetPrice, AssetSymbol } from '/common/models'
+import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch } from 'vue'
+import AssetPriceVue from '../components/AssetPrice.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import CandlestickChart from '../components/Charts/CandlestickChart.vue'
 import CompanyInfo from '../components/CompanyInfo.vue'
@@ -64,7 +62,7 @@ export default defineComponent({
     HeadlineActions,
     WatchAssetModal,
     CompanyInfo,
-    AssetPrice,
+    AssetPrice: AssetPriceVue,
     CandlestickChart,
     BuySellAsset,
   },
@@ -75,28 +73,36 @@ export default defineComponent({
     },
   },
   setup (props) {
+
     const data : {
+      liveSubscription : Parse.LiveQuerySubscription,
       loading : boolean,
       assetSymbol : AssetSymbol | null,
-      currentPrice : Money,
-      previousPrice : Money,
     } = reactive({
-      loading       : false,
-      assetSymbol   : null,
-      currentPrice  : Money.fromDecimal(14, Currencies.USD),
-      previousPrice : Money.fromDecimal(12, Currencies.USD),
+      loading     : false,
+      assetSymbol : null,
     })
 
     const loadAssetSymbol = async () => {
       data.loading     = true
       data.assetSymbol = await AssetSymbol.fetchSymbolByTicker(props.ticker)
       data.loading     = false
+
+      if (data.liveSubscription) {
+        await data.liveSubscription.unsubscribe()
+      }
     }
 
     watch(() => props.ticker, loadAssetSymbol)
 
     onBeforeMount(async () => {
       await loadAssetSymbol()
+    })
+
+    onUnmounted(async () => {
+      if (data.liveSubscription) {
+        await data.liveSubscription.unsubscribe()
+      }
     })
 
     return {
