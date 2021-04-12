@@ -170,7 +170,7 @@ class SubscriptionsHandler<T> {
 }
 
 
-const handler = new SubscriptionsHandler(AssetSymbol, 5)
+const handler = new SubscriptionsHandler(AssetSymbol, 60)
 
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
