@@ -96,7 +96,7 @@
           :row="row"
           :value="row[header]"
         >
-          {{ formatValue(fields[header], { value: row[header], row }) }}
+            {{ formatValue(fields[header], { value: row[header], row }) }}
         </slot>
       </div>
     </div>
@@ -187,6 +187,12 @@ export default defineComponent({
 
     const search = ref('')
 
+    for (const [key, field] of Object.entries(config.fields)) {
+      if (!field.key) {
+        field.key = key
+      }
+    }
+
     config.headerLayout = props.config.headerLayout.map(key => {
       if (!Array.isArray(key)) {
         return [
@@ -244,15 +250,14 @@ export default defineComponent({
         }
 
         for (const [
-          key, filter
-        ] of Object.entries(config.filters)) {
+                     key, filter
+                   ] of Object.entries(config.filters)) {
           if (filter.value /* !== ''*/) {
             if (typeof filter.handler === 'function') {
               if (filter.handler(filter.value, row) === false) {
                 return false
               }
             } else if (row[key] !== filter.value) {
-              console.log(key, false)
               return false
             }
           }
@@ -265,7 +270,7 @@ export default defineComponent({
           let valueA  = a[sort.header.key]
           let valueB  = b[sort.header.key]
           const order = sort.order ? -1 : 1
-
+          
           if (sort.header.sortKey) {
             valueA = valueA[sort.header.sortKey]
             valueB = valueB[sort.header.sortKey]
