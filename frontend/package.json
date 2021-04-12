@@ -52,7 +52,7 @@
     "@types/crypto-js": "^4.0.1",
     "@types/node": "^14.14.37",
     "@types/papaparse": "^5.2.5",
-    "@types/parse": "^2.18.4",
+    "@types/parse": "^2.18.5",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "@vitejs/plugin-vue": "^1.2.1",
