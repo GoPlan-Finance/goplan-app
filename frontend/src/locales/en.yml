@@ -58,3 +58,15 @@ quote:
   pe: PE
   earningsAnnouncement: Earning date
   sharesOutstanding: Shares Outstanding
+
+
+
+holdings:
+  headline: Holdings
+  table:
+    ticker: Ticker
+    symbol: Symbol
+    openQty: Open Qty
+    openAvgPrice: Avg Price
+    openTotalPrice: Book Value
+    closeQty: Closed Qty

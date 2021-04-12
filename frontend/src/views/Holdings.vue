@@ -5,95 +5,69 @@
     <buy-sell-asset />
   </HeadlineActions>
 
-  <DataTable
-    :config="config"
-    :rows="rows"
+  <template
+    v-for="openOrClose in ['open','closed']"
+    :key="openOrClose"
   >
-    <template
-      #filters(accounts)="{filter}"
+    <h1 class="text-gray-700 text-2xl  items-center">
+      {{ openOrClose.charAt(0).toUpperCase() + openOrClose.substring(1) }} Positions
+    </h1>
+
+    <DataTable
+      :config="config"
+      :rows="rows[openOrClose]"
     >
-      <label
-        v-for="(option) in filter.options"
-        :key="option.label"
-        :class="filter.value && filter.value.id === option.value.id? 'bg-gray-300' : ''"
-        class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
+      <!--Copied from Transactions.vue-->
+      <template
+        #field(ticker)="{ row }"
       >
-        <input
-          v-model="filter.value"
-          :text="option.label"
-          :value="option.value"
-          class="hidden"
-          name="radio"
-          type="radio"
-          @click="filter.value = (filter.value && filter.value.id === option.value.id ? null : filter.value)"
+        <AppLink
+          v-if="row.symbol"
+          :ticker="row.symbol"
+          class="font-bold"
+          to="ticker_details"
         >
-        <span class="py-1 px-2 text-sm text-gray-700">{{ option.label }}</span>
-      </label>
-    </template>
-    <template
-      #field(symbol)="{ row }"
-    >
-      <AppLink
-        v-if="row.symbol"
-        :ticker="row.symbol"
-        class="font-bold"
-        to="ticker_details"
-      >
-        <p class="font-normal text-sm">
-          {{ row.name }}
-        </p>
-      </AppLink>
-      <span v-else-if="row.importRawData && row.importRawData.description">
-        {{ row.importRawData.description }}
-      </span>
-      <span v-else>
+          <p class="mr-3 font-bold">
+            {{ row.symbol.symbol }}
+          </p>
+        </AppLink>
+        <span v-else-if="row.symbolName">
+          {{ row.symbolName }}
+        </span>
+        <span v-else>
         <!--N/A-->
-      </span>
-    </template>
-    <template
-      #field(ticker)="{ row }"
-    >
-      <AppLink
-        v-if="row.symbol"
-        :ticker="row.symbol.symbol"
-        class="font-bold"
-        to="ticker_details"
+        </span>
+      </template>
+
+      <template
+        #field(symbol)="{value, row }"
       >
-        <p class="mr-3 font-bold">
-          {{ row.symbol.symbol }}
-        </p>
-        <p class="font-normal text-sm">
-          {{ row.symbol.name }}
-        </p>
-      </AppLink>
-      <span v-else-if="row.importRawData && row.importRawData.symbol">
-        {{ row.importRawData.symbol }}
-      </span>
-      <span v-else>
+        <AppLink
+          v-if="value"
+          :ticker="value"
+          class="font-bold"
+          to="ticker_details"
+        >
+          <p class="font-normal text-sm">
+            {{ value.name }}
+          </p>
+        </AppLink>
+        <span v-else-if="row.importRawData && row.importRawData.description">
+          {{ row.symbolName }}
+        </span>
+        <span v-else>
         <!--N/A-->
-      </span>
-    </template>
-    <template
-      #field(type)="{ value }"
-    >
-      <div
-        :class="value ==='BUY'? 'text-blue-500' : 'text-yellow-500'"
-        class="flex gap-2"
-      >
-        <ArrowCircleLeftIcon
-          :class="value ==='BUY'? 'transform rotate-180' : ''"
-          class="h-6 w-6"
-        />
-        {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
-      </div>
-    </template>
-  </DataTable>
+        </span>
+      </template>
+    </DataTable>
+  </template>
 </template>
 
 <script lang="ts">
-import { Account, Transaction } from '/common/models'
+
+import { Transaction } from '/common/models'
 import { Query } from '/common/Query'
-import { formatCurrency } from '/common/utils'
+import { ArrayUtils, formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
@@ -105,107 +79,54 @@ import AppLink from '../components/router/AppLink.vue'
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon,
+    BuySellAsset, HeadlineActions, DataTable, AppLink,
   },
   setup () {
     const data = reactive({
-      rows   : [],
-      config : {
+      rows: {
+        open   : [],
+        closed : [],
+      },
+      config: {
         fields: {
-          type       : {},
-          value      : {},
-          executedAt : {
-            justify : 'right',
-            format  : 'date',
-          },
           symbol: {
-            sortKey: 'name',
+            // sortKey: 'name'
           },
           ticker: {
-            sortKey: 'name',
+            // sortKey: 'symbol'
           },
-          quantity: {
-            justify : 'right',
-            format  : value => {
-              return value % 1 > Number.EPSILON ? value : Number(value).toFixed(0)
+          openQty        : {},
+          closeQty       : {},
+          openTotalPrice : {
+            private : true,
+            format  : (value, row) => {
+              return row.currency ? formatCurrency(value, row.currency, true) : value.toFixed(2)
             },
           },
-          price: {
-            justify : 'right',
-            format  : (value, row) => {
-              return formatCurrency(value, row.currency, false)
-            },
-          },
-          totalExcludingFees: {
-            justify : 'right',
-            format  : (value, row) => {
-              return formatCurrency(value, row.currency)
-            },
-          },
-          fees: {
-            justify : 'right',
-            format  : (value, row) => {
-              return formatCurrency(value, row.currency)
+          openAvgPrice: {
+            format: (value, row) => {
+              return row.currency ? formatCurrency(value, row.currency, false) : value.toFixed(2)
             },
           },
         },
         headerLayout: [
-          'type',
-          'executedAt',
           [
-            'symbol', 'ticker',
+            'ticker', 'symbol'
           ],
-          'quantity',
-          'price',
+          'openQty',
           [
-            'totalExcludingFees',
+            'openAvgPrice',
+            'openTotalPrice',
           ],
-          'fees',
+          'closeQty',
+
         ],
         settings: {
           actions           : false,
           translationPrefix : 'holdings.table',
         },
-        filters: {
-          accounts: {
-            align   : 'left',
-            value   : null,
-            options : [],
-            handler : ({row, value} : { row : Transaction, value : Account }) : boolean => {
-              console.log(row.account.id, value.id, row.account.id === value.id)
-              return row.account.id === value.id
-            },
-          },
-          type: {
-            value   : '',
-            options : [
-              {
-                value   : '',
-                display : 'All Types',
-              },
-              {
-                value : 'BUY',
-                label : 'Buy',
-              },
-              {
-                value : 'SELL',
-                label : 'Sell',
-              },
-              {
-                value : 'DIVIDENDS',
-                label : 'Dividends',
-              },
-              {
-                value : 'FEES',
-                label : 'Fees',
-              },
-              {
-                value : 'TRANSFER',
-                label : 'Transfers',
-              },
-            ],
-          },
-        },
+
+
         search: {
           handler: (transaction, searchString) => {
             const searchVal = searchString.toLowerCase()
@@ -224,6 +145,10 @@ export default defineComponent({
     })
 
 
+    // const transactionUpdated = (transaction : Transaction) => {
+    // }
+
+    const transactions   = []
     let liveSubscription = null
 
     onBeforeMount(async () => {
@@ -231,15 +156,75 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery(data.rows)
+      liveSubscription = await q.liveQuery(transactions, transactionUpdated)
 
-      const qA                             = new Query(Account)
-      data.config.filters.accounts.options = (await qA.find()).map(account => {
+      const holdings = ArrayUtils.groupBy<Transaction>(
+        transactions.filter(transaction => {
+
+          if (!transaction.type) {
+            return false
+          }
+
+          return [
+            'buy', 'sell'
+          ].includes(transaction.type.toLowerCase())
+
+        }), transaction => {
+          if (transaction.symbol) {
+            return transaction.symbol.symbol
+          }
+
+          if (transaction.importRawData && transaction.importRawData.symbol) {
+            return transaction.importRawData.symbol
+          }
+
+          return 'N/A'
+        })
+      console.table(holdings)
+
+      const rows = Object.entries(holdings).map(([
+        symbolName, transactions
+      ]) => {
+
+        //const symbol = await CacheableQuery.create(AssetSymbol).getObjectById()
+        const symbol = transactions.length > 0 ? transactions[0].symbol : null
+        const totals = {
+          symbol,
+          currency       : symbol ? symbol.currency : null,
+          openQty        : 0,
+          closeQty       : 0,
+          openTotalPrice : 0,
+          openAvgPrice   : 0,
+        }
+
+        transactions.forEach(transaction => {
+          if (transaction.type.toLowerCase() === 'buy') {
+            totals.openQty        += transaction.quantity
+            totals.openTotalPrice += transaction.value
+          }
+
+          if (transaction.type.toLowerCase() === 'sell') {
+            totals.closeQty += transaction.quantity
+
+            totals.openQty        -= transaction.quantity
+            totals.openTotalPrice -= transaction.value
+          }
+        })
+
+
+        totals.openAvgPrice = totals.openQty !== 0 ? totals.openTotalPrice / totals.openQty : 0
+
         return {
-          value : account,
-          label : account.name,
+          symbolName,
+          ...totals,
         }
       })
+
+
+      data.rows.open   = rows.filter(row => row.openQty !== 0)
+      data.rows.closed = rows.filter(row => row.openQty === 0)
+
+
     })
 
     onUnmounted(async () => {

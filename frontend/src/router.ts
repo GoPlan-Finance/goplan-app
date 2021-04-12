@@ -18,6 +18,7 @@ import NotFound from './views/Error404.vue'
 import Auth from './views/modules/Auth/Auth.vue'
 import Profile from './views/modules/Auth/Profile.vue'
 import Transactions from './views/Transactions.vue'
+import Holdings from './views/Holdings.vue'
 import Watchlists from './views/Watchlists.vue'
 import WatchlistsDetails from './views/WatchlistsDetails.vue'
 
@@ -53,6 +54,12 @@ const appRoutes : RouteRecordRaw[] = [
     name      : 'transactions',
     props     : true,
     component : Transactions,
+  },
+  {
+    path      : '/holdings',
+    name      : 'holdings',
+    props     : true,
+    component : Holdings,
   },
   {
     path      : '/details/:ticker',

@@ -41,7 +41,7 @@
         to="ticker_details"
       >
         <p class="font-normal text-sm">
-          {{ row.name }}
+          {{ row.symbol.name }}
         </p>
       </AppLink>
       <span v-else-if="row.importRawData && row.importRawData.description">
@@ -51,6 +51,7 @@
         <!--N/A-->
       </span>
     </template>
+
     <template
       #field(ticker)="{ row }"
     >
@@ -62,9 +63,6 @@
       >
         <p class="mr-3 font-bold">
           {{ row.symbol.symbol }}
-        </p>
-        <p class="font-normal text-sm">
-          {{ row.symbol.name }}
         </p>
       </AppLink>
       <span v-else-if="row.importRawData && row.importRawData.symbol">
@@ -139,7 +137,7 @@ export default defineComponent({
             sortKey: 'name',
           },
           ticker: {
-            sortKey: 'name',
+            sortKey: 'symbol',
           },
           quantity: {
             justify : 'right',

@@ -22,19 +22,38 @@
       </div>
 
       <nav class="mt-14">
+        <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">
+          My Portfolio
+        </div>
+
         <navigation-item
-          title="Watchlists"
-          to="/watchlists"
+          title="Holdings"
+          to="/holdings"
         >
-          <TrendingUpIcon
+          <RefreshIcon
             class="h-5 w-5"
           />
         </navigation-item>
+
+
         <navigation-item
           title="Transactions"
           to="/transactions"
         >
           <RefreshIcon
+            class="h-5 w-5"
+          />
+        </navigation-item>
+
+
+        <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">
+          Research
+        </div>
+        <navigation-item
+          title="Watchlists"
+          to="/watchlists"
+        >
+          <TrendingUpIcon
             class="h-5 w-5"
           />
         </navigation-item>

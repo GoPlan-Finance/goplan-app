@@ -57,11 +57,11 @@ export class Transaction extends SecureObject {
     this.set('quantity', value)
   }
 
-  get type () : string {
+  get type () : TransactionType {
     return this.get('type')
   }
 
-  set type (value) {
+  set type (value : TransactionType) {
     this.set('type', value.toUpperCase())
   }
 
@@ -101,7 +101,7 @@ export class Transaction extends SecureObject {
     this.set('importStatus', value)
   }
 
-  get importRawData () : unknown {
+  get importRawData () : any {
     return this.get('importRawData')
   }
 
