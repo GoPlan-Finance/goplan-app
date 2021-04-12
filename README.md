@@ -29,7 +29,7 @@
 </p>
 
 
-![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/master/.github/screenshoot-goplan.png)
+![screenshot](https://github.com/GoPlan-Finance/GoPlan-app/raw/master/.github/screenshot-goplan.png)
 
 
 
