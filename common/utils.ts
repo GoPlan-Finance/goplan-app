@@ -69,6 +69,16 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
     throw 'Invalid currency'
   }
 
+  if (value instanceof Money) {
+    value = value.toDecimal()
+  } else if (!isNaN(Number(value))) {
+    value = Number(value)
+  }
+
+
+  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
+
+
   currency = currency.toUpperCase()
 
   if (!Currencies[currency as keyof typeof Currencies]) {
@@ -77,11 +87,6 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
 
   const currencyInfo : Currency = Currencies[currency as keyof typeof Currencies] as Currency
 
-  if (value instanceof Money) {
-    value = value.toDecimal()
-  } else if (!isNaN(Number(value))) {
-    value = Number(value)
-  }
 
   /* cap max decimals to either currency, or 4 */
   const nbDecimals = fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4)
@@ -117,11 +122,27 @@ class ArrayUtils {
     }, {})
   }
 
+}
+
+
+class StringUtils {
+
+  static toNumberOrNull (value : string) : number | null {
+    const floatVal = parseFloat(value)
+
+    if (isNaN(floatVal)) {
+      return null
+    }
+
+    return floatVal
+  }
+
 
 }
 
 
 export {
+  StringUtils,
   ArrayUtils,
   sleep,
   processBatch,

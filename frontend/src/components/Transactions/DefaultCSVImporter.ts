@@ -6,6 +6,7 @@
 import { Account, AssetSymbol, Transaction } from '/common/models'
 import { TransactionType } from '/common/models/Transaction'
 import { Query } from '/common/Query'
+import { StringUtils } from '/common/utils'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
@@ -13,10 +14,10 @@ import * as Papa from 'papaparse'
 export interface CsvDataInterface {
   currency : string
   date : string
-  price : number
-  quantity : number
-  fees : number
-  totalExcludingFees : number
+  price : string
+  quantity : string
+  fees : string
+  totalExcludingFees : string
   type : TransactionType,
   account : Account,
   accountName : string,
@@ -175,10 +176,10 @@ export class DefaultCSVImporter {
         transaction.executedAt         = dayjs(row.date).toDate()
         transaction.currency           = row.currency
         transaction.account            = row.account
-        transaction.price              = row.price
-        transaction.quantity           = row.quantity
-        transaction.fees               = row.fees
-        transaction.totalExcludingFees = row.totalExcludingFees
+        transaction.price              = StringUtils.toNumberOrNull(row.price)
+        transaction.quantity           = StringUtils.toNumberOrNull(row.quantity)
+        transaction.fees               = StringUtils.toNumberOrNull(row.fees)
+        transaction.totalExcludingFees = StringUtils.toNumberOrNull(row.totalExcludingFees)
         transaction.symbol             = row.assetSymbol
         transaction.type               = row.type
         transaction.importRawData      = row

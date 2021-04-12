@@ -170,8 +170,10 @@ export default defineComponent({
         if (config.search
             && config.search.handler
             && typeof config.search.handler !== 'function') {
-          throw 'Invalid search.handler()'
+          return false
         }
+
+        return true
       },
     },
     rows: {

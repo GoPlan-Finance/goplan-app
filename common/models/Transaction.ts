@@ -65,10 +65,6 @@ export class Transaction extends SecureObject {
     this.set('type', value.toUpperCase())
   }
 
-  get value () : number {
-    return this.price * this.quantity //this.price.multiply(this.quantity)
-  }
-
   get currency () : string {
     return this.get('currency')
   }

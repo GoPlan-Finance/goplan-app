@@ -112,9 +112,10 @@ export default defineComponent({
           [
             'ticker', 'symbol',
           ],
-          'openQty',
           [
-            'openAvgPrice',
+            'openQty', 'openAvgPrice',
+          ],
+          [
             'openTotalPrice',
           ],
           'closeQty',
@@ -155,7 +156,7 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery(transactions, /*transactionUpdated*/)
+      liveSubscription = await q.liveQuery(transactions /*transactionUpdated*/)
 
       const holdings = ArrayUtils.groupBy<Transaction>(
         transactions.filter(transaction => {
@@ -199,17 +200,16 @@ export default defineComponent({
         transactions.forEach(transaction => {
           if (transaction.type.toLowerCase() === 'buy') {
             totals.openQty        += transaction.quantity
-            totals.openTotalPrice += transaction.value
+            totals.openTotalPrice += transaction.totalExcludingFees
           }
 
           if (transaction.type.toLowerCase() === 'sell') {
             totals.closeQty += transaction.quantity
 
             totals.openQty        -= transaction.quantity
-            totals.openTotalPrice -= transaction.value
+            totals.openTotalPrice -= transaction.totalExcludingFees
           }
         })
-
 
         totals.openAvgPrice = totals.openQty !== 0 ? totals.openTotalPrice / totals.openQty : 0
 
