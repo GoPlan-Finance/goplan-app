@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "description": "a financial planning platform for the general public.",
   "scripts": {
-    "pre-commit": "npm run lint-fix && cd ../backend && npm run lint-fix && cd ../frontend && npm run lint-fix",
-    "npm-update": "npm update && cd ../backend && npm update && cd ../frontend && npm update",
+    "pre-commit": "concurrently --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run lint-fix\" \"cd ../backend && npm run lint-fix\"  \"cd ../frontend && npm run lint-fix\"",
+    "npm-update": "concurrently  --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm update\" \"cd ../backend && npm update\"  \"cd ../frontend && npm update\"",
+    "npm-install": "concurrently  --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm i\" \"cd ../backend && npm i\"  \"cd ../frontend && npm i\"",
     "build": "cd ../backend && npm i && npm run build && cd ../frontend &&  npm i && npm run build",
     "lint": "eslint --cache .  --ext ts --ext js ",
     "lint-fix": "eslint --cache --fix .  --ext ts --ext js "
@@ -37,6 +38,7 @@
     "@types/parse": "^2.18.4",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "concurrently": "^6.0.2",
     "eslint": "^7.24.0",
     "eslint-plugin-varspacing": "^1.2.2",
     "eslint-plugin-vue": "^7.9.0",
