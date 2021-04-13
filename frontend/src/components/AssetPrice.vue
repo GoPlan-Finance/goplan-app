@@ -78,7 +78,7 @@ export default defineComponent({
     })
 
 
-    const change = computed(() => (price.value ?( price.value.price - price.value.previousClose ): null))
+    const change = computed(() => (price.value ? (price.value.price - price.value.previousClose) : null))
 
     const changeIsPositive = computed(() => change.value >= 0)
 
