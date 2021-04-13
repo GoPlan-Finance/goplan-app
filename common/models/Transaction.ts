@@ -1,7 +1,10 @@
 import { Account, AssetSymbol } from '.'
 import { SecureObject } from './base/SecureObject'
 
-export type TransactionType = 'transfer' | 'buy' | 'sell' |'dividends'| 'fees'
+
+export type TransactionType = 'transfer' | 'buy' | 'sell' | 'dividends' | 'fees'
+
+
 export class Transaction extends SecureObject {
 
   static className = 'Transaction'
@@ -15,6 +18,10 @@ export class Transaction extends SecureObject {
       'totalExcludingFees',
       'importRawData',
     ])
+
+    this.fees               = null
+    this.totalExcludingFees = null
+    this.importRawData      = null
   }
 
   get symbol () : AssetSymbol {
@@ -57,16 +64,12 @@ export class Transaction extends SecureObject {
     this.set('quantity', value)
   }
 
-  get type () : string {
+  get type () : TransactionType {
     return this.get('type')
   }
 
-  set type (value) {
+  set type (value : TransactionType) {
     this.set('type', value.toUpperCase())
-  }
-
-  get value () : number {
-    return this.price * this.quantity //this.price.multiply(this.quantity)
   }
 
   get currency () : string {
@@ -101,7 +104,7 @@ export class Transaction extends SecureObject {
     this.set('importStatus', value)
   }
 
-  get importRawData () : unknown {
+  get importRawData () : any {
     return this.get('importRawData')
   }
 

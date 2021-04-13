@@ -7,6 +7,7 @@ import { AssetAddressRegion } from './AssetAddressRegion'
 import { AssetIndustry } from './AssetIndustry'
 import { AssetProfile } from './AssetProfile'
 import { AssetSector } from './AssetSector'
+import { AssetPrice } from './AssetPrice'
 import { AssetSymbol } from './AssetSymbol'
 import { StockExchange } from './StockExchange'
 import { Transaction } from './Transaction'
@@ -16,8 +17,7 @@ import { Watchlist } from './Watchlist'
 
 export {
   AssetSymbol,
-
-  // Cachable
+  AssetPrice,
   AssetSector,
   AssetAddressRegion,
   AssetIndustry,

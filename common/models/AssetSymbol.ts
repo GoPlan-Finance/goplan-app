@@ -1,5 +1,6 @@
 import { BaseObject } from '/common/models/base/BaseObject'
 import { Query } from '/common/Query'
+import { CacheableQuery } from '/common/Query/CacheableQuery'
 import { StockExchange } from './StockExchange'
 
 
@@ -32,11 +33,16 @@ export class AssetSymbol extends BaseObject {
     return this.get('currency')
   }
 
-  static async fetchSymbolByTicker (ticker : string) : Promise<AssetSymbol | null> {
-    const query = new Query(AssetSymbol)
+  static async fetchSymbolByTicker (
+    ticker : string,
+    useMasterKey = false
+  ) : Promise<AssetSymbol | null> {
+
+    const query = CacheableQuery.create(AssetSymbol)
     query.equalTo('symbol', ticker.toUpperCase())
     query.include('exchange')
-    return query.first()
+
+    return query.first(AssetSymbol.useMasterKey(useMasterKey))
   }
 
   async getExchange () : Promise<StockExchange> {

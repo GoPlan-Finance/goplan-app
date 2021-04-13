@@ -96,7 +96,12 @@
           :row="row"
           :value="row[header]"
         >
-          {{ formatValue(fields[header], { value: row[header], row }) }}
+          <Private v-if="fields[header].private === true">
+            {{ formatValue(fields[header], { value: row[header], row }) }}
+          </Private>
+          <template v-else>
+            {{ formatValue(fields[header], { value: row[header], row }) }}
+          </template>
         </slot>
       </div>
     </div>
@@ -130,6 +135,7 @@ export interface TableHeader {
   classes? : string,
   justify? : 'left' | 'right' | 'center',
   sortKey? : string
+  private? : boolean
   format? : 'date' | 'datetime' | 'time' | FormatFn
 }
 
@@ -164,8 +170,10 @@ export default defineComponent({
         if (config.search
             && config.search.handler
             && typeof config.search.handler !== 'function') {
-          throw 'Invalid search.handler()'
+          return false
         }
+
+        return true
       },
     },
     rows: {
@@ -298,6 +306,7 @@ export default defineComponent({
 
     function setSort (key : string) {
       const header = config.fields[key]
+
       if (sort.header !== null && sort.header.key === header.key) {
         sort.order = !sort.order
       } else {
