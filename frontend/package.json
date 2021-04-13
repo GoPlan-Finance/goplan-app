@@ -62,7 +62,7 @@
     "cross-env": "^7.0.2",
     "eslint": "^7.24.0",
     "eslint-plugin-varspacing": "^1.2.2",
-    "eslint-plugin-vue": "^7.8.0",
+    "eslint-plugin-vue": "^7.9.0",
     "postcss": "^8.2.10",
     "typescript": "^4.2.4",
     "vite": "^2.1.5",
