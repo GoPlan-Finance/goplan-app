@@ -6,16 +6,17 @@
 import { BaseObject } from '/common/models/base/BaseObject'
 
 
-export type LiveQueryUpdateFn<T> = (obj : T) => void
+export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted'
+export type LiveQueryUpdateFn<T> = (obj : T, event : LiveQueryUpdateFnEventType) => void
 
 
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
-  constructor (objectClass: string | (new (...args: any[]) => T | BaseObject)) {
+  constructor (objectClass : string | (new (...args : any[]) => T | BaseObject)) {
     super(objectClass)
   }
 
-  static create<U extends BaseObject> (objectClass: string | (new (...args: any[]) => U | BaseObject)) : Query<U> {
+  static create<U extends BaseObject> (objectClass : string | (new (...args : any[]) => U | BaseObject)) : Query<U> {
     return new Query<U>(objectClass)
   }
 
@@ -33,10 +34,10 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     removeFn? : LiveQueryUpdateFn<T>,
   ) : Promise<Parse.LiveQuerySubscription> {
 
-    const replace = async (object : T) => {
+    const replace = async (object : T, event : LiveQueryUpdateFnEventType) => {
 
       if (updateFn) {
-        await updateFn(object)
+        await updateFn(object, event)
       }
 
       if (objects !== null) {
@@ -54,7 +55,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     const remove = async (object : T) => {
 
       if (removeFn) {
-        await removeFn(object)
+        await removeFn(object, 'deleted')
       }
 
       if (objects !== null) {
@@ -67,19 +68,19 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     }
 
     for (const object of await this.find()) {
-      replace(object)
+      replace(object, null)
     }
 
     const subscription = await this.subscribe()
 
     subscription.on('create', item => {
 
-      replace(item as T)
+      replace(item as T, 'created')
     })
 
     subscription.on('update', item => {
 
-      replace(item as T)
+      replace(item as T, 'updated')
     })
 
     subscription.on('delete', item => {
@@ -90,7 +91,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   }
 
 
-  public  async getOrNull (
+  public async getOrNull (
     docId : string,
     useMasterKey = false,
   ) : Promise<T> {
@@ -99,7 +100,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     return this.get(docId, BaseObject.useMasterKey(useMasterKey))
   }
 
-  public  async getObjectById (
+  public async getObjectById (
     docId : string,
     useMasterKey = false,
   ) : Promise<T> {
@@ -112,7 +113,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
 
-  public  async findBy (
+  public async findBy (
     params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false,
   ) : Promise<T[]> {
@@ -128,7 +129,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     return this.find(BaseObject.useMasterKey(useMasterKey))
   }
 
-  public  async findOneBy (
+  public async findOneBy (
     params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false,
   ) : Promise<T | undefined> {
@@ -144,7 +145,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   }
 
   private createObject () : T {
-    const className = this.className as any as new (...args: any[]) => T
+    const className = this.className as any as new (...args : any[]) => T
 
     return new className()
   }
@@ -160,7 +161,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
       return obj
     }
 
-    const obj2      = this.createObject()
+    const obj2 = this.createObject()
 
     obj2.set(params)
 

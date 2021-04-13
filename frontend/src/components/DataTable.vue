@@ -118,6 +118,7 @@
 </template>
 
 <script lang="ts">
+import { formatCurrency } from '/common/utils'
 import * as dayjs from 'dayjs'
 import { Money } from 'ts-money'
 import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
@@ -136,7 +137,7 @@ export interface TableHeader {
   justify? : 'left' | 'right' | 'center',
   sortKey? : string
   private? : boolean
-  format? : 'date' | 'datetime' | 'time' | FormatFn
+  format? : 'date' | 'datetime' | 'time' | 'currency' | 'money' | FormatFn
 }
 
 
@@ -245,6 +246,14 @@ export default defineComponent({
 
       if (header.format === 'time') {
         return dayjs(value).format('HH:mm:ss')
+      }
+
+      if (header.format === 'currency') {
+        return formatCurrency(value, row.currency, true)
+      }
+
+      if (header.format === 'money') {
+        return formatCurrency(value, row.currency, false)
       }
 
       throw `Unknown table dataformatter "${header.format}`

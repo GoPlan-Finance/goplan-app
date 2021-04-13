@@ -23,7 +23,7 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="row.symbol"
+          :ticker="row.symbol.symbol"
           class="font-bold"
           to="ticker_details"
         >
@@ -44,7 +44,7 @@
       >
         <AppLink
           v-if="value"
-          :ticker="value"
+          :ticker="value.symbol"
           class="font-bold"
           to="ticker_details"
         >
@@ -61,11 +61,33 @@
       </template>
 
       <template
-        #field(currentPrice)="{ row}"
+        #field(dayPL)="{ row}"
       >
-        <AssetPrice
-          :symbol="row.symbol"
+        <AssetPriceChange
+          v-if="row.symbol"
+          :compare-to="row.symbol"
+          compare-from="previousClose"
         />
+      </template>
+      <template
+        #field(openPL)="{ row}"
+      >
+        <template v-if="openOrClose === 'open' && row.openQty !== 0">
+          <AssetPriceChange
+            :compare-from="row.openAvgPrice"
+            :compare-to="row.symbol"
+          />
+        </template>
+      </template>
+      <template
+        #field(closePL)="{ row}"
+      >
+        <template v-if="row.closeQty !== 0">
+          <AssetPriceChange
+            :compare-from="row.openAvgPrice"
+            :compare-to="row.closeAvgPrice"
+          />
+        </template>
       </template>
     </DataTable>
   </template>
@@ -73,12 +95,12 @@
 
 <script lang="ts">
 
-import { AssetPrice, Transaction } from '/common/models'
+import { Transaction } from '/common/models'
 import { Query } from '/common/Query'
-import { ArrayUtils, formatCurrency } from '/common/utils'
-import AssetPrice2 from '../components/AssetPrice.vue'
+import { ArrayUtils } from '/common/utils'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
+import AssetPriceChange from '../components/AssetPriceChange.vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
@@ -87,7 +109,7 @@ import AppLink from '../components/router/AppLink.vue'
 
 export default defineComponent({
   components: {
-    AssetPrice: AssetPrice2,
+    AssetPriceChange,
     BuySellAsset,
     HeadlineActions,
     DataTable,
@@ -107,36 +129,52 @@ export default defineComponent({
           ticker: {
             // sortKey: 'symbol'
           },
-          openQty        : {},
-          currentPrice   : {},
-          closeQty       : {},
-          openTotalPrice : {
+
+          currentPrice : {},
+          //
+          openQty      : {
+            format: value => (value !== 0 ? value : ''),
+          },
+          openTotalPrice: {
             private : true,
-            format  : (value, row) => {
-              return row.currency ? formatCurrency(value, row.currency, true) : value.toFixed(2)
-            },
+            format  : 'currency',
           },
           openAvgPrice: {
-            format: (value, row) => {
-              return row.currency ? formatCurrency(value, row.currency, false) : value.toFixed(2)
-            },
+            format: 'money',
           },
+          //
+          closeQty: {
+            format: value => (value !== 0 ? value : ''),
+          },
+          closeAvgPrice: {
+            format: 'money',
+          },
+          closeTotalPrice: {
+            private : true,
+            format  : 'currency',
+          },
+          //
+          dayPL   : {},
+          openPL  : {},
+          closePL : {},
         },
         headerLayout: [
           [
             'ticker', 'symbol',
           ],
           [
-            'openQty', 'openAvgPrice',
+            'openQty', 'openAvgPrice'
           ],
           [
-            'openTotalPrice',
+            'closeQty', 'closeAvgPrice'
           ],
-          'closeQty',
+          'dayPL',
           [
-            'currentPrice',
+            'openPL', 'openTotalPrice'
           ],
-
+          [
+            'closePL', 'closeTotalPrice'
+          ],
         ],
         settings: {
           actions           : false,
@@ -145,25 +183,36 @@ export default defineComponent({
 
 
         search: {
-          handler: (transaction, searchString) => {
-            const searchVal = searchString.toLowerCase()
+          handler: (searchString, holding) => {
+            const searchVal  = searchString.toLowerCase()
+            const tickerName = holding.symbolName
 
-            if (transaction.symbol
-                && (transaction.symbol.name.toLowerCase().includes(searchVal)
-                    || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
+            if (tickerName && tickerName.toLowerCase().startsWith(searchVal)) {
+              return true
+            }
+
+            // noinspection RedundantIfStatementJS
+            if (holding.symbol
+                && (
+                  holding.symbol.name.toLowerCase().includes(searchVal)
+                )
             ) {
               return true
             }
 
-            return dayjs(transaction.executedAt).format('YYYY-MM-DD').toLowerCase().startsWith(searchVal)
+            return false
           },
         },
       },
     })
 
 
-    // const transactionUpdated = (transaction : Transaction) => {
-    // }
+    const transactionUpdated = (transaction : Transaction, event) => {
+      // if (!event) {
+      //
+      // }
+      console.log(event, transaction)
+    }
 
     const transactions   = []
     let liveSubscription = null
@@ -173,7 +222,7 @@ export default defineComponent({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      liveSubscription = await q.liveQuery(transactions /*transactionUpdated*/)
+      liveSubscription = await q.liveQuery(transactions, transactionUpdated)
 
       const holdings = ArrayUtils.groupBy<Transaction>(
         transactions.filter(transaction => {
@@ -187,15 +236,9 @@ export default defineComponent({
           ].includes(transaction.type.toLowerCase())
 
         }), transaction => {
-          if (transaction.symbol) {
-            return transaction.symbol.symbol
-          }
+          const symbol = transaction.getTickerName()
 
-          if (transaction.importRawData && transaction.importRawData.symbol) {
-            return transaction.importRawData.symbol
-          }
-
-          return 'N/A'
+          return symbol ? symbol : 'N/A'
         })
 
       const rows = Object.entries(holdings).map(([
@@ -209,9 +252,16 @@ export default defineComponent({
           symbolName,
           currency       : symbol ? symbol.currency : null,
           openQty        : 0,
-          closeQty       : 0,
           openTotalPrice : 0,
-          openAvgPrice   : 0,
+          openAvgPrice   : null,
+
+          closeQty        : 0,
+          closeTotalPrice : 0,
+          closeAvgPrice   : null,
+
+          dayPL   : null,
+          openPL  : null,
+          closePL : null,
         }
 
         transactions.forEach(transaction => {
@@ -221,14 +271,30 @@ export default defineComponent({
           }
 
           if (transaction.type.toLowerCase() === 'sell') {
-            row.closeQty += transaction.quantity
+            row.closeQty        += transaction.quantity
+            row.closeTotalPrice += transaction.totalExcludingFees
 
-            row.openQty        -= transaction.quantity
-            row.openTotalPrice -= transaction.totalExcludingFees
+            // row.openQty -= transaction.quantity
+            // row.openTotalPrice -= transaction.totalExcludingFees
           }
         })
 
-        row.openAvgPrice = row.openQty !== 0 ? row.openTotalPrice / row.openQty : 0
+        if (row.openQty) {
+          row.openAvgPrice = row.openTotalPrice / (row.openQty)
+        } else {
+          row.openTotalPrice = null
+          row.openAvgPrice   = null
+        }
+
+        if (row.closeQty) {
+          row.openQty        -= row.closeQty
+          row.openTotalPrice -= row.closeTotalPrice
+
+          row.closeAvgPrice = row.closeTotalPrice / row.closeQty
+        } else {
+          row.closeTotalPrice = null
+          row.closeAvgPrice   = null
+        }
 
         return row
       })
@@ -236,8 +302,6 @@ export default defineComponent({
 
       data.rows.open   = rows.filter(row => row.openQty !== 0)
       data.rows.closed = rows.filter(row => row.openQty === 0)
-
-
     })
 
     onUnmounted(async () => {

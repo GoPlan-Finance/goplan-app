@@ -1,4 +1,4 @@
-import { Currencies, Currency, Money } from 'ts-money'
+import { Currencies, Money } from 'ts-money'
 
 
 function sleep (ms : number) : Promise<void> {
@@ -72,7 +72,7 @@ class MathUtils {
 }
 
 
-function padDecimals (num : number, minDec  = 0, maxDec  = 4) {
+function padDecimals (num : number, minDec = 0, maxDec = 4) {
 
   // decimal part, without trailing 00
   // 1.000 ->  ''
@@ -88,21 +88,22 @@ function padDecimals (num : number, minDec  = 0, maxDec  = 4) {
 }
 
 
-const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+interface CurrencyInfoInterface {
+  decimal_digits : number
+  symbol : string
+}
+
+
+const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterface => {
+
+  const info = {
+    decimal_digits : 2,
+    symbol         : '$',
+  }
 
   if (!currency) {
-    throw 'Invalid currency'
+    return info
   }
-
-  if (value instanceof Money) {
-    value = value.toDecimal()
-  } else if (!isNaN(Number(value))) {
-    value = Number(value)
-  }
-
-
-  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
-
 
   currency = currency.toUpperCase()
 
@@ -110,7 +111,24 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
     throw `Currency not found ${currency}`
   }
 
-  const currencyInfo : Currency = Currencies[currency as keyof typeof Currencies] as Currency
+  return Currencies[currency.toUpperCase() as keyof typeof Currencies]
+}
+
+
+const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
+
+  const currencyInfo = getCurrencyInfo(currency)
+
+  if (value === null) {
+    return ''
+  }
+
+  if (value instanceof Money) {
+    value = value.toDecimal()
+  } else if (!isNaN(Number(value))) {
+    value = Number(value)
+  }
 
 
   /* cap max decimals to either currency, or 4 */

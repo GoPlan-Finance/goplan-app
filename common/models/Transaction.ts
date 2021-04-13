@@ -113,6 +113,18 @@ export class Transaction extends SecureObject {
   }
 
 
+  getTickerName () : string | null {
+    if (this.symbol) {
+      return this.symbol.symbol
+    }
+
+    if (this.importRawData && this.importRawData.symbol) {
+      return this.importRawData.symbol
+    }
+
+    return null
+  }
+
 }
 
 

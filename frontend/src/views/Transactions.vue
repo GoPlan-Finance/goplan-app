@@ -109,7 +109,6 @@ import { Account, Transaction } from '/common/models'
 import { Query } from '/common/Query'
 import { formatCurrency } from '/common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
-import Private from '../components/base/Private.vue'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -223,11 +222,17 @@ export default defineComponent({
         },
         search: {
           handler: (searchString, transaction) => {
-            const searchVal = searchString.toLowerCase()
+            const searchVal  = searchString.toLowerCase()
+            const tickerName = transaction.getTickerName()
+
+            if (tickerName && tickerName.toLowerCase().startsWith(searchVal)) {
+              return true
+            }
 
             if (transaction.symbol
-                && (transaction.symbol.name.toLowerCase().includes(searchVal)
-                    || transaction.symbol.symbol.toLowerCase().startsWith(searchVal))
+                && (
+                  transaction.symbol.name.toLowerCase().includes(searchVal)
+                )
             ) {
               return true
             }
