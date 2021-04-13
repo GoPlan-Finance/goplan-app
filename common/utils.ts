@@ -63,6 +63,31 @@ const processBatch = async <T, U> (
 }
 
 
+class MathUtils {
+
+  static between (i : number, min : number, max : number) : number {
+    return Math.max(min, Math.min(i, max))
+  }
+
+}
+
+
+function padDecimals (num : number, minDec  = 0, maxDec  = 4) {
+
+  // decimal part, without trailing 00
+  // 1.000 ->  ''
+  // 1.12345000 ->  12345
+  // 1.12000 -> 12
+  const str = num.toFixed(maxDec).toString()
+
+  const dec = str.includes('.') ? str.split('.')[1].replace(/0+$/, '') : ''
+
+  const len = dec.length <= minDec ? minDec : maxDec
+
+  return Number(num).toFixed(len)
+}
+
+
 const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
 
   if (!currency) {
@@ -89,8 +114,11 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
 
 
   /* cap max decimals to either currency, or 4 */
-  const nbDecimals = fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4)
-  const valueStr   = value.toFixed(nbDecimals)
+  const valueStr = padDecimals(
+    value,
+    currencyInfo.decimal_digits,
+    fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4),
+  )
 
   if ([
     'EUR', 'GBP',
@@ -122,7 +150,7 @@ class ArrayUtils {
     }, {})
   }
 
-  public static batches<T> (array: T[], perChunk : number)  : T[][] {
+  public static batches<T> (array : T[], perChunk : number) : T[][] {
 
     return Object.values(ArrayUtils.groupBy<T>(array, (value, index) => {
 
