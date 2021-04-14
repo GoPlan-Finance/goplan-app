@@ -23,7 +23,7 @@
         </svg>
       </button>
 
-      <SearchBar class="mx-4" />
+      <SearchBar class="mx-4 lg:mx-0 sm:w-96 active:w-full" />
     </div>
 
     <div class="flex items-center">

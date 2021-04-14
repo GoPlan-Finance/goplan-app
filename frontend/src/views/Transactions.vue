@@ -233,10 +233,7 @@ export default defineComponent({
       await accountStore.subscribe()
     })
 
-
     watch(() => accountStore.accounts, () => {
-
-
       data.config.filters.accounts.options = accountStore.accounts.map(account => {
         return {
           value : account,
@@ -248,7 +245,6 @@ export default defineComponent({
     })
 
     watch(() => transactionStore.transactions, () => {
-      
       data.rows = transactionStore.transactions
     }, {
       immediate: true,

@@ -14,15 +14,27 @@
       </ButtonDefault>
     </template>
     <template #content>
-      <div class="grid grid-cols-2 gap-2">
-        <label>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5">
+        <label class="col-span-1 md:col-span-2">
           <div class="text-gray-400 ml-2 mb-1">
             Asset
           </div>
-          <asset-search v-model="symbol" />
+          <asset-search
+            v-model="symbol"
+            class="w-full"
+            search-field-class="border"
+          />
         </label>
         <label class="col-start-1">
-
+          <div class="text-gray-400 ml-2 mb-1">
+            Account
+          </div>
+          <AccountSelect
+            v-model="account"
+            class="w-full"
+          />
+        </label>
+        <label>
           <div class="text-gray-400 ml-2 mb-1">
             Date
           </div>
@@ -39,8 +51,7 @@
           </div>
           <input
             v-model="quantity"
-            class="rounded min-w-min"
-            placeholder="QTY"
+            class="rounded w-full"
             type="number"
           >
         </label>
@@ -50,8 +61,7 @@
           </div>
           <input
             v-model="price"
-            class="rounded"
-            placeholder="$$$"
+            class="rounded w-full"
             type="number"
           >
         </label>
@@ -76,7 +86,8 @@
 
 <script lang="ts">
 
-import { AssetSymbol, Transaction } from '/@common/models'
+import { Account, AssetSymbol, Transaction } from '/@common/models'
+import AccountSelect from '/@components/AccountSelect.vue'
 import * as dayjs from 'dayjs'
 import { defineComponent, ref } from 'vue'
 import AssetSearch from '/@components/AssetSearch.vue'
@@ -86,7 +97,7 @@ import { PlusCircleIcon } from '@heroicons/vue/solid'
 
 
 export default defineComponent({
-  components : {AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
+  components : {AccountSelect, AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
   props      : {
     assetSymbol: {
       type    : AssetSymbol,
@@ -97,9 +108,9 @@ export default defineComponent({
     const symbol : AssetSymbol = ref(props.assetSymbol)
     const quantity             = ref(null)
     const price                = ref(null)
+    const account: Account     = ref(null)
     const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
-    console.log(symbol)
     const addTransaction = async (type : 'buy' | 'sell') => {
 
       const t = new Transaction()
@@ -110,6 +121,7 @@ export default defineComponent({
       t.set('type', type.toUpperCase())
       t.set('symbol', symbol.value)
       t.set('currency', symbol.value.currency)
+      t.set('account', account.value)
 
       await t.save()
       alert('saved :)')
@@ -125,6 +137,7 @@ export default defineComponent({
       executedAt,
       quantity,
       price,
+      account
     }
   },
 
