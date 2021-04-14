@@ -14,18 +14,27 @@
       </ButtonDefault>
     </template>
     <template #content>
-      <AccountSelect
-        v-model="account"
-      />
-      <div class="grid grid-cols-2 gap-2">
-        <label>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5">
+        <label class="col-span-1 md:col-span-2">
           <div class="text-gray-400 ml-2 mb-1">
             Asset
           </div>
-          <asset-search v-model="symbol" />
+          <asset-search
+            v-model="symbol"
+            class="w-full"
+            search-field-class="border"
+          />
         </label>
         <label class="col-start-1">
-
+          <div class="text-gray-400 ml-2 mb-1">
+            Account
+          </div>
+          <AccountSelect
+            v-model="account"
+            class="w-full"
+          />
+        </label>
+        <label>
           <div class="text-gray-400 ml-2 mb-1">
             Date
           </div>
@@ -42,8 +51,7 @@
           </div>
           <input
             v-model="quantity"
-            class="rounded min-w-min"
-            placeholder="QTY"
+            class="rounded w-full"
             type="number"
           >
         </label>
@@ -53,8 +61,7 @@
           </div>
           <input
             v-model="price"
-            class="rounded"
-            placeholder="$$$"
+            class="rounded w-full"
             type="number"
           >
         </label>

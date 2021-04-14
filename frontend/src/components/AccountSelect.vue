@@ -1,6 +1,6 @@
 <template>
   <select
-    class="rounded-lg border-0"
+    class="rounded"
     name="type"
     :value="$props.modelValue?.id"
     @input="update('id', $event.target.value)"

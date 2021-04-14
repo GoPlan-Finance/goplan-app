@@ -5,16 +5,17 @@
     </div>
 
     <div
-      :class="`modal ${
-        !opened && 'opacity-0 pointer-events-none'
-      } z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center`"
+      class="modal z-30 fixed p-4 w-full h-full top-0 left-0 flex items-center justify-center"
+      :class="{
+        'opacity-0 pointer-events-none': !opened
+      }"
     >
       <div
-        class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
+        class="absolute w-full h-full bg-gray-900 opacity-50"
         @click="close(true)"
       />
-      <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-        <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+      <div class="bg-white md:max-w-lg w-full mx-auto rounded-lg shadow-lg z-30 overflow-y-auto">
+        <div class="absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-30">
           <svg
             class="fill-current text-white"
             height="18"
@@ -37,7 +38,7 @@
               {{ title }}
             </p>
             <div
-              class="modal-close cursor-pointer z-50"
+              class="modal-close cursor-pointer z-30"
               @click="close"
             >
               <svg
@@ -127,7 +128,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .modal {
   transition: opacity 0.25s ease;
 }
