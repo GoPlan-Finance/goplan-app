@@ -6,7 +6,7 @@
     "pre-commit": "concurrently --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run lint-fix\" \"cd ../backend && npm run lint-fix\"  \"cd ../frontend && npm run lint-fix\"",
     "npm-update": "concurrently  --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm update\" \"cd ../backend && npm update\"  \"cd ../frontend && npm update\"",
     "npm-install": "concurrently  --kill-others-on-fail -p \"[{name}]\" -n \"Common,Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm i\" \"cd ../backend && npm i\"  \"cd ../frontend && npm i\"",
-    "build": "cd ../backend && npm i && npm run build && cd ../frontend &&  npm i && npm run build",
+    "build": "concurrently  --kill-others-on-fail -p \"[{name}]\" -n \"Backend,Frontend\" -c \"yellow.bold,cyan.bold,green.bold\" \"cd ../backend && npm run build\"  \"cd ../frontend && npm run build\"",
     "lint": "eslint --cache .  --ext ts --ext js ",
     "lint-fix": "eslint --cache --fix .  --ext ts --ext js "
   },

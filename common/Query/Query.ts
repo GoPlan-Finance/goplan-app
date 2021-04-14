@@ -8,15 +8,20 @@ import { BaseObject } from '/common/models/base/BaseObject'
 
 export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted'
 export type LiveQueryUpdateFn<T> = (obj : T, event : LiveQueryUpdateFnEventType) => void
+type Constructible<T> = (new (...args : any[]) => T)
 
 
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
-  constructor (objectClass : string | (new (...args : any[]) => T | BaseObject)) {
+  objectClass : Constructible<T> = null
+
+  constructor (objectClass : Constructible<T>) {
     super(objectClass)
+
+    this.objectClass = objectClass
   }
 
-  static create<U extends BaseObject> (objectClass : string | (new (...args : any[]) => U | BaseObject)) : Query<U> {
+  static create<U extends BaseObject> (objectClass : Constructible<U>) : Query<U> {
     return new Query<U>(objectClass)
   }
 
@@ -48,7 +53,10 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
           objects[index] = object
           return
         }
-        objects.push(object)
+
+        if (event) {
+          objects.push(object)
+        }
       }
     }
 
@@ -67,9 +75,17 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
       }
     }
 
+    const tmpObjects : T[] = []
     for (const object of await this.find()) {
-      replace(object, null)
+      if (updateFn) {
+        await updateFn(object, null)
+      }
+      tmpObjects.push(object)
     }
+    if (objects) {
+      objects.push(...tmpObjects)
+    }
+
 
     const subscription = await this.subscribe()
 
@@ -147,12 +163,13 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   private createObject () : T {
     const className = this.className as any as new (...args : any[]) => T
 
-    return new className()
+    return new this.objectClass()
   }
 
   public async findOrCreate (
     params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },
     useMasterKey = false,
+    save         = true,
   ) : Promise<T> {
 
     const obj = await this.findOneBy(params, useMasterKey)
@@ -164,6 +181,11 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     const obj2 = this.createObject()
 
     obj2.set(params)
+
+    if (!save) {
+      return obj2
+    }
+
 
     return obj2.save(null, BaseObject.useMasterKey(useMasterKey)) as Promise<T>
   }

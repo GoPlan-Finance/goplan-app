@@ -34,18 +34,18 @@ export class BaseObject extends Parse.Object {
     Parse.Object.registerSubclass(this.className, this)
   }
 
-  public async maybeFetchPointer<T extends BaseObject> (
-    params : string,
-    useMasterKey = false,
-  ) : Promise<T> {
-
-    const value : T | Parse.Pointer = this.get(params)
-
-    if (value instanceof BaseObject) {
-      return value as T
-    }
-
-    return Query.create<T>(this.className).getObjectById(value.objectId, useMasterKey)
-  }
+  // public async maybeFetchPointer<T extends BaseObject> (
+  //   params : string,
+  //   useMasterKey = false,
+  // ) : Promise<T> {
+  //
+  //   const value : T | Parse.Pointer = this.get(params)
+  //
+  //   if (value instanceof BaseObject) {
+  //     return value as T
+  //   }
+  //
+  //   return Query.create<T>(this).getObjectById(value.objectId, useMasterKey)
+  // }
 
 }

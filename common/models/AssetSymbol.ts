@@ -45,9 +45,6 @@ export class AssetSymbol extends BaseObject {
     return query.first(AssetSymbol.useMasterKey(useMasterKey))
   }
 
-  async getExchange () : Promise<StockExchange> {
-    return this.maybeFetchPointer('exchange')
-  }
 
 }
 
