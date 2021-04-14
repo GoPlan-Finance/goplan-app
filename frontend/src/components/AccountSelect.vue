@@ -2,7 +2,7 @@
   <select
     class="rounded-lg border-0"
     name="type"
-    :value="$props.modelValue.id"
+    :value="$props.modelValue?.id"
     @input="update('id', $event.target.value)"
   >
     <option
