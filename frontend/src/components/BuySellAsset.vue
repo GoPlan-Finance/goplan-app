@@ -14,6 +14,9 @@
       </ButtonDefault>
     </template>
     <template #content>
+      <AccountSelect
+        v-model="account"
+      />
       <div class="grid grid-cols-2 gap-2">
         <label>
           <div class="text-gray-400 ml-2 mb-1">
@@ -76,7 +79,8 @@
 
 <script lang="ts">
 
-import { AssetSymbol, Transaction } from '/@common/models'
+import { Account, AssetSymbol, Transaction } from '/@common/models'
+import AccountSelect from '/@components/AccountSelect.vue'
 import * as dayjs from 'dayjs'
 import { defineComponent, ref } from 'vue'
 import AssetSearch from '/@components/AssetSearch.vue'
@@ -86,7 +90,7 @@ import { PlusCircleIcon } from '@heroicons/vue/solid'
 
 
 export default defineComponent({
-  components : {AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
+  components : {AccountSelect, AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
   props      : {
     assetSymbol: {
       type    : AssetSymbol,
@@ -97,9 +101,9 @@ export default defineComponent({
     const symbol : AssetSymbol = ref(props.assetSymbol)
     const quantity             = ref(null)
     const price                = ref(null)
+    const account: Account     = ref(null)
     const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
-    console.log(symbol)
     const addTransaction = async (type : 'buy' | 'sell') => {
 
       const t = new Transaction()
@@ -110,6 +114,7 @@ export default defineComponent({
       t.set('type', type.toUpperCase())
       t.set('symbol', symbol.value)
       t.set('currency', symbol.value.currency)
+      t.set('account', account.value)
 
       await t.save()
       alert('saved :)')
@@ -125,6 +130,7 @@ export default defineComponent({
       executedAt,
       quantity,
       price,
+      account
     }
   },
 
