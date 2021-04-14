@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import * as dayjs from 'dayjs'
-import localizedFormat from 'dayjs/plugin/localizedFormat'
+import { localizedFormat } from 'dayjs/plugin/localizedFormat'
 import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 
 

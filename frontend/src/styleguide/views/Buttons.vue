@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ButtonDefault, { ButtonType } from '../../components/base/ButtonDefault.vue'
+import ButtonDefault, { ButtonType } from '/@components/base/ButtonDefault.vue'
 
 
 export default defineComponent({

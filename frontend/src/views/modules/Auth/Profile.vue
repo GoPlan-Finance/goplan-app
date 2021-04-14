@@ -199,7 +199,7 @@
 
 <script lang="ts">
 
-import { User } from '/common/models'
+import { User } from '/@common/models'
 import { defineComponent, onMounted, ref } from 'vue'
 
 

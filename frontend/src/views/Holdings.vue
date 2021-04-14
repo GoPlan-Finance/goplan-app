@@ -95,16 +95,16 @@
 
 <script lang="ts">
 
-import { Transaction } from '/common/models'
-import { Query } from '/common/Query'
-import { ArrayUtils } from '/common/utils'
+import { Transaction } from '/@common/models'
+import { Query } from '/@common/Query'
+import { ArrayUtils } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
-import AssetPriceChange from '../components/AssetPriceChange.vue'
-import BuySellAsset from '../components/BuySellAsset.vue'
-import DataTable from '../components/DataTable.vue'
-import HeadlineActions from '../components/HeadlineActions.vue'
-import AppLink from '../components/router/AppLink.vue'
+import AssetPriceChange from '/@components/AssetPriceChange.vue'
+import BuySellAsset from '/@components/BuySellAsset.vue'
+import DataTable from '/@components/DataTable.vue'
+import HeadlineActions from '/@components/HeadlineActions.vue'
+import AppLink from '/@components/router/AppLink.vue'
 
 
 export default defineComponent({

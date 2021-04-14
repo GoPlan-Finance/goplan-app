@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-import { AssetPrice, AssetSymbol } from '/common/models'
-import { formatCurrency } from '/common/utils'
+import { AssetPrice, AssetSymbol } from '/@common/models'
+import { formatCurrency } from '/@common/utils'
 import { computed, onUnmounted, onBeforeMount, ref, defineComponent } from 'vue'
 
 

@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Currencies, Money } from 'ts-money'
 import { defineComponent } from 'vue'
-import AssetPrice from '../../components/AssetPrice.vue'
+import AssetPrice from '/@components/AssetPrice.vue'
 
 
 export default defineComponent({

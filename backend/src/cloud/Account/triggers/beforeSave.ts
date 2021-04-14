@@ -5,8 +5,8 @@
  */
 // import { assertEncrypted } from '../../../../common/Auth'
 
-import { assertEncrypted } from '/common/Auth'
-import { EncryptedValue } from '/common/Crypto'
+import { assertEncrypted } from '/@common/Auth'
+import { EncryptedValue } from '/@common/Crypto'
 import { assertUser } from '../../Auth'
 
 

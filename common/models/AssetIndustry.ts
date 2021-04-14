@@ -1,4 +1,4 @@
-import { BaseObject } from '/common/models/base/BaseObject'
+import { BaseObject } from '/@common/models/base/BaseObject'
 
 
 export class AssetIndustry extends BaseObject {

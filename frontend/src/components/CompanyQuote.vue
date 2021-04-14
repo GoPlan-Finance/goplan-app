@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { AssetSymbol } from '/common/models'
+import { AssetSymbol } from '/@common/models'
 import { defineComponent, onBeforeMount, reactive } from 'vue'
 import { CompanyQuote } from '../../backend/src/cloud/DataProviders/providers/types' // @todo
 import DataField from './base/DataField.vue'

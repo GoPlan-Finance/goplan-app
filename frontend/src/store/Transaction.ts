@@ -1,6 +1,6 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { Transaction } from '/common/models'
-import { Query } from '/common/Query'
+import { Transaction } from '/@common/models'
+import { Query } from '/@common/Query'
 import { defineStore } from 'pinia'
 
 // const db = new IndexedDB('companyProfile')

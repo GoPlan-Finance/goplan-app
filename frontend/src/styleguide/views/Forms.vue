@@ -181,8 +181,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import DataField from '../../components/base/DataField.vue'
-import SearchBar from '../../components/SearchBar.vue'
+import DataField from '/@components/base/DataField.vue'
+import SearchBar from '/@components/SearchBar.vue'
 
 
 interface User {

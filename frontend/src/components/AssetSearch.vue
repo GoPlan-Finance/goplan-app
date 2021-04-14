@@ -29,10 +29,10 @@
 
 <script lang="ts">
 
-import { AssetSymbol } from '/common/models'
-import { Query } from '/common/Query'
+import { AssetSymbol } from '/@common/models'
+import { Query } from '/@common/Query'
 import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue'
-import SearchField from '../components/base/SearchField.vue'
+import SearchField from '/@components/base/SearchField.vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {

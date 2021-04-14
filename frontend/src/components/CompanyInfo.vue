@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { AssetProfile, AssetSymbol } from '/common/models'
+import { AssetProfile, AssetSymbol } from '/@common/models'
 import { defineComponent, onBeforeMount, reactive } from 'vue'
 import DataField from './base/DataField.vue'
 

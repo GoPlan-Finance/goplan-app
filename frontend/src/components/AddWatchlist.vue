@@ -48,10 +48,10 @@
 
 <script lang="ts">
 
-import { Watchlist } from '/common/models'
+import { Watchlist } from '/@common/models'
 import { defineComponent, ref } from 'vue'
-import ButtonDefault from './base/ButtonDefault.vue'
-import Modal from './Modal.vue'
+import ButtonDefault from '/@components/base/ButtonDefault.vue'
+import Modal from '/@components/base/GoModal.vue'
 
 
 export default defineComponent({

@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { AssetPrice, AssetSymbol } from '/common/models'
-import { CacheableQuery } from '/common/Query/CacheableQuery'
-import { ArrayUtils } from '/common/utils'
+import { AssetPrice, AssetSymbol } from '/@common/models'
+import { CacheableQuery } from '/@common/Query/CacheableQuery'
+import { ArrayUtils } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { DataProvider } from '../../DataProviders/providers'
 

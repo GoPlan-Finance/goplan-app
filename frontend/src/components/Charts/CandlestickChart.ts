@@ -3,7 +3,7 @@
  *
  *
  */
-import { AssetSymbol } from '/common/models'
+import { AssetSymbol } from '/@common/models'
 import * as dayjs from 'dayjs'
 import * as duration from 'dayjs/plugin/duration'
 

@@ -7,18 +7,9 @@
         label="Buy/Sell"
       >
         <template #before>
-          <svg
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-              fill-rule="evenodd"
-            />
-          </svg>
+          <PlusCircleIcon
+            class="h-6 w-6"
+          />
         </template>
       </ButtonDefault>
     </template>
@@ -85,16 +76,17 @@
 
 <script lang="ts">
 
-import { AssetSymbol, Transaction } from '/common/models'
-import dayjs from 'dayjs'
+import { AssetSymbol, Transaction } from '/@common/models'
+import * as dayjs from 'dayjs'
 import { defineComponent, ref } from 'vue'
-import AssetSearch from '../components/AssetSearch.vue'
+import AssetSearch from '/@components/AssetSearch.vue'
 import ButtonDefault from './base/ButtonDefault.vue'
-import Modal from './Modal.vue'
+import Modal from '/@components/base/GoModal.vue'
+import { PlusCircleIcon } from '@heroicons/vue/solid'
 
 
 export default defineComponent({
-  components : {AssetSearch, Modal, ButtonDefault},
+  components : {AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
   props      : {
     assetSymbol: {
       type    : AssetSymbol,
@@ -126,11 +118,6 @@ export default defineComponent({
       price.value      = null
       executedAt.value = dayjs().format('YYYY-MM-DD')
     }
-
-    // watch(symbol, async () => {
-    //
-    // })
-
 
     return {
       addTransaction,

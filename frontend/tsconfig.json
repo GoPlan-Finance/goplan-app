@@ -9,12 +9,18 @@
     "noEmit": true,
     "baseUrl": "./src",
     "paths": {
-      "/common/*": [
+      "/@common/*": [
         "./../../common/*"
       ],
-      "/*": [
-        "./"
+      "/@components/*": [
+        "./components/*"
       ],
+      "/@views/*": [
+        "./views/*"
+      ],
+      "/@styleguide/*": [
+        "./styleguide/*"
+      ]
     },
     "types": [
       "@intlify/vite-plugin-vue-i18n/client"

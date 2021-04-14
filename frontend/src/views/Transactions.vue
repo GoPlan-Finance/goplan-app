@@ -105,17 +105,17 @@
 </template>
 
 <script lang="ts">
-import { Account, Transaction } from '/common/models'
-import { Query } from '/common/Query'
-import { formatCurrency } from '/common/utils'
+import { Account, Transaction } from '/@common/models'
+import { Query } from '/@common/Query'
+import { formatCurrency } from '/@common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
-import BuySellAsset from '../components/BuySellAsset.vue'
-import DataTable from '../components/DataTable.vue'
-import HeadlineActions from '../components/HeadlineActions.vue'
-import AppLink from '../components/router/AppLink.vue'
-import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
+import BuySellAsset from '/@components/BuySellAsset.vue'
+import DataTable from '/@components/DataTable.vue'
+import HeadlineActions from '/@components/HeadlineActions.vue'
+import AppLink from '/@components/router/AppLink.vue'
+import ImportTransactionsModal from '/@components/Transactions/ImportTransactionsModal.vue'
 
 
 export default defineComponent({

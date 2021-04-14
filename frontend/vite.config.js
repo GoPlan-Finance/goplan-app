@@ -15,7 +15,10 @@ export default {
   },
   resolve: {
     alias: {
-      '/common': path.resolve(__dirname, '../common')
+      '/@common'     : path.resolve(__dirname, '../common'),
+      '/@components' : path.resolve(__dirname, './src/components'),
+      '/@styleguide' : path.resolve(__dirname, './src/styleguide'),
+      '/@views'      : path.resolve(__dirname, './src/views'),
     },
   },
   plugins: [
