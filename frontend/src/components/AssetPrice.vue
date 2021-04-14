@@ -7,7 +7,7 @@
       {{ formatCurrency(price.price , symbol.currency , false) }}
     </div>
     <div class="text-gray-400 font-bold">
-      {{ ass }}
+      <!-- currency -->
     </div>
     <div
       :class="changeIsPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-import { AssetPrice, AssetSymbol } from '/common/models'
-import { formatCurrency } from '/common/utils'
+import { AssetPrice, AssetSymbol } from '/@common/models'
+import { formatCurrency } from '/@common/utils'
 import { computed, onUnmounted, onBeforeMount, ref, defineComponent } from 'vue'
 
 

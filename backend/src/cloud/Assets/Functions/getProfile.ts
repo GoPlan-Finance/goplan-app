@@ -4,8 +4,8 @@
  *
  */
 // noinspection ES6PreferShortImport
-import { AssetSymbol } from '/common/models'
-import { CacheableQuery } from '/common/Query/CacheableQuery'
+import { AssetSymbol } from '/@common/models'
+import { CacheableQuery } from '/@common/Query/CacheableQuery'
 import { assertUser } from '../../Auth'
 
 import { DataProvider } from '../../DataProviders/providers'

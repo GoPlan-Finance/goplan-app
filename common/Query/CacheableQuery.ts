@@ -3,8 +3,8 @@
  *
  *
  */
-import { BaseObject } from '/common/models/base/BaseObject'
-import { Query } from '/common/Query'
+import { BaseObject } from '/@common/models/base/BaseObject'
+import { Query } from '/@common/Query'
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable prefer-rest-params */
 import * as CryptoJS from 'crypto-js'

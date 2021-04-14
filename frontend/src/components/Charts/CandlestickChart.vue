@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { AssetSymbol } from '/common/models'
+import { AssetSymbol } from '/@common/models'
 import dayjs, { Dayjs } from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 

@@ -1,6 +1,6 @@
-import { BaseObject } from '/common/models/base/BaseObject'
-import { Query } from '/common/Query'
-import { CacheableQuery } from '/common/Query/CacheableQuery'
+import { BaseObject } from '/@common/models/base/BaseObject'
+import { Query } from '/@common/Query'
+import { CacheableQuery } from '/@common/Query/CacheableQuery'
 import { StockExchange } from './StockExchange'
 
 
@@ -45,9 +45,6 @@ export class AssetSymbol extends BaseObject {
     return query.first(AssetSymbol.useMasterKey(useMasterKey))
   }
 
-  async getExchange () : Promise<StockExchange> {
-    return this.maybeFetchPointer('exchange')
-  }
 
 }
 

@@ -18,6 +18,7 @@
     </HeadlineActions>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <AssetPrice
+        size="large"
         :symbol="assetSymbol"
       />
     </div>
@@ -45,15 +46,15 @@
 </template>
 
 <script lang="ts">
-import { AssetPrice, AssetSymbol } from '/common/models'
+import { AssetPrice, AssetSymbol } from '/@common/models'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch } from 'vue'
-import AssetPriceVue from '../components/AssetPrice.vue'
-import BuySellAsset from '../components/BuySellAsset.vue'
-import CandlestickChart from '../components/Charts/CandlestickChart.vue'
-import CompanyInfo from '../components/CompanyInfo.vue'
-import CompanyQuote from '../components/CompanyQuote.vue'
-import HeadlineActions from '../components/HeadlineActions.vue'
-import WatchAssetModal from '../components/WatchAssetModal.vue'
+import AssetPriceVue from '/@components/AssetPrice.vue'
+import BuySellAsset from '/@components/BuySellAsset.vue'
+import CandlestickChart from '/@components/Charts/CandlestickChart.vue'
+import CompanyInfo from '/@components/CompanyInfo.vue'
+import CompanyQuote from '/@components/CompanyQuote.vue'
+import HeadlineActions from '/@components/HeadlineActions.vue'
+import WatchAssetModal from '/@components/WatchAssetModal.vue'
 
 
 export default defineComponent({

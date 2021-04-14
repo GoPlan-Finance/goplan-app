@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ButtonDefault, { ButtonType } from '../../components/base/ButtonDefault.vue'
-import Modal from '../../components/Modal.vue'
+import ButtonDefault, { ButtonType } from '/@components/base/ButtonDefault.vue'
+import Modal from '/@components/base/GoModal.vue'
 
 
 export default defineComponent({

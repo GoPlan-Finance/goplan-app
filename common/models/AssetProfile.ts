@@ -1,5 +1,5 @@
-import { BaseObject } from '/common/models/base/BaseObject'
-import { CacheableQuery } from '/common/Query/CacheableQuery'
+import { BaseObject } from '/@common/models/base/BaseObject'
+import { CacheableQuery } from '/@common/Query/CacheableQuery'
 import { AssetAddressRegion } from './AssetAddressRegion'
 import { AssetIndustry } from './AssetIndustry'
 import { AssetSector } from './AssetSector'

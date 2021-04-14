@@ -1,6 +1,6 @@
-import { BaseObject } from '/common/models/base/BaseObject'
-import { Query } from '/common/Query'
-import { LiveQueryUpdateFn } from '/common/Query/Query'
+import { BaseObject } from '/@common/models/base/BaseObject'
+import { Query } from '/@common/Query'
+import { LiveQueryUpdateFn } from '/@common/Query/Query'
 import { AssetSymbol } from './AssetSymbol'
 
 

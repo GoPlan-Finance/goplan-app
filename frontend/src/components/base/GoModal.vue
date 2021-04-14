@@ -80,7 +80,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, toRefs } from 'vue'
-import ButtonDefault from '../components/base/ButtonDefault.vue'
+import ButtonDefault from '/@components/base/ButtonDefault.vue'
 
 
 export default defineComponent({

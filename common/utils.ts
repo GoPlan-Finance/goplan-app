@@ -1,14 +1,14 @@
-import { Currencies, Currency, Money } from 'ts-money'
+import { Currencies, Money } from 'ts-money'
 
 
-function sleep (ms : number) : Promise<void> {
+export function sleep (ms : number) : Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-type StringKeys<T> = Extract<keyof T, string>;
+export type StringKeys<T> = Extract<keyof T, string>;
 
 
-const processBatch = async <T, U> (
+export const processBatch = async <T, U> (
   data : Array<T>, func : (elem : T) => U,
   statusFunc : (curIndex : number, len : number, result : U) => boolean | undefined | null,
   nbParallel = 8,
@@ -63,10 +63,69 @@ const processBatch = async <T, U> (
 }
 
 
-const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+export class MathUtils {
+
+  static between (i : number, min : number, max : number) : number {
+    return Math.max(min, Math.min(i, max))
+  }
+
+}
+
+
+export function hideZero (num: number) {
+  return num === 0 ? '' : num
+}
+
+export function padDecimals (num : number, minDec = 0, maxDec = 4) {
+
+  // decimal part, without trailing 00
+  // 1.000 ->  ''
+  // 1.12345000 ->  12345
+  // 1.12000 -> 12
+  const str = num.toFixed(maxDec).toString()
+
+  const dec = str.includes('.') ? str.split('.')[1].replace(/0+$/, '') : ''
+
+  const len = dec.length <= minDec ? minDec : maxDec
+
+  return Number(num).toFixed(len)
+}
+
+
+interface CurrencyInfoInterface {
+  decimal_digits : number
+  symbol : string
+}
+
+
+export const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterface => {
+
+  const info = {
+    decimal_digits : 2,
+    symbol         : '$',
+  }
 
   if (!currency) {
-    throw 'Invalid currency'
+    return info
+  }
+
+  currency = currency.toUpperCase()
+
+  if (!Currencies[currency as keyof typeof Currencies]) {
+    throw `Currency not found ${currency}`
+  }
+
+  return Currencies[currency.toUpperCase() as keyof typeof Currencies]
+}
+
+
+export const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
+
+  const currencyInfo = getCurrencyInfo(currency)
+
+  if (value === null) {
+    return ''
   }
 
   if (value instanceof Money) {
@@ -76,21 +135,12 @@ const formatCurrency = (value : Money | number, currency : string, fixedDecimals
   }
 
 
-  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
-
-
-  currency = currency.toUpperCase()
-
-  if (!Currencies[currency as keyof typeof Currencies]) {
-    throw `Currency not found ${currency}`
-  }
-
-  const currencyInfo : Currency = Currencies[currency as keyof typeof Currencies] as Currency
-
-
   /* cap max decimals to either currency, or 4 */
-  const nbDecimals = fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4)
-  const valueStr   = value.toFixed(nbDecimals)
+  const valueStr = padDecimals(
+    value,
+    currencyInfo.decimal_digits,
+    fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4),
+  )
 
   if ([
     'EUR', 'GBP',
@@ -105,7 +155,7 @@ type groupByFn<T> = (value : T, index : number) => string
 type groupByResult<T> = { [key : string] : T[] }
 
 
-class ArrayUtils {
+export class ArrayUtils {
 
   public static groupBy<T> (array : T[], keyCb : groupByFn<T>) : groupByResult<T> {
 
@@ -122,11 +172,11 @@ class ArrayUtils {
     }, {})
   }
 
-  public static batches<T> (array: T[], perChunk : number)  : T[][] {
+  public static batches<T> (array : T[], perChunk : number) : T[][] {
 
     return Object.values(ArrayUtils.groupBy<T>(array, (value, index) => {
 
-      return Math.ceil(index / perChunk).toString()
+      return Math.floor(index / perChunk).toString()
 
     }))
   }
@@ -135,7 +185,7 @@ class ArrayUtils {
 }
 
 
-class StringUtils {
+export class StringUtils {
 
   static toNumberOrNull (value : string) : number | null {
     const floatVal = parseFloat(value)
@@ -150,13 +200,4 @@ class StringUtils {
 
 }
 
-
-export {
-  StringUtils,
-  ArrayUtils,
-  sleep,
-  processBatch,
-  formatCurrency,
-}
-export type { StringKeys }
 

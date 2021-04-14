@@ -5,9 +5,9 @@
  */
 // eslint-disable-next-line  @typescript-eslint/no-var-requires
 const moduleAlias = require('module-alias')
-moduleAlias.addAlias('/common', `${__dirname}/../../../common`)
+moduleAlias.addAlias('/@common', `${__dirname}/../../../common`)
 
-import { SecureObject } from '/common/models/base/SecureObject'
+import { SecureObject } from '/@common/models/base/SecureObject'
 
 
 SecureObject.setServerMode()

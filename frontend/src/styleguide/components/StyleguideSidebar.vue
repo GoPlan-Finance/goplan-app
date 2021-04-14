@@ -227,8 +227,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import GoPlanLogo from '../../components/GoPlanLogo.vue'
-import NavigationItem from '../../components/NavigationItem.vue'
+import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
+import NavigationItem from '/@components/NavigationItem.vue'
 
 
 export default defineComponent({

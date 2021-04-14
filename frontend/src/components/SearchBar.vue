@@ -4,7 +4,7 @@
 
 <script lang="ts">
 
-import { AssetSymbol } from '/common/models'
+import { AssetSymbol } from '/@common/models'
 import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AssetSearch from './AssetSearch.vue'

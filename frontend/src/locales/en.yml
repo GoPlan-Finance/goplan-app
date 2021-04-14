@@ -70,3 +70,14 @@ holdings:
     openAvgPrice: Avg Price
     openTotalPrice: Book Value
     closeQty: Closed Qty
+    closeAvgPrice: AvgPrice
+    closeTotalPrice: Closed value
+    currentPrice: Current Price
+    currentAvgPrice: Current Price
+    currentTotalPrice: Current Value
+    dayPLChange: Daily Change
+    dayPL: Day P/L
+    openPL: Unrealized P/L
+    lastBuy: Last purchace
+    closePL: Realized P/L
+    weight: % Portfolio

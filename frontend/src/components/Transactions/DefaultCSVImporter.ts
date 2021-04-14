@@ -3,10 +3,10 @@
  *
  *
  */
-import { Account, AssetSymbol, Transaction } from '/common/models'
-import { TransactionType } from '/common/models/Transaction'
-import { Query } from '/common/Query'
-import { StringUtils } from '/common/utils'
+import { Account, AssetSymbol, Transaction } from '/@common/models'
+import { TransactionType } from '/@common/models/Transaction'
+import { Query } from '/@common/Query'
+import { StringUtils } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
@@ -46,6 +46,7 @@ export class DefaultCSVImporter {
 
   private async getOrCreateAccount (name : string) : Promise<Account> {
 
+
     if (!this.accounts) {
       const q = new Query(Account)
 
@@ -58,9 +59,14 @@ export class DefaultCSVImporter {
       return account
     }
 
+
     account      = new Account()
     account.name = name
-    return await account.save()
+
+    await account.save()
+    this.accounts.push(account)
+
+    return account
   }
 
   private async validateRow (row) : Promise<CsvDataInterface> {

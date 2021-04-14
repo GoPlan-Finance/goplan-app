@@ -48,12 +48,11 @@
 
 <script lang="ts">
 
-import { AssetSymbol, Watchlist } from '/common/models'
-import { Query } from '/common/Query'
+import { AssetSymbol, Watchlist } from '/@common/models'
+import { Query } from '/@common/Query'
 import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue'
-import Modal from './Modal.vue'
-
+import Modal from '/@components/base/GoModal.vue'
 
 export default defineComponent({
   components : {Modal, ButtonDefault},
