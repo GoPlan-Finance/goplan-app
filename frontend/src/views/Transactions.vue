@@ -86,36 +86,20 @@
         {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
       </div>
     </template>
-    <template #field(price)="{value}">
-      <Private>
-        {{ value }}
-      </Private>
-    </template>
-    <template #field(fees)="{value}">
-      <Private>
-        {{ value }}
-      </Private>
-    </template>
-    <template #field(totalExcludingFees)="{value}">
-      <Private>
-        {{ value }}
-      </Private>
-    </template>
   </DataTable>
 </template>
 
 <script lang="ts">
-import { Account, Transaction } from '/@common/models'
-import { Query } from '/@common/Query'
-import { formatCurrency } from '/@common/utils'
+import { formatCurrency, padDecimals } from '/@common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
-import BuySellAsset from '/@components/BuySellAsset.vue'
-import DataTable from '/@components/DataTable.vue'
-import HeadlineActions from '/@components/HeadlineActions.vue'
-import AppLink from '/@components/router/AppLink.vue'
-import ImportTransactionsModal from '/@components/Transactions/ImportTransactionsModal.vue'
+import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
+import BuySellAsset from '../components/BuySellAsset.vue'
+import DataTable from '../components/DataTable.vue'
+import HeadlineActions from '../components/HeadlineActions.vue'
+import AppLink from '../components/router/AppLink.vue'
+import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
+import { useAccountStore, useTransactionStore } from '/@store/index'
 
 
 export default defineComponent({
@@ -123,7 +107,7 @@ export default defineComponent({
     BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
   },
   setup () {
-    const data = reactive({
+    const data             = reactive({
       rows   : [],
       config : {
         fields: {
@@ -141,25 +125,25 @@ export default defineComponent({
           quantity: {
             justify : 'right',
             format  : value => {
-              return value % 1 > Number.EPSILON ? value : Number(value).toFixed(0)
+              return value === 0 ? '' : padDecimals(value, 0, 2)
             },
           },
           price: {
             justify : 'right',
             format  : (value, row) => {
-              return formatCurrency(value, row.currency, false)
+              return value === 0 ? '' : formatCurrency(value, row.currency, false)
             },
           },
           totalExcludingFees: {
             justify : 'right',
             format  : (value, row) => {
-              return formatCurrency(value, row.currency)
+              return value === 0 ? '' : formatCurrency(value, row.currency)
             },
           },
           fees: {
             justify : 'right',
             format  : (value, row) => {
-              return formatCurrency(value, row.currency)
+              return value === 0 ? '' : formatCurrency(value, row.currency)
             },
           },
         },
@@ -186,7 +170,6 @@ export default defineComponent({
             value   : null,
             options : [],
             handler : (value, row) => {
-              console.log(row.account.id, value.id, row.account.id === value.id)
               return row.account.id === value.id
             },
           },
@@ -242,30 +225,33 @@ export default defineComponent({
         },
       },
     })
-
-
-    let liveSubscription = null
+    const accountStore     = useAccountStore()
+    const transactionStore = useTransactionStore()
 
     onBeforeMount(async () => {
-      const q          = new Query(Transaction)
-      q.limit(100000)
-      q.descending('executedAt')
-      q.include('symbol')
-      liveSubscription = await q.liveQuery(data.rows)
+      await transactionStore.subscribe()
+      await accountStore.subscribe()
+    })
 
-      const qA                             = new Query(Account)
-      data.config.filters.accounts.options = (await qA.find()).map(account => {
+
+    watch(() => accountStore.accounts, () => {
+
+
+      data.config.filters.accounts.options = accountStore.accounts.map(account => {
         return {
           value : account,
           label : account.name,
         }
       })
+    }, {
+      immediate: true,
     })
 
-    onUnmounted(async () => {
-      if (liveSubscription) {
-        await liveSubscription.unsubscribe()
-      }
+    watch(() => transactionStore.transactions, () => {
+      
+      data.rows = transactionStore.transactions
+    }, {
+      immediate: true,
     })
 
     return {

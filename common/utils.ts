@@ -1,14 +1,14 @@
 import { Currencies, Money } from 'ts-money'
 
 
-function sleep (ms : number) : Promise<void> {
+export function sleep (ms : number) : Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-type StringKeys<T> = Extract<keyof T, string>;
+export type StringKeys<T> = Extract<keyof T, string>;
 
 
-const processBatch = async <T, U> (
+export const processBatch = async <T, U> (
   data : Array<T>, func : (elem : T) => U,
   statusFunc : (curIndex : number, len : number, result : U) => boolean | undefined | null,
   nbParallel = 8,
@@ -63,7 +63,7 @@ const processBatch = async <T, U> (
 }
 
 
-class MathUtils {
+export class MathUtils {
 
   static between (i : number, min : number, max : number) : number {
     return Math.max(min, Math.min(i, max))
@@ -72,7 +72,11 @@ class MathUtils {
 }
 
 
-function padDecimals (num : number, minDec = 0, maxDec = 4) {
+export function hideZero (num: number) {
+  return num === 0 ? '' : num
+}
+
+export function padDecimals (num : number, minDec = 0, maxDec = 4) {
 
   // decimal part, without trailing 00
   // 1.000 ->  ''
@@ -94,7 +98,7 @@ interface CurrencyInfoInterface {
 }
 
 
-const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterface => {
+export const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterface => {
 
   const info = {
     decimal_digits : 2,
@@ -115,7 +119,7 @@ const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterface => {
 }
 
 
-const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+export const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
   // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
 
   const currencyInfo = getCurrencyInfo(currency)
@@ -151,7 +155,7 @@ type groupByFn<T> = (value : T, index : number) => string
 type groupByResult<T> = { [key : string] : T[] }
 
 
-class ArrayUtils {
+export class ArrayUtils {
 
   public static groupBy<T> (array : T[], keyCb : groupByFn<T>) : groupByResult<T> {
 
@@ -172,7 +176,7 @@ class ArrayUtils {
 
     return Object.values(ArrayUtils.groupBy<T>(array, (value, index) => {
 
-      return Math.ceil(index / perChunk).toString()
+      return Math.floor(index / perChunk).toString()
 
     }))
   }
@@ -181,7 +185,7 @@ class ArrayUtils {
 }
 
 
-class StringUtils {
+export class StringUtils {
 
   static toNumberOrNull (value : string) : number | null {
     const floatVal = parseFloat(value)
@@ -196,13 +200,4 @@ class StringUtils {
 
 }
 
-
-export {
-  StringUtils,
-  ArrayUtils,
-  sleep,
-  processBatch,
-  formatCurrency,
-}
-export type { StringKeys }
 
