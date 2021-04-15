@@ -248,7 +248,7 @@ export default defineComponent({
     })
 
     watch(() => transactionStore.transactions, () => {
-      
+
       data.rows = transactionStore.transactions
     }, {
       immediate: true,

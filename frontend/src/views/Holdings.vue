@@ -136,6 +136,7 @@ export default defineComponent({
           },
 
           currentTotalPrice: {
+            private : true,
             format: (value, row : Holding) => {
               if (!row.lastPrice) {
                 return ''
