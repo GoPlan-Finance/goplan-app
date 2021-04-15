@@ -37,12 +37,12 @@
 </template>
 
 <script lang="ts">
-import { Transaction, Watchlist } from '/common/models'
-import { Query } from '/common/Query'
+import { Transaction, Watchlist } from '/@common/models'
+import { Query } from '/@common/Query'
 import dayjs from 'dayjs'
 import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
-import DataTable from '../components/DataTable.vue'
-import AppLink from '../components/router/AppLink.vue'
+import DataTable from '/@components/DataTable.vue'
+import AppLink from '/@components/router/AppLink.vue'
 
 
 export default defineComponent({

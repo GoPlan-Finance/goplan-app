@@ -88,15 +88,15 @@
 
 <script lang="ts">
 
-import { Holding } from '/common/models/Holding'
-import { formatCurrency } from '/common/utils'
+import { Holding } from '/@common/models/Holding'
+import { formatCurrency } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { defineComponent, reactive, ref, toRefs, watch } from 'vue'
-import AssetPriceChange from '../components/AssetPriceChange.vue'
-import BuySellAsset from '../components/BuySellAsset.vue'
-import DataTable from '../components/DataTable.vue'
-import HeadlineActions from '../components/HeadlineActions.vue'
-import AppLink from '../components/router/AppLink.vue'
+import AssetPriceChange from '/@components/AssetPriceChange.vue'
+import BuySellAsset from '/@components/BuySellAsset.vue'
+import DataTable from '/@components/DataTable.vue'
+import HeadlineActions from '/@components/HeadlineActions.vue'
+import AppLink from '/@components/router/AppLink.vue'
 import { useAssetPriceStore, useHoldingStore } from '../store'
 
 

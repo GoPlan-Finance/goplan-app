@@ -3,7 +3,7 @@
  *
  *
  */
-import { Query } from '/common/Query'
+import { Query } from '/@common/Query'
 
 
 type LiveQueryUpdateFn<T> = (obj : T) => void

@@ -57,7 +57,7 @@
 
 <script lang="ts">
 
-import { User } from '/common/models'
+import { User } from '/@common/models'
 import { AuthStore } from '/store'
 import { defineComponent, inject, ref } from 'vue'
 

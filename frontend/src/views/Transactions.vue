@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { formatCurrency, padDecimals } from '/common/utils'
+import { formatCurrency, padDecimals } from '/@common/utils'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
@@ -99,7 +99,7 @@ import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 import AppLink from '../components/router/AppLink.vue'
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
-import { useAccountStore, useTransactionStore } from '../store'
+import { useAccountStore, useTransactionStore } from '/@store/index'
 
 
 export default defineComponent({
@@ -233,10 +233,7 @@ export default defineComponent({
       await accountStore.subscribe()
     })
 
-
     watch(() => accountStore.accounts, () => {
-
-
       data.config.filters.accounts.options = accountStore.accounts.map(account => {
         return {
           value : account,

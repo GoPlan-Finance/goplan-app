@@ -3,7 +3,7 @@
  *
  *
  */
-import { BaseObject } from '/common/models/base/BaseObject'
+import { BaseObject } from '/@common/models/base/BaseObject'
 
 
 export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted'

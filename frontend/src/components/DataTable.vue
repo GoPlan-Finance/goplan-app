@@ -118,11 +118,11 @@
 </template>
 
 <script lang="ts">
-import { formatCurrency } from '/common/utils'
+import { formatCurrency } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { Money } from 'ts-money'
 import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
-import SearchField from '../components/base/SearchField.vue'
+import SearchField from '/@components/base/SearchField.vue'
 
 
 export type TableRow = Record<string, unknown>

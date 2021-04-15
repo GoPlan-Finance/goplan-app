@@ -66,7 +66,7 @@
 import { RefreshIcon, TrendingUpIcon } from '@heroicons/vue/outline'
 import { defineComponent } from 'vue'
 import { useSidebar } from '../hooks/useSidebar'
-import GoPlanLogo from './GoPlanLogo.vue'
+import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
 import NavigationItem from './NavigationItem.vue'
 
 

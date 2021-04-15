@@ -1,14 +1,15 @@
 <template>
   <div
-    class="relative lg:mx-0 sm:w-96 active::min-w-full"
+    class="relative"
   >
     <SearchField
       v-model="input"
+      :input-class="searchFieldClass"
       @keyup.enter="selectElement()"
     />
     <ul
       v-if="symbols.data.length && isOpen"
-      class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-10"
+      class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-40"
     >
       <li
         v-for="symbol in symbols.data"
@@ -29,10 +30,10 @@
 
 <script lang="ts">
 
-import { AssetSymbol } from '/common/models'
-import { Query } from '/common/Query'
-import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue'
-import SearchField from '../components/base/SearchField.vue'
+import { AssetSymbol } from '/@common/models'
+import { Query } from '/@common/Query'
+import SearchField from '/@components/base/SearchField.vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
@@ -55,6 +56,10 @@ export default defineComponent({
       type     : AssetSymbol,
       required : false,
     },
+    searchFieldClass: {
+      type    : String,
+      default : ''
+    }
   },
   emits: [
     'update:modelValue',
@@ -63,7 +68,7 @@ export default defineComponent({
     const isOpen                             = ref(false)
     const symbols : { data : AssetSymbol[] } = reactive({data: []})
 
-    const tickerName : string = computed(() => (props.modelValue ? props.modelValue.symbol : ''))
+    const tickerName = ref<string>('')
 
     const update = async () => {
       if (!tickerName.value) {
@@ -77,11 +82,11 @@ export default defineComponent({
       symbols.data = await getSymbols(tickerName.value)
     }
 
-    const input : string = computed({
+    const input = computed<string>({
       get () {
         return tickerName.value
       },
-      set (param) {
+      set (param: string) {
         tickerName.value = param
         update()
       },

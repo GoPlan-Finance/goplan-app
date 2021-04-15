@@ -27,12 +27,12 @@
 
 <script lang="ts">
 
-import { User } from '/common/models'
-import { sleep } from '/common/utils'
+import { User } from '/@common/models'
+import { sleep } from '/@common/utils'
 import { AuthStore } from 'store'
 import { defineComponent, getCurrentInstance, inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import GoPlanLogo from '../../../components/GoPlanLogo.vue'
+import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
 import CreateMasterKey from './CreateMasterKey.vue'
 import GoogleButton from './googleButton.vue'
 import UnlockMasterKey from './UnlockMasterKey.vue'

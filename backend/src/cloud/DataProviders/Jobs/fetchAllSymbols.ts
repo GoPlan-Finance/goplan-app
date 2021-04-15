@@ -10,10 +10,10 @@ import {
   AssetSector,
   AssetSymbol,
   StockExchange,
-} from '/common/models'
-import { CacheableQuery } from '/common/Query/CacheableQuery'
+} from '/@common/models'
+import { CacheableQuery } from '/@common/Query/CacheableQuery'
 // noinspection ES6PreferShortImport
-import { processBatch } from '/common/utils'
+import { processBatch } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { DataProvider, ProviderSymbols } from '../providers'
 

@@ -1,4 +1,4 @@
-import { User } from '/common/models'
+import { User } from '/@common/models'
 import { defineStore } from 'pinia'
 import { AuthStore, Session } from '../auth'
 

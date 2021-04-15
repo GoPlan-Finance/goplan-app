@@ -184,7 +184,7 @@
 
 import { defineComponent, reactive, toRefs } from 'vue'
 import ButtonDefault, { ButtonType } from '../base/ButtonDefault.vue'
-import Modal from '../Modal.vue'
+import Modal from '/@components/base/GoModal.vue'
 import { DefaultCSVImporter } from './DefaultCSVImporter'
 
 

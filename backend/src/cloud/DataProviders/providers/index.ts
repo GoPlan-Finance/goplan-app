@@ -4,8 +4,8 @@
  *
  *
  */
-import { AssetSymbol } from '/common/models'
-import { sleep } from '/common/utils'
+import { AssetSymbol } from '/@common/models'
+import { sleep } from '/@common/utils'
 import * as dayjs from 'dayjs'
 
 import * as weekOfYear from 'dayjs/plugin/weekOfYear'
