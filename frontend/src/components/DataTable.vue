@@ -195,11 +195,10 @@ export default defineComponent({
     })
 
     const config : TableConfig = reactive({
-      fields       : props.config.fields,
-      headerLayout : [],
-      settings     : props.config.settings || {},
-      filters      : props.config.filters || {},
-      search       : props.config.search || {},
+      fields   : props.config.fields,
+      settings : props.config.settings || {},
+      filters  : props.config.filters || {},
+      search   : props.config.search || {},
     })
 
     const search = ref('')
@@ -216,22 +215,6 @@ export default defineComponent({
       field.compare = getHandler<CompareFn>(field, 'compare')
       //field.search = getHandler<CompareFn>(field, 'search')
     }
-
-    config.headerLayout = props.config.headerLayout.map(key => {
-      if (!Array.isArray(key)) {
-        return [
-          key,
-        ]
-      }
-      return key
-    })
-
-    config.headerLayout.forEach(layout => layout.map(fieldName => {
-      if (typeof config.fields[fieldName] !== 'object') {
-        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
-      }
-    }))
-
 
     function fieldFormatValue (header : TableHeader, row) {
       const value = header.value(row, header)
@@ -310,6 +293,12 @@ export default defineComponent({
       const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
       return objectToNestedArrays(tableLayout)
     })
+
+    tableLayout.value.forEach(layout => layout.map(fieldName => {
+      if (typeof config.fields[fieldName] !== 'object') {
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
+      }
+    }))
 
     const tableTemplate = computed(() => {
       let template = ''

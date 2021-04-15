@@ -190,19 +190,6 @@ export default defineComponent({
             'fees',
           ],
         },
-        headerLayout: [
-          'type',
-          'executedAt',
-          [
-            'name', 'ticker',
-          ],
-          'quantity',
-          'price',
-          [
-            'totalExcludingFees',
-          ],
-          'fees',
-        ],
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table',

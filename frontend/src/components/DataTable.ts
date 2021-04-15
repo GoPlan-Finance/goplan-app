@@ -50,7 +50,6 @@ export interface TableLayoutCollection {
 export interface TableConfig {
   fields : TableHeader[],
   tableLayout: TableLayoutCollection
-  headerLayout : string[] | string[][],
   settings? : {
     actions : boolean,
     translationPrefix : string
