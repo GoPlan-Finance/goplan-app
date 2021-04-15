@@ -18,6 +18,7 @@ export class Transaction extends SecureObject {
       'totalExcludingFees',
       'importRawData',
     ])
+
   }
 
   get symbol () : AssetSymbol {

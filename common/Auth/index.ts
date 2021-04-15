@@ -9,13 +9,7 @@ import { Crypto } from '../Crypto'
 
 const assertEncryptedField = (object : Parse.Object, fieldName : string) : void => {
 
-  if (!value) {
-    throw 'Invalid encrypted field value (null)'
-  }
-
-  if (typeof value !== 'object') {
-    throw 'Invalid encrypted field value'
-  }
+  const value = object.get(fieldName)
 
   if (value !== undefined && !Crypto.isEncrypted(value)) {
     throw `Field "${fieldName}" is not encrypted as expected.`

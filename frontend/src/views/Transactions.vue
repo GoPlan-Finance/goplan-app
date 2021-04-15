@@ -82,6 +82,15 @@
         {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
       </div>
     </template>
+
+    <template
+      #actions="{row}"
+    >
+      <buy-sell-asset
+        v-if="row.type === 'BUY' || row.type === 'SELL'"
+        :transaction="row"
+      /><!--      @todo case sensitive row.type-->
+    </template>
   </DataTable>
 </template>
 
@@ -191,7 +200,7 @@ export default defineComponent({
           ],
         },
         settings: {
-          actions           : false,
+          actions           : true,
           translationPrefix : 'transactions.table',
         },
         filters: {
