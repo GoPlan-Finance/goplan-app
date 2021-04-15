@@ -1,4 +1,5 @@
 <template>
+  {{ breakpoint }}
   <div class="grid grid-cols-2 gap-2">
     <div
       v-for="alignment in ['left', 'right']"
@@ -145,7 +146,8 @@ import {
   TableHeader,
   TableRow, ValueFn,
 } from '/@components/DataTable'
-import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
+import { getCurrentBreakpoint } from '/@utils/screens'
+import { computed, defineComponent, reactive, ref, toRefs, onBeforeMount, onBeforeUnmount } from 'vue'
 
 
 export default defineComponent({
@@ -189,6 +191,19 @@ export default defineComponent({
     })
 
     const search = ref('')
+
+    const breakpoint    = ref(null)
+    const resizeHandler = (event) => {
+      breakpoint.value = getCurrentBreakpoint(event.target.innerWidth)
+    }
+
+    onBeforeMount(async () => {
+      window.addEventListener('resize', resizeHandler, {passive: true})
+    })
+
+    onBeforeUnmount(async () => {
+      window.removeEventListener('resize', resizeHandler)
+    })
 
     for (const [
       key, field
@@ -289,7 +304,10 @@ export default defineComponent({
       setSort,
       sort,
       search,
+      breakpoint
     }
   },
 })
+
+
 </script>
