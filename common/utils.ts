@@ -1,4 +1,4 @@
-import { Currencies, Money } from 'ts-money'
+import { Currencies } from 'ts-money'
 
 
 export function sleep (ms : number) : Promise<void> {
@@ -72,7 +72,7 @@ export class MathUtils {
 }
 
 
-export function hideZero (num: number) {
+export function hideZero (num : number) {
   return num === 0 ? '' : num
 }
 
@@ -119,7 +119,7 @@ export const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterfac
 }
 
 
-export const formatCurrency = (value : Money | number, currency : string, fixedDecimals = true) : string => {
+export const formatCurrency = (value : /*Money |*/ number, currency : string, fixedDecimals = true) : string => {
   // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
 
   const currencyInfo = getCurrencyInfo(currency)
@@ -128,9 +128,10 @@ export const formatCurrency = (value : Money | number, currency : string, fixedD
     return ''
   }
 
-  if (value instanceof Money) {
-    value = value.toDecimal()
-  } else if (!isNaN(Number(value))) {
+  /* if (value instanceof Money) {
+   value = value.toDecimal()
+   } else */
+  if (!isNaN(Number(value))) {
     value = Number(value)
   }
 

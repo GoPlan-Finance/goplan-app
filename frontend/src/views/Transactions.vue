@@ -32,28 +32,25 @@
       </label>
     </template>
     <template
-      #field(symbol)="{ row }"
+      #field(name)="{ value , row }"
     >
       <AppLink
         v-if="row.symbol"
-        :ticker="row.symbol"
+        :ticker="row.symbol.symbol"
         class="font-bold"
         to="ticker_details"
       >
         <p class="font-normal text-sm">
-          {{ row.symbol.name }}
+          {{ value }}
         </p>
       </AppLink>
-      <span v-else-if="row.importRawData && row.importRawData.description">
-        {{ row.importRawData.description }}
-      </span>
       <span v-else>
-        <!--N/A-->
+        {{ value }}
       </span>
     </template>
 
     <template
-      #field(ticker)="{ row }"
+      #field(ticker)="{value, row }"
     >
       <AppLink
         v-if="row.symbol"
@@ -62,14 +59,11 @@
         to="ticker_details"
       >
         <p class="mr-3 font-bold">
-          {{ row.symbol.symbol }}
+          {{ value }}
         </p>
       </AppLink>
-      <span v-else-if="row.importRawData && row.importRawData.symbol">
-        {{ row.importRawData.symbol }}
-      </span>
       <span v-else>
-        <!--N/A-->
+        {{ value }}
       </span>
     </template>
     <template
@@ -90,7 +84,9 @@
 </template>
 
 <script lang="ts">
+import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
+import { useAccountStore, useTransactionStore } from '/@store/index'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
@@ -99,7 +95,6 @@ import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'
 import AppLink from '../components/router/AppLink.vue'
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue'
-import { useAccountStore, useTransactionStore } from '/@store/index'
 
 
 export default defineComponent({
@@ -116,11 +111,20 @@ export default defineComponent({
             justify : 'right',
             format  : 'date',
           },
-          symbol: {
-            sortKey: 'name',
+          name: {
+            value: (transaction : Transaction) => {
+              if (transaction.symbol && transaction.symbol.name) {
+                return transaction.symbol.name
+              }
+
+              if (transaction.importRawData && transaction.importRawData.description) {
+                return transaction.importRawData.description
+              }
+              return ''
+            },
           },
           ticker: {
-            sortKey: 'symbol',
+            value: (value : Transaction) => value.getTickerName(),
           },
           quantity: {
             justify : 'right',
@@ -151,7 +155,7 @@ export default defineComponent({
           'type',
           'executedAt',
           [
-            'symbol', 'ticker',
+            'name', 'ticker',
           ],
           'quantity',
           'price',
@@ -245,6 +249,7 @@ export default defineComponent({
     })
 
     watch(() => transactionStore.transactions, () => {
+
       data.rows = transactionStore.transactions
     }, {
       immediate: true,

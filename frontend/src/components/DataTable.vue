@@ -59,6 +59,29 @@
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
+
+        <svg
+          v-if="fields[subRow] === sort.header"
+          :class="sort.order === 'asc' ? '' : 'transform rotate-180'"
+          class=""
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="3"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line
+            x1="12"
+            x2="12"
+            y1="19"
+            y2="5"
+          />
+          <polyline points="5 12 12 5 19 12" />
+        </svg>
       </div>
     </div>
     <div v-if="settings?.actions" />
@@ -91,18 +114,16 @@
         >
           {{ $t(settings.translationPrefix + '.' + header) }}
         </div>
-        <slot
-          :name="`field(${header})`"
-          :row="row"
-          :value="row[header]"
-        >
-          <Private v-if="fields[header].private === true">
-            {{ formatValue(fields[header], { value: row[header], row }) }}
-          </Private>
-          <template v-else>
-            {{ formatValue(fields[header], { value: row[header], row }) }}
-          </template>
-        </slot>
+
+        <Private :hide="fields[header].private === true">
+          <slot
+            :name="`field(${header})`"
+            :row="row"
+            :value=" fieldFormatValue(fields[header], row) "
+          >
+            {{ fieldFormatValue(fields[header], row) }}
+          </slot>
+        </Private>
       </div>
     </div>
     <div
@@ -118,47 +139,18 @@
 </template>
 
 <script lang="ts">
-import { formatCurrency } from '/@common/utils'
-import * as dayjs from 'dayjs'
-import { Money } from 'ts-money'
-import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
 import SearchField from '/@components/base/SearchField.vue'
-
-
-export type TableRow = Record<string, unknown>
-
-type FormatFn = (value : unknown, row : unknown) => void
-type SearchFn = (value : unknown, searchString : string) => boolean
-
-
-export interface TableHeader {
-  key? : string,
-  classes? : string,
-  justify? : 'left' | 'right' | 'center',
-  sortKey? : string
-  private? : boolean
-  format? : 'date' | 'datetime' | 'time' | 'currency' | 'money' | FormatFn
-}
-
-
-export interface TableConfig {
-  fields : TableHeader[][],
-  headerLayout : string[] | string[][],
-  settings? : {
-    actions : boolean,
-    translationPrefix : string
-  },
-  filters : Record<string, any>,
-  search : {
-    handler : SearchFn
-  }
-}
-
-
-interface SortSettings {
-  header : TableHeader,
-  order : boolean
-}
+import {
+  CompareFn,
+  FormatFn,
+  getHandler,
+  SortSettings,
+  TableConfig,
+  TableHeader,
+  TableRow,
+  ValueFn,
+} from '/@components/DataTable'
+import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -185,7 +177,7 @@ export default defineComponent({
   setup (props) {
     const sort : SortSettings = reactive({
       header : null,
-      order  : true,
+      order  : 'desc',
     })
 
     const columnCount = computed(() => {
@@ -209,6 +201,11 @@ export default defineComponent({
       if (!field.key) {
         field.key = key
       }
+
+      field.format  = getHandler<FormatFn>(field, 'format')
+      field.value   = getHandler<ValueFn>(field, 'value')
+      field.compare = getHandler<CompareFn>(field, 'compare')
+      //field.search = getHandler<CompareFn>(field, 'search')
     }
 
     config.headerLayout = props.config.headerLayout.map(key => {
@@ -226,37 +223,11 @@ export default defineComponent({
       }
     }))
 
-    function formatValue (header : TableHeader, {value, row}) {
 
-      if (!header.format) {
-        return value
-      }
+    function fieldFormatValue (header : TableHeader, row) {
 
-      if (typeof header.format === 'function') {
-        return header.format(value, row)
-      }
-
-      if (header.format === 'date') {
-        return dayjs(value).format('YYYY-MM-DD')
-      }
-
-      if (header.format === 'datetime') {
-        return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
-      }
-
-      if (header.format === 'time') {
-        return dayjs(value).format('HH:mm:ss')
-      }
-
-      if (header.format === 'currency') {
-        return formatCurrency(value, row.currency, true)
-      }
-
-      if (header.format === 'money') {
-        return formatCurrency(value, row.currency, false)
-      }
-
-      throw `Unknown table dataformatter "${header.format}`
+      const fieldValue = header.value(row, header)
+      return header.format(fieldValue, row)
     }
 
     const rowsInternal = computed(() => {
@@ -287,27 +258,18 @@ export default defineComponent({
         return true
       })
 
-      if (sort.header) {
+      const sortHeader = sort.header as TableHeader
+      if (sortHeader) {
+        console.time(`${config.settings.translationPrefix} SORT`)
         rows.sort((a : TableRow, b : TableRow) => {
-          let valueA  = a[sort.header.key]
-          let valueB  = b[sort.header.key]
-          const order = sort.order ? -1 : 1
+          const valueA = sortHeader.value(a, sortHeader)
+          const valueB = sortHeader.value(b, sortHeader)
 
-          if (sort.header.sortKey) {
-            valueA = valueA[sort.header.sortKey]
-            valueB = valueB[sort.header.sortKey]
-          }
+          const order = sort.order === 'asc' ? -1 : 1
 
-          if (valueA instanceof Money && valueB instanceof Money) {
-            return (valueA.toDecimal() < valueB.toDecimal()) ? order : (order * -1)
-          } else if (valueA instanceof String) {
-            const textA = (valueA as string).toUpperCase()
-            const textB = (valueB as string).toUpperCase()
-            return (textA < textB) ? order : (textA > textB) ? (order * -1) : 0
-          } else {
-            return (valueA < valueB) ? order : (order * -1)
-          }
+          return order * sortHeader.compare(valueA, valueB)
         })
+        console.timeEnd(`${config.settings.translationPrefix} SORT`)
       }
 
       return rows
@@ -317,15 +279,16 @@ export default defineComponent({
       const header = config.fields[key]
 
       if (sort.header !== null && sort.header.key === header.key) {
-        sort.order = !sort.order
+        sort.order = sort.order === 'asc' ? 'desc' : 'asc'
       } else {
         sort.header = header
+        sort.order  = header.sort === 'asc' ? 'asc' : 'desc'
       }
     }
 
     return {
       ...toRefs(config),
-      formatValue,
+      fieldFormatValue,
       columnCount,
       rowsInternal,
       setSort,

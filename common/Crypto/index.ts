@@ -90,7 +90,7 @@ export class Crypto {
       throw 'Decryption failed'
     }
 
-    return (JSON.parse(decrypted))
+    return JSON.parse(decrypted)
   }
 
   static randomWords (len : number) : string {

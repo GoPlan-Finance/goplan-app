@@ -31,7 +31,6 @@
     "node": ">=4.3"
   },
   "dependencies": {
-    "@types/parse": "^2.18.5",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "convict": "^6.0.1",
@@ -47,6 +46,7 @@
     "ts-money": "^0.4.6"
   },
   "devDependencies": {
+    "@types/parse": "^2.18.5",
     "@types/concurrently": "^6.0.1",
     "@types/convict": "^6.0.1",
     "@types/crypto-js": "^4.0.1",

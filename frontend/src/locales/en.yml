@@ -28,7 +28,7 @@ transactions:
     dividends: Dividends
     totalExcludingFees: Total Excluding Fees
     executedAt: Date
-    symbol: Name
+    name: Name
     ticker: Ticker
     price: Price
     quantity: Quantity
@@ -65,7 +65,7 @@ holdings:
   headline: Holdings
   table:
     ticker: Ticker
-    symbol: Symbol
+    name: Symbol
     openQty: Open Qty
     openAvgPrice: Avg Price
     openTotalPrice: Book Value
