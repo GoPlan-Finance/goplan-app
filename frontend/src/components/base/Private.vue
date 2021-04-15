@@ -1,5 +1,5 @@
 <template>
-  <template v-if="privateMode">
+  <template v-if="privateMode && hide">
     *****
   </template>
   <template v-else>
@@ -19,6 +19,12 @@ export enum ButtonType {
 
 
 export default defineComponent({
+  props: {
+    hide: {
+      default : true,
+      type    : Boolean
+    },
+  },
   setup (props) {
     const userStore          = useUserStore()
 

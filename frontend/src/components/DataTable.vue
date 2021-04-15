@@ -114,18 +114,16 @@
         >
           {{ $t(settings.translationPrefix + '.' + header) }}
         </div>
-        <slot
-          :name="`field(${header})`"
-          :row="row"
-          :value=" fieldFormatValue(fields[header], row) "
-        >
-          <Private v-if="fields[header].private === true">
+
+        <Private :hide="fields[header].private === true">
+          <slot
+            :name="`field(${header})`"
+            :row="row"
+            :value=" fieldFormatValue(fields[header], row) "
+          >
             {{ fieldFormatValue(fields[header], row) }}
-          </Private>
-          <template v-else>
-            {{ fieldFormatValue(fields[header], row) }}
-          </template>
-        </slot>
+          </slot>
+        </Private>
       </div>
     </div>
     <div
@@ -149,7 +147,8 @@ import {
   SortSettings,
   TableConfig,
   TableHeader,
-  TableRow, ValueFn,
+  TableRow,
+  ValueFn,
 } from '/@components/DataTable'
 import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
 
@@ -227,8 +226,8 @@ export default defineComponent({
 
     function fieldFormatValue (header : TableHeader, row) {
 
-      const value = header.value(row, header)
-      return header.format(value, row)
+      const fieldValue = header.value(row, header)
+      return header.format(fieldValue, row)
     }
 
     const rowsInternal = computed(() => {

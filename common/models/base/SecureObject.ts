@@ -1,7 +1,10 @@
 import { Crypto, DerivedKey } from '../..//Crypto'
 import { BaseObject } from './BaseObject'
 
-
+const perf = {
+  time : 0,
+  ops  : 0,
+}
 export abstract class SecureObject extends BaseObject {
 
   private static isServer         = false
@@ -42,7 +45,13 @@ export abstract class SecureObject extends BaseObject {
       return val
     }
 
-    return Crypto.decrypt<T>(SecureObject.sessionDerivedKey, val)
+    const start = window.performance.now()
+
+    const decrypted = Crypto.decrypt<T>(SecureObject.sessionDerivedKey, val)
+
+    perf.time +=  window.performance.now() - start
+    //console.log(++perf.ops, perf.time)
+    return decrypted
   }
 
   public set<T> (
