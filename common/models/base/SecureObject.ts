@@ -25,6 +25,11 @@ export abstract class SecureObject extends BaseObject {
     super(className)
 
     this.secureFields = secureFields
+
+
+    this.secureFields.forEach(field => {
+      this.set(field, null)
+    })
   }
 
   static setSessionDerivedKey (derived : DerivedKey) : void {
