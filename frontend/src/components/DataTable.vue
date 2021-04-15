@@ -40,8 +40,8 @@
     </div>
   </div>
   <div
-    :class="`lg:grid-cols-${columnCount}`"
-    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
+    :class="`grid-cols-${columnCount}`"
+    class="grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
   >
     <div
       v-for="(row, rowIndex) in headerLayout"
@@ -89,13 +89,13 @@
   <div
     v-for="(row, rowIndex) in rowsInternal"
     :key="rowIndex"
-    :class="`lg:grid-cols-${columnCount}`"
-    class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
+    :class="`grid-cols-${columnCount}`"
+    class="mb-2 grid gap-2 bg-white rounded-lg px-4 py-3"
   >
     <div
       v-for="(cell, cellIndex) in headerLayout"
       :key="cellIndex"
-      class="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-1 gap-1 items-center"
+      class="grid grid-cols-none gap-1 items-center"
     >
       <div
         v-for="(header, headerIndex) in cell"
@@ -108,12 +108,6 @@
           }
         ]"
       >
-        <div
-          class="block lg:hidden text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
-          @click="setSort(header)"
-        >
-          {{ $t(settings.translationPrefix + '.' + header) }}
-        </div>
         <slot
           :name="`field(${header})`"
           :row="row"
