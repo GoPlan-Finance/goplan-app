@@ -1,4 +1,5 @@
-export enum Screen {
+export enum Screens {
+ DEFAULT = 'default',
  SM = 'sm',
  MD = 'md',
  LG = 'lg',
@@ -24,7 +25,6 @@ export const getCurrentBreakpoint = (innerWidth: number): string => {
   let biggestBreakpointValue    = 0
   for (const breakpoint of Object.keys(screens)) {
     const breakpointValue = getBreakpointValue(breakpoint)
-    console.log(breakpointValue, innerWidth, biggestBreakpointValue)
     if (
       breakpointValue > biggestBreakpointValue &&
       innerWidth >= breakpointValue

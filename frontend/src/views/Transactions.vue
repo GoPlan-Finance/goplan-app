@@ -87,6 +87,7 @@
 import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
+import { Screens } from '/@utils/screens'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
@@ -150,6 +151,40 @@ export default defineComponent({
               return value === 0 ? '' : formatCurrency(value, row.currency)
             },
           },
+        },
+        tableLayout: {
+          [Screens.DEFAULT]: [
+            'type', [
+              'executedAt',
+              'name'
+            ],
+            [
+              'quantity',
+              'price',
+            ]
+          ],
+          [Screens.SM]: [
+            'type',
+            'executedAt',
+            [
+              'name', 'ticker',
+            ],
+            'quantity',
+            'price',
+          ],
+          [Screens.XL]: [
+            'type',
+            'executedAt',
+            [
+              'name', 'ticker',
+            ],
+            'quantity',
+            'price',
+            [
+              'totalExcludingFees',
+            ],
+            'fees',
+          ],
         },
         headerLayout: [
           'type',

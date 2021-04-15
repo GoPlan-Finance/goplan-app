@@ -1,5 +1,4 @@
 <template>
-  {{ breakpoint }}
   <div class="grid grid-cols-2 gap-2">
     <div
       v-for="alignment in ['left', 'right']"
@@ -45,7 +44,7 @@
     class="grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
   >
     <div
-      v-for="(row, rowIndex) in headerLayout"
+      v-for="(row, rowIndex) in tableLayout"
       :key="rowIndex"
       class="grid items-center"
     >
@@ -94,7 +93,7 @@
     class="mb-2 grid gap-2 bg-white rounded-lg px-4 py-3"
   >
     <div
-      v-for="(cell, cellIndex) in headerLayout"
+      v-for="(cell, cellIndex) in tableLayout"
       :key="cellIndex"
       class="grid grid-cols-none gap-1 items-center"
     >
@@ -108,6 +107,7 @@
             'lg:text-center': fields[header].justify === 'center'
           }
         ]"
+        class="whitespace-nowrap overflow-hidden overflow-ellipsis"
       >
         <slot
           :name="`field(${header})`"
@@ -138,17 +138,17 @@
 <script lang="ts">
 import SearchField from '/@components/base/SearchField.vue'
 import {
-  CompareFn,
+  CompareFn, findTableLayout,
   FormatFn,
   getHandler,
   SortSettings,
   TableConfig,
-  TableHeader,
-  TableRow, ValueFn,
+  TableHeader, TableLayout,
+  TableRow,
+  ValueFn,
 } from '/@components/DataTable'
-import { getCurrentBreakpoint } from '/@utils/screens'
-import { computed, defineComponent, reactive, ref, toRefs, onBeforeMount, onBeforeUnmount } from 'vue'
-
+import { getCurrentBreakpoint, Screens } from '/@utils/screens'
+import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
 
 export default defineComponent({
   components : {SearchField},
@@ -177,9 +177,23 @@ export default defineComponent({
       order  : 'desc',
     })
 
+    const breakpoint    = ref(null)
+    const resizeHandler = (event) => {
+      breakpoint.value = getCurrentBreakpoint(event.target.innerWidth)
+    }
+
+    onBeforeMount(async () => {
+      breakpoint.value = getCurrentBreakpoint(window.innerWidth)
+      window.addEventListener('resize', resizeHandler, {passive: true})
+    })
+
+    onBeforeUnmount(async () => {
+      window.removeEventListener('resize', resizeHandler)
+    })
+
     const columnCount = computed(() => {
       const actions = props.config.settings.actions ? 1 : 0
-      return Object.keys(props.config.headerLayout).length + actions
+      return Object.keys(findTableLayout(props.config.tableLayout, breakpoint.value)).length + actions
     })
 
     const config : TableConfig = reactive({
@@ -191,19 +205,6 @@ export default defineComponent({
     })
 
     const search = ref('')
-
-    const breakpoint    = ref(null)
-    const resizeHandler = (event) => {
-      breakpoint.value = getCurrentBreakpoint(event.target.innerWidth)
-    }
-
-    onBeforeMount(async () => {
-      window.addEventListener('resize', resizeHandler, {passive: true})
-    })
-
-    onBeforeUnmount(async () => {
-      window.removeEventListener('resize', resizeHandler)
-    })
 
     for (const [
       key, field
@@ -296,6 +297,20 @@ export default defineComponent({
       }
     }
 
+    const tableLayout = computed(() => {
+      const tableLayouts = props.config.tableLayout
+      let tableLayout    = findTableLayout(tableLayouts, breakpoint.value)
+      tableLayout        = tableLayout.map(key => {
+        if (!Array.isArray(key)) {
+          return [
+            key,
+          ]
+        }
+        return key
+      })
+      return tableLayout
+    })
+
     return {
       ...toRefs(config),
       fieldFormatValue,
@@ -304,7 +319,7 @@ export default defineComponent({
       setSort,
       sort,
       search,
-      breakpoint
+      tableLayout
     }
   },
 })
