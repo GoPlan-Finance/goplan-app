@@ -14,11 +14,12 @@ export interface TableHeader {
   key? : string,
   sort? : 'asc' | 'desc'
   classes? : string,
-  justify? : 'left' | 'right' | 'center',
+  justify? : 'left' | 'right' | 'center'
   private? : boolean
   format? : FormatTypes | FormatFn
   compare? : FormatTypes | CompareFn
   value? : ValueFn
+  width?: string
 }
 
 
@@ -35,20 +36,20 @@ interface FormatterInterface {
 type FormatTypes = keyof typeof formatters
 
 
-export type TableLayoutItems = string[] | string[][]
+export type TableLayout = string[] | string[][]
 
-export interface TableLayout {
-  [Screens.DEFAULT]?: TableLayoutItems,
-  [Screens.SM]?: TableLayoutItems,
-  [Screens.MD]?: TableLayoutItems,
-  [Screens.LG]?: TableLayoutItems,
-  [Screens.XL]?: TableLayoutItems,
-  [Screens.XL2]?: TableLayoutItems,
+export interface TableLayoutCollection {
+  [Screens.DEFAULT]?: TableLayout,
+  [Screens.SM]?: TableLayout,
+  [Screens.MD]?: TableLayout,
+  [Screens.LG]?: TableLayout,
+  [Screens.XL]?: TableLayout,
+  [Screens.XL2]?: TableLayout,
 }
 
 export interface TableConfig {
   fields : TableHeader[],
-  tableLayout: TableLayout
+  tableLayout: TableLayoutCollection
   headerLayout : string[] | string[][],
   settings? : {
     actions : boolean,
@@ -138,7 +139,7 @@ export function getHandler<T> (field : TableHeader, op : keyof FormatterInterfac
 }
 
 
-export function findTableLayout (tableLayouts: TableLayout, breakpoint: Screens) {
+export function findTableLayout (tableLayouts: TableLayoutCollection, breakpoint: Screens) {
   let currentScreenSizeFound = false
   for (const screenSize of Object.values(Screens).reverse()) {
     if (screenSize === breakpoint) {

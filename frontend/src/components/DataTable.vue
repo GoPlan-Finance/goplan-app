@@ -40,8 +40,8 @@
     </div>
   </div>
   <div
-    :class="`grid-cols-${columnCount}`"
-    class="grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
+    class="grid gap-2 px-4 py-2 text-gray-400 text-sm"
+    :style="tableTemplate"
   >
     <div
       v-for="(row, rowIndex) in tableLayout"
@@ -89,7 +89,7 @@
   <div
     v-for="(row, rowIndex) in rowsInternal"
     :key="rowIndex"
-    :class="`grid-cols-${columnCount}`"
+    :style="tableTemplate"
     class="mb-2 grid gap-2 bg-white rounded-lg px-4 py-3"
   >
     <div
@@ -138,17 +138,20 @@
 <script lang="ts">
 import SearchField from '/@components/base/SearchField.vue'
 import {
-  CompareFn, findTableLayout,
+  CompareFn,
+  findTableLayout,
   FormatFn,
   getHandler,
   SortSettings,
   TableConfig,
-  TableHeader, TableLayout,
+  TableHeader,
+  TableLayout,
   TableRow,
   ValueFn,
 } from '/@components/DataTable'
-import { getCurrentBreakpoint, Screens } from '/@utils/screens'
+import { getCurrentBreakpoint } from '/@utils/screens'
 import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
+
 
 export default defineComponent({
   components : {SearchField},
@@ -191,11 +194,6 @@ export default defineComponent({
       window.removeEventListener('resize', resizeHandler)
     })
 
-    const columnCount = computed(() => {
-      const actions = props.config.settings.actions ? 1 : 0
-      return Object.keys(findTableLayout(props.config.tableLayout, breakpoint.value)).length + actions
-    })
-
     const config : TableConfig = reactive({
       fields       : props.config.fields,
       headerLayout : [],
@@ -236,7 +234,6 @@ export default defineComponent({
 
 
     function fieldFormatValue (header : TableHeader, row) {
-
       const value = header.value(row, header)
       return header.format(value, row)
     }
@@ -297,10 +294,8 @@ export default defineComponent({
       }
     }
 
-    const tableLayout = computed(() => {
-      const tableLayouts = props.config.tableLayout
-      let tableLayout    = findTableLayout(tableLayouts, breakpoint.value)
-      tableLayout        = tableLayout.map(key => {
+    function objectToNestedArrays (object: Record<any, any>) {
+      return  object.map(key => {
         if (!Array.isArray(key)) {
           return [
             key,
@@ -308,18 +303,33 @@ export default defineComponent({
         }
         return key
       })
-      return tableLayout
+    }
+
+    const tableLayout: TableLayout = computed(() => {
+      const tableLayouts = props.config.tableLayout
+      const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
+      return objectToNestedArrays(tableLayout)
+    })
+
+    const tableTemplate = computed(() => {
+      let template = ''
+      for (const column of tableLayout.value) {
+        template += config.fields[column]?.width ?? '1fr'
+        template += ' '
+      }
+      console.log(template)
+      return `grid-template-columns: ${template};`
     })
 
     return {
       ...toRefs(config),
       fieldFormatValue,
-      columnCount,
       rowsInternal,
       setSort,
       sort,
       search,
-      tableLayout
+      tableLayout,
+      tableTemplate
     }
   },
 })

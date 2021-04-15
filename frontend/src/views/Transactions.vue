@@ -107,10 +107,13 @@ export default defineComponent({
       rows   : [],
       config : {
         fields: {
-          type       : {},
-          executedAt : {
+          type: {
+            width: '10%'
+          },
+          executedAt: {
             justify : 'right',
             format  : 'date',
+            width   : '20%'
           },
           name: {
             value: (transaction : Transaction) => {
@@ -154,7 +157,8 @@ export default defineComponent({
         },
         tableLayout: {
           [Screens.DEFAULT]: [
-            'type', [
+            'type',
+            [
               'executedAt',
               'name'
             ],
