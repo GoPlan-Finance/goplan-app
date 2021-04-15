@@ -19,44 +19,38 @@
     >
       <!--Copied from Transactions.vue-->
       <template
-        #field(ticker)="{ row }"
+        #field(ticker)="{ value , row }"
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="row.symbol.symbol"
+          :ticker="value"
           class="font-bold"
           to="ticker_details"
         >
           <p class="mr-3 font-bold">
-            {{ row.symbol.symbol }}
+            {{ value }}
           </p>
         </AppLink>
-        <span v-else-if="row.symbolName">
-          {{ row.symbolName }}
-        </span>
         <span v-else>
-        <!--N/A-->
+          {{ value }}
         </span>
       </template>
 
       <template
-        #field(symbol)="{value, row }"
+        #field(name)="{value, row }"
       >
         <AppLink
-          v-if="value"
-          :ticker="value.symbol"
+          v-if="row.symbol"
+          :ticker="value"
           class="font-bold"
           to="ticker_details"
         >
           <p class="font-normal text-sm">
-            {{ value.name }}
+            {{ value }}
           </p>
         </AppLink>
-        <span v-else-if="row.symbolName">
-          {{ row.symbolName }}
-        </span>
         <span v-else>
-          N/A
+          {{ value }}
         </span>
       </template>
 
@@ -89,14 +83,13 @@
 <script lang="ts">
 
 import { Holding } from '/@common/models/Holding'
-import { formatCurrency } from '/@common/utils'
-import * as dayjs from 'dayjs'
-import { defineComponent, reactive, ref, toRefs, watch } from 'vue'
 import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import BuySellAsset from '/@components/BuySellAsset.vue'
 import DataTable from '/@components/DataTable.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
 import AppLink from '/@components/router/AppLink.vue'
+import * as dayjs from 'dayjs'
+import { defineComponent, reactive, ref, toRefs, watch } from 'vue'
 import { useAssetPriceStore, useHoldingStore } from '../store'
 
 
@@ -118,48 +111,38 @@ export default defineComponent({
       },
       config: {
         fields: {
-          symbol: {
-            // sortKey: 'name'
+          name: {
+            value: (transaction : Holding) => {
+              if (transaction.symbol && transaction.symbol.name) {
+                return transaction.symbol.name
+              }
+
+              if (transaction.importRawData && transaction.importRawData.description) {
+                return transaction.importRawData.description
+              }
+              return ''
+            },
           },
           ticker: {
-            // sortKey: 'symbol'
+            value: (value : Holding) => value.symbolName,
           },
-          dayPLChange : {},
-          dayPL       : {
-            format: (value, row : Holding) => {
-              if (!row.lastPrice) {
-                return ''
-              }
-
-              return formatCurrency((row.lastPrice.previousClose - row.lastPrice.price) * row.openQty, row.currency, true)
-            },
-          },
-
           currentTotalPrice: {
             private : true,
-            format: (value, row : Holding) => {
-              if (!row.lastPrice) {
-                return ''
-              }
-
-              return formatCurrency(row.lastPrice.price * row.openQty, row.currency, true)
-            },
+            value   : (row : Holding) => (!row.lastPrice ? '' : row.lastPrice.price * row.openQty),
+            format  : 'currency',
           },
           currentAvgPrice: {
-            format: (value, row : Holding) => {
-              if (!row.lastPrice) {
-                return ''
-              }
-
-              return formatCurrency(row.lastPrice.price, row.currency)
+            value: (row : Holding) => {
+              return !row.lastPrice ? '' : row.lastPrice.price
             },
+            format: 'money',
           },
           //
           openQty: {
             format: value => (value !== 0 ? value : ''),
           },
           lastBuy: {
-            format: 'date'
+            format: 'date',
           },
           openTotalPrice: {
             private : true,
@@ -180,20 +163,40 @@ export default defineComponent({
             format  : 'currency',
           },
           //
-          openPL   : {},
-          closedPL : {},
-          weight   : {
-            format: (value, row) => {
-              return  totalOpen.value !== 0 ? `${((100 * row.openQty * row.openAvgPrice) / totalOpen.value).toFixed(1)} %` : ''
+          openPL: {
+            format : 'percent',
+            value  : (row : Holding) => {
+              if (!row.lastPrice || row.lastPrice.price === 0) {
+                return 1.00
+              }
+
+              return row.lastPrice.price / row.openAvgPrice
+            },
+          },
+          dayPLChange: {
+            format : 'percent',
+            value  : (row : Holding) => {
+              if (!row.lastPrice || row.lastPrice.price === 0) {
+                return ''
+              }
+
+              return row.lastPrice.previousClose / row.lastPrice.price
+            },
+          },
+
+          weight: {
+            format : 'percent',
+            value  : (row : Holding) => {
+              return totalOpen.value === 0 ? 0 : ((row.openQty * row.openAvgPrice) / totalOpen.value)
             },
           },
         },
         headerLayout: [
           [
-            'ticker', 'symbol',
+            'ticker', 'name',
           ],
           [
-            'openQty',  'lastBuy'
+            'openQty', 'lastBuy',
           ],
           [
             'openTotalPrice', 'openAvgPrice',

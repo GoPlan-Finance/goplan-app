@@ -10,7 +10,7 @@
     "outDir": "dist",
     "baseUrl": "./src",
     "paths": {
-      "/common/*": [
+      "/@common/*": [
         "./../../common/*"
       ],
       "/*": [

@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.0.1",
-    "@types/node": "^14.14.37",
+    "@types/node": "^14.14.39",
     "@types/parse": "^2.18.4",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",

@@ -133,11 +133,11 @@ const styleguideRoutes : RouteRecordRaw[] = [
     name      : 'details',
     component : StyleguideDetail,
   },
-  {
-    path      : '/styleguide/modals',
-    name      : 'modals',
-    component : StyleguideModals,
-  },
+  // {
+  //   path      : '/styleguide/modals',
+  //   name      : 'modals',
+  //   component : StyleguideModals,
+  // },
 ]
 
 styleguideRoutes.forEach(route => (route.meta = {layout: 'styleguide'}))

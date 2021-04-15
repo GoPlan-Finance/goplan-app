@@ -49,7 +49,7 @@ export class Transaction extends SecureObject {
   }
 
   get price () : number {
-    return this.get('price') //Money.fromDecimal(Number(this.get('price')), this.get('currency'))
+    return this.get('price')
   }
 
   set price (value) {
