@@ -6,6 +6,11 @@
     @input="update('id', $event.target.value)"
   >
     <option
+      value=""
+    >
+      Please select
+    </option>
+    <option
       v-for="account in accountStore.accounts"
       :key="account.id"
       :value="account.id"

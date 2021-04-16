@@ -56,15 +56,16 @@
 
 
       <template
-        #field(openPL)="{ row}"
+        #field(openPL)="{ row }"
       >
-        <template v-if="openOrClose === 'open' && row.openQty !== 0">
-          <AssetPriceChange
-            v-if="row.lastPrice"
-            :compare-from="row.openQty * row.openAvgPrice"
-            :compare-to=" row.openQty * row.lastPrice.price"
-          />
-        </template>
+        <AssetPriceChange
+          v-if="openOrClose === 'open' && row.openQty !== 0 && row.lastPrice"
+          :compare-from="row.openQty * row.openAvgPrice"
+          :compare-to=" row.openQty * row.lastPrice.price"
+        />
+        <span v-else>
+          --
+        </span>
       </template>
 
       <template
@@ -75,6 +76,9 @@
           :compare-from="row.openQty * row.lastPrice.previousClose"
           :compare-to=" row.openQty * row.lastPrice.price"
         />
+        <span v-else>
+          --
+        </span>
       </template>
     </DataTable>
   </template>
@@ -113,13 +117,13 @@ export default defineComponent({
       config: {
         fields: {
           name: {
-            value: (transaction : Holding) => {
-              if (transaction.symbol && transaction.symbol.name) {
-                return transaction.symbol.name
+            value: (holding : Holding) => {
+              if (holding.symbol && holding.symbol.name) {
+                return holding.symbol.name
               }
 
-              if (transaction.importRawData && transaction.importRawData.description) {
-                return transaction.importRawData.description
+              if (holding.importRawData && holding.importRawData.description) {
+                return holding.importRawData.description
               }
               return ''
             },
@@ -167,21 +171,21 @@ export default defineComponent({
           openPL: {
             format : 'percent',
             value  : (row : Holding) => {
-              if (!row.lastPrice || row.lastPrice.price === 0) {
-                return 1.00
+              if (!row.lastPrice || row.lastPrice.openAvgPrice === 0) {
+                return 0
               }
 
-              return row.lastPrice.price / row.openAvgPrice
+              return (row.lastPrice.price / row.openAvgPrice) - 1
             },
           },
           dayPLChange: {
             format : 'percent',
             value  : (row : Holding) => {
               if (!row.lastPrice || row.lastPrice.price === 0) {
-                return ''
+                return null
               }
 
-              return row.lastPrice.previousClose / row.lastPrice.price
+              return (row.lastPrice.previousClose / row.lastPrice.price) - 1
             },
           },
 

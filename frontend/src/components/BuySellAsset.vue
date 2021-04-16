@@ -51,6 +51,7 @@
           </div>
           <input
             v-model="quantity"
+            min="0"
             class="rounded w-full"
             type="number"
           >
@@ -61,6 +62,7 @@
           </div>
           <input
             v-model="price"
+            min="0"
             class="rounded w-full"
             type="number"
           >
@@ -69,13 +71,13 @@
     </template>
     <template #actions>
       <ButtonDefault
-        :disabled="!symbol || !price || !executedAt || !quantity"
+        :disabled="!symbol || !price || !executedAt || !quantity || !account"
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
         label="Buy"
         @click="addTransaction('buy')"
       />
       <ButtonDefault
-        :disabled="!price || !executedAt || !quantity"
+        :disabled="!symbol || !price || !executedAt || !quantity || !account"
         class="bg-red-500"
         label="Sell"
         @click="addTransaction('sell')"
