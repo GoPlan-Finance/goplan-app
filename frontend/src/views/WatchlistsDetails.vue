@@ -15,7 +15,7 @@
           :ticker="row.symbol"
           to="ticker_details"
         >
-          <p class="font-normal text-sm">
+          <p class="font-normal text-sm overflow-hidden overflow-ellipsis">
             {{ row.name }}
           </p>
         </AppLink>
@@ -27,7 +27,7 @@
           :ticker="row.symbol"
           to="ticker_details"
         >
-          <p class="font-normal text-sm">
+          <p class="font-normal text-sm overflow-hidden overflow-ellipsis">
             {{ row.symbol }}
           </p>
         </AppLink>
@@ -37,12 +37,13 @@
 </template>
 
 <script lang="ts">
-import { Transaction, Watchlist } from '/@common/models'
+import { Watchlist } from '/@common/models'
 import { Query } from '/@common/Query'
-import dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
+import { Screens } from '/@utils/screens'
+import * as dayjs from 'dayjs'
+import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -64,10 +65,13 @@ export default defineComponent({
           name   : {},
           symbol : {},
         },
-        headerLayout: [
-          'name',
-          'symbol',
-        ],
+        tableLayout: {
+          [Screens.DEFAULT]: [
+            [
+              'name', 'symbol',
+            ],
+          ],
+        },
         settings: {
           actions           : false,
           translationPrefix : 'watchlist.table',
@@ -94,7 +98,6 @@ export default defineComponent({
 
     const sortedRows = computed(() => {
       return data.items.filter(row => {
-
         return true
       })
     })
