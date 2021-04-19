@@ -83,7 +83,6 @@ export default defineComponent({
     let liveSubscription = null
 
     const show = async (watchlist : Watchlist) => {
-      console.log(watchlist.symbols)
       watchlist.percentChange = (Math.random() * 10) - 3.5
       watchlist.symbolsCount  = await watchlist.relation('symbols').query().count()
     }

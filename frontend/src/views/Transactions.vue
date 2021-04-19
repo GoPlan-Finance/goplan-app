@@ -13,23 +13,25 @@
     <template
       #filters(accounts)="{filter}"
     >
-      <label
-        v-for="(option) in filter.options"
-        :key="option.label"
-        :class="filter.value && filter.value.id === option.value.id? 'bg-gray-300' : ''"
-        class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
-      >
-        <input
-          v-model="filter.value"
-          :text="option.label"
-          :value="option.value"
-          class="hidden"
-          name="radio"
-          type="radio"
-          @click="filter.value = (filter.value && filter.value.id === option.value.id ? null : filter.value)"
+      <span>
+        <label
+          v-for="(option) in filter.options"
+          :key="option.label"
+          :class="filter.value && filter.value.id === option.value.id? 'bg-gray-300' : ''"
+          class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
         >
-        <span class="py-1 px-2 text-sm text-gray-700">{{ option.label }}</span>
-      </label>
+          <input
+            v-model="filter.value"
+            :text="option.label"
+            :value="option.value"
+            class="hidden"
+            name="radio"
+            type="radio"
+            @click="filter.value = (filter.value && filter.value.id === option.value.id ? null : filter.value)"
+          >
+          <span class="py-1 px-2 text-sm text-gray-700">{{ option.label }}</span>
+        </label>
+      </span>
     </template>
     <template
       #field(name)="{ value , row }"
@@ -89,7 +91,7 @@ import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
+import { defineComponent, onBeforeMount, computed, reactive, toRefs, watch } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
 import DataTable from '../components/DataTable.vue'
 import HeadlineActions from '../components/HeadlineActions.vue'

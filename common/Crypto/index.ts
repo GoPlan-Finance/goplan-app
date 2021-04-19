@@ -2,7 +2,9 @@
  *
  *
  */
-import * as CryptoJS from 'crypto-js'
+
+const enc = new TextEncoder()
+const dec = new TextDecoder()
 
 
 export interface EncryptedValue {
@@ -28,79 +30,181 @@ export interface DecryptedKey {
 
 
 export interface DerivedKey {
-  PBKDF2 : string,
+  PBKDF2 : JsonWebKey,
 }
 
 
 export class Crypto {
 
-  public static randomSalt () : string {
+
+  static isEncrypted (value : { [key:string] : unknown }, strict  = true) : boolean {
+
+    if (typeof value !== 'object' || value === undefined || value === null) {
+      return false
+    }
+
+    const keys = {
+      ct   : 'string',
+      iv   : 'string',
+      kVer : 'number',
+      aVer : 'number',
+    }
+
+    // All required keys are OK
+    for (const [
+      k, t
+    ] of Object.entries(keys)) {
+
+      if (typeof value[k] !== t) {
+        return false
+      }
+    }
+
+    if (!strict) {
+      return true
+    }
+
+    const kk     = Object.keys(keys)
+    const extras = Object.keys(value).filter(k => !kk.includes(k))
+
+    return extras.length === 0
+  }
+
+
+  static buffToStr (buff : Uint8Array) : string {
+    return btoa(String.fromCharCode.apply(null, buff))
+  }
+
+  static strToBuff (b64 : string) : Uint8Array {
+    return Uint8Array.from(atob(b64), (c) => c.charCodeAt(null))
+  }
+
+
+  public static randomSalt () : Uint8Array {
     const size = 128
-    return CryptoJS.lib.WordArray.random(size / 8).toString()
+    return Crypto.randomWords(size / 8,
+    )
   }
 
-  static encrypt (derivedKey : DerivedKey, data : unknown | string | number | null) : EncryptedValue {
-    const iv = Crypto.randomIv()
+  static async encrypt (derivedKey : DerivedKey, data : unknown | string | number | null) : Promise<EncryptedValue> {
 
-    const encrypted = CryptoJS.AES.encrypt(
-      JSON.stringify(data),
-      CryptoJS.enc.Hex.parse(derivedKey.PBKDF2), {
-        iv,
-        padding : CryptoJS.pad.Pkcs7,
-        mode    : CryptoJS.mode.CBC,
-      })
+    try {
+      const key = await Crypto.importKey(derivedKey.PBKDF2)
+
+
+      const iv               = Crypto.randomIv()
+      const encryptedContent = await window.crypto.subtle.encrypt(
+        {
+          name: 'AES-GCM',
+          iv,
+        },
+        key,
+        enc.encode(JSON.stringify(data !== undefined ? data : null)),
+      )
+
+      return {
+        iv   : Crypto.buffToStr(iv),
+        ct   : Crypto.buffToStr(new Uint8Array(encryptedContent)),
+        kVer : 1,
+        aVer : 2,
+      }
+    } catch (e) {
+      console.error('Crypto::encrypt() Failed', e)
+      throw e
+    }
+
+
+  }
+
+
+  /*
+   Import a PEM encoded RSA private key, to use for RSA-PSS signing.
+   Takes a string containing the PEM encoded key, and returns a Promise
+   that will resolve to a CryptoKey representing the private key.
+   */
+  private static async importKey (jwk : JsonWebKey) : Promise<CryptoKey> {
+    return window.crypto.subtle.importKey(
+      'jwk',
+      jwk,
+      {
+        name: 'AES-GCM',
+      },
+      false,
+      [
+        'encrypt', 'decrypt'
+      ],
+    )
+  }
+
+  private static async exportKey (derivedKey : CryptoKey) : Promise<JsonWebKey> {
+    return await window.crypto.subtle.exportKey(
+      'jwk',
+      derivedKey,
+    )
+  }
+
+  static async PBKDF2 (masterKey : string, salt : Uint8Array) : Promise<DerivedKey> {
+
+    const key = await window.crypto.subtle.importKey('raw', enc.encode(masterKey), 'PBKDF2', false, [
+      'deriveKey',
+    ])
+
+    const derivedKey = await window.crypto.subtle.deriveKey(
+      {
+        name       : 'PBKDF2',
+        salt,
+        iterations : 250000,
+        hash       : 'SHA-256',
+      },
+      key,
+      {name: 'AES-GCM', length: 256},
+      true,
+      [
+        'encrypt', 'decrypt'
+      ],
+    )
+
 
     return {
-      iv   : iv.toString(),
-      ct   : encrypted.toString(),
-      kVer : 1,
-      aVer : 1,
+      PBKDF2: await Crypto.exportKey(derivedKey),
     }
   }
 
-  static PBKDF2 (key : string, salt : string) : DerivedKey {
+  static async decrypt<T> (derivedKey : DerivedKey, cypherObject : EncryptedValue) : Promise<T> {
 
-    const keySize    = 256
-    const iterations = 1000
+    const key  = await Crypto.importKey(derivedKey.PBKDF2)
+    const iv   = Crypto.strToBuff(cypherObject.iv)
+    const data = Crypto.strToBuff(cypherObject.ct)
 
-    return {
-      PBKDF2: CryptoJS.PBKDF2(key,
-        CryptoJS.enc.Hex.parse(salt), {
-          keySize: keySize / 32,
-          iterations,
-        }).toString(),
+    try {
+      const decryptedContent = await window.crypto.subtle.decrypt(
+        {
+          name: 'AES-GCM',
+          iv,
+        },
+        key,
+        data,
+      )
+
+      const decodedContent = dec.decode(decryptedContent)
+
+      if (decodedContent === undefined || decodedContent === '') {
+        return null
+      }
+
+      return JSON.parse(decodedContent)
+    } catch (e) {
+      console.error('Crypto::decrypt() Failed ', e)
+      throw e
     }
   }
 
-  static decrypt<T> (derivedKey : DerivedKey, cypherObject : EncryptedValue) : T {
-
-    const key       = CryptoJS.enc.Hex.parse(derivedKey.PBKDF2)
-    const iv        = CryptoJS.enc.Hex.parse(cypherObject.iv)
-    const encrypted = cypherObject.ct
-
-    const decrypted = CryptoJS.AES.decrypt(
-      encrypted,
-      key, {
-        iv,
-        padding : CryptoJS.pad.Pkcs7,
-        mode    : CryptoJS.mode.CBC,
-      }).toString(CryptoJS.enc.Utf8)
-
-    if (typeof decrypted !== 'string' || decrypted.length === 0) {
-      throw 'Decryption failed'
-    }
-
-    return JSON.parse(decrypted)
-  }
-
-  static randomWords (len : number) : string {
-    return CryptoJS.lib.WordArray.random(len).toString()
-
+  static randomWords (len : number) : Uint8Array {
+    return window.crypto.getRandomValues(new Uint8Array(len))
   }
 
   private static randomIv () {
-    const size = 128
-    return CryptoJS.lib.WordArray.random(size / 8)
+    return Crypto.randomWords(12)
   }
 
 }

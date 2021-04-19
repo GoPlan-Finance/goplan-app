@@ -1,17 +1,20 @@
-import { Crypto, DerivedKey } from '../..//Crypto'
+import { Crypto, DerivedKey, EncryptedValue } from '../..//Crypto'
 import { BaseObject } from './BaseObject'
+
 
 const perf = {
   time : 0,
   ops  : 0,
 }
+
+
 export abstract class SecureObject extends BaseObject {
 
   private static isServer         = false
   private static sessionDerivedKey : DerivedKey
-  private secureFields : string[] = []
+  private readonly secureFields : string[] = []
 
-  public static  setServerMode () {
+  public static setServerMode () {
     SecureObject.isServer = true
   }
 
@@ -25,83 +28,106 @@ export abstract class SecureObject extends BaseObject {
     SecureObject.sessionDerivedKey = derived
   }
 
-  public get<T> (attr : string) : T {
+  public _secureFields () : string[] {
+    return this.secureFields
+  }
 
-    const val = super.get(attr)
-
+  public async decrypt () : Promise<void> {
     if (SecureObject.isServer) {
-      return val
-    }
-
-    if (!this.secureFields.includes(attr)) {
-      return val
+      return
     }
 
     if (!SecureObject.sessionDerivedKey) {
       throw 'Encryption key not set"'
     }
 
-    if (!val) {
-      return val
+    await Promise.all(
+      this.secureFields.map(async fieldName => {
+        const val = this.get(fieldName)
+
+        if (val === undefined || val === null) {
+          return // Skip null/undefined values. This will occur if we add new encrypted fields to the schema.
+        }
+
+        if (Crypto.isEncrypted(val)) {
+          this.set(fieldName, await SecureObject.decryptField(val))
+        }
+      },
+      ))
+  }
+
+  public async encrypt () : Promise<void> {
+
+    if (SecureObject.isServer) {
+      return
     }
+
+    if (!SecureObject.sessionDerivedKey) {
+      throw 'Encryption key not set"'
+    }
+
+    await Promise.all(
+      this.secureFields.map(async fieldName => {
+        const val = super.get(fieldName)
+
+        if (!Crypto.isEncrypted(val)) {
+          super.set(fieldName, await SecureObject.encryptField(val))
+        }
+      },
+      ))
+  }
+
+  public static async decryptField<T> (val : EncryptedValue) : Promise<T> {
 
     const start = window.performance.now()
 
-    const decrypted = Crypto.decrypt<T>(SecureObject.sessionDerivedKey, val)
+    const decrypted = await Crypto.decrypt<T>(SecureObject.sessionDerivedKey, val)
 
-    perf.time +=  window.performance.now() - start
+    perf.time += window.performance.now() - start
     //console.log(++perf.ops, perf.time)
     return decrypted
   }
 
-  public set<T> (
-    key : string | { [key : string] : unknown },
-    value : T | undefined = undefined,
-    options : unknown     = undefined,
-  ) : this | false {
-    if (SecureObject.isServer) {
-      return super.set(key as string, value, options)
+  public static async encryptField<T> (val : T) : Promise<EncryptedValue> {
+
+    if (Crypto.isEncrypted(val as unknown as EncryptedValue)) {
+
+      throw 'Already encrypted'
+
+      return val as unknown as EncryptedValue
     }
 
 
-    const encrypt = (k : string, v : unknown) => {
-      if (v instanceof Parse.Object) {
-        throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
-      }
-
-      if (!SecureObject.sessionDerivedKey) {
-        throw 'Encryption key not set"'
-      }
-
-      const encryptedValue = Crypto.encrypt(SecureObject.sessionDerivedKey, v)
-
-      return super.set(k, encryptedValue, options)
+    if (val instanceof Parse.Object) {
+      throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
     }
 
-    if (key && typeof key === 'object') {
+    return await Crypto.encrypt(SecureObject.sessionDerivedKey, val)
+  }
 
-      for (const k in key) {
 
-        if (!Object.prototype.hasOwnProperty.call(key, k)) {
-          continue
-        }
-        const v = key[k]
+  async save (
+    target : SecureObject | Array<SecureObject | Parse.File> = undefined,
+    options : Parse.RequestOptions                           = undefined,
+  ) {
 
-        if (this.secureFields.includes(k)) {
-          encrypt(k, v)
-        } else {
-          super.set(k as string, v, options)
-        }
+    for (const [
+      name, value
+    ] of Object.entries(this.attributes)) {
+      if (value instanceof BaseObject) {
+        this.set(name, value.toPointer())
       }
-
-      return this
-    } else if (typeof key === 'string' && this.secureFields.includes(key)) {
-
-      return encrypt(key, value)
-
     }
 
-    return super.set(key as string, value, options)
+    await this.encrypt()
+    const savedObject = await super.save(target, options)
+
+
+    if (savedObject instanceof SecureObject) {
+      await savedObject.decrypt()
+    }
+
+    return savedObject
   }
 
 }

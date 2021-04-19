@@ -91,7 +91,7 @@
 import { Account, AssetSymbol, Transaction } from '/@common/models'
 import AccountSelect from '/@components/AccountSelect.vue'
 import * as dayjs from 'dayjs'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, toRef } from 'vue'
 import AssetSearch from '/@components/AssetSearch.vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from '/@components/base/GoModal.vue'
@@ -117,10 +117,11 @@ export default defineComponent({
 
       const t = new Transaction()
 
-      t.set('quantity', quantity.value)
-      t.set('price', price.value)
+      t.set('quantity', parseFloat(quantity.value))
+      t.set('price', parseFloat(price.value))
       t.set('executedAt', dayjs(executedAt.value).toDate())
       t.set('type', type.toUpperCase())
+
       t.set('symbol', symbol.value)
       t.set('currency', symbol.value.currency)
       t.set('account', account.value)

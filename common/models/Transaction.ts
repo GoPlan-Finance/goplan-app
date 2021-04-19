@@ -19,9 +19,6 @@ export class Transaction extends SecureObject {
       'importRawData',
     ])
 
-    this.fees               = null
-    this.totalExcludingFees = null
-    this.importRawData      = null
   }
 
   get symbol () : AssetSymbol {

@@ -4,6 +4,7 @@
  *
  */
 import { BaseObject } from '/@common/models/base/BaseObject'
+import { SecureObject } from '/@common/models/base/SecureObject'
 
 
 export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted'
@@ -41,6 +42,10 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
     const replace = async (object : T, event : LiveQueryUpdateFnEventType) => {
 
+      if (object instanceof SecureObject) {
+        await object.decrypt()
+      }
+
       if (updateFn) {
         await updateFn(object, event)
       }
@@ -61,6 +66,9 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     }
 
     const remove = async (object : T) => {
+      if (object instanceof SecureObject) {
+        await object.decrypt()
+      }
 
       if (removeFn) {
         await removeFn(object, 'deleted')
@@ -189,5 +197,29 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
     return obj2.save(null, BaseObject.useMasterKey(useMasterKey)) as Promise<T>
   }
+
+  public async get (objectId : string, options? : Parse.Query.GetOptions) : Promise<T> {
+    const obj = await super.get(objectId, options)
+
+    if (obj instanceof SecureObject) {
+      await (obj as SecureObject).decrypt()
+    }
+
+    return obj
+  }
+
+  async find (options? : Parse.Query.FindOptions) : Promise<T[]> {
+
+    const objects = await super.find(options)
+
+    for (const obj of objects) {
+      if (obj instanceof SecureObject) {
+        await (obj as SecureObject).decrypt()
+      }
+    }
+
+    return objects
+  }
+
 
 }

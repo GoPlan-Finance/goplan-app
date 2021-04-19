@@ -62,8 +62,8 @@ export class AuthStore {
     }
 
     const clientKey = user.get('clientKey') as EncryptedKey
-    const derived   = Crypto.PBKDF2(masterKey, clientKey.s)
-    const key       = Crypto.decrypt(derived, clientKey) as DecryptedKey
+    const derived   = await Crypto.PBKDF2(masterKey, Crypto.strToBuff(clientKey.s))
+    const key       =  await Crypto.decrypt(derived, clientKey) as DecryptedKey
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key'
@@ -106,18 +106,18 @@ export class AuthStore {
     //
 
     // 2. We generate our super secret key that we will use to actually encrypt the user's data
-    const encryptionKey = Crypto.randomWords(128 / 8)
+    const encryptionKey = Crypto.randomWords(128)
     const salt          = Crypto.randomSalt()
 
-    const derived = Crypto.PBKDF2(newMasterKey, salt)
+    const derived = await Crypto.PBKDF2(newMasterKey, salt)
 
-    const encryptedKey = Crypto.encrypt(derived, {
-      encryptionKey,
+    const encryptedKey = await Crypto.encrypt(derived, {
+      encryptionKey: Crypto.buffToStr(encryptionKey),
     })
 
     return {
-      ...encryptedKey,
-      s: salt.toString(),
+      ...encryptedKey /* contains ct, iv, kVer, aVer */,
+      s: Crypto.buffToStr(salt),
     }
   }
 

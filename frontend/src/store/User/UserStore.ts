@@ -14,7 +14,6 @@ export const useUserStore = defineStore({
 
     const isPrivate = Session.get<boolean>('privateMode')
 
-    console.log(isPrivate)
     return {
       privateMode: isPrivate,
     }

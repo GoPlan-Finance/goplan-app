@@ -109,3 +109,5 @@ dist
 /.idea/inspectionProfiles/Project_Default.xml
 /backend/node_modules1
 /backend/node_modules2
+/backend/config/server.key
+/backend/config/server.cert

@@ -93,7 +93,7 @@ import DataTable from '/@components/DataTable.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import * as dayjs from 'dayjs'
-import { defineComponent, reactive, ref, toRefs, watch } from 'vue'
+import { defineComponent, reactive, ref, toRefs, watch, onBeforeMount} from 'vue'
 import { useAssetPriceStore, useHoldingStore } from '../store'
 
 
@@ -250,9 +250,14 @@ export default defineComponent({
     const holdingStore = useHoldingStore()
     const priceStore   = useAssetPriceStore()
 
-    holdingStore.subscribe()
+    onBeforeMount(async () => {
+      await holdingStore.subscribe()
+      console.log('holdings beforemount')
+    })
 
     watch(() => holdingStore.holdings, () => {
+
+      console.log('holdings watch')
       const rows : Holding[] = holdingStore.holdings
 
       totalOpen.value = holdingStore.holdings.reduce((result, holding) => {
@@ -264,7 +269,9 @@ export default defineComponent({
 
       data.rows.open   = rows.filter(row => row.openQty !== 0)
       data.rows.closed = rows.filter(row => row.openQty === 0)
-    }, {})
+    }, {
+      immediate: true
+    })
 
 
     return {

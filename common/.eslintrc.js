@@ -19,7 +19,7 @@ module.exports = {
     'varspacing/var-spacing' : 2,
 
     'no-console'  : process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger' : process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger' : process.env.NODE_ENV === 'production' ? 'error' : 'warn',
 
     'eqeqeq'                : 'error',
     'no-invalid-this'       : 'error',

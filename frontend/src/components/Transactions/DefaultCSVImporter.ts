@@ -7,6 +7,8 @@ import { Account, AssetSymbol, Transaction } from '/@common/models'
 import { TransactionType } from '/@common/models/Transaction'
 import { Query } from '/@common/Query'
 import { StringUtils } from '/@common/utils'
+
+import { Mutex } from 'async-mutex'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
@@ -28,6 +30,8 @@ export interface CsvDataInterface {
 
 export class DefaultCSVImporter {
 
+  mutex = new Mutex()
+
   accounts : Account[] | null = null
 
   parseCSV (file) : Promise<CsvDataInterface[]> {
@@ -46,27 +50,28 @@ export class DefaultCSVImporter {
 
   private async getOrCreateAccount (name : string) : Promise<Account> {
 
+    return await this.mutex.runExclusive(async () => {
 
-    if (!this.accounts) {
-      const q = new Query(Account)
+      if (!this.accounts) {
+        const q = new Query(Account)
 
-      this.accounts = await q.find()
-    }
+        this.accounts = await q.find()
+      }
 
-    let account = this.accounts.find(account => account.name === name)
+      let account = this.accounts.find(account => account.name === name)
 
-    if (account) {
+      if (account) {
+        return account
+      }
+
+      account      = new Account()
+      account.name = name
+
+      await account.save()
+      this.accounts.push(account)
+
       return account
-    }
-
-
-    account      = new Account()
-    account.name = name
-
-    await account.save()
-    this.accounts.push(account)
-
-    return account
+    })
   }
 
   private async validateRow (row) : Promise<CsvDataInterface> {

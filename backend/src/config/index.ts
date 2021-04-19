@@ -28,6 +28,27 @@ const config = convict({
     default : 'development',
     env     : 'NODE_ENV',
   },
+
+  server: {
+    http: {
+      enabled: {
+        format  : 'Boolean',
+        default : false,
+      },
+      mountPath: {
+        doc     : 'Parse Mount Path',
+        format  : '*',
+        default : '/parse',
+      },
+      port: {
+        doc     : 'The port to bind.',
+        format  : 'port',
+        default : 80,
+        env     : 'HTTP_PORT',
+        arg     : 'httpPort',
+      },
+    },    
+  },
   parse: {
     databaseUri: {
       doc     : 'Database URI',
@@ -46,7 +67,7 @@ const config = convict({
       default : null,
     },
     serverUrl: {
-      doc     : 'Parse Server URL',
+      doc     : 'Parse Server URL. This is the URL where the backend will attempt to connect to.',
       format  : '*',
       default : 'http://local.goplan.finance:1337/parse',
     },
@@ -58,18 +79,6 @@ const config = convict({
           default : null,
         },
       },
-    },
-    mountPath: {
-      doc     : 'Parse Mount Path',
-      format  : '*',
-      default : '/parse',
-    },
-    port: {
-      doc     : 'The port to bind.',
-      format  : 'port',
-      default : 1337,
-      env     : 'PORT',
-      arg     : 'port',
     },
   },
   dataProviders: {
