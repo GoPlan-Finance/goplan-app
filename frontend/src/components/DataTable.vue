@@ -6,6 +6,11 @@
       :class="alignment === 'left' ? 'justify-start' : 'justify-end'"
       class="flex gap-2 mb-2"
     >
+      <slot
+        v-if="alignment ==='right'"
+        :name="`beforeFilters(${alignment})`"
+      />
+
       <label
         v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => ((alignment ==='right' && !filter.align) || filter.align === alignment))"
         :key="key"
@@ -36,6 +41,11 @@
       <SearchField
         v-if="config.search && (alignment === 'right')"
         v-model="search"
+      />
+
+      <slot
+        v-if="alignment ==='right'"
+        :name="`afterFilters(${alignment})`"
       />
     </div>
   </div>
@@ -131,7 +141,7 @@
       class="grid items-center"
     >
       <slot
-        :row="rowIndex"
+        :row="row"
         name="actions"
       />
     </div>

@@ -4,6 +4,7 @@
   >
     <SearchField
       v-model="input"
+      :placeholder="placeholder"
       :input-class="searchFieldClass"
       @keyup.enter="selectElement()"
     />
@@ -33,7 +34,7 @@
 import { AssetSymbol } from '/@common/models'
 import { Query } from '/@common/Query'
 import SearchField from '/@components/base/SearchField.vue'
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
@@ -52,6 +53,10 @@ const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
 export default defineComponent({
   components : {SearchField},
   props      : {
+    placeholder: {
+      type    : String,
+      default : 'Search',
+    },
     modelValue: {
       required  : true,
       validator : prop => prop instanceof AssetSymbol || prop === null,
@@ -87,10 +92,24 @@ export default defineComponent({
         return tickerName.value
       },
       set (param : string) {
+        if (tickerName.value === param) {
+          return
+        }
+
         tickerName.value = param
         update()
       },
+    })
 
+    watch(() => props.modelValue, () => {
+      if (props.modelValue === null) {
+        symbols.data     = []
+        tickerName.value = ''
+        isOpen.value     = false
+      } else if (tickerName.value !== props.modelValue.symbol) {
+        symbols.data     = []
+        tickerName.value = props.modelValue.symbol
+      }
     })
 
     function selectElement (symbol? : AssetSymbol | undefined) {

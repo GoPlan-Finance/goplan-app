@@ -6,47 +6,108 @@
 
     <DataTable
       :config="config"
-      :rows="sortedRows"
+      :rows="sortedItems"
     >
       <template
-        #field(name)="{ row }"
+        #beforeFilters(right)
       >
-        <AppLink
-          :ticker="row.symbol"
-          to="ticker_details"
-        >
-          <p class="font-normal text-sm">
-            {{ row.name }}
-          </p>
-        </AppLink>
+        <AssetSearch
+          v-model="selectedAsset"
+          placeholder="Add Symbol"
+        />
       </template>
+
+
+      <!--Copied from Transactions.vue-->
       <template
-        #field(symbol)="{ row }"
+        #field(ticker)="{ value , row }"
       >
         <AppLink
-          :ticker="row.symbol"
+          v-if="row.symbol"
+          :ticker="value"
+          class="font-bold"
+          to="ticker_details"
+        >
+          <p class="mr-3 font-bold">
+            {{ row.symbol.symbol }}
+          </p>
+        </AppLink>
+        <span v-else>
+          {{ row.symbol.symbol }}
+        </span>
+      </template>
+
+      <template
+        #field(name)="{value, row }"
+      >
+        <AppLink
+          v-if="row.symbol"
+          :ticker="value"
+          class="font-bold"
           to="ticker_details"
         >
           <p class="font-normal text-sm">
-            {{ row.symbol }}
+            {{ row.symbol.name }}
           </p>
         </AppLink>
+        <span v-else>
+          {{ row.symbol.name }}
+        </span>
+      </template>
+
+      <template
+        #field(dayPLChange)="{ row}"
+      >
+        <AssetPriceChange
+          v-if="row.lastPrice"
+          :compare-from="row.lastPrice.previousClose"
+          :compare-to=" row.lastPrice.price"
+        />
+        <span v-else>
+          --
+        </span>
+      </template>
+
+      <template
+        #actions="{row}"
+      >
+        <div
+          class="cursor-pointer hover:text-red-600"
+          @click="remove(row)"
+        >
+          <svg
+            class="h-6 w-6 stroke-1 stroke-current"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
       </template>
     </DataTable>
   </template>
 </template>
 
 <script lang="ts">
-import { Watchlist } from '/@common/models'
+import { Watchlist, WatchlistItem } from '/@common/models'
+import { Holding } from '/@common/models/Holding'
 import { Query } from '/@common/Query'
+import AssetPriceChange from '/@components/AssetPriceChange.vue'
+import AssetSearch from '/@components/AssetSearch.vue'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
-import dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
+import { useAssetPriceStore } from '/@store/index'
+import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReactive, toRef, toRefs, watch } from 'vue'
 
 
 export default defineComponent({
-  components : {AppLink, DataTable},
+  components : {AssetPriceChange, AssetSearch, AppLink, DataTable},
   props      : {
     id: {
       type     : String,
@@ -54,56 +115,122 @@ export default defineComponent({
     },
   },
   setup (props) {
-    let liveSubscription = null
+    let liveSubscription  = null
+    let liveSubscription2 = null
+    const selectedAsset   = ref(null)
+    const watchlistId     = toRef(props, 'id')
+    const watchlistItems  = shallowReactive([])
+    const priceStore      = useAssetPriceStore()
 
     const data = reactive({
-      watchlist : null,
-      items     : [],
-      config    : {
+      watchlist   : null,
+      items       : [],
+      sortedItems : [],
+      config      : {
         fields: {
-          name   : {},
-          symbol : {},
+          name      : {},
+          ticker    : {},
+          createdAt : {
+            format: 'date'
+          },
+          dayPLChange: {
+            format : 'percent',
+            value  : (row : Holding) => {
+              if (!row.lastPrice || row.lastPrice.price === 0) {
+                return null
+              }
+
+              return (row.lastPrice.previousClose / row.lastPrice.price) - 1
+            },
+          },
         },
         headerLayout: [
-          'name',
-          'symbol',
+          [
+            'ticker', 'name'
+          ],
+          'createdAt',
+          'dayPLChange',
         ],
         settings: {
-          actions           : false,
+          actions           : true,
           translationPrefix : 'watchlist.table',
         },
       },
     })
 
-
+    async function remove (watchlistItem : WatchlistItem) {
+      watchlistItem.destroy()
+    }
+    
     onBeforeMount(async () => {
-      const q = new Query(Watchlist)
-      q.get(props.id)
+      await priceStore.subscribe()
 
+      const q          = Query.create(Watchlist)
+      data.watchlist   = await q.get(watchlistId.value)
       liveSubscription = await q.liveQuery(null, async wl => {
-        data.items     = await wl.relation('symbols').query().find()
         data.watchlist = wl
       })
+
+      const q2          = Query.create(WatchlistItem)
+      q2.equalTo('watchlist', data.watchlist)
+      q2.include('symbol')
+      liveSubscription2 = await q2.liveQuery(watchlistItems)
     })
 
     onUnmounted(async () => {
       if (liveSubscription) {
         await liveSubscription.unsubscribe()
       }
+      if (liveSubscription2) {
+        await liveSubscription2.unsubscribe()
+      }
     })
 
-    const sortedRows = computed(() => {
-      return data.items.filter(row => {
+    watch(selectedAsset, async () => {
+      if (!selectedAsset.value) {
+        return
+      }
 
-        return true
+      if (data.items.find(item => item.symbol.id === selectedAsset.value.id)) {
+        console.warn('Symbol already exists')
+        selectedAsset.value = null
+        return
+      }
+
+      const wi = new WatchlistItem()
+
+      wi.watchlist = data.watchlist
+      wi.symbol    = selectedAsset.value
+
+      await wi.save()
+      //data.items.push(await wi.save())
+
+      selectedAsset.value = null
+    })
+
+
+    watch(watchlistItems, async () => {
+
+      data.sortedItems = watchlistItems
+
+      const symbols = watchlistItems.map(item => item.symbol)
+
+      await priceStore.watch(symbols, assetPrice => {
+
+        const item = data.sortedItems.find(item => {
+          return item.symbol && item.symbol.id === assetPrice.symbol.id
+        })
+
+        item.lastPrice = assetPrice
       })
-    })
+
+    }, {immediate: true})
 
 
     return {
-      dayjs,
+      remove,
+      selectedAsset,
       ...toRefs(data),
-      sortedRows,
     }
   },
 })

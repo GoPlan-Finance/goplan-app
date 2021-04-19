@@ -9,6 +9,7 @@ import StockExchange from './StockExchange'
 import Transaction from './Transaction'
 import User from './User'
 import Watchlist from './Watchlist'
+import WatchlistItem from './WatchlistItem'
 
 
 export const schemas = [
@@ -26,5 +27,6 @@ export const schemas = [
   AssetPrice,
   Account,
   Watchlist,
+  WatchlistItem,
   Transaction,
 ]

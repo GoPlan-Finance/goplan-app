@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { Watchlist } from '/@common/models'
+import { Watchlist, WatchlistItem } from '/@common/models'
 import { Query } from '/@common/Query'
 import AddWatchlist from '/@components/AddWatchlist.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
@@ -84,7 +84,7 @@ export default defineComponent({
 
     const show = async (watchlist : Watchlist) => {
       watchlist.percentChange = (Math.random() * 10) - 3.5
-      watchlist.symbolsCount  = await watchlist.relation('symbols').query().count()
+      watchlist.symbolsCount  = await Query.create(WatchlistItem).equalTo('watchlist', watchlist).count()
     }
 
     async function remove (watchlist : Watchlist) {

@@ -19,6 +19,7 @@ watchlists:
   updated: Updated
   show_more: 'Show More'
 
+
 transactions:
   headline: Transactions
   table:
@@ -39,7 +40,9 @@ transactions:
 watchlist:
   table:
     name: Name
-    symbol: Symbol
+    createdAt: Date Added
+    ticker: Symbol
+    dayPLChange: Day P/L
 
 quote:
   open: Open
@@ -81,3 +84,6 @@ holdings:
     lastBuy: Last purchace
     closePL: Realized P/L
     weight: % Portfolio
+
+
+

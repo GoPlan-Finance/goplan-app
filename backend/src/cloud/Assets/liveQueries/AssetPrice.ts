@@ -184,7 +184,6 @@ const handler = new SubscriptionsHandler(AssetSymbol, 60)
 // @ts-ignore
 Parse.Cloud.beforeSubscribe(AssetPrice, async (request) => {
 
-
   const query : Parse.Query = request.query
 
   const where = query.toJSON().where.symbol
@@ -195,16 +194,19 @@ Parse.Cloud.beforeSubscribe(AssetPrice, async (request) => {
 
   if (!where.$in) {
     where.$in = [
-      where
+      where,
     ]
   }
 
   for (const symbol of where.$in) {
+    try {
+      const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(symbol.objectId, true)
 
-    const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(symbol.objectId, true)
-
-    console.log('sub', request.requestId)
-    handler.subscribe(request.requestId, assetSymbol)
+      console.log('sub', request.requestId)
+      handler.subscribe(request.requestId, assetSymbol)
+    } catch (e) {
+      console.error(`Failed tu subscribe to ${symbol}`, e)
+    }
   }
 
   await handler.runOnce()
