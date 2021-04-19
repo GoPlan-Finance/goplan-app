@@ -25,7 +25,6 @@ export const useHoldingStore = defineStore({
   actions: {
     updateHoldings () {
 
-      const priceStore        = useAssetPriceStore()
       const transactionsStore = useTransactionStore()
 
       const holdings = ArrayUtils.groupBy<Transaction>(
@@ -127,7 +126,8 @@ export const useHoldingStore = defineStore({
         console.log('HoldingStore computed', transactionStore.transactions.length)
         return transactionStore.transactions
       })
-      watch(() => transactionStore.transactions, async (i, j) => {
+
+      watch(() => transactionStore.transactions, async () => {
 
         console.log('updateHoldings', transactionStore.transactions.length)
 

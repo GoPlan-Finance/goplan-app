@@ -13,23 +13,23 @@ export class IndexedDB {
     this.store = createStore('goPlan', `${name}Store`)
   }
 
-  get (path : string) {
+  async get<T> (path : string) : Promise<T> {
     return get(path, this.store)
   }
 
-  set (path : string, value : string) {
+  async set<T> (path : string, value : T) : Promise<void> {
     return set(path, value, this.store)
   }
 
-  remove (path : string) {
+  async remove (path : string) : Promise<void> {
     return del(path, this.store)
   }
 
-  getAllKeys () {
+  async getAllKeys () : Promise<IDBValidKey[]> {
     return keys(this.store)
   }
 
-  clear () {
+  async clear () : Promise<void> {
     return clear(this.store)
   }
 

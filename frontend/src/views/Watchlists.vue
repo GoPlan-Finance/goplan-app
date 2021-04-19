@@ -68,12 +68,12 @@
 </template>
 
 <script lang="ts">
-import { Transaction, Watchlist } from '/@common/models'
+import { Watchlist } from '/@common/models'
 import { Query } from '/@common/Query'
-import dayjs from 'dayjs'
-import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 import AddWatchlist from '/@components/AddWatchlist.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
+import dayjs from 'dayjs'
+import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
 
 
 export default defineComponent({

@@ -11,7 +11,6 @@ export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted
 export type LiveQueryUpdateFn<T> = (obj : T, event : LiveQueryUpdateFnEventType) => void
 type Constructible<T> = (new (...args : any[]) => T)
 
-
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
   objectClass : Constructible<T> = null
@@ -162,15 +161,15 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     for (const [
       k, v
     ] of Object.entries(params)) {
-      this.equalTo(k, v as any)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.equalTo(k, v)
     }
 
     return this.first(BaseObject.useMasterKey(useMasterKey)) as Promise<T>
   }
 
   private createObject () : T {
-    const className = this.className as any as new (...args : any[]) => T
-
     return new this.objectClass()
   }
 

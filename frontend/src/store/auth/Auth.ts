@@ -6,17 +6,17 @@ import { Session } from './index'
 
 export class AuthStore {
 
-  public static maybeLoadDerivedKey () {
+  public static maybeLoadDerivedKey () :void {
     const derivedKey = Session.get<DerivedKey>('derivedKey')
     SecureObject.setSessionDerivedKey(derivedKey)
   }
 
-  public static clearDerivedKey () {
+  public static clearDerivedKey () :void {
 
     AuthStore.storeDerivedKey(null)
   }
 
-  private static storeDerivedKey (derivedKey : DerivedKey) {
+  private static storeDerivedKey (derivedKey : DerivedKey) :void  {
     // @todo ensure SessionStorage is safe storage for tokens
     Session.set('derivedKey', derivedKey)
     SecureObject.setSessionDerivedKey(derivedKey)

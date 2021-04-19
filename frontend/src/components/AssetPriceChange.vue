@@ -48,14 +48,14 @@
 <script lang="ts">
 import { AssetPrice, AssetSymbol } from '/@common/models'
 import { formatCurrency } from '/@common/utils'
-import { watchEffect, defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
+import { defineComponent, onUnmounted, ref, watchEffect } from 'vue'
 
 
 export default defineComponent({
   props: {
     compareFrom: {
       type: [
-        String, Number
+        String, Number,
       ],
       default   : 'previousClose',
       validator : value => {
@@ -77,7 +77,7 @@ export default defineComponent({
     },
     compareTo: {
       type: [
-        AssetSymbol, Number
+        AssetSymbol, Number,
       ],
       required: true,
     },
@@ -88,7 +88,7 @@ export default defineComponent({
 
     const currency = ref(null)
 
-    const assetPrice  = ref<AssetPrice>(null)
+    const assetPrice = ref<AssetPrice>(null)
 
     const fromPrice = ref<number>(null)
     const toPrice   = ref<number>(null)
@@ -125,8 +125,8 @@ export default defineComponent({
           assetPrice.value = ap
 
           update(
-            typeof compareFrom === 'string'  ?  ap[compareFrom] : compareFrom,
-            ap.price
+            typeof compareFrom === 'string' ? ap[compareFrom] : compareFrom,
+            ap.price,
           )
         })
       } else {
@@ -136,7 +136,7 @@ export default defineComponent({
 
         update(
           compareFrom,
-          compareTo
+          compareTo,
         )
       }
     }

@@ -13,6 +13,9 @@ import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
 
 
+type LoggerFn = (i : number, msg : string) => void
+
+
 export interface CsvDataInterface {
   currency : string
   date : string
@@ -74,7 +77,7 @@ export class DefaultCSVImporter {
     })
   }
 
-  private async validateRow (row) : Promise<CsvDataInterface> {
+  private async validateRow (row : CsvDataInterface) : Promise<CsvDataInterface> {
     // date  type  symbol  quantity  price  fees  totalExcludingFees  currency  accountName  description
 
     if (!row.type || !row.date || !row.currency || !row.accountName) {
@@ -140,20 +143,21 @@ export class DefaultCSVImporter {
       throw 'fees missing'
     }
 
-    if (row.totalExcludingFees && row.totalExcludingFees !== 0 && [
+    if (row.totalExcludingFees && parseFloat(row.totalExcludingFees) !== 0 && [
       'fees',
     ].includes(row.type)) {
       throw 'totalExcludingFees must be empty'
     }
 
-    if (row.type === 'sell' && row.quantity < 0) {
-      row.quantity = Math.abs(row.quantity)  // Some exports contains SELL -100
+    const qty = parseFloat(row.quantity)
+    if (row.type === 'sell' && qty < 0) {
+      row.quantity = Math.abs(qty).toString()  // Some exports contains SELL -100
     }
 
     return row
   }
 
-  async validateCSV (file, logger) : Promise<CsvDataInterface[]> {
+  async validateCSV (file : File, logger : LoggerFn) : Promise<CsvDataInterface[]> {
 
     const validRows = []
 
@@ -176,7 +180,7 @@ export class DefaultCSVImporter {
   }
 
 
-  async importCSV (rows : CsvDataInterface[], logger) {
+  async importCSV (rows : CsvDataInterface[], logger : LoggerFn) {
 
     for (const [
       i, row

@@ -198,7 +198,7 @@ enum ImportStepEnum {
 export default defineComponent({
   components : {Modal, ButtonDefault},
   props      : {},
-  setup (props) {
+  setup () {
     const data = reactive({
       currentStep : ImportStepEnum.Instructions,
       opened      : false,

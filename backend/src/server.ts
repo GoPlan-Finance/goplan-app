@@ -6,7 +6,6 @@
  */
 
 import * as express from 'express'
-import * as fs from 'fs'
 import * as http from 'http'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -102,7 +101,7 @@ function runParse (api : ParseServer, server : http.Server, port : number, mount
 }
 
 
-const isHTTP  = config.get('server.http.enabled')
+const isHTTP = config.get('server.http.enabled')
 
 
 if (isHTTP) {

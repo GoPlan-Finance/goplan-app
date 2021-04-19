@@ -24,7 +24,7 @@ class SubscriptionsHandler<T> {
   mutex : Mutex                     = null
   subscriptions : SubscriptionsType = []
   delay : number
-  interval : any
+  interval : NodeJS.Timeout
   classType : T
 
   constructor (classType : T, delay : number) {

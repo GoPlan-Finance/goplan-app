@@ -14,7 +14,7 @@ export abstract class SecureObject extends BaseObject {
   private static sessionDerivedKey : DerivedKey
   private readonly secureFields : string[] = []
 
-  public static setServerMode () {
+  public static setServerMode () :void {
     SecureObject.isServer = true
   }
 
@@ -109,7 +109,7 @@ export abstract class SecureObject extends BaseObject {
   async save (
     target : SecureObject | Array<SecureObject | Parse.File> = undefined,
     options : Parse.RequestOptions                           = undefined,
-  ) {
+  ) :Promise<this> {
 
     for (const [
       name, value

@@ -49,7 +49,7 @@ export class Transaction extends SecureObject {
     return this.get('price')
   }
 
-  set price (value) {
+  set price (value : number) {
     this.set('price', value)
   }
 
@@ -57,7 +57,7 @@ export class Transaction extends SecureObject {
     return Number(this.get('quantity'))
   }
 
-  set quantity (value) {
+  set quantity (value : number) {
     this.set('quantity', value)
   }
 
@@ -73,7 +73,7 @@ export class Transaction extends SecureObject {
     return this.get('currency')
   }
 
-  set currency (value) {
+  set currency (value : string) {
     this.set('currency', value.toUpperCase())
   }
 
@@ -81,7 +81,7 @@ export class Transaction extends SecureObject {
     return this.get('fees')
   }
 
-  set fees (value) {
+  set fees (value : number) {
     this.set('fees', value)
   }
 
@@ -89,7 +89,7 @@ export class Transaction extends SecureObject {
     return this.get('totalExcludingFees')
   }
 
-  set totalExcludingFees (value) {
+  set totalExcludingFees (value : number) {
     this.set('totalExcludingFees', value)
   }
 
@@ -97,15 +97,15 @@ export class Transaction extends SecureObject {
     return this.get('importStatus')
   }
 
-  set importStatus (value) {
+  set importStatus (value : unknown) {
     this.set('importStatus', value)
   }
 
-  get importRawData () : any {
+  get importRawData () : unknown {
     return this.get('importRawData')
   }
 
-  set importRawData (value) {
+  set importRawData (value : unknown) {
     this.set('importRawData', value)
   }
 
@@ -115,11 +115,9 @@ export class Transaction extends SecureObject {
       return this.symbol.symbol
     }
 
-    if (this.importRawData && this.importRawData.symbol) {
-      return this.importRawData.symbol
-    }
-
-    return null
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return (this.importRawData && this.importRawData.symbol) ? this.importRawData.symbol : null
   }
 
 }

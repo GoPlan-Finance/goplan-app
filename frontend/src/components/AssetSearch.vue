@@ -30,7 +30,7 @@
 
 <script lang="ts">
 
-import { Account, AssetSymbol } from '/@common/models'
+import { AssetSymbol } from '/@common/models'
 import { Query } from '/@common/Query'
 import SearchField from '/@components/base/SearchField.vue'
 import { computed, defineComponent, reactive, ref } from 'vue'
@@ -54,12 +54,12 @@ export default defineComponent({
   props      : {
     modelValue: {
       required  : true,
-      validator : prop =>  prop instanceof AssetSymbol || prop === null,
+      validator : prop => prop instanceof AssetSymbol || prop === null,
     },
     searchFieldClass: {
       type    : String,
-      default : ''
-    }
+      default : '',
+    },
   },
   emits: [
     'update:modelValue',
@@ -86,7 +86,7 @@ export default defineComponent({
       get () {
         return tickerName.value
       },
-      set (param: string) {
+      set (param : string) {
         tickerName.value = param
         update()
       },

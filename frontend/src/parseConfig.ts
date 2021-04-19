@@ -8,9 +8,6 @@
 // withh vite
 
 
-import { SecureObject } from '/@common/models/base/SecureObject'
-
-
 Parse.initialize('goplan-finance')
 
 window.Parse.serverURL = 'https://goplan.finance/parse'
@@ -23,7 +20,7 @@ window.Parse.enableLocalDatastore()
 Parse.CoreManager.setStorageController(Parse.IndexedDB)
 
 
-//
+// import { SecureObject } from '/@common/models/base/SecureObject'
 // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // // @ts-ignore
 // const ParseObjectController = Parse.CoreManager.getObjectController()

@@ -72,11 +72,11 @@ export class MathUtils {
 }
 
 
-export function hideZero (num : number) {
-  return num === 0 ? '' : num
+export function hideZero (num : number) : string {
+  return num === 0 ? '' : num.toString()
 }
 
-export function padDecimals (num : number, minDec = 0, maxDec = 4) {
+export function padDecimals (num : number, minDec = 0, maxDec = 4) :string {
 
   // decimal part, without trailing 00
   // 1.000 ->  ''
