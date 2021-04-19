@@ -8,7 +8,7 @@
       :key="option.value"
       :value="option.value"
     >
-      {{ option.display }}
+      {{ option.label }}
     </option>
   </select>
 </template>
@@ -19,7 +19,7 @@ import { defineComponent, PropType, computed } from 'vue'
 
 export type SelectOption = {
   value: string,
-  display: string
+  label: string
 }
 
 export default defineComponent({

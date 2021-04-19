@@ -23,28 +23,28 @@ export default defineComponent({
 
     const options: SelectOption[] = [
       {
-        value   : '',
-        display : 'All Types',
+        value : '',
+        label : 'All Types',
       },
       {
-        value   : 'BUY',
-        display : 'Buy',
+        value : 'BUY',
+        label : 'Buy',
       },
       {
-        value   : 'SELL',
-        display : 'Sell',
+        value : 'SELL',
+        label : 'Sell',
       },
       {
-        value   : 'DIVIDENDS',
-        display : 'Dividends',
+        value : 'DIVIDENDS',
+        label : 'Dividends',
       },
       {
-        value   : 'FEES',
-        display : 'Fees',
+        value : 'FEES',
+        label : 'Fees',
       },
       {
-        value   : 'TRANSFER',
-        display : 'Transfers',
+        value : 'TRANSFER',
+        label : 'Transfers',
       },
     ]
 
