@@ -1,20 +1,24 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { Transaction } from '/@common/models'
+import { Account, Transaction } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
 import { ArrayUtils } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { defineStore } from 'pinia'
 import { watch, computed} from 'vue'
 import { useAssetPriceStore, useTransactionStore } from './'
-// const db = new IndexedDB('companyProfile')
+
+interface StoreState {
+  subscriptionPromise : Promise<void>
+  holdings : Holding[]
+}
+
 
 export const useHoldingStore = defineStore({
   // name of the store
   id: 'holding',
 
-  state: () => ({
+  state: () : StoreState => ({
     subscriptionPromise : null,
-    liveSubscription    : null,
     holdings            : [],
   }),
   // optional getters

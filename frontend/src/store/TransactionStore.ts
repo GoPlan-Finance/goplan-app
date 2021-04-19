@@ -1,18 +1,22 @@
 // import {IndexedDB} from './base/IndexedDB'
 import { Transaction } from '/@common/models'
+import { Holding } from '/@common/models/Holding'
 import { Query } from '/@common/Query'
 import { defineStore } from 'pinia'
 
 // const db = new IndexedDB('companyProfile')
 
+interface StoreState {
+  subscriptionPromise : Promise<void>
+  transactions : Transaction[]
+}
 
 export const useTransactionStore = defineStore({
   // name of the store
   id: 'transaction',
 
-  state: () => ({
+  state: () : StoreState => ({
     subscriptionPromise : null,
-    liveSubscription    : null,
     transactions        : [],
   }),
   // optional getters
@@ -33,7 +37,7 @@ export const useTransactionStore = defineStore({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      this.liveSubscription = await q.liveQuery(this.transactions, (obj, event) => {
+      await q.liveQuery(this.transactions, (obj, event) => {
         console.log(`transaction ${event ? event : 'init'} - ${obj.id}`, obj, this.transactions.length)
       })
     },
