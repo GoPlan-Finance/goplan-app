@@ -23,6 +23,9 @@
       ],
       "/@store/*": [
         "./store/*"
+      ],
+      "/@utils/*": [
+        "./utils/*"
       ]
     },
     "types": [

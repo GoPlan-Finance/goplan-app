@@ -92,6 +92,7 @@ import BuySellAsset from '/@components/BuySellAsset.vue'
 import DataTable from '/@components/DataTable.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
 import AppLink from '/@components/router/AppLink.vue'
+import { Screens } from '/@utils/screens'
 import * as dayjs from 'dayjs'
 import { defineComponent, reactive, ref, toRefs, watch, onBeforeMount} from 'vue'
 import { useAssetPriceStore, useHoldingStore } from '../store'
@@ -195,27 +196,37 @@ export default defineComponent({
             },
           },
         },
-        headerLayout: [
-          [
-            'ticker', 'name',
+        tableLayout: {
+          [Screens.DEFAULT]: [
+            [
+              'ticker', 'openQty',
+            ],
+            [
+              'openPL', 'openTotalPrice'
+            ],
           ],
-          [
-            'openQty', 'lastBuy',
+          [Screens.SM]: [
+            [
+              'ticker', 'name',
+            ],
+            [
+              'openQty', 'lastBuy',
+            ],
+            [
+              'openTotalPrice', 'openAvgPrice',
+            ],
+            [
+              'currentTotalPrice', 'currentAvgPrice',
+            ],
+            [
+              'openPL', /* 'openTotalPrice',*/
+            ],
+            [
+              'dayPLChange', /*'dayPL',*/
+            ],
+            'weight',
           ],
-          [
-            'openTotalPrice', 'openAvgPrice',
-          ],
-          [
-            'currentTotalPrice', 'currentAvgPrice',
-          ],
-          [
-            'openPL', /* 'openTotalPrice',*/
-          ],
-          [
-            'dayPLChange', /*'dayPL',*/
-          ],
-          'weight',
-        ],
+        },
         settings: {
           actions           : false,
           translationPrefix : 'holdings.table',

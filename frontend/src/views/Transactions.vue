@@ -89,6 +89,7 @@
 import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
+import { Screens } from '/@utils/screens'
 import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
@@ -108,10 +109,13 @@ export default defineComponent({
       rows   : [],
       config : {
         fields: {
-          type       : {},
-          executedAt : {
+          type: {
+            width: '10%'
+          },
+          executedAt: {
             justify : 'right',
             format  : 'date',
+            width   : '20%'
           },
           name: {
             value: (transaction : Transaction) => {
@@ -153,19 +157,41 @@ export default defineComponent({
             },
           },
         },
-        headerLayout: [
-          'type',
-          'executedAt',
-          [
-            'name', 'ticker',
+        tableLayout: {
+          [Screens.DEFAULT]: [
+            'type',
+            [
+              'executedAt',
+              'name'
+            ],
+            [
+              'quantity',
+              'price',
+            ]
           ],
-          'quantity',
-          'price',
-          [
-            'totalExcludingFees',
+          [Screens.SM]: [
+            'type',
+            'executedAt',
+            [
+              'name', 'ticker',
+            ],
+            'quantity',
+            'price',
           ],
-          'fees',
-        ],
+          [Screens.XL]: [
+            'type',
+            'executedAt',
+            [
+              'name', 'ticker',
+            ],
+            'quantity',
+            'price',
+            [
+              'totalExcludingFees',
+            ],
+            'fees',
+          ],
+        },
         settings: {
           actions           : false,
           translationPrefix : 'transactions.table',

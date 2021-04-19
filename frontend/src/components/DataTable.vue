@@ -40,11 +40,11 @@
     </div>
   </div>
   <div
-    :class="`lg:grid-cols-${columnCount}`"
-    class="hidden lg:grid grid-cols-1 gap-2 px-4 py-2 text-gray-400 text-sm"
+    class="grid gap-2 px-4 py-2 text-gray-400 text-sm"
+    :style="tableTemplate"
   >
     <div
-      v-for="(row, rowIndex) in headerLayout"
+      v-for="(row, rowIndex) in tableLayout"
       :key="rowIndex"
       class="grid items-center"
     >
@@ -89,13 +89,13 @@
   <div
     v-for="(row, rowIndex) in rowsInternal"
     :key="rowIndex"
-    :class="`lg:grid-cols-${columnCount}`"
-    class="mb-2 grid grid-cols-2 sm:grid-cols-2 gap-2 bg-white rounded-lg px-4 py-3"
+    :style="tableTemplate"
+    class="mb-2 grid gap-2 bg-white rounded-lg px-4 py-3"
   >
     <div
-      v-for="(cell, cellIndex) in headerLayout"
+      v-for="(cell, cellIndex) in tableLayout"
       :key="cellIndex"
-      class="grid grid-cols-none sm:grid-cols-2 lg:grid-cols-1 gap-1 items-center"
+      class="grid grid-cols-none gap-1 items-center"
     >
       <div
         v-for="(header, headerIndex) in cell"
@@ -107,14 +107,8 @@
             'lg:text-center': fields[header].justify === 'center'
           }
         ]"
+        class="whitespace-nowrap overflow-hidden overflow-ellipsis"
       >
-        <div
-          class="block lg:hidden text-sm font-light text-gray-500 cursor-pointer hover:text-blue-600 select-none"
-          @click="setSort(header)"
-        >
-          {{ $t(settings.translationPrefix + '.' + header) }}
-        </div>
-
         <Private :hide="fields[header].private === true">
           <slot
             :name="`field(${header})`"
@@ -142,6 +136,7 @@
 import SearchField from '/@components/base/SearchField.vue'
 import {
   CompareFn,
+  findTableLayout,
   FormatFn,
   getHandler,
   SortSettings,
@@ -149,8 +144,10 @@ import {
   TableHeader,
   TableRow,
   ValueFn,
+  TableLayout,
 } from '/@components/DataTable'
-import { computed, defineComponent, reactive, ref, toRefs } from 'vue'
+import { getCurrentBreakpoint } from '/@utils/screens'
+import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -180,17 +177,25 @@ export default defineComponent({
       order  : 'desc',
     })
 
-    const columnCount = computed(() => {
-      const actions = props.config.settings.actions ? 1 : 0
-      return Object.keys(props.config.headerLayout).length + actions
+    const breakpoint    = ref(null)
+    const resizeHandler = (event) => {
+      breakpoint.value = getCurrentBreakpoint(event.target.innerWidth)
+    }
+
+    onBeforeMount(async () => {
+      breakpoint.value = getCurrentBreakpoint(window.innerWidth)
+      window.addEventListener('resize', resizeHandler, {passive: true})
+    })
+
+    onBeforeUnmount(async () => {
+      window.removeEventListener('resize', resizeHandler)
     })
 
     const config : TableConfig = reactive({
-      fields       : props.config.fields,
-      headerLayout : [],
-      settings     : props.config.settings || {},
-      filters      : props.config.filters || {},
-      search       : props.config.search || {},
+      fields   : props.config.fields,
+      settings : props.config.settings || {},
+      filters  : props.config.filters || {},
+      search   : props.config.search || {},
     })
 
     const search = ref('')
@@ -208,26 +213,9 @@ export default defineComponent({
       //field.search = getHandler<CompareFn>(field, 'search')
     }
 
-    config.headerLayout = props.config.headerLayout.map(key => {
-      if (!Array.isArray(key)) {
-        return [
-          key,
-        ]
-      }
-      return key
-    })
-
-    config.headerLayout.forEach(layout => layout.map(fieldName => {
-      if (typeof config.fields[fieldName] !== 'object') {
-        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
-      }
-    }))
-
-
     function fieldFormatValue (header : TableHeader, row) {
-
-      const fieldValue = header.value(row, header)
-      return header.format(fieldValue, row)
+      const value = header.value(row, header)
+      return header.format(value, row)
     }
 
     const rowsInternal = computed(() => {
@@ -286,14 +274,48 @@ export default defineComponent({
       }
     }
 
+    function objectToNestedArrays (object: Record<any, any>) {
+      return  object.map(key => {
+        if (!Array.isArray(key)) {
+          return [
+            key,
+          ]
+        }
+        return key
+      })
+    }
+
+    const tableLayout: TableLayout = computed(() => {
+      const tableLayouts = props.config.tableLayout
+      const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
+      return objectToNestedArrays(tableLayout)
+    })
+
+    tableLayout.value.forEach(layout => layout.map(fieldName => {
+      if (typeof config.fields[fieldName] !== 'object') {
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
+      }
+    }))
+
+    const tableTemplate = computed(() => {
+      let template = ''
+      for (const column of tableLayout.value) {
+        template += config.fields[column]?.width ?? '1fr'
+        template += ' '
+      }
+      console.log(template)
+      return `grid-template-columns: ${template};`
+    })
+
     return {
       ...toRefs(config),
       fieldFormatValue,
-      columnCount,
       rowsInternal,
       setSort,
       sort,
       search,
+      tableLayout,
+      tableTemplate
     }
   },
 })

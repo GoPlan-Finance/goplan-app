@@ -1,4 +1,5 @@
 import { formatCurrency } from '/@common/utils'
+import { Screens } from '/@utils/screens'
 import * as dayjs from 'dayjs'
 
 /* eslint-disable no-use-before-define */
@@ -13,11 +14,12 @@ export interface TableHeader {
   key? : string,
   sort? : 'asc' | 'desc'
   classes? : string,
-  justify? : 'left' | 'right' | 'center',
+  justify? : 'left' | 'right' | 'center'
   private? : boolean
   format? : FormatTypes | FormatFn
   compare? : FormatTypes | CompareFn
   value? : ValueFn
+  width?: string
 }
 
 
@@ -34,9 +36,20 @@ interface FormatterInterface {
 type FormatTypes = keyof typeof formatters
 
 
+export type TableLayout = string[] | string[][]
+
+export interface TableLayoutCollection {
+  [Screens.DEFAULT]?: TableLayout,
+  [Screens.SM]?: TableLayout,
+  [Screens.MD]?: TableLayout,
+  [Screens.LG]?: TableLayout,
+  [Screens.XL]?: TableLayout,
+  [Screens.XL2]?: TableLayout,
+}
+
 export interface TableConfig {
-  fields : TableHeader[][],
-  headerLayout : string[] | string[][],
+  fields : TableHeader[],
+  tableLayout: TableLayoutCollection
   settings? : {
     actions : boolean,
     translationPrefix : string
@@ -122,4 +135,20 @@ export function getHandler<T> (field : TableHeader, op : keyof FormatterInterfac
   }
 
   throw `Unknown table data "${op}" for "${handler}"`
+}
+
+
+export function findTableLayout (tableLayouts: TableLayoutCollection, breakpoint: Screens) {
+  let currentScreenSizeFound = false
+  for (const screenSize of Object.values(Screens).reverse()) {
+    if (screenSize === breakpoint) {
+      currentScreenSizeFound = true
+      if (tableLayouts[breakpoint]) {
+        return tableLayouts[breakpoint]
+      }
+    } else if (currentScreenSizeFound && tableLayouts[screenSize]) {
+      return tableLayouts[screenSize]
+    }
+  }
+  return tableLayouts[Screens.DEFAULT]
 }
