@@ -5,13 +5,23 @@
  *
  */
 export default {
-  env: 'development',
+  env : 'development',
 
-  parse: {
-    masterKey   : '',
-    databaseUri : ''
+  server        : {
+    http: {
+      enabled: false
+    },
+    https : {
+      // enabled: true,
+      // cert : `${__dirname}/server.cert`,
+      // key : `${__dirname}/server.key`,
+    },
   },
-  dataProviders: [
+  parse         : {
+    masterKey   : '',
+    databaseUri : '',
+  },
+  dataProviders : [
     {
       name   : 'fmp',
       apiKey : '',
@@ -19,7 +29,7 @@ export default {
     {
       name   : 'yahoo',
       apiKey : '',
-    }
+    },
 
-  ]
+  ],
 }

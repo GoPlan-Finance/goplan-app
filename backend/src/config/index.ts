@@ -28,6 +28,53 @@ const config = convict({
     default : 'development',
     env     : 'NODE_ENV',
   },
+
+  server: {
+    http: {
+      enabled: {
+        format  : 'Boolean',
+        default : false,
+      },
+      mountPath: {
+        doc     : 'Parse Mount Path',
+        format  : '*',
+        default : '/parse',
+      },
+      port: {
+        doc     : 'The port to bind.',
+        format  : 'port',
+        default : 80,
+        env     : 'HTTP_PORT',
+        arg     : 'httpPort',
+      },
+    },
+    https: {
+      enabled: {
+        format  : 'Boolean',
+        default : false,
+      },
+      mountPath: {
+        doc     : 'Parse Mount Path',
+        format  : '*',
+        default : '/parse',
+      },
+      port: {
+        doc     : 'The port to bind.',
+        format  : 'port',
+        default : 443,
+        env     : 'HTTPS_PORT',
+        arg     : 'httpsPort',
+      },
+      cert: {
+        format  : '*',
+        default : null,
+      },
+      key: {
+        format  : '*',
+        default : null,
+      },
+    },
+  },
   parse: {
     databaseUri: {
       doc     : 'Database URI',
@@ -58,18 +105,6 @@ const config = convict({
           default : null,
         },
       },
-    },
-    mountPath: {
-      doc     : 'Parse Mount Path',
-      format  : '*',
-      default : '/parse',
-    },
-    port: {
-      doc     : 'The port to bind.',
-      format  : 'port',
-      default : 1337,
-      env     : 'PORT',
-      arg     : 'port',
     },
   },
   dataProviders: {

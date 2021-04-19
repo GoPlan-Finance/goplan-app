@@ -6,8 +6,9 @@
  */
 
 import * as express from 'express'
-
-import { createServer } from 'http'
+import * as fs from 'fs'
+import * as http from 'http'
+import * as https from 'https'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { ParseServer } from 'parse-server'
@@ -39,8 +40,6 @@ config.validate({allowed: 'strict'})
 global.weHateGlobals_dataProviders = config.get('dataProviders') as ProviderConfigInterface[]
 
 
-const args     = process.argv || []
-const test     = args.some(arg => arg.includes('jasmine'))
 process.env.TZ = 'America/New_York' // here is the magical line
 
 
@@ -81,29 +80,71 @@ const app = express()
 // Serve static assets from the /public folder
 // app.use('/public', express.static(path.join(__dirname, '/public')))
 
-// Serve the Parse API on the /parse URL prefix
-if (!test) {
-  const api = new ParseServer(parseConfig)
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  app.use(config.get('parse.mountPath'), api)
-}
+const api = new ParseServer(parseConfig)
 
 // Parse Server plays nicely with the rest of your web routes
 app.get('/', function (req, res) {
   res.status(200).send('I dream of being a website.  Please star the GoPlan-Finance repo on GitHub!')
 })
 
-const port = config.get('parse.port')
-if (!test) {
-  const httpServer = createServer(app)
+function runParse (api : ParseServer, server : http.Server | https.Server, port : number, mountPath : string) : void {
+
+  const httpServer = http.createServer(app)
+
+  app.use(mountPath, api)
+
   httpServer.listen(port, function () {
     console.log(`GoPlan running on port ${port}.`)
   })
+
   // This will enable the Live Query real-time server
   ParseServer.createLiveQueryServer(httpServer)
 }
+
+
+const isHTTP  = config.get('server.http.enabled')
+const isHTTPS = config.get('server.https.enabled')
+
+const httpsServer = null
+
+if (isHTTPS) {
+
+
+  const cert = config.get('server.https.cert') as string
+  const key  = config.get('server.https.key') as string
+
+  if (!cert) {
+    console.error('"server.https.cert" missing')
+    process.exit(-1)
+  }
+  if (!key) {
+    console.error('"server.https.key" missing')
+    process.exit(-1)
+  }
+
+  const privateKey  = fs.readFileSync(key, 'utf8')
+  const certificate = fs.readFileSync(cert, 'utf8')
+
+  const credentials = {key: privateKey, cert: certificate}
+
+  runParse(
+    api,
+    https.createServer(credentials, app),
+    config.get('server.https.port'),
+    config.get('server.https.mountPath'),
+  )
+
+}
+
+if (isHTTP) {
+  runParse(
+    api,
+    http.createServer(app),
+    config.get('server.http.port'),
+    config.get('server.http.mountPath'),
+  )
+}
+
 
 module.exports = {
   app,
