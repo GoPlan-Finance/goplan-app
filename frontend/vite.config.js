@@ -23,6 +23,7 @@ export default {
       '/@styleguide' : path.resolve(__dirname, './src/styleguide'),
       '/@views'      : path.resolve(__dirname, './src/views'),
       '/@store'      : path.resolve(__dirname, './src/store'),
+      '/@utils'      : path.resolve(__dirname, './src/utils'),
     },
   },
   plugins: [

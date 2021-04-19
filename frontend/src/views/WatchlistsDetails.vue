@@ -28,7 +28,7 @@
           class="font-bold"
           to="ticker_details"
         >
-          <p class="mr-3 font-bold">
+          <p class="font-normal text-sm overflow-hidden overflow-ellipsis">
             {{ row.symbol.symbol }}
           </p>
         </AppLink>
@@ -103,6 +103,7 @@ import AssetSearch from '/@components/AssetSearch.vue'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { useAssetPriceStore } from '/@store/index'
+import { Screens } from '/@utils/screens'
 import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReactive, toRef, toRefs, watch } from 'vue'
 
 
@@ -131,7 +132,7 @@ export default defineComponent({
           name      : {},
           ticker    : {},
           createdAt : {
-            format: 'date'
+            format: 'date',
           },
           dayPLChange: {
             format : 'percent',
@@ -144,13 +145,15 @@ export default defineComponent({
             },
           },
         },
-        headerLayout: [
-          [
-            'ticker', 'name'
+        tableLayout: {
+          [Screens.DEFAULT]: [
+            [
+              'ticker', 'name',
+            ],
+            'createdAt',
+            'dayPLChange',
           ],
-          'createdAt',
-          'dayPLChange',
-        ],
+        },
         settings: {
           actions           : true,
           translationPrefix : 'watchlist.table',
@@ -161,7 +164,7 @@ export default defineComponent({
     async function remove (watchlistItem : WatchlistItem) {
       watchlistItem.destroy()
     }
-    
+
     onBeforeMount(async () => {
       await priceStore.subscribe()
 
@@ -190,7 +193,6 @@ export default defineComponent({
       if (!selectedAsset.value) {
         return
       }
-
       if (data.items.find(item => item.symbol.id === selectedAsset.value.id)) {
         console.warn('Symbol already exists')
         selectedAsset.value = null
