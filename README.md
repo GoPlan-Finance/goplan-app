@@ -119,9 +119,38 @@ npm run build
 cd backend
 ```
 
-- Copy `config/config.defaults.ts` to `config/config.ts`
-- Edit the configuration file to set your Database URL, Master Key, and Data provider(s) API Keys
+1. Copy `config/config.defaults.ts` to `config/config.ts`
+2. Edit the configuration file to set your Database URL, Master Key, and Data provider(s) API Keys
 
+
+3. The backend need to have HTTPS enabled 
+   - If you are using a proxy to handle the SSL certificates, set `server.http: true`
+     
+   - Otherwise, generate the SSL Certificates using :
+  
+```
+openssl req -nodes -new -x509 -keyout config/server.key -out config/server.cert
+```
+
+Then set the server config to:  
+```js
+export default {
+  // ....
+  server: {
+    http: {
+      enabled: false,
+    },
+    https: {
+      enabled: true,
+      cert: 'config/server.cert',
+      key: 'config/server.key'
+    }
+  }
+  // ....
+}
+```
+
+Once you configured the steps above, you can start the server:
 
 ```
 npm run build
