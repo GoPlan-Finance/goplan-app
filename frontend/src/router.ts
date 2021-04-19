@@ -6,6 +6,7 @@ import Charts from '/@styleguide/views/Charts.vue'
 import Dashboard from '/@styleguide/views/Dashboard.vue'
 import DataTables from '/@styleguide/views/DataTables.vue'
 import Forms from '/@styleguide/views/Forms.vue'
+import Inputs from '/@styleguide/views/Inputs.vue'
 import Modals from '/@styleguide/views/Modals.vue'
 import Styleguide from '/@styleguide/views/Styleguide.vue'
 import StyleguideDetail from '/@styleguide/views/StyleguideDetail.vue'
@@ -97,6 +98,11 @@ const styleguideRoutes : RouteRecordRaw[] = [
     path      : '/styleguide/forms',
     name      : 'Forms',
     component : Forms,
+  },
+  {
+    path      : '/styleguide/inputs',
+    name      : 'Inputs',
+    component : Inputs,
   },
   {
     path      : '/styleguide/cards',
