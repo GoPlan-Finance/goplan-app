@@ -20,7 +20,7 @@
 
       <!--Copied from Transactions.vue-->
       <template
-        #field(ticker)="{ value , row }"
+        #field(ticker)="{ row }"
       >
         <AppLink
           v-if="row.symbol"
@@ -38,7 +38,7 @@
       </template>
 
       <template
-        #field(name)="{value, row }"
+        #field(name)="{ row }"
       >
         <AppLink
           v-if="row.symbol"
@@ -56,7 +56,7 @@
       </template>
 
       <template
-        #field(dayPLChange)="{ row}"
+        #field(dayPLChange)="{ row }"
       >
         <AssetPriceChange
           v-if="row.lastPrice"
