@@ -24,7 +24,7 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="value"
+          :ticker="row.symbol.symbol"
           class="font-bold"
           to="ticker_details"
         >
@@ -42,7 +42,7 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="value"
+          :ticker="row.symbol.symbol"
           class="font-bold"
           to="ticker_details"
         >
