@@ -4,6 +4,7 @@
  *
  */
 import { assertEncryptedObject } from '/@common/Auth'
+import { Holding, Transaction } from '/@common/models'
 import { SecureObject } from '/@common/models/base/SecureObject'
 import { assertUser } from '../../Auth'
 
@@ -12,16 +13,32 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
   assertEncryptedObject(request.object as SecureObject)
   assertUser(request)
 
-  if (request.object.isNew()) {
-    request.object.set('createdBy', request.user)
+  const transaction = request.object as Transaction
+
+  if (transaction.isNew()) {
+    transaction.set('createdBy', request.user)
+
+    const holding = await Holding.findOrCreateFromTransaction(transaction, true, true)
+
+
+    if (holding) {
+      transaction.holding = holding
+    }
+
+
   }
 
   if (!request.master) {
-    request.object.setACL(new Parse.ACL(request.user))
+    transaction.setACL(new Parse.ACL(request.user))
   }
+
+
 },
 {
   fields: {
+    holding: {
+      constant: true,
+    },
     price: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

@@ -42,8 +42,6 @@ export const useAssetPriceStore = defineStore({
         await this.liveSubscription.unsubscribe()
       }
 
-      console.log('price watch', assetSymbols.length, Object.keys(this.assetPrices).length)
-
       const q = Query.create(AssetPrice)
       q.descending('recordedAt')
       q.include('symbol')

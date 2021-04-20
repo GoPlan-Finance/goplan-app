@@ -38,7 +38,7 @@
     >
       <AppLink
         v-if="row.symbol"
-        :ticker="row.symbol.symbol"
+        :ticker="row.symbolName"
         class="font-bold"
         to="ticker_details"
       >
@@ -52,11 +52,11 @@
     </template>
 
     <template
-      #field(ticker)="{value, row }"
+      #field(symbolName)="{value, row }"
     >
       <AppLink
         v-if="row.symbol"
-        :ticker="row.symbol.symbol"
+        :ticker="row.symbolName"
         class="font-bold"
         to="ticker_details"
       >
@@ -129,10 +129,8 @@ export default defineComponent({
               return ''
             },
           },
-          ticker: {
-            value: (value : Transaction) => value.getTickerName(),
-          },
-          quantity: {
+          symbolName : { },
+          quantity   : {
             justify : 'right',
             format  : value => {
               return value === 0 ? '' : padDecimals(value, 0, 2)
@@ -173,7 +171,7 @@ export default defineComponent({
             'type',
             'executedAt',
             [
-              'name', 'ticker',
+              'name', 'symbolName',
             ],
             'quantity',
             'price',
@@ -182,7 +180,7 @@ export default defineComponent({
             'type',
             'executedAt',
             [
-              'name', 'ticker',
+              'name', 'symbolName',
             ],
             'quantity',
             'price',
@@ -238,9 +236,8 @@ export default defineComponent({
         search: {
           handler: (searchString, transaction) => {
             const searchVal  = searchString.toLowerCase()
-            const tickerName = transaction.getTickerName()
 
-            if (tickerName && tickerName.toLowerCase().startsWith(searchVal)) {
+            if (transaction.symbolName && transaction.symbolName.toLowerCase().startsWith(searchVal)) {
               return true
             }
 

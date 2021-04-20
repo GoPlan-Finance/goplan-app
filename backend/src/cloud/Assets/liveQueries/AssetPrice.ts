@@ -63,7 +63,6 @@ class SubscriptionsHandler<T> {
   public async runOnce () {
     this.removeExpired()
 
-    console.log(`Got ${this.subscriptions.length} to update`)
     const providers = ArrayUtils.groupBy(this.subscriptions, value => {
       return value.symbol.dataProviderName || 'NO_PROVIDER'
     })
@@ -202,7 +201,6 @@ Parse.Cloud.beforeSubscribe(AssetPrice, async (request) => {
     try {
       const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(symbol.objectId, true)
 
-      console.log('sub', request.requestId)
       handler.subscribe(request.requestId, assetSymbol)
     } catch (e) {
       console.error(`Failed tu subscribe to ${symbol}`, e)
@@ -218,7 +216,5 @@ Parse.Cloud.beforeSubscribe(AssetPrice, async (request) => {
 // @ts-ignore
 Parse.Cloud.beforeUnsubscribe(AssetPrice, async (request) => {
 
-
-  console.log('unsub', request.requestId)
   handler.unsubscribe(request.requestId)
 })

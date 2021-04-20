@@ -119,6 +119,7 @@ export default defineComponent({
 
       t.set('quantity', parseFloat(quantity.value))
       t.set('price', parseFloat(price.value))
+      t.totalExcludingFees = t.quantity * t.price
       t.set('executedAt', dayjs(executedAt.value).toDate())
       t.set('type', type.toUpperCase())
 
@@ -127,7 +128,7 @@ export default defineComponent({
       t.set('account', account.value)
 
       await t.save()
-      alert('saved :)')
+      //  alert('saved :)')
 
       quantity.value   = null
       price.value      = null

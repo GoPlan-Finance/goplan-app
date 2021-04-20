@@ -28,9 +28,7 @@ export const useAccountStore = defineStore({
       const q               = Query.create(Account)
       q.limit(100000)
       q.descending('updatedAt')
-      this.liveSubscription = await q.liveQuery(this.accounts, (obj, event) => {
-        console.log(`accounts ${event ? event : 'init'} - ${obj.id}`, obj)
-      })
+      this.liveSubscription = await q.liveQuery(this.accounts)
     },
     async subscribe () {
       if (this.subscriptionPromise) {

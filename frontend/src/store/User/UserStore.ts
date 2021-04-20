@@ -25,7 +25,6 @@ export const useUserStore = defineStore({
 
       this.privateMode = enabled
       Session.set('privateMode', enabled)
-      console.log(this.privateMode, Session.get<boolean>('privateMode'))
       // const user = await AuthStore.currentUser()
       //
       // this.privateMode = enabled

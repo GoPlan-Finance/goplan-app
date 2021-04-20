@@ -124,7 +124,7 @@ export const formatCurrency = (value : /*Money |*/ number, currency : string, fi
 
   const currencyInfo = getCurrencyInfo(currency)
 
-  if (value === null) {
+  if (value === null || value === undefined) {
     return ''
   }
 

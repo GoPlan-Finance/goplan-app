@@ -11,7 +11,7 @@ const assertEncryptedField = (object : Parse.Object, fieldName : string) : void 
 
   const value = object.get(fieldName)
 
-  if (!Crypto.isEncrypted(value)) {
+  if (value !== undefined && !Crypto.isEncrypted(value)) {
     throw `Field "${fieldName}" is not encrypted as expected.`
   }
 }

@@ -1,4 +1,5 @@
 import { AssetSymbol, Watchlist } from '/@common/models'
+import { User } from '/@common/models/User'
 import { BaseObject } from './base/BaseObject'
 
 
@@ -24,6 +25,14 @@ export class WatchlistItem extends BaseObject {
 
   set symbol (value : AssetSymbol) {
     this.set('symbol', value)
+  }
+
+  get createdBy () : User {
+    return this.get('createdBy')
+  }
+
+  set createdBy (value : User) {
+    this.set('createdBy', value)
   }
 
 }
