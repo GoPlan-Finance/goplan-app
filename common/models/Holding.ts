@@ -69,7 +69,7 @@ export class Holding extends SecureObject {
     return this.get('currency')
   }
 
-  set currency (value) {
+  set currency (value :string) {
     this.set('currency', value ? value.toUpperCase() : null)
   }
 

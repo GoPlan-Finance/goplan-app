@@ -53,13 +53,13 @@ export default defineComponent({
   components : {SearchField},
   props      : {
     modelValue: {
-      type     : AssetSymbol,
-      required : false,
+      required  : true,
+      validator : prop => prop instanceof AssetSymbol || prop === null,
     },
     searchFieldClass: {
       type    : String,
-      default : ''
-    }
+      default : '',
+    },
   },
   emits: [
     'update:modelValue',
@@ -86,7 +86,7 @@ export default defineComponent({
       get () {
         return tickerName.value
       },
-      set (param: string) {
+      set (param : string) {
         tickerName.value = param
         update()
       },

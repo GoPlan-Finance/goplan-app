@@ -3,14 +3,13 @@
  *
  *
  */
-// import { assertEncrypted } from '../../../../common/Auth'
-
-import { assertEncrypted } from '/@common/Auth'
-import { EncryptedValue } from '/@common/Crypto'
+import { assertEncryptedObject } from '/@common/Auth'
+import { SecureObject } from '/@common/models/base/SecureObject'
 import { assertUser } from '../../Auth'
 
 
 Parse.Cloud.beforeSave('Transaction', async (request) => {
+  assertEncryptedObject(request.object as SecureObject)
   assertUser(request)
 
   if (request.object.isNew()) {
@@ -26,47 +25,31 @@ Parse.Cloud.beforeSave('Transaction', async (request) => {
     price: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : true,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: true,
     },
     quantity: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : true,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: true,
     },
     type: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : true,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: true,
     },
-    fees: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    fees: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : false,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: false,
     },
-    totalExcludingFees: {
-      options: (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
-    },
-    importRawData: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    totalExcludingFees : {},
+    importRawData      : {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : false,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: false,
     },
-    currency: {// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    currency: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       required : true,
       options  : (value : string) => {

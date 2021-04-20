@@ -1,32 +1,34 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { Transaction } from '/@common/models'
+import { Account, Transaction } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
 import { ArrayUtils } from '/@common/utils'
 import * as dayjs from 'dayjs'
 import { defineStore } from 'pinia'
-import { watch } from 'vue'
+import { watch, computed} from 'vue'
 import { useAssetPriceStore, useTransactionStore } from './'
-// const db = new IndexedDB('companyProfile')
+
+interface StoreState {
+  subscriptionPromise : Promise<void>
+  holdings : Holding[]
+}
+
 
 export const useHoldingStore = defineStore({
   // name of the store
   id: 'holding',
 
-  state: () => ({
-    liveSubscription : null,
-    holdings         : [],
+  state: () : StoreState => ({
+    subscriptionPromise : null,
+    holdings            : [],
   }),
   // optional getters
-  getters: {
-
-  },
+  getters: {},
 
 
   // optional actions
   actions: {
     updateHoldings () {
 
-      const priceStore        = useAssetPriceStore()
       const transactionsStore = useTransactionStore()
 
       const holdings = ArrayUtils.groupBy<Transaction>(
@@ -115,14 +117,21 @@ export const useHoldingStore = defineStore({
 
 
     },
-    async subscribe () {
+    async _init () {
+
       const transactionStore = useTransactionStore()
       const priceStore       = useAssetPriceStore()
 
       await transactionStore.subscribe()
       await priceStore.subscribe()
 
-      watch(() => transactionStore.transactions, async (i, j) => {
+      const asdf = computed(() => {
+
+        console.log('HoldingStore computed', transactionStore.transactions.length)
+        return transactionStore.transactions
+      })
+
+      watch(() => transactionStore.transactions, async () => {
 
         console.log('updateHoldings', transactionStore.transactions.length)
 
@@ -141,8 +150,6 @@ export const useHoldingStore = defineStore({
 
           console.log(holding.symbolName, assetPrice)
           holding.lastPrice = assetPrice
-
-
         })
 
       },
@@ -150,7 +157,15 @@ export const useHoldingStore = defineStore({
         immediate: true,
       })
 
+    },
+    async subscribe () {
+      if (this.subscriptionPromise) {
+        return this.subscriptionPromise
+      }
 
+      this.subscriptionPromise = this._init()
+
+      return this.subscriptionPromise
     },
 
     reset () {

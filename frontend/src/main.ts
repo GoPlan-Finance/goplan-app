@@ -19,9 +19,6 @@ import router from './router'
 import { AuthStore } from './store'
 import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue'
 
-// eslint-disable-next-line init-declarations
-declare let Parse
-
 
 dayjs.extend(duration)
 dayjs.extend(relativeTime)

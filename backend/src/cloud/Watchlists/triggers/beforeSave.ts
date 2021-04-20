@@ -3,7 +3,6 @@
  *
  *
  */
-// import { assertEncrypted } from '../../../../common/Auth'
 
 import { assertUser } from '../../Auth'
 

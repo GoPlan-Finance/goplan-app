@@ -42,7 +42,6 @@ import { Query } from '/@common/Query'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { Screens } from '/@utils/screens'
-import * as dayjs from 'dayjs'
 import { computed, defineComponent, onBeforeMount, onUnmounted, reactive, toRefs } from 'vue'
 
 
@@ -104,7 +103,6 @@ export default defineComponent({
 
 
     return {
-      dayjs,
       ...toRefs(data),
       sortedRows,
     }

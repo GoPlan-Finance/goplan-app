@@ -25,7 +25,7 @@ export default defineComponent({
       type    : Boolean
     },
   },
-  setup (props) {
+  setup () {
     const userStore          = useUserStore()
 
     return {

@@ -78,7 +78,7 @@ function dateFormat (format) {
 
 function currencyFormat (fixedDecimals) {
   return {
-    format  : (value : number, row : unknown) => formatCurrency(value, row.currency, true),
+    format  : (value : number, row : unknown) => formatCurrency(value, row.currency, fixedDecimals),
     compare : (a, b) => {
       // @todo add currency conversions
       return b - a

@@ -51,8 +51,8 @@
           </div>
           <input
             v-model="quantity"
-            min="0"
             class="rounded w-full"
+            min="0"
             type="number"
           >
         </label>
@@ -62,8 +62,8 @@
           </div>
           <input
             v-model="price"
-            min="0"
             class="rounded w-full"
+            min="0"
             type="number"
           >
         </label>
@@ -90,12 +90,12 @@
 
 import { Account, AssetSymbol, Transaction } from '/@common/models'
 import AccountSelect from '/@components/AccountSelect.vue'
-import * as dayjs from 'dayjs'
-import { defineComponent, ref } from 'vue'
 import AssetSearch from '/@components/AssetSearch.vue'
-import ButtonDefault from './base/ButtonDefault.vue'
 import Modal from '/@components/base/GoModal.vue'
 import { PlusCircleIcon } from '@heroicons/vue/solid'
+import * as dayjs from 'dayjs'
+import { defineComponent, ref } from 'vue'
+import ButtonDefault from './base/ButtonDefault.vue'
 
 
 export default defineComponent({
@@ -110,17 +110,18 @@ export default defineComponent({
     const symbol : AssetSymbol = ref(props.assetSymbol)
     const quantity             = ref(null)
     const price                = ref(null)
-    const account: Account     = ref(null)
+    const account : Account    = ref(null)
     const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
 
     const addTransaction = async (type : 'buy' | 'sell') => {
 
       const t = new Transaction()
 
-      t.set('quantity', quantity.value)
-      t.set('price', price.value)
+      t.set('quantity', parseFloat(quantity.value))
+      t.set('price', parseFloat(price.value))
       t.set('executedAt', dayjs(executedAt.value).toDate())
       t.set('type', type.toUpperCase())
+
       t.set('symbol', symbol.value)
       t.set('currency', symbol.value.currency)
       t.set('account', account.value)
@@ -139,7 +140,7 @@ export default defineComponent({
       executedAt,
       quantity,
       price,
-      account
+      account,
     }
   },
 

@@ -7,6 +7,9 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 
 // https://vitejs.dev/config/
 export default {
+  server: {
+    https: true
+  },
   esmExternals : true,
   optimizeDeps : {
     exclude: [

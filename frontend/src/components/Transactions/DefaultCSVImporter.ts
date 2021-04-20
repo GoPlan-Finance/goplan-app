@@ -7,8 +7,13 @@ import { Account, AssetSymbol, Transaction } from '/@common/models'
 import { TransactionType } from '/@common/models/Transaction'
 import { Query } from '/@common/Query'
 import { StringUtils } from '/@common/utils'
+
+import { Mutex } from 'async-mutex'
 import * as dayjs from 'dayjs'
 import * as Papa from 'papaparse'
+
+
+type LoggerFn = (i : number, msg : string) => void
 
 
 export interface CsvDataInterface {
@@ -28,6 +33,8 @@ export interface CsvDataInterface {
 
 export class DefaultCSVImporter {
 
+  mutex = new Mutex()
+
   accounts : Account[] | null = null
 
   parseCSV (file) : Promise<CsvDataInterface[]> {
@@ -46,30 +53,31 @@ export class DefaultCSVImporter {
 
   private async getOrCreateAccount (name : string) : Promise<Account> {
 
+    return await this.mutex.runExclusive(async () => {
 
-    if (!this.accounts) {
-      const q = new Query(Account)
+      if (!this.accounts) {
+        const q = new Query(Account)
 
-      this.accounts = await q.find()
-    }
+        this.accounts = await q.find()
+      }
 
-    let account = this.accounts.find(account => account.name === name)
+      let account = this.accounts.find(account => account.name === name)
 
-    if (account) {
+      if (account) {
+        return account
+      }
+
+      account      = new Account()
+      account.name = name
+
+      await account.save()
+      this.accounts.push(account)
+
       return account
-    }
-
-
-    account      = new Account()
-    account.name = name
-
-    await account.save()
-    this.accounts.push(account)
-
-    return account
+    })
   }
 
-  private async validateRow (row) : Promise<CsvDataInterface> {
+  private async validateRow (row : CsvDataInterface) : Promise<CsvDataInterface> {
     // date  type  symbol  quantity  price  fees  totalExcludingFees  currency  accountName  description
 
     if (!row.type || !row.date || !row.currency || !row.accountName) {
@@ -135,20 +143,21 @@ export class DefaultCSVImporter {
       throw 'fees missing'
     }
 
-    if (row.totalExcludingFees && row.totalExcludingFees !== 0 && [
+    if (row.totalExcludingFees && parseFloat(row.totalExcludingFees) !== 0 && [
       'fees',
     ].includes(row.type)) {
       throw 'totalExcludingFees must be empty'
     }
 
-    if (row.type === 'sell' && row.quantity < 0) {
-      row.quantity = Math.abs(row.quantity)  // Some exports contains SELL -100
+    const qty = parseFloat(row.quantity)
+    if (row.type === 'sell' && qty < 0) {
+      row.quantity = Math.abs(qty).toString()  // Some exports contains SELL -100
     }
 
     return row
   }
 
-  async validateCSV (file, logger) : Promise<CsvDataInterface[]> {
+  async validateCSV (file : File, logger : LoggerFn) : Promise<CsvDataInterface[]> {
 
     const validRows = []
 
@@ -171,7 +180,7 @@ export class DefaultCSVImporter {
   }
 
 
-  async importCSV (rows : CsvDataInterface[], logger) {
+  async importCSV (rows : CsvDataInterface[], logger : LoggerFn) {
 
     for (const [
       i, row

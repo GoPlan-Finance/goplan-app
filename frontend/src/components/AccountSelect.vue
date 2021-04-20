@@ -30,8 +30,8 @@ import { defineComponent, onBeforeMount } from 'vue'
 export default defineComponent({
   props: {
     modelValue: {
-      type     : Object as Account,
-      required : true,
+      required  : true,
+      validator : prop =>  prop instanceof Account || prop === null
     },
   },
   emits: [

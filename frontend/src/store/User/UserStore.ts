@@ -1,6 +1,5 @@
-import { User } from '/@common/models'
 import { defineStore } from 'pinia'
-import { AuthStore, Session } from '../auth'
+import { Session } from '../auth'
 
 
 export const useUserStore = defineStore({
@@ -14,15 +13,12 @@ export const useUserStore = defineStore({
 
     const isPrivate = Session.get<boolean>('privateMode')
 
-    console.log(isPrivate)
     return {
       privateMode: isPrivate,
     }
   },
   // optional getters
-  getters: {
-
-  },
+  getters: {},
 
   actions: {
     async setPrivateMode (enabled : boolean) {

@@ -17,7 +17,7 @@ export class Account extends SecureObject {
     return this.get('name')
   }
 
-  set name (value) {
+  set name (value : string) {
     this.set('name', value)
   }
 
@@ -27,7 +27,7 @@ export class Account extends SecureObject {
     return this.get('currency')
   }
 
-  set currency (value) {
+  set currency (value : string) {
     this.set('currency', value.toUpperCase())
   }
 

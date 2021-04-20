@@ -3,11 +3,6 @@
  *
  *
  */
-import { Query } from '/@common/Query'
-
-
-type LiveQueryUpdateFn<T> = (obj : T) => void
-
 
 /*abstract*/
 export class BaseObject extends Parse.Object {

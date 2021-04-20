@@ -3,15 +3,14 @@
  *
  *
  */
-// import { assertEncrypted } from '../../../../common/Auth'
-
-import { assertEncrypted } from '/@common/Auth'
-import { EncryptedValue } from '/@common/Crypto'
+import {  assertEncryptedObject } from '/@common/Auth'
+import { SecureObject } from '/@common/models/base/SecureObject'
 import { assertUser } from '../../Auth'
 
 
 Parse.Cloud.beforeSave('Account', async (request) => {
   assertUser(request)
+  assertEncryptedObject(request.object as SecureObject)
 
   if (request.object.isNew()) {
     request.object.set('createdBy', request.user)
@@ -28,10 +27,7 @@ Parse.Cloud.beforeSave('Account', async (request) => {
     name: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      required : true,
-      options  : (value : EncryptedValue) => {
-        assertEncrypted(value)
-      },
+      required: true,
     },
     // currency: {
     //   required : false,
