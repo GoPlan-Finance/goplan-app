@@ -7,6 +7,7 @@ import AssetSector from './AssetSector'
 import AssetSymbol from './AssetSymbol'
 import StockExchange from './StockExchange'
 import Transaction from './Transaction'
+import Holding from './Holding'
 import User from './User'
 import Watchlist from './Watchlist'
 import WatchlistItem from './WatchlistItem'
@@ -29,4 +30,5 @@ export const schemas = [
   Watchlist,
   WatchlistItem,
   Transaction,
+  Holding,
 ]

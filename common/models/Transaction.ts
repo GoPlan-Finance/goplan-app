@@ -1,4 +1,4 @@
-import { Account, AssetSymbol } from '.'
+import { Account, AssetSymbol, Holding } from '.'
 import { SecureObject } from './base/SecureObject'
 
 
@@ -29,12 +29,33 @@ export class Transaction extends SecureObject {
     this.set('symbol', value ? value.toPointer() : null)
   }
 
+  get symbolName () : string {
+
+    if (this.symbol && this.symbol.symbol) {
+      return this.symbol.symbol
+    }
+
+    return this.get('symbolName')
+  }
+
+  set symbolName (value : string) {
+    this.set('symbolName', value)
+  }
+
   get account () : Account {
     return this.get('account')
   }
 
   set account (value : Account) {
     this.set('account', value ? value.toPointer() : null)
+  }
+
+  get holding () : Holding {
+    return this.get('holding')
+  }
+
+  set holding (value : Holding) {
+    this.set('holding', value ? value.toPointer() : null)
   }
 
   get executedAt () : Date {
@@ -107,17 +128,6 @@ export class Transaction extends SecureObject {
 
   set importRawData (value : unknown) {
     this.set('importRawData', value)
-  }
-
-
-  getTickerName () : string | null {
-    if (this.symbol) {
-      return this.symbol.symbol
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return (this.importRawData && this.importRawData.symbol) ? this.importRawData.symbol : null
   }
 
 }

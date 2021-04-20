@@ -200,7 +200,10 @@ export class DefaultCSVImporter {
         transaction.importRawData      = row
 
 
-        if (!row.assetSymbol) {
+        if (!row.assetSymbol && row.symbol) {
+
+          transaction.symbolName = row.symbol
+          
           transaction.importStatus = {
             errors: [
               {missingSymbol: row.symbol},

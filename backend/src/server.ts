@@ -18,7 +18,7 @@ import userConfig from '../config/config'
 import defaultConfig from '../config/config.defaults'
 import { ProviderConfigInterface } from './cloud/DataProviders/providers'
 
-import liveQueryClassNames from './cloud/liveQuery'
+import liveQueryClassNames from './schema/liveQuery'
 
 
 import config from './config'

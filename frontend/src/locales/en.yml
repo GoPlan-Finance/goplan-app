@@ -67,7 +67,7 @@ quote:
 holdings:
   headline: Holdings
   table:
-    ticker: Ticker
+    symbolName: Ticker
     name: Symbol
     openQty: Open Qty
     openAvgPrice: Avg Price
@@ -81,9 +81,14 @@ holdings:
     dayPLChange: Daily Change
     dayPL: Day P/L
     openPL: Unrealized P/L
-    lastBuy: Last purchace
+    lastBuyAt: Last purchace
+    firstBuyAt: First purchace
+    lastSellAt: Last sell
+    firstSellAt: First sell
     closePL: Realized P/L
     weight: % Portfolio
+
+
 
 
 

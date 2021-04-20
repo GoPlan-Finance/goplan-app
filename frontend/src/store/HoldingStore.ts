@@ -1,11 +1,10 @@
-// import {IndexedDB} from './base/IndexedDB'
-import { Account, Transaction } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
-import { ArrayUtils } from '/@common/utils'
-import * as dayjs from 'dayjs'
+import { Query } from '/@common/Query'
+import { HoldingHelper } from '/@store/Holding/HoldingHelper'
 import { defineStore } from 'pinia'
-import { watch, computed} from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useAssetPriceStore, useTransactionStore } from './'
+
 
 interface StoreState {
   subscriptionPromise : Promise<void>
@@ -21,134 +20,52 @@ export const useHoldingStore = defineStore({
     subscriptionPromise : null,
     holdings            : [],
   }),
-  // optional getters
   getters: {},
 
-
-  // optional actions
   actions: {
-    updateHoldings () {
-
-      const transactionsStore = useTransactionStore()
-
-      const holdings = ArrayUtils.groupBy<Transaction>(
-        transactionsStore.transactions.filter(transaction => {
-
-          if (!transaction.type) {
-            return false
-          }
-
-          return [
-            'buy', 'sell',
-          ].includes(transaction.type.toLowerCase())
-
-        }), transaction => {
-          const symbol = transaction.getTickerName()
-
-          return symbol ? symbol : 'N/A'
-        })
-
-
-      this.holdings = Object.entries(holdings).map(([
-        symbolName, transactions,
-      ]) => {
-
-        //const symbol = await CacheableQuery.create(AssetSymbol).getObjectById()
-        const transaction = transactions.length > 0 ? transactions[0] : null
-        const symbol      = transactions.length > 0 ? transactions[0].symbol : null
-        const holding     = new Holding()
-
-        // if (symbol) {
-        //   priceStore.watch(symbol)
-        //   holding.lastPrice = priceStore.getPrice(symbol)
-        // }
-        holding.lastBuy    = null
-        holding.symbol     = symbol
-        holding.symbolName = symbolName
-        holding.currency   = symbol ? symbol.currency : (transaction ? transaction.currency : null)
-
-        holding.openQty        = 0
-        holding.openAvgPrice   = 0
-        holding.openTotalPrice = 0
-
-        holding.closedQty        = 0
-        holding.closedAvgPrice   = 0
-        holding.closedTotalPrice = 0
-
-        transactions.forEach(transaction => {
-          if (transaction.type.toLowerCase() === 'buy') {
-            holding.openQty        += transaction.quantity
-            holding.openTotalPrice += transaction.totalExcludingFees
-
-            if (!holding.lastBuy || dayjs(holding.lastBuy).unix() < dayjs(transaction.executedAt).unix()) {
-              holding.lastBuy = transaction.executedAt
-            }
-
-          }
-
-          if (transaction.type.toLowerCase() === 'sell') {
-            holding.closedQty        += transaction.quantity
-            holding.closedTotalPrice += transaction.totalExcludingFees
-
-            // row.openQty -= transaction.quantity
-            // row.openTotalPrice -= transaction.totalExcludingFees
-          }
-        })
-
-        if (holding.openQty) {
-          holding.openAvgPrice = holding.openTotalPrice / (holding.openQty)
-        } else {
-          holding.openTotalPrice = null
-          holding.openAvgPrice   = null
-        }
-
-        if (holding.closedQty) {
-          holding.openQty        -= holding.closedQty
-          holding.openTotalPrice -= holding.closedTotalPrice
-
-          holding.closedAvgPrice = holding.closedTotalPrice / holding.closedQty
-        } else {
-          holding.closedTotalPrice = null
-          holding.closedAvgPrice   = null
-        }
-
-        return holding
-      })
-
-
-    },
     async _init () {
 
-      const transactionStore = useTransactionStore()
-      const priceStore       = useAssetPriceStore()
+      HoldingHelper.createMissingHoldings().then(() => HoldingHelper.findOutdatedHoldings())
 
-      await transactionStore.subscribe()
+      const priceStore       = useAssetPriceStore()
       await priceStore.subscribe()
 
-      const asdf = computed(() => {
+      const symbols = ref([])
 
-        console.log('HoldingStore computed', transactionStore.transactions.length)
-        return transactionStore.transactions
+      const q = Query.create(Holding).limit(9999)
+      q.include('symbol')
+
+      await q.liveQuery(this.holdings, async (holding, op) => {
+
+        await HoldingHelper.maybeUpdateOutdated(holding)
+
+        if (!holding.symbol) {
+          return
+        }
+
+        const index = symbols.value.findIndex(symbol => symbol.id === holding.symbol.id)
+
+        if (op === 'deleted') {
+          symbols.value.splice(index, 1)
+        } else if (index === -1) {
+          symbols.value.push(holding.symbol)
+        } else {
+          // no-op, already present
+        }
       })
 
-      watch(() => transactionStore.transactions, async () => {
+      watch(() => symbols, async () => {
+        console.log('HoldingStore: watch ', symbols.value.length)
 
-        console.log('updateHoldings', transactionStore.transactions.length)
-
-        this.updateHoldings()
-
-        const symbols = this.holdings.filter(holding => {
-          return holding.symbol !== null
-        }).map(holding => holding.symbol)
-
-        await priceStore.watch(symbols, assetPrice => {
-          console.log('price', assetPrice)
-
+        await priceStore.watch(symbols.value, assetPrice => {
           const holding : Holding = this.holdings.find(holding => {
             return holding.symbol && holding.symbol.id === assetPrice.symbol.id
           })
 
-          console.log(holding.symbolName, assetPrice)
+          if (!holding) {
+            return
+          }
+
           holding.lastPrice = assetPrice
         })
 

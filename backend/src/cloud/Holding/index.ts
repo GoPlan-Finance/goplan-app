@@ -7,5 +7,5 @@
  */
 
 
-require('./triggers/afterSave')
+require('./Jobs/markAllAsOutdated')
 require('./triggers/beforeSave')

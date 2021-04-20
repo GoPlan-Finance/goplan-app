@@ -19,11 +19,11 @@
     >
       <!--Copied from Transactions.vue-->
       <template
-        #field(ticker)="{ value , row }"
+        #field(symbolName)="{ value , row }"
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="value"
+          :ticker="row.symbolName"
           class="font-bold"
           to="ticker_details"
         >
@@ -41,7 +41,7 @@
       >
         <AppLink
           v-if="row.symbol"
-          :ticker="value"
+          :ticker="row.symbolName"
           class="font-bold"
           to="ticker_details"
         >
@@ -58,14 +58,28 @@
       <template
         #field(openPL)="{ row }"
       >
-        <AssetPriceChange
-          v-if="openOrClose === 'open' && row.openQty !== 0 && row.lastPrice"
-          :compare-from="row.openQty * row.openAvgPrice"
-          :compare-to=" row.openQty * row.lastPrice.price"
-        />
-        <span v-else>
-          --
-        </span>
+        <template
+          v-if="openOrClose === 'open'"
+        >
+          <AssetPriceChange
+            v-if="row.openQty !== 0 && row.lastPrice"
+            :compare-from="row.openQty * row.openAvgPrice"
+            :compare-to=" row.openQty * row.lastPrice.price"
+          />
+
+          <span v-else>
+            --
+          </span>
+        </template>
+
+        <template
+          v-if="openOrClose === 'closed'"
+        >
+          <AssetPriceChange
+            :compare-from="row.buyTotalPrice"
+            :compare-to=" row.closedTotalPrice"
+          />
+        </template>
       </template>
 
       <template
@@ -73,8 +87,8 @@
       >
         <AssetPriceChange
           v-if="row.lastPrice"
-          :compare-from="row.openQty * row.lastPrice.previousClose"
-          :compare-to=" row.openQty * row.lastPrice.price"
+          :compare-from="(openOrClose === 'close' ?row.openQty : 1) * row.lastPrice.previousClose"
+          :compare-to=" (openOrClose === 'close' ?row.openQty : 1)* row.lastPrice.price"
         />
         <span v-else>
           --
@@ -94,8 +108,8 @@ import HeadlineActions from '/@components/HeadlineActions.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { Screens } from '/@utils/screens'
 import * as dayjs from 'dayjs'
-import { defineComponent, reactive, ref, toRefs, watch, onBeforeMount} from 'vue'
-import { useAssetPriceStore, useHoldingStore } from '../store'
+import { defineComponent, onBeforeMount, reactive, ref, toRefs, watch } from 'vue'
+import { useHoldingStore } from '../store'
 
 
 export default defineComponent({
@@ -128,10 +142,8 @@ export default defineComponent({
               return ''
             },
           },
-          ticker: {
-            value: (value : Holding) => value.symbolName,
-          },
-          currentTotalPrice: {
+          symbolName        : {},
+          currentTotalPrice : {
             private : true,
             value   : (row : Holding) => (!row.lastPrice ? '' : row.lastPrice.price * row.openQty),
             format  : 'currency',
@@ -146,7 +158,7 @@ export default defineComponent({
           openQty: {
             format: value => (value !== 0 ? value : ''),
           },
-          lastBuy: {
+          lastBuyAt: {
             format: 'date',
           },
           openTotalPrice: {
@@ -199,18 +211,18 @@ export default defineComponent({
         tableLayout: {
           [Screens.DEFAULT]: [
             [
-              'ticker', 'openQty',
+              'symbolName', 'openQty',
             ],
             [
-              'openPL', 'openTotalPrice'
+              'openPL', 'openTotalPrice',
             ],
           ],
           [Screens.SM]: [
             [
-              'ticker', 'name',
+              'symbolName', 'name',
             ],
             [
-              'openQty', 'lastBuy',
+              'openQty', 'lastBuyAt',
             ],
             [
               'openTotalPrice', 'openAvgPrice',
@@ -259,16 +271,15 @@ export default defineComponent({
 
 
     const holdingStore = useHoldingStore()
-    const priceStore   = useAssetPriceStore()
 
     onBeforeMount(async () => {
       await holdingStore.subscribe()
       console.log('holdings beforemount')
     })
 
-    watch(() => holdingStore.holdings, () => {
+    watch(holdingStore.holdings, () => {
 
-      console.log('holdings watch')
+      console.log('holdings watch', holdingStore.holdings)
       const rows : Holding[] = holdingStore.holdings
 
       totalOpen.value = holdingStore.holdings.reduce((result, holding) => {
@@ -281,7 +292,7 @@ export default defineComponent({
       data.rows.open   = rows.filter(row => row.openQty !== 0)
       data.rows.closed = rows.filter(row => row.openQty === 0)
     }, {
-      immediate: true
+      immediate: true,
     })
 
 

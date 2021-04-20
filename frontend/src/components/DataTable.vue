@@ -313,7 +313,6 @@ export default defineComponent({
         template += config.fields[column]?.width ?? '1fr'
         template += ' '
       }
-      console.log(template)
       return `grid-template-columns: ${template};`
     })
 

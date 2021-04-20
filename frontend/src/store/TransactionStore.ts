@@ -37,9 +37,7 @@ export const useTransactionStore = defineStore({
       q.limit(100000)
       q.descending('executedAt')
       q.include('symbol')
-      await q.liveQuery(this.transactions, (obj, event) => {
-        console.log(`transaction ${event ? event : 'init'} - ${obj.id}`, obj, this.transactions.length)
-      })
+      await q.liveQuery(this.transactions)
     },
     async subscribe () {
       if (this.subscriptionPromise) {
