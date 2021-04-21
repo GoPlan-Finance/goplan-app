@@ -4,8 +4,8 @@
   >
     <SearchField
       v-model="input"
-      :placeholder="placeholder"
       :input-class="searchFieldClass"
+      :placeholder="placeholder"
       @keyup.enter="selectElement()"
     />
     <ul
@@ -34,7 +34,7 @@
 import { AssetSymbol } from '/@common/models'
 import { Query } from '/@common/Query'
 import SearchField from '/@components/base/SearchField.vue'
-import { computed, defineComponent, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, reactive, ref, onBeforeMount} from 'vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
@@ -57,9 +57,13 @@ export default defineComponent({
       type    : String,
       default : 'Search',
     },
+    allowText: {
+      type    : Boolean,
+      default : false,
+    },
     modelValue: {
       required  : true,
-      validator : prop => prop instanceof AssetSymbol || prop === null,
+      validator : prop => prop instanceof AssetSymbol || typeof prop === 'string' || prop === null,
     },
     searchFieldClass: {
       type    : String,
@@ -75,14 +79,26 @@ export default defineComponent({
 
     const tickerName = ref<string>('')
 
+    onBeforeMount(() => {
+
+      if (props.modelValue instanceof AssetSymbol) {
+        tickerName.value = props.modelValue.symbol
+      } else if (typeof props.modelValue === 'string') {
+        tickerName.value = props.modelValue
+      }
+
+    })
+
     const update = async () => {
       if (!tickerName.value) {
         return
       }
+
       if (props.modelValue && tickerName.value === props.modelValue.symbol) {
         symbols.data = []
         return
       }
+
       isOpen.value = true
       symbols.data = await getSymbols(tickerName.value)
     }
@@ -96,26 +112,27 @@ export default defineComponent({
           return
         }
 
+        if (param === '') {
+          emit('update:modelValue', '')
+          return
+        }
+
         tickerName.value = param
+
         update()
+
+
+        if (props.allowText) {
+          emit('update:modelValue', tickerName.value)
+        }
       },
     })
 
-    watch(() => props.modelValue, () => {
-      if (props.modelValue === null) {
-        symbols.data     = []
-        tickerName.value = ''
-        isOpen.value     = false
-      } else if (tickerName.value !== props.modelValue.symbol) {
-        symbols.data     = []
-        tickerName.value = props.modelValue.symbol
-      }
-    })
-
     function selectElement (symbol? : AssetSymbol | undefined) {
-      if (!symbol) {
+      if (!symbol && symbols.data.length) {
         symbol = symbols.data[0]
       }
+
       symbols.data     = []
       tickerName.value = symbol ? symbol.symbol : ''
       isOpen.value     = false

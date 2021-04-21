@@ -90,6 +90,25 @@
         v-if="row.type === 'BUY' || row.type === 'SELL'"
         :transaction="row"
       /><!--      @todo case sensitive row.type-->
+
+      <div
+        class="cursor-pointer hover:text-red-600"
+        @click="remove(row)"
+      >
+        <svg
+          class="h-6 w-6 stroke-1 stroke-current"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
     </template>
   </DataTable>
 </template>
@@ -119,12 +138,12 @@ export default defineComponent({
       config : {
         fields: {
           type: {
-            width: '10%'
+            width: '10%',
           },
           executedAt: {
             justify : 'right',
             format  : 'date',
-            width   : '20%'
+            width   : '20%',
           },
           name: {
             value: (transaction : Transaction) => {
@@ -138,7 +157,7 @@ export default defineComponent({
               return ''
             },
           },
-          symbolName : { },
+          symbolName : {},
           quantity   : {
             justify : 'right',
             format  : value => {
@@ -169,12 +188,12 @@ export default defineComponent({
             'type',
             [
               'executedAt',
-              'name'
+              'name',
             ],
             [
               'quantity',
               'price',
-            ]
+            ],
           ],
           [Screens.SM]: [
             'type',
@@ -244,7 +263,7 @@ export default defineComponent({
         },
         search: {
           handler: (searchString, transaction) => {
-            const searchVal  = searchString.toLowerCase()
+            const searchVal = searchString.toLowerCase()
 
             if (transaction.symbolName && transaction.symbolName.toLowerCase().startsWith(searchVal)) {
               return true
@@ -289,9 +308,18 @@ export default defineComponent({
       immediate: true,
     })
 
+
+    const remove = async (transaction : Transaction) => {
+      if (confirm('Are you sure?')) {
+        await transaction.destroy()
+      }
+
+    }
+
     return {
       ...toRefs(data),
       dayjs,
+      remove,
     }
   },
 })

@@ -4,10 +4,10 @@
   >
     <template #button>
       <ButtonDefault
-        :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
+        :label="transactionInternal?.id ? 'Edit' : 'Buy/Sell'"
       >
         <template
-          v-if="!transaction?.id"
+          v-if="!transactionInternal?.id"
           #before
         >
           <PlusCircleIcon
@@ -22,15 +22,14 @@
           <div class="text-gray-400 ml-2 mb-1">
             Asset
           </div>
+
+          <!-- Leave :allow-text="false" until we add a way to set Currencies -->
           <asset-search
-            v-if="typeof symbol !== 'string'"
             v-model="symbol"
+            :allow-text="false"
             class="w-full"
             search-field-class="border"
           />
-          <span v-else>
-            {{ symbol }}
-          </span>
         </label>
         <label class="col-start-1">
           <div class="text-gray-400 ml-2 mb-1">
@@ -79,16 +78,16 @@
     </template>
     <template #actions>
       <template
-        v-if="!transaction?.id"
+        v-if="!transactionInternal?.id"
       >
         <ButtonDefault
-          :disabled="!valid"
+          :disabled="!isValid"
           class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
           label="Buy"
           @click="save('buy')"
         />
         <ButtonDefault
-          :disabled="!valid"
+          :disabled="!isValid"
           class="bg-red-500"
           label="Sell"
           @click="save('sell')"
@@ -98,7 +97,7 @@
         v-else
       >
         <ButtonDefault
-          :disabled="!valid"
+          :disabled="!isValid"
           class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
           label="Save"
           @click="save()"
@@ -110,16 +109,13 @@
 
 <script lang="ts">
 
-import { Account, AssetSymbol, Transaction } from '/@common/models'
-import { CacheableQuery } from '/@common/Query/CacheableQuery'
+import { AssetSymbol, Transaction } from '/@common/models'
 import AccountSelect from '/@components/AccountSelect.vue'
 import AssetSearch from '/@components/AssetSearch.vue'
 import Modal from '/@components/base/GoModal.vue'
 import { PlusCircleIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { defineComponent, ref } from 'vue'
-import * as dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, ref } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref, reactive, toRef, watch } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 
 
@@ -131,78 +127,108 @@ export default defineComponent({
       default : null,
     },
     transaction: {
-      type     : Transaction,
-      required : false,
+      type    : Transaction,
+      default : null,
     },
   },
   setup (props) {
-    const transactionInternal  = ref(props.transaction ? props.transaction : new Transaction())
-    const symbol : AssetSymbol = ref(props.assetSymbol)
-    const quantity             = ref(null)
-    const price                = ref(null)
-    const account : Account    = ref(null)
-    const executedAt           = ref(dayjs().format('YYYY-MM-DD'))
+    const transaction2      = toRef(props, 'transaction')
+    let transactionInternal = reactive(transaction2.value ? transaction2.value : new Transaction())
+    const isValid           = ref(false)
+
+    const symbol = computed({
+      get () {
+        return transactionInternal.symbolName
+      },
+      set (value : AssetSymbol | string | null) {
+
+        if (value instanceof AssetSymbol) {
+          transactionInternal.symbol     = value
+          transactionInternal.symbolName = null
+          transactionInternal.currency   = value.currency
+        } else {
+          transactionInternal.symbolName = value
+          transactionInternal.symbol     = null
+        }
+      },
+    })
+
+    const quantity = computed({
+      get () {
+        return transactionInternal.quantity
+      },
+      set (value) {
+        transactionInternal.quantity = parseFloat(value)
+      },
+    })
+
+    const price = computed({
+      get () {
+        return transactionInternal.price
+      },
+      set (value) {
+        transactionInternal.price = parseFloat(value)
+      },
+    })
+
+    const account = computed({
+      get () {
+        return transactionInternal.account
+      },
+      set (value) {
+        transactionInternal.account = value
+      },
+    })
+
+    const executedAt = computed({
+      get () {
+        return dayjs(transactionInternal.executedAt).format('YYYY-MM-DD')
+      },
+      set (value) {
+        transactionInternal.executedAt = dayjs(value).toDate()
+      },
+    })
+
 
     const save = async (type : 'buy' | 'sell') => {
-
-      if (!transactionInternal.value.id) {
-        transactionInternal.value.type = type
+      if (!transactionInternal.id) {
+        transactionInternal.type = type
       }
 
-      transactionInternal.value.symbol     = symbol.value
-      transactionInternal.value.quantity   = quantity.value
-      transactionInternal.value.price      = price.value
-      transactionInternal.value.account    = account.value
-      transactionInternal.value.quantity   = quantity.value
-      transactionInternal.value.executedAt = dayjs(executedAt.value).toDate()
-      transactionInternal.value.currency   = symbol.value.currency
-
-      await t.save()
-      //  alert('saved :)')
-
-      quantity.value   = null
-      price.value      = null
-      executedAt.value = dayjs().format('YYYY-MM-DD')
+      await transactionInternal.save()
+      alert('saved :)')
+      transactionInternal = new Transaction()
     }
 
-    const valid = computed(() => {
-      return symbol.value
-             && price.value
-             && executedAt.value
-             && quantity.value
-             && account.value
-    })
+    onBeforeMount(() => {
 
-    onBeforeMount(async () => {
+      if (!transactionInternal) {
+        transactionInternal = new Transaction()
+      }
 
       if (props.assetSymbol) {
-        symbol.value = await CacheableQuery.create(Account).getObjectById(props.assetSymbol)
+        transactionInternal.symbol = props.assetSymbol
       }
 
-      if (!transactionInternal.value) {
-        transactionInternal.value = new Transaction()
-      } else {
-        quantity.value   = transactionInternal.value.quantity
-        price.value      = transactionInternal.value.price
-        account.value    = transactionInternal.value.account ? await CacheableQuery.create(Account)
-          .getObjectById(transactionInternal.value.account) : null
-        quantity.value   = transactionInternal.value.quantity
-        executedAt.value = dayjs().format('YYYY-MM-DD')
-
-        if (transactionInternal.value.symbol) {
-          symbol.value = await CacheableQuery.create(AssetSymbol).getObjectById(transactionInternal.value.symbol)
-        } else {
-          symbol.value = transactionInternal.value.getTickerName()
-        }
+      if (!transactionInternal.executedAt) {
+        transactionInternal.executedAt = new Date()
       }
-
-
     })
+
+    watch(transactionInternal, () => {
+      isValid.value = transactionInternal
+                      && !!transactionInternal.symbolName
+                      && !isNaN(transactionInternal.price)
+                      && !isNaN(transactionInternal.quantity)
+                      && dayjs(transactionInternal.executedAt).isValid()
+                      && transactionInternal.account
+
+    }, {immediate: true})
 
 
     return {
       save,
-      valid,
+      isValid,
       symbol,
       executedAt,
       quantity,

@@ -70,7 +70,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
     const replace = async (object : T, event : LiveQueryUpdateFnEventType) => {
 
-      await expandIncludes(object)
+      // await expandIncludes(object)
 
       if (object instanceof SecureObject) {
         await object.decrypt()
@@ -108,7 +108,8 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
         const index = objects.findIndex(o => o.id === object.id)
 
         if (index !== -1) {
-          objects.splice(index, 1)
+          delete objects[index]
+          // objects.splice(index, 1)
         }
       }
     }

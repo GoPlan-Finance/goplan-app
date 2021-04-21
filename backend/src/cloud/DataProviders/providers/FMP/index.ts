@@ -11,7 +11,6 @@ import * as dayjs from 'dayjs'
 
 import * as FMPApi from 'financialmodelingprep-openapi'
 import * as Types from '../types'
-import * as FMPApi from 'financialmodelingprep-openapi'
 
 
 // // Simple Examples
