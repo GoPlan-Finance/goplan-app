@@ -31,7 +31,7 @@
     "@heroicons/vue": "^1.0.1",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
-    "echarts": "^5.0.2",
+    "echarts": "^5.1.0",
     "feather-icons": "^4.28.0",
     "papaparse": "^5.3.0",
     "parse": "^3.2.0",
