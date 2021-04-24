@@ -5,10 +5,8 @@
     </div>
 
     <div
+      v-if="opened"
       class="modal z-30 fixed p-4 w-full h-full top-0 left-0 flex items-center justify-center"
-      :class="{
-        'opacity-0 pointer-events-none': !opened
-      }"
     >
       <div
         class="absolute w-full h-full bg-gray-900 opacity-50"
@@ -80,8 +78,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs } from 'vue'
 import ButtonDefault from '/@components/base/ButtonDefault.vue'
+import { defineComponent, ref, toRefs, watch } from 'vue'
 
 
 export default defineComponent({
@@ -97,12 +95,16 @@ export default defineComponent({
       type    : Boolean,
       default : true,
     },
+    modelValue: {
+      type    : Boolean,
+      default : false,
+    },
   },
   emits: [
-    'opened', 'closed',
+    'opened', 'closed', 'update:modelValue',
   ],
   setup (props, {emit}) {
-    const opened = ref(false)
+    const opened = ref(props.modelValue)
 
     function close (isBackdrop = false) {
       if (!props.canClickOutside && isBackdrop) {
@@ -111,12 +113,18 @@ export default defineComponent({
 
       opened.value = false
       emit('closed')
+      emit('update:modelValue', false)
     }
 
     function open () {
       opened.value = true
       emit('opened')
+      emit('update:modelValue', true)
     }
+
+    watch(() => props.modelValue, value => {
+      value ? open() : close()
+    })
 
     return {
       ...toRefs(props),

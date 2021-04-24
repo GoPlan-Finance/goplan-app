@@ -34,7 +34,7 @@
 import { AssetSymbol } from '/@common/models'
 import { Query } from '/@common/Query'
 import SearchField from '/@components/base/SearchField.vue'
-import { computed, defineComponent, reactive, ref, onBeforeMount} from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 
 
 const getSymbols = async (tickerName : string) : Promise<AssetSymbol[]> => {
@@ -63,7 +63,7 @@ export default defineComponent({
     },
     modelValue: {
       required  : true,
-      validator : prop => prop instanceof AssetSymbol || typeof prop === 'string' || prop === null,
+      validator : prop => prop instanceof AssetSymbol || typeof prop === 'string' || prop === null || prop === undefined,
     },
     searchFieldClass: {
       type    : String,
@@ -79,14 +79,13 @@ export default defineComponent({
 
     const tickerName = ref<string>('')
 
-    onBeforeMount(() => {
+    watch(() => props.modelValue, () => {
 
       if (props.modelValue instanceof AssetSymbol) {
         tickerName.value = props.modelValue.symbol
       } else if (typeof props.modelValue === 'string') {
         tickerName.value = props.modelValue
       }
-
     })
 
     const update = async () => {

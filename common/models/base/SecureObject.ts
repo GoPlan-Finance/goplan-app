@@ -58,6 +58,18 @@ export abstract class SecureObject extends BaseObject {
       ))
   }
 
+  clone () : any {
+    const clone = super.clone()
+
+
+    for (const [
+      k, v
+    ] of Object.entries(clone._decryptedReadCache)) {
+      this._decryptedReadCache[k] = v
+    }
+    return clone
+  }
+
 
   public static async decryptField<T> (val : EncryptedValue) : Promise<T> {
 
@@ -105,7 +117,7 @@ export abstract class SecureObject extends BaseObject {
 
       super.set(fieldName, await SecureObject.encryptField(value))
     }
- 
+
 
     const savedObject = await super.save(target, options)
 

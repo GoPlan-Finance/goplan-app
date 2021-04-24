@@ -1,13 +1,15 @@
 <template>
   <Modal
+    v-model="isModalOpen"
     title="Buy/Sell Asset"
+    @opened="modalOpened"
   >
     <template #button>
       <ButtonDefault
-        :label="transactionInternal?.id ? 'Edit' : 'Buy/Sell'"
+        :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
       >
         <template
-          v-if="!transactionInternal?.id"
+          v-if="!transaction?.id"
           #before
         >
           <PlusCircleIcon
@@ -78,7 +80,7 @@
     </template>
     <template #actions>
       <template
-        v-if="!transactionInternal?.id"
+        v-if="!transaction?.id"
       >
         <ButtonDefault
           :disabled="!isValid"
@@ -109,13 +111,14 @@
 
 <script lang="ts">
 
-import { AssetSymbol, Transaction } from '/@common/models'
+import { Account, AssetSymbol, Transaction } from '/@common/models'
+import { Query } from '/@common/Query'
 import AccountSelect from '/@components/AccountSelect.vue'
 import AssetSearch from '/@components/AssetSearch.vue'
 import Modal from '/@components/base/GoModal.vue'
 import { PlusCircleIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, ref, reactive, toRef, watch } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref, toRef, watch } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 
 
@@ -132,109 +135,109 @@ export default defineComponent({
     },
   },
   setup (props) {
-    const transaction2      = toRef(props, 'transaction')
-    let transactionInternal = reactive(transaction2.value ? transaction2.value : new Transaction())
-    const isValid           = ref(false)
+    const transactionProp     = toRef(props, 'transaction')
+    const transactionInternal = ref<Transaction>(new Transaction())
+    const isModalOpen         = ref(false)
 
     const symbol = computed({
       get () {
-        return transactionInternal.symbolName
+        return transactionInternal.value.symbolName
       },
       set (value : AssetSymbol | string | null) {
 
         if (value instanceof AssetSymbol) {
-          transactionInternal.symbol     = value
-          transactionInternal.symbolName = null
-          transactionInternal.currency   = value.currency
+          transactionInternal.value.symbol     = value
+          transactionInternal.value.symbolName = null
+          transactionInternal.value.currency   = value.currency
         } else {
-          transactionInternal.symbolName = value
-          transactionInternal.symbol     = null
+          transactionInternal.value.symbolName = value
+          transactionInternal.value.symbol     = null
         }
       },
     })
 
-    const quantity = computed({
+    const quantity = computed<string>({
       get () {
-        return transactionInternal.quantity
+        return transactionInternal.value.quantity ? transactionInternal.value.quantity.toString() : ''
       },
       set (value) {
-        transactionInternal.quantity = parseFloat(value)
+        transactionInternal.value.quantity = parseFloat(value)
       },
     })
 
-    const price = computed({
+    const price = computed<string>({
       get () {
-        return transactionInternal.price
+        return transactionInternal.value.price ? transactionInternal.value.price.toString() : ''
       },
       set (value) {
-        transactionInternal.price = parseFloat(value)
+        transactionInternal.value.price = parseFloat(value)
       },
     })
 
-    const account = computed({
+    const account = computed<Account>({
       get () {
-        return transactionInternal.account
+        return transactionInternal.value.account
       },
       set (value) {
-        transactionInternal.account = value
+        transactionInternal.value.account = value
       },
     })
 
-    const executedAt = computed({
+    const executedAt = computed<string>({
       get () {
-        return dayjs(transactionInternal.executedAt).format('YYYY-MM-DD')
+        return dayjs(transactionInternal.value.executedAt).format('YYYY-MM-DD')
       },
       set (value) {
-        transactionInternal.executedAt = dayjs(value).toDate()
+        transactionInternal.value.executedAt = dayjs(value).toDate()
       },
     })
 
 
-    const save = async (type : 'buy' | 'sell') => {
-      if (!transactionInternal.id) {
-        transactionInternal.type = type
+    const isValid = computed<boolean>(() => transactionInternal.value
+                                           && !!transactionInternal.value.symbolName
+                                           && !isNaN(transactionInternal.value.price)
+                                           && !isNaN(transactionInternal.value.quantity)
+                                           && dayjs(transactionInternal.value.executedAt).isValid()
+                                           && !!transactionInternal.value.account
+    )
+
+    const save = async (type : 'buy' | 'sell' | undefined) => {
+      if (transactionInternal.value.isNew()) {
+        transactionInternal.value.type = type
       }
 
-      await transactionInternal.save()
-      alert('saved :)')
-      transactionInternal = new Transaction()
+      await transactionInternal.value.save()
+      transactionInternal.value = new Transaction()
+      isModalOpen.value         = false
     }
 
-    onBeforeMount(() => {
+    const modalOpened = async () => {
 
-      if (!transactionInternal) {
-        transactionInternal = new Transaction()
+      if (transactionProp.value) {
+        transactionInternal.value = await Query.create(Transaction).getObjectById(transactionProp.value.id)
       }
 
       if (props.assetSymbol) {
-        transactionInternal.symbol = props.assetSymbol
+        transactionInternal.value.symbol = props.assetSymbol
       }
 
-      if (!transactionInternal.executedAt) {
-        transactionInternal.executedAt = new Date()
+      if (!transactionInternal.value.executedAt) {
+        transactionInternal.value.executedAt = new Date()
       }
-    })
-
-    watch(transactionInternal, () => {
-      isValid.value = transactionInternal
-                      && !!transactionInternal.symbolName
-                      && !isNaN(transactionInternal.price)
-                      && !isNaN(transactionInternal.quantity)
-                      && dayjs(transactionInternal.executedAt).isValid()
-                      && transactionInternal.account
-
-    }, {immediate: true})
+    }
 
 
     return {
       save,
       isValid,
+      isModalOpen,
       symbol,
       executedAt,
       quantity,
       price,
       account,
       transactionInternal,
+      modalOpened,
     }
   },
 

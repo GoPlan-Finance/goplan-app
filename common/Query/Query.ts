@@ -108,8 +108,8 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
         const index = objects.findIndex(o => o.id === object.id)
 
         if (index !== -1) {
-          delete objects[index]
-          // objects.splice(index, 1)
+          // delete objects[index]
+          objects.splice(index, 1)
         }
       }
     }
