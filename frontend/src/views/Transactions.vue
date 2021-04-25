@@ -89,7 +89,11 @@
       <buy-sell-asset
         v-if="row.type === 'BUY' || row.type === 'SELL'"
         :transaction="row"
-      /><!--      @todo case sensitive row.type-->
+      >
+        <PencilIcon
+          class="h-6 w-6"
+        />
+      </buy-sell-asset>
 
       <div
         class="cursor-pointer hover:text-red-600"
@@ -118,7 +122,7 @@ import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
-import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
+import { ArrowCircleLeftIcon, PencilIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -130,7 +134,7 @@ import ImportTransactionsModal from '../components/Transactions/ImportTransactio
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal, PencilIcon,
   },
   setup () {
     const data             = reactive({

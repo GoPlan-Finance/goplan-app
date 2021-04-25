@@ -5,18 +5,20 @@
     @opened="modalOpened"
   >
     <template #button>
-      <ButtonDefault
-        :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
-      >
-        <template
-          v-if="!transaction?.id"
-          #before
+      <slot>
+        <ButtonDefault
+          :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
         >
-          <PlusCircleIcon
-            class="h-6 w-6"
-          />
-        </template>
-      </ButtonDefault>
+          <template
+            v-if="!transaction?.id"
+            #before
+          >
+            <PlusCircleIcon
+              class="h-6 w-6"
+            />
+          </template>
+        </ButtonDefault>
+      </slot>
     </template>
     <template #content>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5">
@@ -198,8 +200,7 @@ export default defineComponent({
                                             && !isNaN(transactionInternal.value.price)
                                             && !isNaN(transactionInternal.value.quantity)
                                             && dayjs(transactionInternal.value.executedAt).isValid()
-                                           && !!transactionInternal.value.account
-    )
+                                            && !!transactionInternal.value.account)
 
     const save = async (type : 'buy' | 'sell' | undefined) => {
       if (transactionInternal.value.isNew()) {
