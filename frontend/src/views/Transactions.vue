@@ -221,6 +221,10 @@ export default defineComponent({
         settings: {
           actions           : true,
           translationPrefix : 'transactions.table',
+          sort              : {
+            field     : 'executedAt',
+            direction : 'desc'
+          },
         },
         filters: {
           accounts: {
