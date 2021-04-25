@@ -2,7 +2,7 @@
   <HeadlineActions
     :headline="$t('holdings.headline')"
   >
-    <buy-sell-asset />
+    <buy-sell-asset/>
   </HeadlineActions>
 
 
@@ -27,12 +27,9 @@
 
 <script lang="ts">
 
-import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import BuySellAsset from '/@components/BuySellAsset.vue'
-import DataTable from '/@components/DataTable.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
 import HoldingsTable from '/@components/Holdings/HoldingsTable.vue'
-import AppLink from '/@components/router/AppLink.vue'
 import { Screens } from '/@utils/screens'
 import * as dayjs from 'dayjs'
 import { computed, defineComponent, onBeforeMount, reactive, toRefs } from 'vue'
@@ -40,17 +37,17 @@ import { useHoldingStore } from '../store'
 
 
 export default defineComponent({
-  components: {
+  components : {
     HoldingsTable,
     BuySellAsset,
     HeadlineActions,
   },
   setup () {
     const data = reactive({
-      open: {
+      open   : {
         rows        : [],
         tableLayout : {
-          [Screens.DEFAULT]: [
+          [Screens.DEFAULT] : [
             [
               'symbolName', 'openQty',
             ],
@@ -58,7 +55,7 @@ export default defineComponent({
               'openPL', 'openTotalPrice',
             ],
           ],
-          [Screens.SM]: [
+          [Screens.SM]      : [
             [
               'symbolName', 'name',
             ],
@@ -81,10 +78,10 @@ export default defineComponent({
           ],
         },
       },
-      closed: {
+      closed : {
         rows        : [],
         tableLayout : {
-          [Screens.DEFAULT]: [
+          [Screens.DEFAULT] : [
             [
               'symbolName', 'openQty',
             ],
@@ -92,7 +89,7 @@ export default defineComponent({
               'openPL', 'openTotalPrice',
             ],
           ],
-          [Screens.SM]: [
+          [Screens.SM]      : [
             [
               'symbolName', 'name',
             ],

@@ -104,7 +104,7 @@ import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { useAssetPriceStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
-import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReactive, toRef, toRefs, watch } from 'vue'
+import {defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReactive, toRef, toRefs, watch} from 'vue'
 
 
 export default defineComponent({
