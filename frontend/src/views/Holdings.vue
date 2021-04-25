@@ -7,7 +7,7 @@
 
 
   <h1 class="text-gray-700 text-2xl  items-center">
-    Open Positions
+    Active Positions
   </h1>
 
   <holdings-table
@@ -15,9 +15,11 @@
     :table-layout="open.tableLayout"
   />
 
+  <br>
+  <br>
 
   <h1 class="text-gray-700 text-2xl  items-center">
-    Closed Positions
+    Previous Positions
   </h1>
   <holdings-table
     :rows="closed.rows"
@@ -27,12 +29,9 @@
 
 <script lang="ts">
 
-import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import BuySellAsset from '/@components/BuySellAsset.vue'
-import DataTable from '/@components/DataTable.vue'
 import HeadlineActions from '/@components/HeadlineActions.vue'
 import HoldingsTable from '/@components/Holdings/HoldingsTable.vue'
-import AppLink from '/@components/router/AppLink.vue'
 import { Screens } from '/@utils/screens'
 import * as dayjs from 'dayjs'
 import { computed, defineComponent, onBeforeMount, reactive, toRefs } from 'vue'
@@ -75,6 +74,10 @@ export default defineComponent({
               'openPL',
             ],
             [
+              'closedPL',
+            ],
+
+            [
               'dayPLChange', /*'dayPL',*/
             ],
             'weight',
@@ -86,10 +89,10 @@ export default defineComponent({
         tableLayout : {
           [Screens.DEFAULT]: [
             [
-              'symbolName', 'openQty',
+              'symbolName',
             ],
             [
-              'openPL', 'openTotalPrice',
+              'closedPL',
             ],
           ],
           [Screens.SM]: [
@@ -97,16 +100,10 @@ export default defineComponent({
               'symbolName', 'name',
             ],
             [
-              'buyQty', 'lastSellAt',
+              'lastSellAt',
             ],
             [
-              'currentTotalPrice', 'currentAvgPrice',
-            ],
-            [
-              'closedPL', /* 'openTotalPrice',   'overallPL',*/
-            ],
-            [
-              'dayPLChange', /*'dayPL',*/
+              'closedPL',
             ],
           ],
         },

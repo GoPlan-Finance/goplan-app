@@ -9,7 +9,7 @@
       ]"
       class=" rounded-lg font-bold p-1 ml-1"
     >
-      <span v-if="isPositive">+</span> {{ percent.toFixed(2) }} %
+      <span v-if="isPositive">+</span> {{ (percent * 100).toFixed(2) }} %
     </div>
     <div
       :class="[
@@ -39,7 +39,7 @@
         <polyline points="5 12 12 5 19 12" />
       </svg>
       <Private>
-        {{ formatCurrency(change, currency, false) }}
+        {{ formatCurrency(change, currency, true) }}
       </Private>
     </div>
   </div>
@@ -103,12 +103,13 @@ export default defineComponent({
         return
       }
 
-      toPrice.value   = toValue
-      fromPrice.value = fromValue
+      fromPrice.value = fromValue // 1000
+      toPrice.value   = toValue  // 300
 
-      change.value     = toValue - fromValue
-      isPositive.value = fromValue < toValue
-      percent.value    = toValue !== 0 ? ((change.value / toValue) * 100) : 0
+      change.value     = toValue - fromValue // -700
+      isPositive.value = fromValue < toValue // -
+
+      percent.value    = toValue !== 0 ? (1 - (toValue / fromValue)) : 0 // -70
     }
 
 

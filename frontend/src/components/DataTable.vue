@@ -267,10 +267,11 @@ export default defineComponent({
         field.key = key
       }
 
-      field.format  = getHandler<FormatFn>(field, 'format')
       field.value   = getHandler<ValueFn>(field, 'value')
       field.compare = getHandler<CompareFn>(field, 'compare')
       //field.search = getHandler<CompareFn>(field, 'search')
+
+      field.format  = getHandler<FormatFn>(field, 'format')
     }
 
     if (config.settings.sort) {

@@ -19,7 +19,7 @@ holdings:
     closeAvgPrice: AvgPrice
     closeQty: Closed Qty
     closeTotalPrice: Closed value
-    closedPL: Unrealized P/L
+    closedPL: Closed P/L
     currentAvgPrice: Current Price
     currentPrice: Current Price
     currentTotalPrice: Current Value
@@ -31,7 +31,7 @@ holdings:
     lastSellAt: Last sell
     name: Symbol
     openAvgPrice: Avg Price
-    openPL: Unrealized P/L
+    openPL: Open P/L
     openQty: Open Qty
     openTotalPrice: Book Value
     symbolName: Ticker
