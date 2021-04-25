@@ -99,7 +99,7 @@ import { TableLayout, TableRow } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import * as dayjs from 'dayjs'
-import { defineComponent, reactive, ref, toRefs } from 'vue'
+import { defineComponent, PropType, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -110,11 +110,11 @@ export default defineComponent({
   },
   props: {
     rows: {
-      type     : Object as TableRow[],
+      type     : Object as PropType<TableRow[]>,
       required : true,
     },
     tableLayout: {
-      type     : Object as TableLayout[],
+      type     : Object as PropType<TableLayout[]>,
       required : true,
     },
   },

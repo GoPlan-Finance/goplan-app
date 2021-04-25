@@ -1,4 +1,4 @@
-export enum heroicons {
+export enum icons {
   ACADEMIC_CAP = 'AcademicCap',
   ADJUSTMENTS = 'Adjustments',
   ANNOTATION = 'Annotation',

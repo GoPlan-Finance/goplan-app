@@ -3,21 +3,21 @@
     Styleguide
   </h1>
 
-  <GoIcons :name="heroicons.PENCIL" class="h-5 w-5"></GoIcons>
-  <GoIcons :name="heroicons.TRASH" type="outline" class="h-5 w-5"></GoIcons>
-  <GoIcons :name="heroicons.ACADEMIC_CAP" type="outline" class="h-10 w-10 transform rotate-180"></GoIcons>
+  <GoIcons :name="icons.PENCIL" class="h-5 w-5"></GoIcons>
+  <GoIcons :name="icons.TRASH" type="outline" class="h-5 w-5"></GoIcons>
+  <GoIcons :name="icons.ACADEMIC_CAP" type="outline" class="h-10 w-10 transform rotate-180"></GoIcons>
 </template>
 
 <script lang="ts">
 import GoIcons from '/@components/Icons/GoIcons.vue'
+import { icons } from '/@components/Icons/icons'
 import { defineComponent } from 'vue'
-import {heroicons} from '/@components/Icons/heroicons'
 
 export default defineComponent({
   components : {GoIcons},
   setup() {
     return {
-      heroicons
+      icons
     }
   }
 })
