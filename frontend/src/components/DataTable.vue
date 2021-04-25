@@ -132,7 +132,7 @@
     </div>
     <div
       v-if="settings?.actions"
-      class="grid items-center"
+      class="flex justify-end gap-2 items-center"
     >
       <slot
         :row="row"
@@ -285,6 +285,9 @@ export default defineComponent({
       for (const column of tableLayout.value) {
         template += config.fields[column]?.width ?? '1fr'
         template += ' '
+      }
+      if  (config.settings.actions) {
+        template += 'min-content'
       }
       return `grid-template-columns: ${template};`
     })
