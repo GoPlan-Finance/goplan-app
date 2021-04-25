@@ -1,6 +1,6 @@
 import { Holding, Transaction } from '/@common/models'
 import { Query } from '/@common/Query'
-import { HoldingTimeSeriesHelper } from '/@store/Holding/HoldingTimeSeriesHelper'
+import { HoldingHistoryHelper } from '/@store/Holding/HoldingHistoryHelper'
 import { Mutex } from 'async-mutex'
 import * as dayjs from 'dayjs'
 import { useTransactionStore } from '../'
@@ -109,7 +109,7 @@ export class HoldingHelper {
 
     await holding.save()
 
-    await HoldingTimeSeriesHelper.updateHistory(holding, transactions)
+    await HoldingHistoryHelper.updateHistory(holding, transactions)
 
   }
 
