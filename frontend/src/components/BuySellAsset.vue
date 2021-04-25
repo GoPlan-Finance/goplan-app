@@ -118,7 +118,7 @@ import AssetSearch from '/@components/AssetSearch.vue'
 import Modal from '/@components/base/GoModal.vue'
 import { PlusCircleIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, ref, toRef } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 
 
@@ -194,10 +194,10 @@ export default defineComponent({
 
 
     const isValid = computed<boolean>(() => transactionInternal.value
-                                           && !!transactionInternal.value.symbolName
-                                           && !isNaN(transactionInternal.value.price)
-                                           && !isNaN(transactionInternal.value.quantity)
-                                           && dayjs(transactionInternal.value.executedAt).isValid()
+                                            && !!transactionInternal.value.symbolName
+                                            && !isNaN(transactionInternal.value.price)
+                                            && !isNaN(transactionInternal.value.quantity)
+                                            && dayjs(transactionInternal.value.executedAt).isValid()
                                            && !!transactionInternal.value.account
     )
 
@@ -206,6 +206,8 @@ export default defineComponent({
         transactionInternal.value.type = type
       }
 
+      transactionInternal.value.totalExcludingFees = transactionInternal.value.quantity * transactionInternal.value.quantity
+      
       await transactionInternal.value.save()
       transactionInternal.value = new Transaction()
       isModalOpen.value         = false

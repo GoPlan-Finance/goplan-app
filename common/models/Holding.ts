@@ -220,7 +220,7 @@ export class Holding extends SecureObject {
       }
 
 
-      if (holding && holding.isNew()) {
+      if (holding && !holding.currency) {
         holding.currency = transaction.currency
 
         if (save) {
