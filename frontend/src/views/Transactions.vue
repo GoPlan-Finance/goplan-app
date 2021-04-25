@@ -89,25 +89,21 @@
       <buy-sell-asset
         v-if="row.type === 'BUY' || row.type === 'SELL'"
         :transaction="row"
-      /><!--      @todo case sensitive row.type-->
-
+      >
+        <!--      @todo case sensitive row.type-->
+        <template #button>
+          <PencilIcon class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300" />
+        </template>
+      </buy-sell-asset>
       <div
-        class="cursor-pointer hover:text-red-600"
+        v-else
+        class="h-6 w-6"
+      />
+      <div
+        class="cursor-pointer hover:text-red-600 text-gray-300"
         @click="remove(row)"
       >
-        <svg
-          class="h-6 w-6 stroke-1 stroke-current"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <TrashIcon class="h-6 w-6" />
       </div>
     </template>
   </DataTable>
@@ -118,7 +114,7 @@ import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
-import { ArrowCircleLeftIcon } from '@heroicons/vue/solid'
+import { ArrowCircleLeftIcon, PencilIcon, TrashIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -130,7 +126,7 @@ import ImportTransactionsModal from '../components/Transactions/ImportTransactio
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, ImportTransactionsModal,
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, PencilIcon, TrashIcon, ImportTransactionsModal,
   },
   setup () {
     const data             = reactive({
