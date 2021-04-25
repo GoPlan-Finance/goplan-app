@@ -207,7 +207,7 @@ export default defineComponent({
       }
 
       transactionInternal.value.totalExcludingFees = transactionInternal.value.quantity * transactionInternal.value.quantity
-      
+
       await transactionInternal.value.save()
       transactionInternal.value = new Transaction()
       isModalOpen.value         = false
