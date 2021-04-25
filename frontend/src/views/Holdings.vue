@@ -94,6 +94,19 @@
           --
         </span>
       </template>
+
+      <template
+        #field(overallPL)="{ row }"
+      >
+        <AssetPriceChange
+          v-if="row.lastPrice"
+          :compare-from="row.buyQty * row.buyAvgPrice"
+          :compare-to="(row.openQty * row.lastPrice.price) + ( row.closedQty * row.closedAvgPrice)"
+        />
+        <span v-else>
+          --
+        </span>
+      </template>
     </DataTable>
   </template>
 </template>
@@ -183,7 +196,7 @@ export default defineComponent({
           openPL: {
             format : 'percent',
             value  : (row : Holding) => {
-              if (!row.lastPrice || row.lastPrice.openAvgPrice === 0) {
+              if (!row.lastPrice || row.openAvgPrice === 0) {
                 return 0
               }
 
@@ -200,7 +213,16 @@ export default defineComponent({
               return (row.lastPrice.previousClose / row.lastPrice.price) - 1
             },
           },
+          overallPL: {
+            format : 'percent',
+            value  : (row : Holding) => {
+              if (!row.lastPrice || row.openAvgPrice === 0) {
+                return 0
+              }
 
+              return (row.lastPrice.price / row.openAvgPrice) - 1
+            },
+          },
           weight: {
             format : 'percent',
             value  : (row : Holding) => {
@@ -231,8 +253,11 @@ export default defineComponent({
               'currentTotalPrice', 'currentAvgPrice',
             ],
             [
-              'openPL', /* 'openTotalPrice',*/
+              'overallPL',
             ],
+            // [
+            //   'openPL', /* 'openTotalPrice',*/
+            // ],
             [
               'dayPLChange', /*'dayPL',*/
             ],
