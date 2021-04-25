@@ -110,7 +110,7 @@ export default defineComponent({
   },
   props: {
     rows: {
-      type     : Object as TableRow[],
+    type     : Object as PropType<TableRow[]>,
       required : true,
     },
     tableLayout: {
