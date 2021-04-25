@@ -253,11 +253,8 @@ export default defineComponent({
               'currentTotalPrice', 'currentAvgPrice',
             ],
             [
-              'overallPL',
+              'openPL', /* 'openTotalPrice',   'overallPL',*/
             ],
-            // [
-            //   'openPL', /* 'openTotalPrice',*/
-            // ],
             [
               'dayPLChange', /*'dayPL',*/
             ],
