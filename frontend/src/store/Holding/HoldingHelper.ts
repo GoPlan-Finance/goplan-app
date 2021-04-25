@@ -1,5 +1,6 @@
 import { Holding, Transaction } from '/@common/models'
 import { Query } from '/@common/Query'
+import { HoldingHistoryHelper } from '/@store/Holding/HoldingHistoryHelper'
 import { Mutex } from 'async-mutex'
 import * as dayjs from 'dayjs'
 import { useTransactionStore } from '../'
@@ -105,7 +106,11 @@ export class HoldingHelper {
     console.log(`Updated "${holding.symbolName}" : BUY ${holding.buyQty}  , OPEN ${holding.openQty},  CLOSE ${holding.closedQty}`)
     holding.isOutdated = false
 
+
     await holding.save()
+
+    await HoldingHistoryHelper.updateHistory(holding, transactions)
+
   }
 
 
@@ -144,7 +149,7 @@ export class HoldingHelper {
 
   public static async findOutdatedHoldings () {
 
-    const isOutdatedQuery =  () : Query<Holding> => {
+    const isOutdatedQuery = () : Query<Holding> => {
       return Query.or(
         Query.create(Holding).notEqualTo('isOutdated', false),
         Query.create(Holding).doesNotExist('isOutdated'),
