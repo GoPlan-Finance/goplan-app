@@ -9,10 +9,10 @@
     </span>
 
     <input
-      :value="$props.modelValue"
       :class="inputClass"
-      class="w-32 min-w-full max-w-full rounded pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
-      placeholder="Search"
+      :value="$props.modelValue"
+      class="w-100 min-w-full max-w-full rounded pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+      :placeholder="placeholder"
       type="text"
       @input="$emit('update:modelValue', $event.target.value)"
     >
@@ -32,10 +32,14 @@ export default defineComponent({
       type     : String,
       required : true,
     },
+    placeholder: {
+      type    : String,
+      default : 'Search',
+    },
     inputClass: {
       type    : String,
-      default : ''
-    }
+      default : '',
+    },
   },
   emits: [
     'update:modelValue',

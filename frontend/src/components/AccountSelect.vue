@@ -31,7 +31,7 @@ export default defineComponent({
   props: {
     modelValue: {
       required  : true,
-      validator : prop =>  prop instanceof Account || prop === null
+      validator : prop =>  prop instanceof Account || prop === null || prop === undefined
     },
   },
   emits: [

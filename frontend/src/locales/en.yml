@@ -19,6 +19,7 @@ watchlists:
   updated: Updated
   show_more: 'Show More'
 
+
 transactions:
   headline: Transactions
   table:
@@ -29,7 +30,7 @@ transactions:
     totalExcludingFees: Total Excluding Fees
     executedAt: Date
     name: Name
-    ticker: Ticker
+    symbolName: Ticker
     price: Price
     quantity: Quantity
     sell: Sell
@@ -39,7 +40,9 @@ transactions:
 watchlist:
   table:
     name: Name
-    symbol: Symbol
+    createdAt: Date Added
+    ticker: Symbol
+    dayPLChange: Day P/L
 
 quote:
   open: Open
@@ -64,7 +67,7 @@ quote:
 holdings:
   headline: Holdings
   table:
-    ticker: Ticker
+    symbolName: Ticker
     name: Symbol
     openQty: Open Qty
     openAvgPrice: Avg Price
@@ -78,6 +81,14 @@ holdings:
     dayPLChange: Daily Change
     dayPL: Day P/L
     openPL: Unrealized P/L
-    lastBuy: Last purchace
+    lastBuyAt: Last purchace
+    firstBuyAt: First purchace
+    lastSellAt: Last sell
+    firstSellAt: First sell
     closePL: Realized P/L
     weight: % Portfolio
+
+
+
+
+

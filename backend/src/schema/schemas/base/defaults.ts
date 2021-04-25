@@ -17,6 +17,7 @@ interface FieldInterface {
   type : FieldType
   targetClass? : string
   required? : boolean
+  defaultValue? : number | string | unknown | null
 }
 
 

@@ -10,11 +10,14 @@ const perf = {
 
 export abstract class SecureObject extends BaseObject {
 
-  private static isServer         = false
+  private static isServer                  = false
   private static sessionDerivedKey : DerivedKey
   private readonly secureFields : string[] = []
 
-  public static setServerMode () :void {
+  private _decryptedReadCache : { [key : string] : unknown } = {}
+  private _dirtyCache : { [key : string] : boolean }         = {}
+
+  public static setServerMode () : void {
     SecureObject.isServer = true
   }
 
@@ -43,39 +46,30 @@ export abstract class SecureObject extends BaseObject {
 
     await Promise.all(
       this.secureFields.map(async fieldName => {
-        const val = this.get(fieldName)
+        const val = super.get(fieldName)
 
         if (val === undefined || val === null) {
           return // Skip null/undefined values. This will occur if we add new encrypted fields to the schema.
         }
 
-        if (Crypto.isEncrypted(val)) {
-          this.set(fieldName, await SecureObject.decryptField(val))
-        }
+        this._dirtyCache[fieldName]         = false
+        this._decryptedReadCache[fieldName] = Crypto.isEncrypted(val) ? await SecureObject.decryptField(val) : val
       },
       ))
   }
 
-  public async encrypt () : Promise<void> {
+  clone () : any {
+    const clone = super.clone()
 
-    if (SecureObject.isServer) {
-      return
+
+    for (const [
+      k, v
+    ] of Object.entries(clone._decryptedReadCache)) {
+      this._decryptedReadCache[k] = v
     }
-
-    if (!SecureObject.sessionDerivedKey) {
-      throw 'Encryption key not set"'
-    }
-
-    await Promise.all(
-      this.secureFields.map(async fieldName => {
-        const val = super.get(fieldName)
-
-        if (!Crypto.isEncrypted(val)) {
-          super.set(fieldName, await SecureObject.encryptField(val))
-        }
-      },
-      ))
+    return clone
   }
+
 
   public static async decryptField<T> (val : EncryptedValue) : Promise<T> {
 
@@ -109,26 +103,88 @@ export abstract class SecureObject extends BaseObject {
   async save (
     target : SecureObject | Array<SecureObject | Parse.File> = undefined,
     options : Parse.RequestOptions                           = undefined,
-  ) :Promise<this> {
+  ) : Promise<this> {
 
     for (const [
-      name, value
-    ] of Object.entries(this.attributes)) {
-      if (value instanceof BaseObject) {
-        this.set(name, value.toPointer())
+      fieldName, isDirty
+    ] of Object.entries(this._dirtyCache)) {
+
+      if (!isDirty) {
+        continue
       }
+
+      const value = this._decryptedReadCache[fieldName]
+
+      super.set(fieldName, await SecureObject.encryptField(value))
     }
 
-    await this.encrypt()
+
     const savedObject = await super.save(target, options)
-
-
-    if (savedObject instanceof SecureObject) {
-      await savedObject.decrypt()
-    }
 
     return savedObject
   }
+
+
+  public get<T> (attr : string) : T {
+
+    const val = super.get(attr)
+
+    if (SecureObject.isServer || !this.secureFields.includes(attr)) {
+      return val
+    }
+
+    return this._decryptedReadCache[attr] as T
+  }
+
+
+  public set<T> (
+    key : string | { [key : string] : unknown },
+    value : T | undefined = undefined,
+    options : unknown     = undefined,
+  ) : this | false {
+
+    if (SecureObject.isServer) {
+      return super.set(key as string, value, options)
+    }
+
+    if (!SecureObject.sessionDerivedKey) {
+      throw 'Encryption key not set"'
+    }
+
+    const setValue = (k : string, v : unknown) => {
+
+      if (!this.secureFields.includes(k)) {
+        return super.set(k as string, v, options)
+      }
+
+      if (v instanceof Parse.Object) {
+        throw 'When setting Secure Fields, you cannot persists objects themselves, you need to use "myObject.toPointer()"'
+      }
+
+      this._dirtyCache[k]         = true
+      this._decryptedReadCache[k] = v
+
+      return this
+    }
+
+    if (key && typeof key === 'object') {
+
+      for (const k in key) {
+
+        if (!Object.prototype.hasOwnProperty.call(key, k)) {
+          continue
+        }
+
+        setValue(k, key[k])
+      }
+
+      return this
+    }
+
+
+    return setValue(key as string, value)
+  }
+
 
 }
 

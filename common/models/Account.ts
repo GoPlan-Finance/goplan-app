@@ -1,3 +1,4 @@
+import { User } from '/@common/models/User'
 import { SecureObject } from './base/SecureObject'
 
 
@@ -29,6 +30,14 @@ export class Account extends SecureObject {
 
   set currency (value : string) {
     this.set('currency', value.toUpperCase())
+  }
+
+  get createdBy () : User {
+    return this.get('createdBy')
+  }
+
+  set createdBy (value : User) {
+    this.set('createdBy', value)
   }
 
 }

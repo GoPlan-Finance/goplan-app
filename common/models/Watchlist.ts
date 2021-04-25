@@ -1,3 +1,4 @@
+import { User } from '/@common/models/User'
 import { AssetSymbol } from './AssetSymbol'
 import { BaseObject } from './base/BaseObject'
 
@@ -16,6 +17,14 @@ export class Watchlist extends BaseObject {
 
   get symbols () : AssetSymbol[] {
     return this.get('symbols')
+  }
+
+  get createdBy () : User {
+    return this.get('createdBy')
+  }
+
+  set createdBy (value : User) {
+    this.set('createdBy', value)
   }
 
 }

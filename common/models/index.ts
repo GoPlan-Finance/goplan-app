@@ -5,14 +5,16 @@
 import { Account } from './Account'
 import { AssetAddressRegion } from './AssetAddressRegion'
 import { AssetIndustry } from './AssetIndustry'
+import { AssetPrice } from './AssetPrice'
 import { AssetProfile } from './AssetProfile'
 import { AssetSector } from './AssetSector'
-import { AssetPrice } from './AssetPrice'
 import { AssetSymbol } from './AssetSymbol'
+import { Holding } from './Holding'
 import { StockExchange } from './StockExchange'
 import { Transaction } from './Transaction'
 import { User } from './User'
 import { Watchlist } from './Watchlist'
+import { WatchlistItem } from './WatchlistItem'
 
 
 export {
@@ -26,7 +28,9 @@ export {
 
   // SecureObject(s)
   Transaction,
+  Holding,
   Watchlist,
+  WatchlistItem,
   Account,
 
   User,

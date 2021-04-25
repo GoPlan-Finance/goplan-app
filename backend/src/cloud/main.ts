@@ -16,7 +16,11 @@ require('./Auth')
 require('./User')
 
 require('./Watchlists')
+require('./WatchlistsItem')
+
 require('./Transaction')
+require('./Holding')
+
 require('./Account')
 require('./ExternalDataProvider')
 

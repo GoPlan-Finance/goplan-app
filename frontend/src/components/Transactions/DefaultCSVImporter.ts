@@ -150,8 +150,17 @@ export class DefaultCSVImporter {
     }
 
     const qty = parseFloat(row.quantity)
-    if (row.type === 'sell' && qty < 0) {
+    if ([
+      'sell', 'buy'
+    ].includes(row.type) && qty < 0) {
       row.quantity = Math.abs(qty).toString()  // Some exports contains SELL -100
+    }
+
+    const totalExcludingFees = parseFloat(row.totalExcludingFees)
+    if ([
+      'sell', 'buy'
+    ].includes(row.type) && totalExcludingFees < 0) {
+      row.totalExcludingFees = Math.abs(totalExcludingFees).toString()  // Some exports contains SELL -100
     }
 
     return row
@@ -200,7 +209,10 @@ export class DefaultCSVImporter {
         transaction.importRawData      = row
 
 
-        if (!row.assetSymbol) {
+        if (!row.assetSymbol && row.symbol) {
+
+          transaction.symbolName = row.symbol
+
           transaction.importStatus = {
             errors: [
               {missingSymbol: row.symbol},

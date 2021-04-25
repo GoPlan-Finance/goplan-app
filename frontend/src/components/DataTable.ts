@@ -10,6 +10,7 @@ export type FormatFn = (value : unknown, row : unknown) => void
 export type ValueFn = (row : unknown, header : TableHeader) => unknown
 export type SearchFn = (value : unknown, searchString : string) => boolean
 
+
 export interface TableHeader {
   key? : string,
   sort? : 'asc' | 'desc'
@@ -19,7 +20,7 @@ export interface TableHeader {
   format? : FormatTypes | FormatFn
   compare? : FormatTypes | CompareFn
   value? : ValueFn
-  width?: string
+  width? : string
 }
 
 
@@ -33,26 +34,33 @@ interface FormatterInterface {
 //  search? : SearchFn
 }
 
+
 type FormatTypes = keyof typeof formatters
 
 
 export type TableLayout = string[] | string[][]
 
+
 export interface TableLayoutCollection {
-  [Screens.DEFAULT]?: TableLayout,
-  [Screens.SM]?: TableLayout,
-  [Screens.MD]?: TableLayout,
-  [Screens.LG]?: TableLayout,
-  [Screens.XL]?: TableLayout,
-  [Screens.XL2]?: TableLayout,
+  [Screens.DEFAULT]? : TableLayout,
+  [Screens.SM]? : TableLayout,
+  [Screens.MD]? : TableLayout,
+  [Screens.LG]? : TableLayout,
+  [Screens.XL]? : TableLayout,
+  [Screens.XL2]? : TableLayout,
 }
+
 
 export interface TableConfig {
   fields : TableHeader[],
-  tableLayout: TableLayoutCollection
+  tableLayout : TableLayoutCollection
   settings? : {
     actions : boolean,
     translationPrefix : string
+    sort? : {
+      field : string,
+      direction : 'asc' | 'desc'
+    }
   },
   filters : Record<string, any>,
   search : {
@@ -138,7 +146,7 @@ export function getHandler<T> (field : TableHeader, op : keyof FormatterInterfac
 }
 
 
-export function findTableLayout (tableLayouts: TableLayoutCollection, breakpoint: Screens) {
+export function findTableLayout (tableLayouts : TableLayoutCollection, breakpoint : Screens) {
   let currentScreenSizeFound = false
   for (const screenSize of Object.values(Screens).reverse()) {
     if (screenSize === breakpoint) {

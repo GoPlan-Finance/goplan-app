@@ -11,6 +11,14 @@ export type LiveQueryUpdateFnEventType = null | 'updated' | 'created' | 'deleted
 export type LiveQueryUpdateFn<T> = (obj : T, event : LiveQueryUpdateFnEventType) => void
 type Constructible<T> = (new (...args : any[]) => T)
 
+
+interface PointerInterface {
+  __type : 'Pointer'
+  className : string
+  objectId : string
+}
+
+
 export class Query<T extends BaseObject> extends Parse.Query<T> {
 
   objectClass : Constructible<T> = null
@@ -31,15 +39,38 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
    * @param objects The array where objects will be added
    * @param updateFn A function that take a single object, that can be used to manipulate the object before it is added
    *                 to the array
-   * @param removeFn
    */
   public async liveQuery (
     objects : T[] | null,
     updateFn? : LiveQueryUpdateFn<T>,
-    removeFn? : LiveQueryUpdateFn<T>,
   ) : Promise<Parse.LiveQuerySubscription> {
 
+    const expandIncludes = async (object : T) => {
+      // @todo  We can probably remove this. More testing needed to see if LiveSubscriptions return objects with include()
+      const includes = this.toJSON().include
+
+      if (!includes) {
+        return
+      }
+
+      const promises = includes.split(',').map(async (include : string) => {
+        const val = object.get(include)
+
+        if (val && val.__type === 'Pointer') {
+          debugger
+          const obj = await Parse.Object.extend(val.className).createWithoutData(val.objectId).fetch()
+
+          object.set(include, obj)
+          console.warn('replaced pointer', val, obj)
+        }
+      })
+
+      await Promise.all(promises)
+    }
+
     const replace = async (object : T, event : LiveQueryUpdateFnEventType) => {
+
+      // await expandIncludes(object)
 
       if (object instanceof SecureObject) {
         await object.decrypt()
@@ -69,14 +100,15 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
         await object.decrypt()
       }
 
-      if (removeFn) {
-        await removeFn(object, 'deleted')
+      if (updateFn) {
+        await updateFn(object, 'deleted')
       }
 
       if (objects !== null) {
         const index = objects.findIndex(o => o.id === object.id)
 
         if (index !== -1) {
+          // delete objects[index]
           objects.splice(index, 1)
         }
       }
@@ -89,6 +121,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
       }
       tmpObjects.push(object)
     }
+
     if (objects) {
       objects.push(...tmpObjects)
     }
@@ -124,10 +157,21 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
   }
 
   public async getObjectById (
-    docId : string,
+    docId : string | PointerInterface | T,
     useMasterKey = false,
   ) : Promise<T> {
-    const doc = await this.getOrNull(docId, useMasterKey)
+
+    if (docId instanceof BaseObject) {
+      return docId
+    }
+    if (typeof docId === 'object' && docId.__type === 'Pointer'
+    ) {
+      if (typeof docId.objectId === 'string') {
+        docId = docId.objectId
+      }
+    }
+
+    const doc = await this.getOrNull(docId as string, useMasterKey)
 
     if (doc) {
       return doc
@@ -135,6 +179,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
 
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Document ${docId} not found`)
   }
+
 
   public async findBy (
     params : { [key : string] : string | boolean | number | BaseObject | Parse.Pointer },

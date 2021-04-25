@@ -78,7 +78,6 @@ export const timeScales : TimeScaleInterface[] = [
 export const getScaleForRange = (min : dayjs.Dayjs, max : dayjs.Dayjs) : TimeScaleInterface => {
   const delta = dayjs.duration(max.diff(min))
 
-  console.log('delta', dayjs(max))
   const scale = timeScales.find(s => delta.asMilliseconds() < s.visible.asMilliseconds())
 
   if (!scale) {
@@ -132,7 +131,6 @@ export const loadData = async (
   //   ]
   // })
 
-  console.log('Received ', eod.length)
   // console.table(data )
   return eod
 }

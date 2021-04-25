@@ -6,6 +6,11 @@
       :class="alignment === 'left' ? 'justify-start' : 'justify-end'"
       class="flex gap-2 mb-2"
     >
+      <slot
+        v-if="alignment ==='right'"
+        :name="`beforeFilters(${alignment})`"
+      />
+
       <label
         v-for="[ key, filter ] in Object.entries(filters).filter(([key , filter]) => ((alignment ==='right' && !filter.align) || filter.align === alignment))"
         :key="key"
@@ -36,6 +41,11 @@
       <SearchField
         v-if="config.search && (alignment === 'right')"
         v-model="search"
+      />
+
+      <slot
+        v-if="alignment ==='right'"
+        :name="`afterFilters(${alignment})`"
       />
     </div>
   </div>
@@ -125,7 +135,7 @@
       class="grid items-center"
     >
       <slot
-        :row="rowIndex"
+        :row="row"
         name="actions"
       />
     </div>
@@ -142,9 +152,9 @@ import {
   SortSettings,
   TableConfig,
   TableHeader,
+  TableLayout,
   TableRow,
   ValueFn,
-  TableLayout,
 } from '/@components/DataTable'
 import { getCurrentBreakpoint } from '/@utils/screens'
 import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
@@ -178,6 +188,62 @@ export default defineComponent({
     })
 
     const breakpoint    = ref(null)
+
+    const config : TableConfig = reactive({
+      fields   : props.config.fields,
+      settings : props.config.settings || {},
+      filters  : props.config.filters || {},
+      search   : props.config.search || {},
+    })
+
+    const search = ref('')
+
+
+    function fieldFormatValue (header : TableHeader, row) {
+      const value = header.value(row, header)
+      return header.format(value, row)
+    }
+
+    function setSort (key : string, direction : 'asc' | 'desc' = null) {
+      const header = config.fields[key]
+
+      if (sort.header !== null && sort.header.key === header.key) {
+        sort.order = sort.order === 'asc' ? 'desc' : 'asc' // reverse
+      } else {
+        sort.header = header
+
+        if (!direction) {
+          direction = header.sort === 'asc' ? 'asc' : 'desc'
+        }
+
+        sort.order = direction
+      }
+    }
+
+    function objectToNestedArrays (object : Record<any, any>) {
+      return object.map(key => {
+        if (!Array.isArray(key)) {
+          return [
+            key,
+          ]
+        }
+        return key
+      })
+    }
+
+    const tableLayout : TableLayout = computed(() => {
+      const tableLayouts = props.config.tableLayout
+      const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
+      return objectToNestedArrays(tableLayout)
+    })
+
+    tableLayout.value.forEach(layout => layout.map(fieldName => {
+      if (typeof config.fields[fieldName] !== 'object') {
+        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
+      }
+    }))
+
+
     const resizeHandler = (event) => {
       breakpoint.value = getCurrentBreakpoint(event.target.innerWidth)
     }
@@ -190,15 +256,6 @@ export default defineComponent({
     onBeforeUnmount(async () => {
       window.removeEventListener('resize', resizeHandler)
     })
-
-    const config : TableConfig = reactive({
-      fields   : props.config.fields,
-      settings : props.config.settings || {},
-      filters  : props.config.filters || {},
-      search   : props.config.search || {},
-    })
-
-    const search = ref('')
 
     for (const [
       key, field
@@ -213,10 +270,25 @@ export default defineComponent({
       //field.search = getHandler<CompareFn>(field, 'search')
     }
 
-    function fieldFormatValue (header : TableHeader, row) {
-      const value = header.value(row, header)
-      return header.format(value, row)
+    if (config.settings.sort) {
+
+      if (!Object.values(config.fields).find(field => field.key === config.settings.sort.field)) {
+        throw `Sort field ${config.settings.sort.field} doesnt exists in "fields"`
+      }
+
+      setSort(config.settings.sort.field, config.settings.sort.direction)
     }
+
+
+    const tableTemplate = computed(() => {
+      let template = ''
+      for (const column of tableLayout.value) {
+        template += config.fields[column]?.width ?? '1fr'
+        template += ' '
+      }
+      return `grid-template-columns: ${template};`
+    })
+
 
     const rowsInternal = computed(() => {
       let rows : TableRow[] = props.rows
@@ -263,49 +335,6 @@ export default defineComponent({
       return rows
     })
 
-    function setSort (key : string) {
-      const header = config.fields[key]
-
-      if (sort.header !== null && sort.header.key === header.key) {
-        sort.order = sort.order === 'asc' ? 'desc' : 'asc'
-      } else {
-        sort.header = header
-        sort.order  = header.sort === 'asc' ? 'asc' : 'desc'
-      }
-    }
-
-    function objectToNestedArrays (object: Record<any, any>) {
-      return  object.map(key => {
-        if (!Array.isArray(key)) {
-          return [
-            key,
-          ]
-        }
-        return key
-      })
-    }
-
-    const tableLayout: TableLayout = computed(() => {
-      const tableLayouts = props.config.tableLayout
-      const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
-      return objectToNestedArrays(tableLayout)
-    })
-
-    tableLayout.value.forEach(layout => layout.map(fieldName => {
-      if (typeof config.fields[fieldName] !== 'object') {
-        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
-      }
-    }))
-
-    const tableTemplate = computed(() => {
-      let template = ''
-      for (const column of tableLayout.value) {
-        template += config.fields[column]?.width ?? '1fr'
-        template += ' '
-      }
-      console.log(template)
-      return `grid-template-columns: ${template};`
-    })
 
     return {
       ...toRefs(config),
@@ -315,7 +344,7 @@ export default defineComponent({
       sort,
       search,
       tableLayout,
-      tableTemplate
+      tableTemplate,
     }
   },
 })
