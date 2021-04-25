@@ -75,6 +75,7 @@ holdings:
     closeQty: Closed Qty
     closeAvgPrice: AvgPrice
     closeTotalPrice: Closed value
+    closedPL: Unrealized P/L
     currentPrice: Current Price
     currentAvgPrice: Current Price
     currentTotalPrice: Current Value
@@ -85,9 +86,7 @@ holdings:
     firstBuyAt: First purchace
     lastSellAt: Last sell
     firstSellAt: First sell
-    closePL: Realized P/L
-    overallPL: Overall P/L
-    weight: % Portfolio
+    weight: "% Portfolio:"
 
 
 
