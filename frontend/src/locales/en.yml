@@ -86,7 +86,9 @@ holdings:
     lastSellAt: Last sell
     firstSellAt: First sell
     closePL: Realized P/L
+    overallPL: Overall P/L
     weight: % Portfolio
+
 
 
 
