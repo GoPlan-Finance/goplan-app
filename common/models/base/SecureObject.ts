@@ -46,15 +46,15 @@ export abstract class SecureObject extends BaseObject {
 
     await Promise.all(
       this.secureFields.map(async fieldName => {
-        const val = super.get(fieldName)
+          const val = super.get(fieldName)
 
-        if (val === undefined || val === null) {
-          return // Skip null/undefined values. This will occur if we add new encrypted fields to the schema.
-        }
+          if (val === undefined || val === null) {
+            return // Skip null/undefined values. This will occur if we add new encrypted fields to the schema.
+          }
 
-        this._dirtyCache[fieldName]         = false
-        this._decryptedReadCache[fieldName] = Crypto.isEncrypted(val) ? await SecureObject.decryptField(val) : val
-      },
+          this._dirtyCache[fieldName]         = false
+          this._decryptedReadCache[fieldName] = Crypto.isEncrypted(val) ? await SecureObject.decryptField(val) : val
+        },
       ))
   }
 
@@ -63,8 +63,8 @@ export abstract class SecureObject extends BaseObject {
 
 
     for (const [
-      k, v
-    ] of Object.entries(clone._decryptedReadCache)) {
+                 k, v
+               ] of Object.entries(clone._decryptedReadCache)) {
       this._decryptedReadCache[k] = v
     }
     return clone
@@ -99,15 +99,10 @@ export abstract class SecureObject extends BaseObject {
     return await Crypto.encrypt(SecureObject.sessionDerivedKey, val)
   }
 
-
-  async save (
-    target : SecureObject | Array<SecureObject | Parse.File> = undefined,
-    options : Parse.RequestOptions                           = undefined,
-  ) : Promise<this> {
-
+  private async encrypt () {
     for (const [
-      fieldName, isDirty
-    ] of Object.entries(this._dirtyCache)) {
+                 fieldName, isDirty
+               ] of Object.entries(this._dirtyCache)) {
 
       if (!isDirty) {
         continue
@@ -117,7 +112,14 @@ export abstract class SecureObject extends BaseObject {
 
       super.set(fieldName, await SecureObject.encryptField(value))
     }
+  }
 
+  async save (
+    target : SecureObject | Array<SecureObject | Parse.File> = undefined,
+    options : Parse.RequestOptions                           = undefined,
+  ) : Promise<this> {
+
+    await this.encrypt()
 
     const savedObject = await super.save(target, options)
 
@@ -185,6 +187,18 @@ export abstract class SecureObject extends BaseObject {
     return setValue(key as string, value)
   }
 
+
+  public static async saveAll<T extends readonly SecureObject[]> (
+    list : T,
+    options? : Parse.Object.SaveAllOptions,
+  ) : Promise<T> {
+
+    for (const obj of list) {
+      await obj.encrypt()
+    }
+
+    return super.saveAll(list, options)
+  }
 
 }
 

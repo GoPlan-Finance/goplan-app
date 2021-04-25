@@ -62,7 +62,7 @@ export default defineComponent({
       default : false,
     },
     modelValue: {
-      required  : true,
+      required  : false,
       validator : prop => prop instanceof AssetSymbol || typeof prop === 'string' || prop === null || prop === undefined,
     },
     searchFieldClass: {

@@ -57,7 +57,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
         const val = object.get(include)
 
         if (val && val.__type === 'Pointer') {
-          debugger
+
           const obj = await Parse.Object.extend(val.className).createWithoutData(val.objectId).fetch()
 
           object.set(include, obj)
@@ -191,7 +191,7 @@ export class Query<T extends BaseObject> extends Parse.Query<T> {
     ] of Object.entries(params)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      query.equalTo(k, v)
+      this.equalTo(k, v)
     }
 
     return this.find(BaseObject.useMasterKey(useMasterKey))
