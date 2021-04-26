@@ -187,7 +187,7 @@ export default defineComponent({
       order  : 'desc',
     })
 
-    const breakpoint    = ref(null)
+    const breakpoint = ref(null)
 
     const config : TableConfig = reactive({
       fields   : props.config.fields,
@@ -199,7 +199,7 @@ export default defineComponent({
     const search = ref('')
 
 
-    function fieldFormatValue (header : TableHeader, row) {
+    function fieldFormatValue (header : TableHeader, row) : string {
       const value = header.value(row, header)
       return header.format(value, row)
     }
@@ -234,14 +234,17 @@ export default defineComponent({
     const tableLayout : TableLayout = computed(() => {
       const tableLayouts = props.config.tableLayout
       const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
-      return objectToNestedArrays(tableLayout)
-    })
 
-    tableLayout.value.forEach(layout => layout.map(fieldName => {
-      if (typeof config.fields[fieldName] !== 'object') {
-        throw `The field ${fieldName} is present in "headerLayout", but missing in "  fields"`
-      }
-    }))
+      const arr = objectToNestedArrays(tableLayout)
+
+      arr.forEach(layout => layout.map(fieldName => {
+        if (!config.fields[fieldName] || typeof config.fields[fieldName] !== 'object') {
+          throw `The field "${fieldName}" is present in "headerLayout", but missing in "  fields"`
+        }
+      }))
+
+      return arr
+    })
 
 
     const resizeHandler = (event) => {
@@ -264,10 +267,11 @@ export default defineComponent({
         field.key = key
       }
 
-      field.format  = getHandler<FormatFn>(field, 'format')
       field.value   = getHandler<ValueFn>(field, 'value')
       field.compare = getHandler<CompareFn>(field, 'compare')
       //field.search = getHandler<CompareFn>(field, 'search')
+
+      field.format  = getHandler<FormatFn>(field, 'format')
     }
 
     if (config.settings.sort) {

@@ -75,6 +75,12 @@ export interface SortSettings {
 }
 
 
+export interface RangeValue {
+  from : number
+  to : number
+}
+
+
 type Formatters = { [key : string] : FormatterInterface }
 
 function dateFormat (format) {
@@ -107,6 +113,20 @@ export const formatters : Formatters = {
     format: (value : number) => `${(value * 100).toFixed(2)} %`,
   },
 
+  range: {
+    compare: (a : RangeValue, b : RangeValue) : number => {
+
+      if (!a) {
+        return 1
+      }
+      if (!b) {
+        return -1
+      }
+
+      return (b.to - b.from) - (a.to - a.from)
+    },
+  },
+
   ___default___: {
     value   : (row : unknown, header : TableHeader) => row[header.key],
     format  : value => value,
@@ -130,16 +150,30 @@ export const formatters : Formatters = {
 
 export function getHandler<T> (field : TableHeader, op : keyof FormatterInterface) : T {
 
-  const handler = field[op] ? field[op] : '___default___'
+  const formatHandler = (handler, op) => {
+    const formatType : FormatterInterface = formatters[handler as FormatTypes]
 
-  if (typeof handler === 'function') {
-    return handler as unknown as T
+    if (formatType && formatType[op]) {
+      return formatType[op] as unknown as T
+    }
+    return null
   }
 
-  const formatType : FormatterInterface = formatters[handler as FormatTypes]
+  if (typeof field[op] === 'function') {
+    return field[op] as unknown as T
+  }
 
-  if (formatType && formatType[op]) {
-    return formatType[op] as unknown as T
+  const format = field['format']
+  if (typeof format === 'string') {
+    const handler = formatHandler(format, op)
+    if (handler) {
+      return handler
+    }
+  }
+
+  const handler = formatHandler('___default___', op)
+  if (handler) {
+    return handler
   }
 
   throw `Unknown table data "${op}" for "${handler}"`

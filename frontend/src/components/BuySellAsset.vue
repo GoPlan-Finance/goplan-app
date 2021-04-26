@@ -6,18 +6,18 @@
   >
     <template #button>
       <slot name="button">
-      <ButtonDefault
-        :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
-      >
-        <template
-          v-if="!transaction?.id"
-          #before
+        <ButtonDefault
+          :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
         >
-          <PlusCircleIcon
-            class="h-6 w-6"
-          />
-        </template>
-      </ButtonDefault>
+          <template
+            v-if="!transaction?.id"
+            #before
+          >
+            <PlusCircleIcon
+              class="h-6 w-6"
+            />
+          </template>
+        </ButtonDefault>
       </slot>
     </template>
     <template #content>
@@ -120,7 +120,7 @@ import AssetSearch from '/@components/AssetSearch.vue'
 import Modal from '/@components/base/GoModal.vue'
 import { PlusCircleIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
-import { computed, defineComponent, onBeforeMount, ref, toRef, watch } from 'vue'
+import { computed, defineComponent, ref, toRef } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 
 
@@ -196,17 +196,18 @@ export default defineComponent({
 
 
     const isValid = computed<boolean>(() => transactionInternal.value
-                                           && !!transactionInternal.value.symbolName
-                                           && !isNaN(transactionInternal.value.price)
-                                           && !isNaN(transactionInternal.value.quantity)
-                                           && dayjs(transactionInternal.value.executedAt).isValid()
-                                           && !!transactionInternal.value.account
-    )
+                                            && !!transactionInternal.value.symbolName
+                                            && !isNaN(transactionInternal.value.price)
+                                            && !isNaN(transactionInternal.value.quantity)
+                                            && dayjs(transactionInternal.value.executedAt).isValid()
+                                            && !!transactionInternal.value.account)
 
     const save = async (type : 'buy' | 'sell' | undefined) => {
       if (transactionInternal.value.isNew()) {
         transactionInternal.value.type = type
       }
+
+      transactionInternal.value.totalExcludingFees = transactionInternal.value.quantity * transactionInternal.value.quantity
 
       await transactionInternal.value.save()
       transactionInternal.value = new Transaction()

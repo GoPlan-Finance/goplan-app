@@ -163,7 +163,8 @@ export class HoldingHelper {
   public static async maybeUpdateOutdated (holding : Holding) : Promise<void> {
     if (holding.isOutdated) {
       try {
-        HoldingHelper.updateHolding(holding)
+        await HoldingHelper.updateHolding(holding)
+
       } catch (e) {
         console.error(`maybeUpdateOutdated(${holding.symbolName}) : ${e}`)
       }

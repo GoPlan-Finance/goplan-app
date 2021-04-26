@@ -1,94 +1,81 @@
 details:
-  address: 'Address'
-  ceo: 'CEO'
-  company_information: 'Company Information'
-  company_name: 'Company Name'
-  country: 'Country'
-  description: 'Description'
-  exchange: 'Exchange'
-  full_time_employees: 'Full Time Employees'
-  industry: 'Industry'
-  ipo_date: 'IPO Date'
-  isin: 'ISIN'
-  sector: 'Sector'
-  symbol: 'Symbol'
-  website: 'Website'
-
-watchlists:
-  headline: Watchlists
-  updated: Updated
-  show_more: 'Show More'
-
-
+  address: Address
+  ceo: CEO
+  company_information: Company Information
+  company_name: Company Name
+  country: Country
+  description: Description
+  exchange: Exchange
+  full_time_employees: Full Time Employees
+  industry: Industry
+  ipo_date: IPO Date
+  isin: ISIN
+  sector: Sector
+  symbol: Symbol
+  website: Website
+holdings:
+  headline: Holdings
+  table:
+    closeAvgPrice: AvgPrice
+    closeQty: Closed Qty
+    closeTotalPrice: Closed value
+    closedPL: Closed P/L
+    currentAvgPrice: Current Price
+    currentPrice: Current Price
+    currentTotalPrice: Current Value
+    dayPL: Day P/L
+    dayPLChange: Daily Change
+    firstBuyAt: First purchace
+    firstSellAt: First sell
+    lastBuyAt: Last purchace
+    lastSellAt: Last sell
+    name: Symbol
+    openAvgPrice: Avg Price
+    openPL: Open P/L
+    openQty: Open Qty
+    openTotalPrice: Book Value
+    symbolName: Ticker
+    weight: '% Portfolio:'
+quote:
+  avgVolume: Avg. Volume
+  change: Change
+  change_percent: Change %
+  dayRange: Day Range
+  earningsAnnouncement: Earning date
+  eps: EPS
+  exchange: Exchange
+  marketCap: Market Cap
+  open: Open
+  pe: PE
+  previousClose: Previous Close
+  priceAvg200: Avg 200 Days
+  priceAvg50: Avg 50 days
+  sharesOutstanding: Shares Outstanding
+  volume: Volume
+  yearRange: Year Range
 transactions:
   headline: Transactions
   table:
     buy: Buy
-    fees: Fees
-    transfer: Transfer
     dividends: Dividends
-    totalExcludingFees: Total Excluding Fees
     executedAt: Date
+    fees: Fees
     name: Name
-    symbolName: Ticker
     price: Price
     quantity: Quantity
     sell: Sell
+    symbolName: Ticker
+    totalExcludingFees: Total Excluding Fees
+    transfer: Transfer
     type: Type
     value: Value
-
 watchlist:
   table:
-    name: Name
     createdAt: Date Added
-    ticker: Symbol
     dayPLChange: Day P/L
-
-quote:
-  open: Open
-  previousClose: Previous Close
-  change_percent: Change %
-  change: Change
-  dayRange: Day Range
-  yearRange: Year Range
-  marketCap: Market Cap
-  priceAvg50: Avg 50 days
-  priceAvg200: Avg 200 Days
-  volume: Volume
-  avgVolume: Avg. Volume
-  exchange: Exchange
-  eps: EPS
-  pe: PE
-  earningsAnnouncement: Earning date
-  sharesOutstanding: Shares Outstanding
-
-
-
-holdings:
-  headline: Holdings
-  table:
-    symbolName: Ticker
-    name: Symbol
-    openQty: Open Qty
-    openAvgPrice: Avg Price
-    openTotalPrice: Book Value
-    closeQty: Closed Qty
-    closeAvgPrice: AvgPrice
-    closeTotalPrice: Closed value
-    currentPrice: Current Price
-    currentAvgPrice: Current Price
-    currentTotalPrice: Current Value
-    dayPLChange: Daily Change
-    dayPL: Day P/L
-    openPL: Unrealized P/L
-    lastBuyAt: Last purchace
-    firstBuyAt: First purchace
-    lastSellAt: Last sell
-    firstSellAt: First sell
-    closePL: Realized P/L
-    weight: % Portfolio
-
-
-
-
-
+    name: Name
+    ticker: Symbol
+watchlists:
+  headline: Watchlists
+  show_more: Show More
+  updated: Updated
