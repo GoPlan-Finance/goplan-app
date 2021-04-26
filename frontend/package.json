@@ -41,7 +41,7 @@
     "ts-money": "^0.4.6",
     "vue": "^3.0.11",
     "vue-echarts": "^6.0.0-rc.4",
-    "vue-feather": "^2.0.0-beta",
+    "vue-feather": "^2.0.0-beta.1",
     "vue-gapi": "next",
     "vue-i18n": "^9.1.6",
     "vue-router": "^4.0.6"
