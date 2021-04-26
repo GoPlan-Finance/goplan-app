@@ -21,9 +21,10 @@ export default defineComponent({
   },
   setup(props) {
     return {
-      icon: defineAsyncComponent(() =>
-        import(`/node_modules/@heroicons/vue/${props.type}/esm/${props.name}Icon.js`)
-      )
+      icon: defineAsyncComponent({
+        loader: () => import(`/node_modules/@heroicons/vue/${props.type}/esm/${props.name}Icon.js`),
+        suspensible: false,
+      })
     }
   }
 })
