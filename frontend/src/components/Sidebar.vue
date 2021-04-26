@@ -30,9 +30,7 @@
           title="Holdings"
           to="/holdings"
         >
-          <RefreshIcon
-            class="h-5 w-5"
-          />
+          <GoIcons name="MenuAlt2" type="outline" class="h-5 w-5" />
         </navigation-item>
 
 
@@ -40,9 +38,7 @@
           title="Transactions"
           to="/transactions"
         >
-          <RefreshIcon
-            class="h-5 w-5"
-          />
+          <GoIcons name="SwitchHorizontal" type="outline" class="h-5 w-5" />
         </navigation-item>
 
 
@@ -53,9 +49,7 @@
           title="Watchlists"
           to="/watchlists"
         >
-          <TrendingUpIcon
-            class="h-5 w-5"
-          />
+          <GoIcons name="TrendingUp" type="outline" class="h-5 w-5" />
         </navigation-item>
       </nav>
     </div>
@@ -63,7 +57,6 @@
 </template>
 
 <script lang="ts">
-import { RefreshIcon, TrendingUpIcon } from '@heroicons/vue/outline'
 import { defineComponent } from 'vue'
 import { useSidebar } from '../hooks/useSidebar'
 import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
@@ -71,7 +64,7 @@ import NavigationItem from './NavigationItem.vue'
 
 
 export default defineComponent({
-  components: {GoPlanLogo, NavigationItem, TrendingUpIcon, RefreshIcon},
+  components: {GoPlanLogo, NavigationItem},
   setup () {
     const {isOpen} = useSidebar()
 

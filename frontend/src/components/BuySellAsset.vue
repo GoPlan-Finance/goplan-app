@@ -13,9 +13,7 @@
             v-if="!transaction?.id"
             #before
           >
-            <PlusCircleIcon
-              class="h-6 w-6"
-            />
+            <GoIcons name="PlusCircle" class="h-6 w-6" />
           </template>
         </ButtonDefault>
       </slot>
@@ -118,14 +116,13 @@ import { Query } from '/@common/Query'
 import AccountSelect from '/@components/AccountSelect.vue'
 import AssetSearch from '/@components/AssetSearch.vue'
 import Modal from '/@components/base/GoModal.vue'
-import { PlusCircleIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { computed, defineComponent, ref, toRef } from 'vue'
 import ButtonDefault from './base/ButtonDefault.vue'
 
 
 export default defineComponent({
-  components : {AccountSelect, AssetSearch, Modal, ButtonDefault, PlusCircleIcon},
+  components : {AccountSelect, AssetSearch, Modal, ButtonDefault},
   props      : {
     assetSymbol: {
       type    : AssetSymbol,
