@@ -2,12 +2,12 @@
   <HeadlineActions
     :headline="$t('holdings.headline')"
   >
-    <buy-sell-asset/>
+    <buy-sell-asset />
   </HeadlineActions>
 
 
   <h1 class="text-gray-700 text-2xl  items-center">
-    Open Positions
+    Active Positions
   </h1>
 
   <holdings-table
@@ -15,9 +15,11 @@
     :table-layout="open.tableLayout"
   />
 
+  <br>
+  <br>
 
   <h1 class="text-gray-700 text-2xl  items-center">
-    Closed Positions
+    Previous Positions
   </h1>
   <holdings-table
     :rows="closed.rows"
@@ -37,17 +39,17 @@ import { useHoldingStore } from '../store'
 
 
 export default defineComponent({
-  components : {
+  components: {
     HoldingsTable,
     BuySellAsset,
     HeadlineActions,
   },
   setup () {
     const data = reactive({
-      open   : {
+      open: {
         rows        : [],
         tableLayout : {
-          [Screens.DEFAULT] : [
+          [Screens.DEFAULT]: [
             [
               'symbolName', 'openQty',
             ],
@@ -55,7 +57,7 @@ export default defineComponent({
               'openPL', 'openTotalPrice',
             ],
           ],
-          [Screens.SM]      : [
+          [Screens.SM]: [
             [
               'symbolName', 'name',
             ],
@@ -72,38 +74,36 @@ export default defineComponent({
               'openPL',
             ],
             [
+              'closedPL',
+            ],
+
+            [
               'dayPLChange', /*'dayPL',*/
             ],
             'weight',
           ],
         },
       },
-      closed : {
+      closed: {
         rows        : [],
         tableLayout : {
-          [Screens.DEFAULT] : [
+          [Screens.DEFAULT]: [
             [
-              'symbolName', 'openQty',
+              'symbolName',
             ],
             [
-              'openPL', 'openTotalPrice',
+              'closedPL',
             ],
           ],
-          [Screens.SM]      : [
+          [Screens.SM]: [
             [
               'symbolName', 'name',
             ],
             [
-              'buyQty', 'lastSellAt',
+              'lastSellAt',
             ],
             [
-              'currentTotalPrice', 'currentAvgPrice',
-            ],
-            [
-              'closedPL', /* 'openTotalPrice',   'overallPL',*/
-            ],
-            [
-              'dayPLChange', /*'dayPL',*/
+              'closedPL',
             ],
           ],
         },

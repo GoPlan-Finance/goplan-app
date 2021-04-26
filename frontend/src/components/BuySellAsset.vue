@@ -5,7 +5,7 @@
     @opened="modalOpened"
   >
     <template #button>
-      <slot>
+      <slot name="button">
         <ButtonDefault
           :label="transaction?.id ? 'Edit' : 'Buy/Sell'"
         >

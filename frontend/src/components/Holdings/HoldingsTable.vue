@@ -42,25 +42,28 @@
 
 
     <template
-      #field(openPL)="{ row }"
+      #field(openPL)="{ value }"
     >
       <AssetPriceChange
-        v-if="row.openQty !== 0 && row.lastPrice"
-        :compare-from="row.openQty * row.openAvgPrice"
-        :compare-to=" row.openQty * row.lastPrice.price"
+        v-if="value"
+        :compare-from="value.from"
+        :compare-to="value.to"
       />
-
       <span v-else>
         --
       </span>
     </template>
     <template
-      #field(closedPL)="{ row }"
+      #field(closedPL)="{ value }"
     >
       <AssetPriceChange
-        :compare-from="row.buyTotalPrice"
-        :compare-to=" row.closedTotalPrice"
+        v-if="value"
+        :compare-from="value.from"
+        :compare-to="value.to"
       />
+      <span v-else>
+        --
+      </span>
     </template>
 
     <!--    <template-->
@@ -76,18 +79,18 @@
     <!--        </span>-->
     <!--    </template>-->
 
-    <template
-      #field(overallPL)="{ row }"
-    >
-      <AssetPriceChange
-        v-if="row.lastPrice"
-        :compare-from="row.buyQty * row.buyAvgPrice"
-        :compare-to="(row.openQty * row.lastPrice.price) + ( row.closedQty * row.closedAvgPrice)"
-      />
-      <span v-else>
-        --
-      </span>
-    </template>
+    <!--    <template-->
+    <!--      #field(overallPL)="{ row }"-->
+    <!--    >-->
+    <!--      <AssetPriceChange-->
+    <!--        v-if="row.lastPrice"-->
+    <!--        :compare-from="row.buyQty * row.buyAvgPrice"-->
+    <!--        :compare-to="(row.openQty * row.lastPrice.price) + ( row.closedQty * row.closedAvgPrice)"-->
+    <!--      />-->
+    <!--      <span v-else>-->
+    <!--        &#45;&#45;-->
+    <!--      </span>-->
+    <!--    </template>-->
   </DataTable>
 </template>
 
@@ -95,11 +98,11 @@
 
 import { Holding } from '/@common/models/Holding'
 import AssetPriceChange from '/@components/AssetPriceChange.vue'
-import { TableLayout, TableRow } from '/@components/DataTable'
+import { RangeValue, TableLayout, TableRow } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import * as dayjs from 'dayjs'
-import { defineComponent, reactive, ref, toRefs } from 'vue'
+import { defineComponent, PropType, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
@@ -110,11 +113,11 @@ export default defineComponent({
   },
   props: {
     rows: {
-      type     : Object as TableRow[],
+      type     : Object as PropType<TableRow[]>,
       required : true,
     },
     tableLayout: {
-      type     : Object as TableLayout[],
+      type     : Object as PropType<TableLayout[]>,
       required : true,
     },
   },
@@ -141,12 +144,12 @@ export default defineComponent({
 
           currentTotalPrice: {
             private : true,
-            value   : (row : Holding) => (!row.lastPrice ? '' : row.lastPrice.price * row.openQty),
+            value   : (row : Holding) => (!row.lastPrice ? null : row.lastPrice.price * row.openQty),
             format  : 'currency',
           },
           currentAvgPrice: {
             value: (row : Holding) => {
-              return !row.lastPrice ? '' : row.lastPrice.price
+              return !row.lastPrice ? null : row.lastPrice.price
             },
             format: 'money',
           },
@@ -170,13 +173,16 @@ export default defineComponent({
             format: 'money',
           },
           openPL: {
-            format : 'percent',
-            value  : (row : Holding) => {
+            format : 'range',
+            value  : (row : Holding) : RangeValue => {
               if (!row.lastPrice || row.openAvgPrice === 0) {
-                return 0
+                return null
               }
 
-              return (row.lastPrice.price / row.openAvgPrice) - 1
+              return {
+                from : row.openQty * row.openAvgPrice,
+                to   : row.openQty * row.lastPrice.price,
+              }
             },
           },
           //
@@ -191,17 +197,19 @@ export default defineComponent({
             format  : 'currency',
           },
           closedPL: {
-            format : 'percent',
-            value  : (row : Holding) => {
-              if (!row.lastPrice || row.openAvgPrice === 0) {
-                return 0
+            format : 'range',
+            value  : (row : Holding) : RangeValue => {
+              if (row.closedQty === 0) {
+                return null
               }
 
-              return (row.lastPrice.price / row.openAvgPrice) - 1
+              return {
+                from : row.closedQty * row.buyAvgPrice,
+                to   : row.closedQty * row.closedAvgPrice,
+              }
             },
           },
           //
-
           dayPLChange: {
             format : 'percent',
             value  : (row : Holding) => {
