@@ -4,16 +4,19 @@
 
 <script>
 import { defineAsyncComponent, defineComponent } from 'vue'
+import { icons } from './icons'
 
 export default defineComponent({
   props: {
     name:{
       type: String,
       required: true,
+      validator: value => Object.values(icons).includes(value)
     },
     type:{
       type: String,
-      default: 'solid'
+      default: 'solid',
+      validator: value => value === 'solid' || value === 'outline'
     }
   },
   setup(props) {
