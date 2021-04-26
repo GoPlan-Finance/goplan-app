@@ -61,7 +61,7 @@
     "autoprefixer": "^10.2.5",
     "concurrently": "^6.0.2",
     "cross-env": "^7.0.2",
-    "eslint": "^7.24.0",
+    "eslint": "^7.25.0",
     "eslint-plugin-varspacing": "^1.2.2",
     "eslint-plugin-vue": "^7.9.0",
     "postcss": "^8.2.12",
