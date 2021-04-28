@@ -32,7 +32,7 @@
     "async-mutex": "^0.3.1",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
-    "echarts": "^5.1.0",
+    "echarts": "^5.1.1",
     "feather-icons": "^4.28.0",
     "papaparse": "^5.3.0",
     "parse": "^3.2.0",
