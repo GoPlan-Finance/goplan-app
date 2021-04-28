@@ -64,7 +64,7 @@
     "eslint": "^7.25.0",
     "eslint-plugin-varspacing": "^1.2.2",
     "eslint-plugin-vue": "^7.9.0",
-    "postcss": "^8.2.12",
+    "postcss": "^8.2.13",
     "typescript": "^4.2.4",
     "vite": "^2.2.3",
     "vite-plugin-rewrite-all": "^0.1.2",
