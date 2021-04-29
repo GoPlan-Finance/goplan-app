@@ -1,0 +1,52 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/backend"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/parse"
+    versions:
+    - 2.18.5
+  - dependency-name: eslint
+    versions:
+    - 7.21.0
+    - 7.24.0
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+    versions:
+    - 4.19.0
+    - 4.21.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.19.0
+- package-ecosystem: npm
+  directory: "/frontend"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.39
+  - dependency-name: "@heroicons/vue"
+    versions:
+    - 1.0.1
+  - dependency-name: "@types/parse"
+    versions:
+    - 2.18.5
+  - dependency-name: eslint
+    versions:
+    - 7.24.0
+  - dependency-name: pinia
+    versions:
+    - 2.0.0-alpha.13
+  - dependency-name: parse
+    versions:
+    - 3.2.0
+  - dependency-name: typescript
+    versions:
+    - 4.2.4
+  - dependency-name: "@tailwindcss/forms"
+    versions:
+    - 0.3.0
