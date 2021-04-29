@@ -92,19 +92,21 @@
       >
         <!--      @todo case sensitive row.type-->
         <template #button>
-          <PencilIcon class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300" />
+          <GoIcons
+            name="Pencil"
+            class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300"
+          />
         </template>
       </buy-sell-asset>
       <div
         v-else
         class="h-6 w-6"
       />
-      <div
-        class="cursor-pointer hover:text-red-600 text-gray-300"
+      <GoIcons
+        name="Trash"
+        class="h-6 w-6 cursor-pointer hover:text-red-600 text-gray-300"
         @click="remove(row)"
-      >
-        <TrashIcon class="h-6 w-6" />
-      </div>
+      />
     </template>
   </DataTable>
 </template>
@@ -114,7 +116,6 @@ import { Transaction } from '/@common/models'
 import { formatCurrency, padDecimals } from '/@common/utils'
 import { useAccountStore, useTransactionStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
-import { ArrowCircleLeftIcon, PencilIcon, TrashIcon } from '@heroicons/vue/solid'
 import * as dayjs from 'dayjs'
 import { defineComponent, onBeforeMount, reactive, toRefs, watch } from 'vue'
 import BuySellAsset from '../components/BuySellAsset.vue'
@@ -126,7 +127,7 @@ import ImportTransactionsModal from '../components/Transactions/ImportTransactio
 
 export default defineComponent({
   components: {
-    BuySellAsset, HeadlineActions, DataTable, AppLink, ArrowCircleLeftIcon, PencilIcon, TrashIcon, ImportTransactionsModal,
+    BuySellAsset, HeadlineActions, DataTable, AppLink, ImportTransactionsModal,
   },
   setup () {
     const data             = reactive({

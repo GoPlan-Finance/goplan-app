@@ -7,45 +7,39 @@
         class="text-gray-500 focus:outline-none lg:hidden"
         @click="isOpen = true"
       >
-        <svg
-          class="h- w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 6H20M4 12H20M4 18H11"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
-        </svg>
+        <GoIcons
+          name="Menu"
+          class="h-6 w-6"
+        />
       </button>
 
       <SearchBar class="mx-4 lg:mx-0 sm:w-96 active:w-full" />
     </div>
 
-    <div class="flex items-center">
-      <a
-        href="#"
+    <div class="flex items-center gap-4">
+      <div
+        class="hover:text-gray-500 cursor-pointer"
         @click="setPrivateMode(!privateMode)"
       >
-        <EyeIcon
+        <GoIcons
           v-if="privateMode !== true"
+          name="Eye"
+          type="outline"
           class="h-7 w-7"
         />
-        <EyeOffIcon
+        <GoIcons
           v-if="privateMode === true"
+          name="EyeOff"
+          type="outline"
           class="h-7 w-7"
         />
-      </a>
+      </div>
 
-      <button class="flex mx-4 text-gray-600 focus:outline-none">
-        <BellIcon
-          class="h-7 w-7"
-        />
-      </button>
+      <GoIcons
+        name="Bell"
+        type="outline"
+        class="h-7 w-7 hover:text-gray-500 cursor-pointer"
+      />
 
       <div class="relative">
         <button
@@ -98,7 +92,6 @@
 </template>
 
 <script lang="ts">
-import { BellIcon, EyeIcon, EyeOffIcon } from '@heroicons/vue/outline'
 import { defineComponent, computed, inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSidebar } from '../hooks/useSidebar'
@@ -108,7 +101,7 @@ import SearchBar from './SearchBar.vue'
 
 export default defineComponent({
   components: {
-    SearchBar, BellIcon, EyeIcon, EyeOffIcon,
+    SearchBar
   },
   // eslint-disable-next-line no-unused-vars
   setup () {
