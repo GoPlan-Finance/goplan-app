@@ -3,7 +3,10 @@
     class="relative"
   >
     <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-      <GoIcons name="Search" class="h-5 w-5 text-gray-300"/>
+      <GoIcons
+        name="Search"
+        class="h-5 w-5 text-gray-300"
+      />
     </span>
 
     <input
@@ -23,7 +26,7 @@ import { defineComponent } from 'vue'
 
 
 export default defineComponent({
-  props      : {
+  props: {
     modelValue: {
       type     : String,
       required : true,

@@ -92,7 +92,10 @@
       >
         <!--      @todo case sensitive row.type-->
         <template #button>
-          <GoIcons name="Pencil" class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300"/>
+          <GoIcons
+            name="Pencil"
+            class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300"
+          />
         </template>
       </buy-sell-asset>
       <div
@@ -100,7 +103,8 @@
         class="h-6 w-6"
       />
       <GoIcons
-        name="Trash" class="h-6 w-6 cursor-pointer hover:text-red-600 text-gray-300"
+        name="Trash"
+        class="h-6 w-6 cursor-pointer hover:text-red-600 text-gray-300"
         @click="remove(row)"
       />
     </template>

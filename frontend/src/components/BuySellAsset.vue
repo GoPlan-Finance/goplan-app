@@ -13,7 +13,10 @@
             v-if="!transaction?.id"
             #before
           >
-            <GoIcons name="PlusCircle" class="h-6 w-6" />
+            <GoIcons
+              name="PlusCircle"
+              class="h-6 w-6"
+            />
           </template>
         </ButtonDefault>
       </slot>

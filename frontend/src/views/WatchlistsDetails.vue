@@ -75,7 +75,10 @@
           class="cursor-pointer hover:text-red-600 text-gray-300"
           @click="remove(row)"
         >
-          <GoIcons name="Trash" class="h-6 w-6" />
+          <GoIcons
+            name="Trash"
+            class="h-6 w-6"
+          />
         </div>
       </template>
     </DataTable>

@@ -30,7 +30,11 @@
           title="Holdings"
           to="/holdings"
         >
-          <GoIcons name="MenuAlt2" type="outline" class="h-5 w-5" />
+          <GoIcons
+            name="MenuAlt2"
+            type="outline"
+            class="h-5 w-5"
+          />
         </navigation-item>
 
 
@@ -38,7 +42,11 @@
           title="Transactions"
           to="/transactions"
         >
-          <GoIcons name="SwitchHorizontal" type="outline" class="h-5 w-5" />
+          <GoIcons
+            name="SwitchHorizontal"
+            type="outline"
+            class="h-5 w-5"
+          />
         </navigation-item>
 
 
@@ -49,7 +57,11 @@
           title="Watchlists"
           to="/watchlists"
         >
-          <GoIcons name="TrendingUp" type="outline" class="h-5 w-5" />
+          <GoIcons
+            name="TrendingUp"
+            type="outline"
+            class="h-5 w-5"
+          />
         </navigation-item>
       </nav>
     </div>

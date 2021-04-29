@@ -7,7 +7,10 @@
         class="text-gray-500 focus:outline-none lg:hidden"
         @click="isOpen = true"
       >
-        <GoIcons name="Menu" class="h-6 w-6" />
+        <GoIcons
+          name="Menu"
+          class="h-6 w-6"
+        />
       </button>
 
       <SearchBar class="mx-4 lg:mx-0 sm:w-96 active:w-full" />
@@ -15,8 +18,8 @@
 
     <div class="flex items-center gap-4">
       <div
-        @click="setPrivateMode(!privateMode)"
         class="hover:text-gray-500 cursor-pointer"
+        @click="setPrivateMode(!privateMode)"
       >
         <GoIcons
           v-if="privateMode !== true"
@@ -32,7 +35,11 @@
         />
       </div>
 
-      <GoIcons name="Bell" type="outline" class="h-7 w-7 hover:text-gray-500 cursor-pointer" />
+      <GoIcons
+        name="Bell"
+        type="outline"
+        class="h-7 w-7 hover:text-gray-500 cursor-pointer"
+      />
 
       <div class="relative">
         <button
