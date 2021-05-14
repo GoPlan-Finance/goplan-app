@@ -13,9 +13,7 @@
         class="font-bold"
         to="ticker_details"
       >
-        <p class="mr-3 font-bold">
-          {{ value }}
-        </p>
+        {{ value }}
       </AppLink>
       <span v-else>
         {{ value }}
@@ -28,12 +26,10 @@
       <AppLink
         v-if="row.symbol"
         :ticker="row.symbolName"
-        class="font-bold"
+        class="text-gray-500"
         to="ticker_details"
       >
-        <p class="font-normal text-sm">
-          {{ value }}
-        </p>
+        {{ value }}
       </AppLink>
       <span v-else>
         {{ value }}
@@ -42,12 +38,28 @@
 
 
     <template
-      #field(openPL)="{ value }"
+      #field(openPLPercent)="{ value }"
     >
-      <AssetPriceChange
+      <PriceChange
         v-if="value"
         :compare-from="value.from"
         :compare-to="value.to"
+        :currency="value.currency"
+        class="font-bold"
+      />
+      <span v-else>
+        --
+      </span>
+    </template>
+    <template
+      #field(openPL)="{ value }"
+    >
+      <PriceChange
+        v-if="value"
+        :compare-from="value.from"
+        :compare-to="value.to"
+        :currency="value.currency"
+        type="total"
       />
       <span v-else>
         --
@@ -56,48 +68,23 @@
     <template
       #field(closedPL)="{ value }"
     >
-      <AssetPriceChange
+      <PriceChange
         v-if="value"
         :compare-from="value.from"
         :compare-to="value.to"
+        :currency="value.currency"
       />
       <span v-else>
         --
       </span>
     </template>
-
-    <!--    <template-->
-    <!--      #field(dayPLChange)="{ row}"-->
-    <!--    >-->
-    <!--      <AssetPriceChange-->
-    <!--        v-if="row.lastPrice"-->
-    <!--        :compare-from="(openOrClose === 'close' ?row.openQty : 1) * row.lastPrice.previousClose"-->
-    <!--        :compare-to=" (openOrClose === 'close' ?row.openQty : 1)* row.lastPrice.price"-->
-    <!--      />-->
-    <!--      <span v-else>-->
-    <!--          &#45;&#45;-->
-    <!--        </span>-->
-    <!--    </template>-->
-
-    <!--    <template-->
-    <!--      #field(overallPL)="{ row }"-->
-    <!--    >-->
-    <!--      <AssetPriceChange-->
-    <!--        v-if="row.lastPrice"-->
-    <!--        :compare-from="row.buyQty * row.buyAvgPrice"-->
-    <!--        :compare-to="(row.openQty * row.lastPrice.price) + ( row.closedQty * row.closedAvgPrice)"-->
-    <!--      />-->
-    <!--      <span v-else>-->
-    <!--        &#45;&#45;-->
-    <!--      </span>-->
-    <!--    </template>-->
   </DataTable>
 </template>
 
 <script lang="ts">
 
 import { Holding } from '/@common/models/Holding'
-import AssetPriceChange from '/@components/AssetPriceChange.vue'
+import PriceChange from '/@components/PriceChange.vue'
 import { RangeValue, TableLayout, TableRow } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
 import AppLink from '/@components/router/AppLink.vue'
@@ -107,7 +94,7 @@ import { defineComponent, PropType, reactive, ref, toRefs } from 'vue'
 
 export default defineComponent({
   components: {
-    AssetPriceChange,
+    PriceChange,
     DataTable,
     AppLink,
   },
@@ -129,51 +116,53 @@ export default defineComponent({
         fields: {
           name: {
             value: (holding : Holding) => {
-              if (holding.symbol && holding.symbol.name) {
-                return holding.symbol.name
-              }
-
-              if (holding.importRawData && holding.importRawData.description) {
-                return holding.importRawData.description
-              }
-              return ''
+                return holding?.symbol?.name ?? holding?.importRawData?.description ?? ''
             },
           },
           symbolName : {},
-          buyQty     : {},
-
+          buyQty     : {
+            justify: 'right',
+          },
           currentTotalPrice: {
             private : true,
             value   : (row : Holding) => (!row.lastPrice ? null : row.lastPrice.price * row.openQty),
             format  : 'currency',
+            justify: 'right',
           },
           currentAvgPrice: {
             value: (row : Holding) => {
               return !row.lastPrice ? null : row.lastPrice.price
             },
             format: 'money',
+            justify: 'right',
+            classes: 'text-gray-500'
           },
-          //
-
           lastBuyAt: {
             format: 'date',
+            classes: 'text-gray-500',
+            width: '100px'
           },
           lastSellAt: {
             format: 'date',
+            classes: 'text-gray-500',
+            width: '100px'
           },
-          //
           openQty: {
             format: value => (value !== 0 ? value : ''),
           },
           openTotalPrice: {
             private : true,
             format  : 'currency',
+            justify: 'right',
           },
           openAvgPrice: {
             format: 'money',
+            justify: 'right',
+            classes: 'text-gray-500'
           },
           openPL: {
             format : 'range',
+            justify: 'right',
             value  : (row : Holding) : RangeValue => {
               if (!row.lastPrice || row.openAvgPrice === 0) {
                 return null
@@ -182,22 +171,41 @@ export default defineComponent({
               return {
                 from : row.openQty * row.openAvgPrice,
                 to   : row.openQty * row.lastPrice.price,
+                currency: row.currency
               }
             },
           },
-          //
+          openPLPercent: {
+            format : 'range',
+            justify: 'right',
+            value  : (row : Holding) : RangeValue => {
+              if (!row.lastPrice || row.openAvgPrice === 0) {
+                return null
+              }
+
+              return {
+                from : row.openQty * row.openAvgPrice,
+                to   : row.openQty * row.lastPrice.price,
+                currency: row.currency
+              }
+            },
+          },
           closedQty: {
             format: value => (value !== 0 ? value : ''),
+            justify: 'right',
           },
           closedAvgPrice: {
             format: 'money',
+            justify: 'right',
           },
           closedTotalPrice: {
             private : true,
             format  : 'currency',
+            justify: 'right',
           },
           closedPL: {
             format : 'range',
+            justify: 'right',
             value  : (row : Holding) : RangeValue => {
               if (row.closedQty === 0) {
                 return null
@@ -206,11 +214,12 @@ export default defineComponent({
               return {
                 from : row.closedQty * row.buyAvgPrice,
                 to   : row.closedQty * row.closedAvgPrice,
+                currency: row.currency
               }
             },
           },
-          //
           dayPLChange: {
+            justify: 'right',
             format : 'percent',
             value  : (row : Holding) => {
               if (!row.lastPrice || row.lastPrice.price === 0) {
@@ -220,9 +229,9 @@ export default defineComponent({
               return (row.lastPrice.previousClose / row.lastPrice.price) - 1
             },
           },
-
           weight: {
             format : 'percent',
+            justify: 'right',
             value  : (row : Holding) => {
               return totalOpen.value === 0 ? 0 : ((row.openQty * row.openAvgPrice) / totalOpen.value)
             },
@@ -256,7 +265,6 @@ export default defineComponent({
         },
       },
     })
-
 
     return {
       ...toRefs(data),
