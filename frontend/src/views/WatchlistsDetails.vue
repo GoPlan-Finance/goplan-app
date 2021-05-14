@@ -58,7 +58,7 @@
       <template
         #field(dayPLChange)="{ row }"
       >
-        <AssetPriceChange
+        <PriceChange
           v-if="row.lastPrice"
           :compare-from="row.lastPrice.previousClose"
           :compare-to=" row.lastPrice.price"
@@ -89,9 +89,9 @@
 import { Watchlist, WatchlistItem } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
 import { Query } from '/@common/Query'
-import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import AssetSearch from '/@components/AssetSearch.vue'
 import DataTable from '/@components/DataTable.vue'
+import PriceChange from '/@components/PriceChange.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { useAssetPriceStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
@@ -99,7 +99,7 @@ import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReac
 
 
 export default defineComponent({
-  components : {AssetPriceChange, AssetSearch, AppLink, DataTable},
+  components : {PriceChange, AssetSearch, AppLink, DataTable},
   props      : {
     id: {
       type     : String,
