@@ -78,6 +78,7 @@ export interface SortSettings {
 export interface RangeValue {
   from : number
   to : number
+  currency: string
 }
 
 
