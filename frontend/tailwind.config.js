@@ -11,7 +11,9 @@ module.exports = {
   ],
   darkMode : false, // or 'media' or 'class'
   theme    : {
-    extend: {},
+    fontFamily: {
+      'sans': ['Lato', 'system-ui', 'sans-serif']
+    }
   },
   variants: {
     cursor: [
