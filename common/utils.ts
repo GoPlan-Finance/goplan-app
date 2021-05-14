@@ -1,4 +1,5 @@
 import { Currencies } from 'ts-money'
+import NumberFormatOptions = Intl.NumberFormatOptions
 
 
 export function sleep (ms : number) : Promise<void> {
@@ -119,37 +120,30 @@ export const getCurrencyInfo = (currency : string | null) : CurrencyInfoInterfac
 }
 
 
-export const formatCurrency = (value : /*Money |*/ number, currency : string, fixedDecimals = true) : string => {
-  // return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency }).format(value)
-
-  const currencyInfo = getCurrencyInfo(currency)
+export const formatCurrency = (value : number, currency : string, fixedDecimals = true, locale = 'en-US', signDisplay = 'auto') : string => {
 
   if (value === null || value === undefined) {
     return ''
   }
 
-  /* if (value instanceof Money) {
-   value = value.toDecimal()
-   } else */
   if (!isNaN(Number(value))) {
     value = Number(value)
   }
 
-
-  /* cap max decimals to either currency, or 4 */
-  const valueStr = padDecimals(
-    value,
-    currencyInfo.decimal_digits,
-    fixedDecimals ? currencyInfo.decimal_digits : Math.max(currencyInfo.decimal_digits, 4),
-  )
-
-  if ([
-    'EUR', 'GBP',
-  ].includes(currency)) {
-    return `${currencyInfo.symbol} ${valueStr}`
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#parameters
+  let options: NumberFormatOptions = {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 4,
+    signDisplay: signDisplay
   }
 
-  return `${valueStr} ${currencyInfo.symbol}`
+  if (fixedDecimals) {
+    options.minimumFractionDigits = 2
+  }
+
+  return new Intl.NumberFormat(locale, options).format(value)
 }
 
 type groupByFn<T> = (value : T, index : number) => string
