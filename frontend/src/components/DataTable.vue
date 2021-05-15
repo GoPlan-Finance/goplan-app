@@ -279,8 +279,8 @@ export default defineComponent({
         template += ' '
         width    = ''
       }
-      if  (config.settings.actions) {
-        template += 'min-content'
+      if (config.settings.actions) {
+        template += '56px' // This is enough space for 2 actions, eventually we will have to come up with a better way to display this
       }
       return `grid-template-columns: ${template};`
     })
