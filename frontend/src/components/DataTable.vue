@@ -141,16 +141,16 @@ import {
 } from '/@components/DataTable'
 import GoIcons from '/@components/Icons/GoIcons.vue'
 import { getCurrentBreakpoint } from '/@utils/screens'
-import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
+import { computed, defineComponent, onBeforeMount, onBeforeUnmount, PropType, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
   components : {GoIcons, SearchField},
   props      : {
     config: {
-      type      : Object as TableConfig,
+      type      : Object as PropType<TableConfig>,
       required  : true,
-      validator : (config) => {
+      validator : (config: TableConfig) => {
         if (config.search
             && config.search.handler
             && typeof config.search.handler !== 'function') {
@@ -161,7 +161,7 @@ export default defineComponent({
       },
     },
     rows: {
-      type     : Object as TableRow[],
+      type     : Object as PropType<TableRow[]>,
       required : true,
     },
   },
@@ -178,6 +178,7 @@ export default defineComponent({
       settings : props.config.settings || {},
       filters  : props.config.filters || {},
       search   : props.config.search || {},
+      tableLayout: props.config.tableLayout
     })
 
     const search = ref('')
@@ -215,8 +216,8 @@ export default defineComponent({
       })
     }
 
-    const tableLayout : TableLayout = computed(() => {
-      const tableLayouts = props.config.tableLayout
+    const tableLayout = computed<TableLayout>(() => {
+      const tableLayouts = config.tableLayout
       const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
 
       const arr = objectToNestedArrays(tableLayout)
