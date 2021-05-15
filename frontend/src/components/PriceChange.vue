@@ -34,20 +34,20 @@ import { computed, defineComponent } from 'vue'
 export default defineComponent({
   props: {
     compareFrom: {
-      type: Number,
-      required: true,
+      type     : Number,
+      required : true,
     },
     compareTo: {
-      type: Number,
-      required: true,
+      type     : Number,
+      required : true,
     },
     currency: {
-      type: String,
-      required: false,
+      type     : String,
+      required : false,
     },
     type: {
-      type: String,
-      default: 'percentage',
+      type      : String,
+      default   : 'percentage',
       validator : value => {
         return [
           'percentage',
@@ -57,9 +57,9 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const total = computed(() => props.compareTo - props.compareFrom)
+    const total      = computed(() => props.compareTo - props.compareFrom)
     const isPositive = computed(() => total.value >= 0)
-    const percent = computed(() => (total.value / props.compareFrom) * 100)
+    const percent    = computed(() => (total.value / props.compareFrom) * 100)
 
     return {
       total,

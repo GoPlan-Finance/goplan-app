@@ -74,9 +74,9 @@ watchlist:
   table:
     createdAt: Date Added
     dayPLChange: Day P/L
+    lastPrice: Current Price
     name: Name
     ticker: Symbol
-    lastPrice: Current Price
 watchlists:
   headline: Watchlists
   show_more: Show More

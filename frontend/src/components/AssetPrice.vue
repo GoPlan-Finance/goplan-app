@@ -31,7 +31,7 @@ import { computed, onUnmounted, onBeforeMount, ref, defineComponent } from 'vue'
 
 export default defineComponent({
   components : {PriceChange},
-  props: {
+  props      : {
     symbol: {
       type     : AssetSymbol,
       required : true,

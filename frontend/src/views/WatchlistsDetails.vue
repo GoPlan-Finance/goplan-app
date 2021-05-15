@@ -97,30 +97,30 @@ import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReac
 export default defineComponent({
   components : {PriceChange, AssetSearch, AppLink, DataTable},
   props      : {
-    id : {
+    id: {
       type     : String,
       required : true,
     },
   },
   setup (props) {
-    let liveSubscription       = null
-    let liveSubscription2      = null
-    const selectedAsset        = ref(null)
-    const watchlistId          = toRef(props, 'id')
-    const watchlistItems       = shallowReactive([])
-    const priceStore           = useAssetPriceStore()
+    let liveSubscription  = null
+    let liveSubscription2 = null
+    const selectedAsset   = ref(null)
+    const watchlistId     = toRef(props, 'id')
+    const watchlistItems  = shallowReactive([])
+    const priceStore      = useAssetPriceStore()
 
     const config : TableConfig = {
-      fields      : {
-        name        : {
-          classes : 'text-bold',
+      fields: {
+        name: {
+          classes: 'text-bold',
         },
-        ticker      : {},
-        createdAt   : {
-          format : 'date',
-          justify: 'right'
+        ticker    : {},
+        createdAt : {
+          format  : 'date',
+          justify : 'right'
         },
-        dayPLChange : {
+        dayPLChange: {
           format  : 'percent',
           justify : 'right',
           value   : (row : Holding) => {
@@ -131,15 +131,15 @@ export default defineComponent({
             return (row.lastPrice.previousClose / row.lastPrice.price) - 1
           },
         },
-        lastPrice : {
+        lastPrice: {
           justify : 'right',
-          value: (row: Holding) => {
-            return row.lastPrice?.price ?? null;
+          value   : (row: Holding) => {
+            return row.lastPrice?.price ?? null
           }
         }
       },
-      tableLayout : {
-        [Screens.DEFAULT] : [
+      tableLayout: {
+        [Screens.DEFAULT]: [
           [
             'ticker', 'name',
           ],
@@ -148,7 +148,7 @@ export default defineComponent({
             'dayPLChange'
           ]
         ],
-        [Screens.SM]      : [
+        [Screens.SM]: [
           [
             'ticker', 'name',
           ],
@@ -157,7 +157,7 @@ export default defineComponent({
           'createdAt',
         ],
       },
-      settings    : {
+      settings: {
         actions           : true,
         translationPrefix : 'watchlist.table',
       },
@@ -183,7 +183,7 @@ export default defineComponent({
         data.watchlist = wl
       })
 
-      const q2 = Query.create(WatchlistItem)
+      const q2          = Query.create(WatchlistItem)
       q2.equalTo('watchlist', data.watchlist)
       q2.include('symbol')
       liveSubscription2 = await q2.liveQuery(watchlistItems)
@@ -235,7 +235,7 @@ export default defineComponent({
         item.lastPrice = assetPrice
       })
 
-    }, {immediate : true})
+    }, {immediate: true})
 
 
     return {

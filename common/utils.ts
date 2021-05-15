@@ -131,12 +131,12 @@ export const formatCurrency = (value : number, currency : string, fixedDecimals 
   }
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#parameters
-  let options: NumberFormatOptions = {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 4,
-    signDisplay: signDisplay
+  const options: NumberFormatOptions = {
+    style                 : 'currency',
+    currency,
+    minimumFractionDigits : 0,
+    maximumFractionDigits : 4,
+    signDisplay
   }
 
   if (fixedDecimals) {

@@ -70,10 +70,10 @@
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
         <GoIcons
-            v-if="fields[subRow] === sort.header"
-            :class="sort.order === 'asc' ? '' : 'transform rotate-180'"
-            class="w-5 h-5"
-            name="ChevronDown"
+          v-if="fields[subRow] === sort.header"
+          :class="sort.order === 'asc' ? '' : 'transform rotate-180'"
+          class="w-5 h-5"
+          name="ChevronDown"
         />
       </div>
     </div>
@@ -270,14 +270,14 @@ export default defineComponent({
 
     const tableTemplate = computed(() => {
       let template = ''
-      let width = ''
+      let width    = ''
       for (const column of tableLayout.value) {
         for (const field of column) {
           width = config.fields[field]?.width
         }
         template += width ?? '1fr'
         template += ' '
-        width = ''
+        width    = ''
       }
       if  (config.settings.actions) {
         template += 'min-content'
