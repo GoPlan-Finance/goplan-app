@@ -52,7 +52,7 @@ export interface TableLayoutCollection {
 
 
 export interface TableConfig {
-  fields : TableHeader[],
+  fields : Record<string, TableHeader>,
   tableLayout : TableLayoutCollection
   settings? : {
     actions : boolean,
