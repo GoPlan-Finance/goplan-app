@@ -18,19 +18,16 @@
       </template>
 
 
-      <!--Copied from Transactions.vue-->
       <template
         #field(ticker)="{ row }"
       >
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.symbol"
-          class="font-bold"
+          class="font-bold overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >
-          <p class="font-normal text-sm overflow-hidden overflow-ellipsis">
-            {{ row.symbol.symbol }}
-          </p>
+          {{ row.symbol.symbol }}
         </AppLink>
         <span v-else>
           {{ row.symbol.symbol }}
@@ -43,12 +40,10 @@
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.symbol"
-          class="font-bold"
+          class="text-sm text-gray-500 overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >
-          <p class="font-normal text-sm">
-            {{ row.symbol.name }}
-          </p>
+          {{ row.symbol.name }}
         </AppLink>
         <span v-else>
           {{ row.symbol.name }}
@@ -90,6 +85,7 @@ import { Watchlist, WatchlistItem } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
 import { Query } from '/@common/Query'
 import AssetSearch from '/@components/AssetSearch.vue'
+import { TableConfig } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
 import PriceChange from '/@components/PriceChange.vue'
 import AppLink from '/@components/router/AppLink.vue'
@@ -101,55 +97,66 @@ import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReac
 export default defineComponent({
   components : {PriceChange, AssetSearch, AppLink, DataTable},
   props      : {
-    id: {
+    id : {
       type     : String,
       required : true,
     },
   },
   setup (props) {
-    let liveSubscription  = null
-    let liveSubscription2 = null
-    const selectedAsset   = ref(null)
-    const watchlistId     = toRef(props, 'id')
-    const watchlistItems  = shallowReactive([])
-    const priceStore      = useAssetPriceStore()
+    let liveSubscription       = null
+    let liveSubscription2      = null
+    const selectedAsset        = ref(null)
+    const watchlistId          = toRef(props, 'id')
+    const watchlistItems       = shallowReactive([])
+    const priceStore           = useAssetPriceStore()
+
+    const config : TableConfig = {
+      fields      : {
+        name        : {
+          classes : 'text-bold',
+        },
+        ticker      : {},
+        createdAt   : {
+          format : 'date',
+        },
+        dayPLChange : {
+          format  : 'percent',
+          justify : 'right',
+          value   : (row : Holding) => {
+            if (!row.lastPrice || row.lastPrice.price === 0) {
+              return null
+            }
+
+            return (row.lastPrice.previousClose / row.lastPrice.price) - 1
+          },
+        },
+      },
+      tableLayout : {
+        [Screens.DEFAULT] : [
+          [
+            'ticker', 'name',
+          ],
+          'dayPLChange',
+        ],
+        [Screens.SM]      : [
+          [
+            'ticker', 'name',
+          ],
+          'createdAt',
+          'dayPLChange',
+        ],
+      },
+      settings    : {
+        actions           : true,
+        translationPrefix : 'watchlist.table',
+      },
+    }
+
 
     const data = reactive({
       watchlist   : null,
       items       : [],
       sortedItems : [],
-      config      : {
-        fields: {
-          name      : {},
-          ticker    : {},
-          createdAt : {
-            format: 'date',
-          },
-          dayPLChange: {
-            format : 'percent',
-            value  : (row : Holding) => {
-              if (!row.lastPrice || row.lastPrice.price === 0) {
-                return null
-              }
-
-              return (row.lastPrice.previousClose / row.lastPrice.price) - 1
-            },
-          },
-        },
-        tableLayout: {
-          [Screens.DEFAULT]: [
-            [
-              'ticker', 'name',
-            ],
-            'createdAt',
-            'dayPLChange',
-          ],
-        },
-        settings: {
-          actions           : true,
-          translationPrefix : 'watchlist.table',
-        },
-      },
     })
 
     async function remove (watchlistItem : WatchlistItem) {
@@ -165,7 +172,7 @@ export default defineComponent({
         data.watchlist = wl
       })
 
-      const q2          = Query.create(WatchlistItem)
+      const q2 = Query.create(WatchlistItem)
       q2.equalTo('watchlist', data.watchlist)
       q2.include('symbol')
       liveSubscription2 = await q2.liveQuery(watchlistItems)
@@ -217,13 +224,14 @@ export default defineComponent({
         item.lastPrice = assetPrice
       })
 
-    }, {immediate: true})
+    }, {immediate : true})
 
 
     return {
       remove,
       selectedAsset,
       ...toRefs(data),
+      config,
     }
   },
 })
