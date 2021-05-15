@@ -76,6 +76,7 @@ watchlist:
     dayPLChange: Day P/L
     name: Name
     ticker: Symbol
+    lastPrice: Current Price
 watchlists:
   headline: Watchlists
   show_more: Show More

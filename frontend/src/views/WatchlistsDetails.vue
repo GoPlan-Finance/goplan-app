@@ -118,6 +118,7 @@ export default defineComponent({
         ticker      : {},
         createdAt   : {
           format : 'date',
+          justify: 'right'
         },
         dayPLChange : {
           format  : 'percent',
@@ -130,20 +131,30 @@ export default defineComponent({
             return (row.lastPrice.previousClose / row.lastPrice.price) - 1
           },
         },
+        lastPrice : {
+          justify : 'right',
+          value: (row: Holding) => {
+            return row.lastPrice?.price ?? null;
+          }
+        }
       },
       tableLayout : {
         [Screens.DEFAULT] : [
           [
             'ticker', 'name',
           ],
-          'dayPLChange',
+          [
+            'lastPrice',
+            'dayPLChange'
+          ]
         ],
         [Screens.SM]      : [
           [
             'ticker', 'name',
           ],
-          'createdAt',
+          'lastPrice',
           'dayPLChange',
+          'createdAt',
         ],
       },
       settings    : {
