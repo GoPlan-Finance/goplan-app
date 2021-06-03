@@ -18,19 +18,16 @@
       </template>
 
 
-      <!--Copied from Transactions.vue-->
       <template
         #field(ticker)="{ row }"
       >
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.symbol"
-          class="font-bold"
+          class="font-bold overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >
-          <p class="font-normal text-sm overflow-hidden overflow-ellipsis">
-            {{ row.symbol.symbol }}
-          </p>
+          {{ row.symbol.symbol }}
         </AppLink>
         <span v-else>
           {{ row.symbol.symbol }}
@@ -43,12 +40,10 @@
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.symbol"
-          class="font-bold"
+          class="text-sm text-gray-500 overflow-hidden overflow-ellipsis"
           to="ticker_details"
         >
-          <p class="font-normal text-sm">
-            {{ row.symbol.name }}
-          </p>
+          {{ row.symbol.name }}
         </AppLink>
         <span v-else>
           {{ row.symbol.name }}
@@ -58,7 +53,7 @@
       <template
         #field(dayPLChange)="{ row }"
       >
-        <AssetPriceChange
+        <PriceChange
           v-if="row.lastPrice"
           :compare-from="row.lastPrice.previousClose"
           :compare-to=" row.lastPrice.price"
@@ -89,9 +84,10 @@
 import { Watchlist, WatchlistItem } from '/@common/models'
 import { Holding } from '/@common/models/Holding'
 import { Query } from '/@common/Query'
-import AssetPriceChange from '/@components/AssetPriceChange.vue'
 import AssetSearch from '/@components/AssetSearch.vue'
+import { TableConfig } from '/@components/DataTable'
 import DataTable from '/@components/DataTable.vue'
+import PriceChange from '/@components/PriceChange.vue'
 import AppLink from '/@components/router/AppLink.vue'
 import { useAssetPriceStore } from '/@store/index'
 import { Screens } from '/@utils/screens'
@@ -99,7 +95,7 @@ import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReac
 
 
 export default defineComponent({
-  components : {AssetPriceChange, AssetSearch, AppLink, DataTable},
+  components : {PriceChange, AssetSearch, AppLink, DataTable},
   props      : {
     id: {
       type     : String,
@@ -114,42 +110,64 @@ export default defineComponent({
     const watchlistItems  = shallowReactive([])
     const priceStore      = useAssetPriceStore()
 
+    const config : TableConfig = {
+      fields: {
+        name: {
+          classes: 'text-bold',
+        },
+        ticker    : {},
+        createdAt : {
+          format  : 'date',
+          justify : 'right'
+        },
+        dayPLChange: {
+          format  : 'percent',
+          justify : 'right',
+          value   : (row : Holding) => {
+            if (!row.lastPrice || row.lastPrice.price === 0) {
+              return null
+            }
+
+            return (row.lastPrice.previousClose / row.lastPrice.price) - 1
+          },
+        },
+        lastPrice: {
+          justify : 'right',
+          value   : (row: Holding) => {
+            return row.lastPrice?.price ?? null
+          }
+        }
+      },
+      tableLayout: {
+        [Screens.DEFAULT]: [
+          [
+            'ticker', 'name',
+          ],
+          [
+            'lastPrice',
+            'dayPLChange'
+          ]
+        ],
+        [Screens.SM]: [
+          [
+            'ticker', 'name',
+          ],
+          'lastPrice',
+          'dayPLChange',
+          'createdAt',
+        ],
+      },
+      settings: {
+        actions           : true,
+        translationPrefix : 'watchlist.table',
+      },
+    }
+
+
     const data = reactive({
       watchlist   : null,
       items       : [],
       sortedItems : [],
-      config      : {
-        fields: {
-          name      : {},
-          ticker    : {},
-          createdAt : {
-            format: 'date',
-          },
-          dayPLChange: {
-            format : 'percent',
-            value  : (row : Holding) => {
-              if (!row.lastPrice || row.lastPrice.price === 0) {
-                return null
-              }
-
-              return (row.lastPrice.previousClose / row.lastPrice.price) - 1
-            },
-          },
-        },
-        tableLayout: {
-          [Screens.DEFAULT]: [
-            [
-              'ticker', 'name',
-            ],
-            'createdAt',
-            'dayPLChange',
-          ],
-        },
-        settings: {
-          actions           : true,
-          translationPrefix : 'watchlist.table',
-        },
-      },
     })
 
     async function remove (watchlistItem : WatchlistItem) {
@@ -224,6 +242,7 @@ export default defineComponent({
       remove,
       selectedAsset,
       ...toRefs(data),
+      config,
     }
   },
 })

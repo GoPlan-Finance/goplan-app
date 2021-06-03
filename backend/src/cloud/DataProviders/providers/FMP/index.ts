@@ -112,9 +112,9 @@ export class FMP implements Types.DataProviderInterface {
           return await query('4hours', '4hour')
         }
       // eslint-disable-next-line no-fallthrough
-      case            'day'            :
-      case            'month'            :
-      case            'week'             : {
+      case            'day'   :
+      case            'month' :
+      case            'week'  : {
         const eod = await historyApi.dailyPrices(symbol, from.toISOString(), to.toISOString())
         return {resolution: 'day', data: eod.data.historical.reverse()}
       }

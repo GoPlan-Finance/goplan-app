@@ -62,36 +62,19 @@
         v-for="(subRow, subRowIndex) in row"
         :key="subRowIndex"
         :class="{
-          'lg:text-right': fields[subRow].justify === 'right',
-          'lg:text-center': fields[subRow].justify === 'center'
+          'flex-row-reverse': fields[subRow].justify === 'right',
+          'text-center justify-center': fields[subRow].justify === 'center'
         }"
-        class="cursor-pointer hover:text-gray-600 select-none"
+        class="flex cursor-pointer hover:text-gray-600 select-none whitespace-nowrap overflow-hidden overflow-ellipsis"
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
-
-        <svg
+        <GoIcons
           v-if="fields[subRow] === sort.header"
           :class="sort.order === 'asc' ? '' : 'transform rotate-180'"
-          class=""
-          fill="none"
-          height="24"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="3"
-          viewBox="0 0 24 24"
-          width="24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <line
-            x1="12"
-            x2="12"
-            y1="19"
-            y2="5"
-          />
-          <polyline points="5 12 12 5 19 12" />
-        </svg>
+          class="w-5 h-5"
+          name="ChevronDown"
+        />
       </div>
     </div>
     <div v-if="settings?.actions" />
@@ -111,13 +94,13 @@
         v-for="(header, headerIndex) in cell"
         :key="headerIndex"
         :class="[
-          header.classes,
+          fields[header].classes,
           {
-            'lg:text-right': fields[header].justify === 'right',
-            'lg:text-center': fields[header].justify === 'center'
+            'text-right justify-end': fields[header].justify === 'right',
+            'text-center justify-center': fields[header].justify === 'center'
           }
         ]"
-        class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+        class="whitespace-nowrap overflow-hidden overflow-ellipsis flex"
       >
         <Private :hide="fields[header].private === true">
           <slot
@@ -156,17 +139,18 @@ import {
   TableRow,
   ValueFn,
 } from '/@components/DataTable'
+import GoIcons from '/@components/Icons/GoIcons.vue'
 import { getCurrentBreakpoint } from '/@utils/screens'
-import { computed, defineComponent, onBeforeMount, onBeforeUnmount, reactive, ref, toRefs } from 'vue'
+import { computed, defineComponent, onBeforeMount, onBeforeUnmount, PropType, reactive, ref, toRefs } from 'vue'
 
 
 export default defineComponent({
-  components : {SearchField},
+  components : {GoIcons, SearchField},
   props      : {
     config: {
-      type      : Object as TableConfig,
+      type      : Object as PropType<TableConfig>,
       required  : true,
-      validator : (config) => {
+      validator : (config: TableConfig) => {
         if (config.search
             && config.search.handler
             && typeof config.search.handler !== 'function') {
@@ -177,7 +161,7 @@ export default defineComponent({
       },
     },
     rows: {
-      type     : Object as TableRow[],
+      type     : Object as PropType<TableRow[]>,
       required : true,
     },
   },
@@ -194,6 +178,7 @@ export default defineComponent({
       settings : props.config.settings || {},
       filters  : props.config.filters || {},
       search   : props.config.search || {},
+      tableLayout: props.config.tableLayout
     })
 
     const search = ref('')
@@ -231,8 +216,8 @@ export default defineComponent({
       })
     }
 
-    const tableLayout : TableLayout = computed(() => {
-      const tableLayouts = props.config.tableLayout
+    const tableLayout = computed<TableLayout>(() => {
+      const tableLayouts = config.tableLayout
       const tableLayout  = findTableLayout(tableLayouts, breakpoint.value)
 
       const arr = objectToNestedArrays(tableLayout)
@@ -286,12 +271,17 @@ export default defineComponent({
 
     const tableTemplate = computed(() => {
       let template = ''
+      let width    = ''
       for (const column of tableLayout.value) {
-        template += config.fields[column]?.width ?? '1fr'
+        for (const field of column) {
+          width = config.fields[field]?.width
+        }
+        template += width ?? '1fr'
         template += ' '
+        width    = ''
       }
-      if  (config.settings.actions) {
-        template += 'min-content'
+      if (config.settings.actions) {
+        template += '56px' // This is enough space for 2 actions, eventually we will have to come up with a better way to display this
       }
       return `grid-template-columns: ${template};`
     })

@@ -71,14 +71,24 @@ export default defineComponent({
               'currentTotalPrice', 'currentAvgPrice',
             ],
             [
-              'openPL',
+              'openPL', 'openPLPercent'
+            ],
+          ],
+          [Screens.MD]: [
+            [
+              'symbolName', 'name',
             ],
             [
-              'closedPL',
+              'openQty', 'lastBuyAt',
             ],
-
             [
-              'dayPLChange', /*'dayPL',*/
+              'openTotalPrice', 'openAvgPrice',
+            ],
+            [
+              'currentTotalPrice', 'currentAvgPrice',
+            ],
+            [
+              'openPL', 'openPLPercent'
             ],
             'weight',
           ],

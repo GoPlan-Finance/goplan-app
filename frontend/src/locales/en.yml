@@ -31,11 +31,12 @@ holdings:
     lastSellAt: Last sell
     name: Symbol
     openAvgPrice: Avg Price
-    openPL: Open P/L
+    openPL: Change Total
+    openPLPercent: Change Percent
     openQty: Open Qty
     openTotalPrice: Book Value
     symbolName: Ticker
-    weight: '% Portfolio:'
+    weight: '% Portfolio'
 quote:
   avgVolume: Avg. Volume
   change: Change
@@ -73,6 +74,7 @@ watchlist:
   table:
     createdAt: Date Added
     dayPLChange: Day P/L
+    lastPrice: Current Price
     name: Name
     ticker: Symbol
 watchlists:
