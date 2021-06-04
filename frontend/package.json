@@ -37,7 +37,7 @@
     "papaparse": "^5.3.0",
     "parse": "^3.2.0",
     "pinia": "^2.0.0-alpha.14",
-    "tailwindcss": "^2.1.2",
+    "tailwindcss": "^2.1.4",
     "ts-money": "^0.4.6",
     "vue": "^3.0.11",
     "vue-echarts": "^6.0.0-rc.5",
