@@ -55,7 +55,7 @@ const parseConfig = {
   },
   allowClientClassCreation : false,
   databaseURI              : config.get('parse.databaseUri'),
-  cloud                    : `${__dirname}/cloud/main.js`,
+  cloud                    : `${__dirname}/cloud/main.ts`,
   appId                    : config.get('parse.appId'),
   masterKey                : config.get('parse.masterKey') as string,
   serverURL                : config.get('parse.serverUrl'), // Don't forget to change to https if needed

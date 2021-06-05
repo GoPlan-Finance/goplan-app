@@ -15,37 +15,35 @@
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "scripts": {
     "start": "npm run serve",
-    "serve": "node dist/backend/src/server.js",
-    "build-ts": "tsc",
-    "build": "npm run build-ts",
-    "serve-debug": "nodemon --inspect dist/backend/src/server.js",
+    "serve": "ts-node src/server.ts",
+    "serve-debug": "nodemon --watch \"src/**\" --watch \"../common/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"npm run start\"",
     "watch-ts": "tsc -w",
-    "debug": "npm run build && npm run watch-debug",
-    "lint": " eslint --cache .  --ext ts --ext js ",
-    "lint-fix": "eslint --cache --fix .  --ext ts --ext js ",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
+    "debug": "npm run serve-debug",
+    "lint": " eslint --cache .  --ext ts",
+    "lint-fix": "eslint --cache --fix .  --ext ts",
     "dev-dependencies-link-fmp": "npm link financialmodelingprep-openapi",
+    "dev-dependencies-link-eod": "npm link eodhistoricaldata-openapi",
     "dev-dependencies-link-parse-server": "npm link parse-server"
   },
   "engines": {
-    "node": ">=4.3"
+    "ts-node": ">=10"
   },
   "dependencies": {
-    "netmask": ">=2.0.1",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "convict": "^6.1.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.6",
+    "eodhistoricaldata-openapi": "github:goplan-finance/eodhistoricaldata-openapi-javascript#master",
     "express": "4.17.1",
     "financialmodelingprep-openapi": "github:goplan-finance/financialmodelingprep-openapi-javascript#master",
     "kerberos": "1.1.5",
     "module-alias": "^2.2.2",
     "netmask": ">=2.0.1",
-    "node-ts": "^5.1.1",
     "parse": "3.2.0",
     "parse-server": "github:GoPlan-Finance/parse-server#4_5_0",
-    "ts-money": "^0.4.6"
+    "ts-money": "^0.4.6",
+    "ts-node": "^10.0.0"
   },
   "devDependencies": {
     "@types/concurrently": "^6.0.1",
@@ -73,9 +71,6 @@
     "prettier": "2.3.2",
     "ts-jest": "^27.0.5",
     "typescript": "^4.3.5"
-  },
-  "peerDependencies": {
-    "redis": ">=3.1.1"
   },
   "peerDependencies": {
     "redis": ">=3.1.1"

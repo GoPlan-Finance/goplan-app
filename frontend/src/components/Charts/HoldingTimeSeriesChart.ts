@@ -119,7 +119,7 @@ export const loadData = async () : Promise<unknown> => {
   for (const timeSeries of holdingTimeSeries) {
 
     if (!series[timeSeries.holding.symbolName]) {
-      series[timeSeries.holding.symbolName] = ArrayUtils.fill(dates.length , 0)
+      series[timeSeries.holding.symbolName] = ArrayUtils.fill(dates.length, 0)
     }
     const dt    = dayjs(timeSeries.startAt).format('YYYY-MM-DD')
     const index = dates.indexOf(dt)
@@ -132,7 +132,7 @@ export const loadData = async () : Promise<unknown> => {
   }
 
   return {
-    symbols : Object.keys(series),
+    symbols: Object.keys(series),
     series,
     dates,
   }
@@ -144,7 +144,9 @@ export const makeSeries = async () : Promise<unknown> => {
   const {series, dates, symbols} = await loadData()
   const chartSeries              = []
 
-  for (const [symbol, data] of Object.entries(series)) {
+  for (const [
+    symbol, data
+  ] of Object.entries(series)) {
 
     chartSeries.push({
       barWidth  : 15,
@@ -153,15 +155,15 @@ export const makeSeries = async () : Promise<unknown> => {
       stack     : 'holdings',
       areaStyle : {},
       emphasis  : {
-        focus : 'series',
+        focus: 'series',
       },
-      data      : data,
+      data,
     })
   }
 
 
   return {
-    series: chartSeries,
+    series : chartSeries,
     dates,
-    legend:  symbols}
+    legend : symbols}
 }

@@ -24,17 +24,6 @@ export default schema('AssetProfile', {
     website           : {type: 'String'},
     fullTimeEmployees : {type: 'Number'},
     description       : {type: 'String'},
-    ceo               : {type: 'String'},
-
-    // price: number;
-    // beta?: number;
-    // volAvg?: number;
-    // mktCap?: number;
-    // lastDiv?: number;
-    // range?: string;
-    // changes?: number;
-    // isin?: string;
-    // cusip?: string;
   },
   indexes: {
     symbol: {symbol: 1},

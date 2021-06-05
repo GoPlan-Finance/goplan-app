@@ -17,7 +17,7 @@
           class="flex items-center"
           to="/"
         >
-          <go-plan-logo/>
+          <go-plan-logo />
         </router-link>
       </div>
 
@@ -78,14 +78,15 @@
 </template>
 
 <script lang="ts">
-import { ChartBarIcon, RefreshIcon, TrendingUpIcon } from '@heroicons/vue/outline'
+import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
+import { ChartBarIcon } from '@heroicons/vue/outline'
 import { defineComponent } from 'vue'
 import { useSidebar } from '../hooks/useSidebar'
 import NavigationItem from './NavigationItem.vue'
 
 
 export default defineComponent({
-  components : {GoPlanLogo, NavigationItem, TrendingUpIcon, RefreshIcon, ChartBarIcon},
+  components: {GoPlanLogo, NavigationItem, ChartBarIcon},
   setup () {
     const {isOpen} = useSidebar()
 

@@ -37,8 +37,8 @@ export class HoldingHistory extends SecureObject {
 
   get symbolName () : string {
 
-    if (this.symbol && this.symbol.symbol) {
-      return this.symbol.symbol
+    if (this.symbol && this.symbol.tickerName) {
+      return this.symbol.tickerName
     }
 
     return this.get('symbolName')

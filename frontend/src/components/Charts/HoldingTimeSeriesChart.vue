@@ -103,33 +103,33 @@ use([
 
 
 export default defineComponent({
-  components : {
+  components: {
     VChart,
   },
-  provide    : {
-    [THEME_KEY] : 'light',
+  provide: {
+    [THEME_KEY]: 'light',
   },
-  props      : {},
+  props: {},
   setup (props) {
     const loading           = ref(true)
     const theChart          = ref(null)
     const currentScaleLabel = ref('Today')
     let currentScale        = reactive(getScaleByLabel('Today'))
 
-    let currentData : CandleData[] = []
+    const currentData : CandleData[] = []
 
     const option = ref({
-      tooltip : {
-        trigger      : 'item',
-        animation    : false,
-        axisPointer  : {
-          type : 'cross',
+      tooltip: {
+        trigger     : 'item',
+        animation   : false,
+        axisPointer : {
+          type: 'cross',
         },
         // appendToBody : true,
         // order: 'valueDesc',
-        formatter : function (params) {
+        formatter (params) {
           // noinspection UnnecessaryLocalVariableJS
-          let output = `${params.seriesName} : ${params.value.toFixed(2)} $` // @todo formatCurrency()
+          const output = `${params.seriesName} : ${params.value.toFixed(2)} $` // @todo formatCurrency()
           // let output = '<b>' + params[0].name + '</b><br/>'
           //   for (let i = 0 ; i < params.length ; i++) {
           //     if (params[i].value !== 0) {
@@ -143,23 +143,23 @@ export default defineComponent({
           return output
         },
       },
-      legend  : {
-        data : [],
+      legend: {
+        data: [],
       },
 
-      grid  : {
+      grid: {
         left         : '3%',
         right        : '4%',
         bottom       : '3%',
         containLabel : true,
       },
-      xAxis : {
-        type : 'category',
-        data : [],
+      xAxis: {
+        type        : 'category',
+        data        : [],
         // scale       : true,
         boundaryGap : false,
       },
-      yAxis : {
+      yAxis: {
         scale : true,
         type  : 'value',
       },
@@ -177,7 +177,7 @@ export default defineComponent({
       //     end   : 100,
       //   },
       // ],
-      series : [],
+      series: [],
     })
 
 
@@ -204,9 +204,8 @@ export default defineComponent({
     }
 
     const onDataZoom = async (event) => {
-
-      return
-
+      
+      /*
       /// @see https://echarts.apache.org/en/api.html#echartsInstance.dispatchAction
       const {start, end} = Array.isArray(event.batch) ? event.batch.slice(-1).pop() : event
 
@@ -236,7 +235,7 @@ export default defineComponent({
         // @todo add zoom logic
         //await reloadData(min, max)
       }
-
+*/
 
     }
 

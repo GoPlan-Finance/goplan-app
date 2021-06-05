@@ -1,36 +1,36 @@
-import AssetPrice from './AssetPrice'
-import Account from './Account'
-import AssetAddressRegion from './AssetAddressRegion'
-import AssetIndustry from './AssetIndustry'
-import AssetProfile from './AssetProfile'
-import AssetSector from './AssetSector'
-import AssetSymbol from './AssetSymbol'
-import StockExchange from './StockExchange'
-import Transaction from './Transaction'
-import Holding from './Holding'
-import HoldingTimeSeries from './HoldingTimeSeries'
-import User from './User'
-import Watchlist from './Watchlist'
-import WatchlistItem from './WatchlistItem'
+import AssetPriceSchema from './AssetPriceSchema'
+import AccountSchema from './AccountSchema'
+import AssetAddressRegionSchema from './AssetAddressRegionSchema'
+import AssetIndustrySchema from './AssetIndustrySchema'
+import AssetProfileSchema from './AssetProfileSchema'
+import AssetSectorSchema from './AssetSectorSchema'
+import AssetSymbolSchema from './AssetSymbolSchema'
+import StockExchangeSchema from './StockExchangeSchema'
+import TransactionSchema from './TransactionSchema'
+import HoldingSchema from './HoldingSchema'
+import HoldingTimeSeriesSchema from './HoldingTimeSeriesSchema'
+import UserSchema from './UserSchema'
+import WatchlistSchema from './WatchlistSchema'
+import WatchlistItemSchema from './WatchlistItemSchema'
 
 
 export const schemas = [
-  User,
+  UserSchema,
 
   // no dependencies
-  AssetSymbol,
-  AssetSector,
-  AssetIndustry,
-  AssetAddressRegion,
-  StockExchange,
+  AssetSymbolSchema,
+  AssetSectorSchema,
+  AssetIndustrySchema,
+  AssetAddressRegionSchema,
+  StockExchangeSchema,
 
   // has dependencies
-  AssetProfile,
-  AssetPrice,
-  Account,
-  Watchlist,
-  WatchlistItem,
-  Transaction,
-  Holding,
-  HoldingTimeSeries,
+  AssetProfileSchema,
+  AssetPriceSchema,
+  AccountSchema,
+  WatchlistSchema,
+  WatchlistItemSchema,
+  TransactionSchema,
+  HoldingSchema,
+  HoldingTimeSeriesSchema,
 ]

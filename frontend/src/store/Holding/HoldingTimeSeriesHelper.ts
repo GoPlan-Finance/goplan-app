@@ -48,7 +48,7 @@ export class HoldingTimeSeriesHelper {
 
     const results = []
     let current   = deltas[0]
-    for (let i = 1 ; i < deltas.length ; ++i) {
+    for (let i = 1; i < deltas.length; ++i) {
       current   = deltas[i - 1]
       const end = deltas[i]
 
@@ -109,7 +109,7 @@ export class HoldingTimeSeriesHelper {
     const eodFormatted = await this.getEOD(dates, holding)
 
     const existingPrices = await Query.create(HoldingTimeSeries).findBy({
-      period : 'day',
+      period: 'day',
       holding,
     })
 
@@ -144,9 +144,9 @@ export class HoldingTimeSeriesHelper {
 
   }
 
-  private static async getEOD (dates : any[], holding : Holding) : Promise<{}> {
+  private static async getEOD (dates : any[], holding : Holding) : Promise<{[key: string] : CandleData}> {
     if (!holding.symbol) {
-      return {}
+      return null
     }
 
 
@@ -163,4 +163,5 @@ export class HoldingTimeSeriesHelper {
     }
     return eodFormatted
   }
+
 }

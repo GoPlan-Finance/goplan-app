@@ -1,5 +1,5 @@
 <template>
-  {{totalOpen}}
+  {{ totalOpen }}
   <DataTable
     :config="config"
     :rows="rows"
@@ -96,17 +96,17 @@ import { computed, defineComponent, PropType, reactive, toRefs } from 'vue'
 
 
 export default defineComponent({
-  components : {
+  components: {
     PriceChange,
     DataTable,
     AppLink,
   },
-  props      : {
-    rows        : {
+  props: {
+    rows: {
       type     : Object as PropType<TableRow[]>,
       required : true,
     },
-    tableLayout : {
+    tableLayout: {
       type     : Object as PropType<TableLayout[]>,
       required : true,
     },
@@ -115,10 +115,10 @@ export default defineComponent({
     const totalOpen = computed(() => ArrayUtils.sum<Holding>(props.rows, elem => elem.openTotalPrice))
 
     const data      = reactive({
-      config : {
-        fields      : {
-          name       : {
-            value : (holding : Holding) => {
+      config: {
+        fields: {
+          name: {
+            value: (holding : Holding) => {
               return holding?.symbol?.name ?? holding?.importRawData?.description ?? ''
             },
           },
@@ -126,14 +126,14 @@ export default defineComponent({
           buyQty     : {
             justify: 'right',
           },
-          currentTotalPrice : {
+          currentTotalPrice: {
             private : true,
             value   : (row : Holding) => (!row.lastPrice ? null : row.lastPrice.price * row.openQty),
             format  : 'currency',
             justify : 'right',
           },
-          currentAvgPrice   : {
-            value  : (row : Holding) => {
+          currentAvgPrice: {
+            value: (row : Holding) => {
               return !row.lastPrice ? null : row.lastPrice.price
             },
             format  : 'money',
@@ -150,10 +150,10 @@ export default defineComponent({
             classes : 'text-gray-500',
             width   : '100px'
           },
-          openQty        : {
-            format : value => (value !== 0 ? value : ''),
+          openQty: {
+            format: value => (value !== 0 ? value : ''),
           },
-          openTotalPrice : {
+          openTotalPrice: {
             private : true,
             format  : 'currency',
             justify : 'right',
@@ -163,7 +163,7 @@ export default defineComponent({
             justify : 'right',
             classes : 'text-gray-500'
           },
-          openPL         : {
+          openPL: {
             format  : 'range',
             justify : 'right',
             value   : (row : Holding) : RangeValue => {
@@ -201,12 +201,12 @@ export default defineComponent({
             format  : 'money',
             justify : 'right',
           },
-          closedTotalPrice : {
+          closedTotalPrice: {
             private : true,
             format  : 'currency',
             justify : 'right',
           },
-          closedPL         : {
+          closedPL: {
             format  : 'range',
             justify : 'right',
             value   : (row : Holding) : RangeValue => {
@@ -221,7 +221,7 @@ export default defineComponent({
               }
             },
           },
-          dayPLChange : {
+          dayPLChange: {
             justify : 'right',
             format  : 'percent',
             value   : (row : Holding) => {
@@ -232,7 +232,7 @@ export default defineComponent({
               return (row.lastPrice.previousClose / row.lastPrice.price) - 1
             },
           },
-          weight : {
+          weight: {
             format  : 'percent',
             justify : 'right',
             value   : (row : Holding) => {
@@ -246,8 +246,8 @@ export default defineComponent({
           actions           : false,
           translationPrefix : 'holdings.table',
         },
-        search      : {
-          handler : (searchString, holding) => {
+        search: {
+          handler: (searchString, holding) => {
             const searchVal  = searchString.toLowerCase()
             const tickerName = holding.symbolName
 
