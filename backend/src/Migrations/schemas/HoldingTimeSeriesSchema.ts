@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('HoldingTimeSeries', {
+export default Migrations.makeSchema('HoldingTimeSeries', {
   fields: {
     holding  : {type: 'Pointer', targetClass: 'Holding', required: true},
     currency : {type: 'String'},
@@ -22,7 +22,7 @@ export default schema('HoldingTimeSeries', {
     holding    : {holding: 1},
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get', 'count', 'update', 'create', 'delete',
     ]),
 

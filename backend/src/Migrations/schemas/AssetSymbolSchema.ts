@@ -1,7 +1,7 @@
-import { requiresAuthentication, schema } from './base/defaults'
+import { Migrations } from 'parse-server'
 
 
-export default schema('AssetSymbol', {
+export default Migrations.makeSchema('AssetSymbol', {
   fields: {
     name             : {type: 'String'},
     symbol           : {type: 'String'},
@@ -18,7 +18,7 @@ export default schema('AssetSymbol', {
     ISIN         : {ISIN: 1},
   },
   classLevelPermissions: {
-    ...requiresAuthentication([
+    ...Migrations.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },
