@@ -1,28 +1,68 @@
 // This file contain duplicate types from Parse-Server that are not yet updated
 
 declare module 'parse-server' {
-  
-  export namespace Migrations {
-    export type CPLType = '*' | ('find' | 'count' | 'get' | 'update' | 'create' | 'delete' /*| 'addField'*/)  []
-    export type FieldType = 'String'
-      | 'Number'
+
+  export namespace SchemaMigrations {
+    export type CLPType = '*' | ('find' | 'count' | 'get' | 'update' | 'create' | 'delete') /*| 'addField'*/[];
+
+
+    export type FieldValueType =
+      | 'String'
       | 'Boolean'
-      | 'Date'
       | 'File'
+      | 'Number'
+      | 'Relation'
+      | 'Pointer'
+      | 'Date'
       | 'GeoPoint'
       | 'Polygon'
       | 'Array'
-      | 'Object'
-      | 'Pointer'
-      | 'Relation';
+      | 'Object';
 
 
     interface FieldInterface {
-      type : FieldType,
+      type : FieldValueType,
       targetClass? : string,
       required? : boolean,
       defaultValue? : any,
     }
+
+    type ClassNameType = '_User' | '_Role' | string;
+
+
+    export interface CLPInterface {
+      requiresAuthentication? : boolean;
+      '*'? : boolean;
+    }
+
+
+    export interface ProtectedFieldsInterface {
+      [key : string] : string[];
+    }
+
+    interface FieldsInterface {
+      [key : string] : FieldInterface,
+    }
+
+
+
+    export interface IndexInterface {
+      [key : string] : number;
+    }
+
+
+    export interface IndexesInterface {
+      [key : string] : IndexInterface;
+    }
+
+
+    export interface MigrationsOptions {
+      schemas : JSONSchema[];
+      strict : boolean;
+      deleteExtraFields : boolean;
+      recreateModifiedFields : boolean;
+    }
+
 
 
     interface CPLInterface {
@@ -31,27 +71,7 @@ declare module 'parse-server' {
     }
 
 
-    interface IndexInterface {
-      [key : string] : number,
-    }
-
-
-    interface FieldsInterface {
-      [key : string] : FieldInterface,
-    }
-
-
-    interface ProtectedFieldsInterface {
-      [key : string] : string[],
-    }
-
-
-    interface IndexesInterface {
-      [key : string] : IndexInterface,
-    }
-
-
-    interface CPLsInterface {
+    export interface CPLsInterface {
       find? : CPLInterface,
       count? : CPLInterface,
       get? : CPLInterface,
@@ -63,20 +83,22 @@ declare module 'parse-server' {
     }
 
 
-    export interface SchemaInterface {
+    export interface JSONSchema {
       fields : FieldsInterface,
       indexes : IndexesInterface,
       classLevelPermissions : CPLsInterface,
     }
 
 
-    export function runMigrations (schemas : SchemaInterface[]) : void;
+    export class CLPHelper {
+      static requiresAuthentication (ops : CLPType) : CPLsInterface ;
 
-    export function makeSchema (className : string, schema : SchemaInterface) : SchemaInterface;
+      static requiresAnonymous (ops : CLPType) : CPLsInterface ;
+    }
 
-    export function requiresAuthentication (ops : CPLType) : CPLsInterface;
 
-    export function requiresAnonymous (ops : CPLType) : CPLsInterface;
+    function makeSchema (className : ClassNameType, schema : Omit<JSONSchema, 'className'>) : JSONSchema ;
+
+
   }
 }
-

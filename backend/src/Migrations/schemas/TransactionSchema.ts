@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('Transaction', {
+export default SchemaMigrations.makeSchema('Transaction', {
   fields: {
     createdBy  : {type: 'Pointer', targetClass: '_User'},
     account    : {type: 'Pointer', targetClass: 'Account', required: true},
@@ -26,7 +26,7 @@ export default Migrations.makeSchema('Transaction', {
     symbol     : {symbol: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count', 'update', 'create', 'delete',
     ]),
 

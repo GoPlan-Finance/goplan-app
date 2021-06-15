@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('AssetSymbol', {
+export default SchemaMigrations.makeSchema('AssetSymbol', {
   fields: {
     name             : {type: 'String'},
     symbol           : {type: 'String'},
@@ -18,7 +18,7 @@ export default Migrations.makeSchema('AssetSymbol', {
     ISIN         : {ISIN: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },

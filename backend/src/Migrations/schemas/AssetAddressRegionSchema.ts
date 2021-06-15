@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('AssetAddressRegion', {
+export default SchemaMigrations.makeSchema('AssetAddressRegion', {
   fields: {
     // parentRegion: {type: 'Pointer', targetClass: 'AssetAddressRegion', required: false},
 
@@ -13,7 +13,7 @@ export default Migrations.makeSchema('AssetAddressRegion', {
     state   : {state: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },

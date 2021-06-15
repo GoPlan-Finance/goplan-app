@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('HoldingTimeSeries', {
+export default SchemaMigrations.makeSchema('HoldingTimeSeries', {
   fields: {
     holding  : {type: 'Pointer', targetClass: 'Holding', required: true},
     currency : {type: 'String'},
@@ -22,7 +22,7 @@ export default Migrations.makeSchema('HoldingTimeSeries', {
     holding    : {holding: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count', 'update', 'create', 'delete',
     ]),
 

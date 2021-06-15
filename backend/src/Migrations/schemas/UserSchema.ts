@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('_User', {
+export default SchemaMigrations.makeSchema('_User', {
   fields: {
     email         : {type: 'String'},
     authData      : {type: 'Object'},
@@ -15,11 +15,11 @@ export default Migrations.makeSchema('_User', {
   },
   indexes               : {},
   classLevelPermissions : {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'update',
     ]),
 
-    ...Migrations.requiresAnonymous([
+    ...SchemaMigrations.CLPHelper.requiresAnonymous([
       'create',
     ]),
 

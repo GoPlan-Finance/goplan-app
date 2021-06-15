@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('Watchlist', {
+export default SchemaMigrations.makeSchema('Watchlist', {
   fields: {
     name      : {type: 'String'},
     createdBy : {type: 'Pointer', targetClass: '_User'},
@@ -10,7 +10,7 @@ export default Migrations.makeSchema('Watchlist', {
     name: {name: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'update', 'create', 'delete',
     ]),
   },

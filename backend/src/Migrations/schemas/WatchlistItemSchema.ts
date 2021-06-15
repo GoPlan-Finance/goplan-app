@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('WatchlistItem', {
+export default SchemaMigrations.makeSchema('WatchlistItem', {
   fields: {
     createdBy : {type: 'Pointer', targetClass: '_User'},
     symbol    : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},
@@ -12,7 +12,7 @@ export default Migrations.makeSchema('WatchlistItem', {
     symbol    : {symbol: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'update', 'create', 'delete', 'count',
     ]),
   },

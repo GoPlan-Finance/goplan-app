@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('Holding', {
+export default SchemaMigrations.makeSchema('Holding', {
   fields: {
     createdBy  : {type: 'Pointer', targetClass: '_User'},
     symbol     : {type: 'Pointer', targetClass: 'AssetSymbol', required: false},
@@ -32,7 +32,7 @@ export default Migrations.makeSchema('Holding', {
     symbol     : {symbol: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count', 'update', 'create', 'delete',
     ]),
 

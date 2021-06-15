@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('AssetIndustry', {
+export default SchemaMigrations.makeSchema('AssetIndustry', {
   fields: {
     name: {type: 'String'},
   },
@@ -9,7 +9,7 @@ export default Migrations.makeSchema('AssetIndustry', {
     name: {name: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get', 'count',
     ]),
   },

@@ -8,8 +8,10 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n'
 // https://vitejs.dev/config/
 export default {
   server: {
-    https: true
+    https: true,
+    host: 'local.goplan.finance',
   },
+
   esmExternals : true,
   optimizeDeps : {
     exclude: [

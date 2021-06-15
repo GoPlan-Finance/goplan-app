@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('AssetProfile', {
+export default SchemaMigrations.makeSchema('AssetProfile', {
   fields: {
     symbol   : {type: 'Pointer', targetClass: 'AssetSymbol', required: true},
     exchange : {type: 'Pointer', targetClass: 'StockExchange', required: true},
@@ -30,7 +30,7 @@ export default Migrations.makeSchema('AssetProfile', {
 
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get',
     ]),
 

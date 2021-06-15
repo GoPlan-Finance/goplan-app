@@ -1,3 +1,5 @@
+import { SchemaMigrations } from 'parse-server'
+
 import AssetPriceSchema from './AssetPriceSchema'
 import AccountSchema from './AccountSchema'
 import AssetAddressRegionSchema from './AssetAddressRegionSchema'
@@ -14,7 +16,7 @@ import WatchlistSchema from './WatchlistSchema'
 import WatchlistItemSchema from './WatchlistItemSchema'
 
 
-export const schemas = [
+export const schemas : SchemaMigrations.JSONSchema[] = [
   UserSchema,
 
   // no dependencies

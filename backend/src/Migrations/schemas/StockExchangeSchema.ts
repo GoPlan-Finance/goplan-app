@@ -1,7 +1,7 @@
-import { Migrations } from 'parse-server'
+import { SchemaMigrations } from 'parse-server'
 
 
-export default Migrations.makeSchema('StockExchange', {
+export default SchemaMigrations.makeSchema('StockExchange', {
   fields: {
     code             : {type: 'String'},
     name             : {type: 'String'},
@@ -15,7 +15,7 @@ export default Migrations.makeSchema('StockExchange', {
     dataProviderName : {dataProviderName: 1},
   },
   classLevelPermissions: {
-    ...Migrations.requiresAuthentication([
+    ...SchemaMigrations.CLPHelper.requiresAuthentication([
       'find', 'get',
     ]),
 

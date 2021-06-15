@@ -1,3 +1,5 @@
+// noinspection ES6PreferShortImport
+
 /**
  *
  *
@@ -10,7 +12,7 @@ import * as http from 'http'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { Migrations, ParseServer } from 'parse-server'
+import { ParseServer } from 'parse-server'
 import userConfig from '../config/config'
 
 // Load environment dependent configuration
@@ -68,10 +70,12 @@ const parseConfig = {
       // '',
     ],
   },
+  migrations: {
+    strict: true,
+    schemas : schemas,
+  },
   serverStartComplete: async () => {
-    console.log('Running Migrations')
-    await Migrations.runMigrations(schemas)
-    console.log('Running Migrations ... Done')
+
   },
 }
 
