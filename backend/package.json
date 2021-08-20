@@ -47,7 +47,7 @@
     "ts-money": "^0.4.6"
   },
   "devDependencies": {
-    "@types/concurrently": "^6.0.1",
+    "@types/concurrently": "^6.2.1",
     "@types/convict": "^6.1.1",
     "@types/crypto-js": "^4.0.2",
     "@types/express": "^4.17.13",
