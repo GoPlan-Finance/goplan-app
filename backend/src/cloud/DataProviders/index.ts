@@ -5,7 +5,5 @@
  *
  */
 
-require('./Jobs/fetchAllSymbols')
-require('./Jobs/fetchAllExchanges')
-
-
+require('./Jobs/fetchAllSymbols');
+require('./Jobs/fetchAllExchanges');

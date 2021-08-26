@@ -6,8 +6,7 @@
  *
  */
 
+require('./Jobs/markAllAsOutdated');
 
-require('./Jobs/markAllAsOutdated')
-
-require('./triggers/beforeSave')
-require('./triggers/afterDelete')
+require('./triggers/beforeSave');
+require('./triggers/afterDelete');

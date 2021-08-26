@@ -1,5 +1,5 @@
 <template>
-  <template v-if="!loading ">
+  <template v-if="!loading">
     <HeadlineActions>
       <template #headline>
         <div class="flex flex-col">
@@ -18,19 +18,16 @@
 
     <div class="grid grid-cols-4 gap-4">
       <div />
-      <div
-        class="col-span-3"
-      />
+      <div class="col-span-3" />
     </div>
   </template>
 </template>
 
 <script lang="ts">
-import BuySellAsset from '/@components/BuySellAsset.vue'
-import HoldingTimeSeriesChart from '/@components/Charts/HoldingTimeSeriesChart.vue'
-import HeadlineActions from '/@components/HeadlineActions.vue'
-import { defineComponent } from 'vue'
-
+import BuySellAsset from '@components/BuySellAsset.vue';
+import HoldingTimeSeriesChart from '@components/Charts/HoldingTimeSeriesChart.vue';
+import HeadlineActions from '@components/HeadlineActions.vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
@@ -39,9 +36,7 @@ export default defineComponent({
     BuySellAsset,
   },
   props: {},
-  setup (props) {
-
-
+  setup(props) {
     // onBeforeMount(async () => {
     // })
     //
@@ -51,9 +46,7 @@ export default defineComponent({
 
     return {
       loading: false,
-    }
+    };
   },
-})
-
-
+});
 </script>

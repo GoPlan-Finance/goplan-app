@@ -1,35 +1,33 @@
-import { SchemaMigrations } from 'parse-server'
-
+import { SchemaMigrations } from 'parse-server';
 
 export default SchemaMigrations.makeSchema('HoldingTimeSeries', {
   fields: {
-    holding  : {type: 'Pointer', targetClass: 'Holding', required: true},
-    currency : {type: 'String'},
+    holding: { type: 'Pointer', targetClass: 'Holding', required: true },
+    currency: { type: 'String' },
 
-    isOutdated: {type: 'Boolean', defaultValue: true},
+    isOutdated: { type: 'Boolean', defaultValue: true },
 
-    startAt : {type: 'Date'},
-    period  : {type: 'String'},
+    startAt: { type: 'Date' },
+    period: { type: 'String' },
 
-    openQty : {type: 'Object'},
-    open    : {type: 'Object'},
-    close   : {type: 'Object'},
-    low     : {type: 'Object'},
-    high    : {type: 'Object'},
+    openQty: { type: 'Object' },
+    open: { type: 'Object' },
+    close: { type: 'Object' },
+    low: { type: 'Object' },
+    high: { type: 'Object' },
   },
   indexes: {
-    isOutdated : {isOutdated: 1},
-    holding    : {holding: 1},
+    isOutdated: { isOutdated: 1 },
+    holding: { holding: 1 },
   },
   classLevelPermissions: {
-    ...SchemaMigrations.CLPHelper.requiresAuthentication([
-      'find', 'get', 'count', 'update', 'create', 'delete',
-    ]),
-
+    ...SchemaMigrations.CLP.allow({
+      requiresAuthentication: ['find', 'get', 'count', 'update', 'create', 'delete'],
+    }),
     protectedFields: {
       // '*': [
       //     'symbol',
       // ],
     },
   },
-})
+});

@@ -1,20 +1,8 @@
 <template>
-  <h1 class="text-gray-700 text-3xl font-bold mb-6">
-    Buttons
-  </h1>
-  <ButtonDefault
-    class="mb-4"
-    label="Primary Button"
-  />
-  <ButtonDefault
-    :type="ButtonType.SECONDARY"
-    class="mb-4"
-    label="Secondary Button"
-  />
-  <ButtonDefault
-    class="mb-4"
-    label="Button with Icon"
-  >
+  <h1 class="text-gray-700 text-3xl font-bold mb-6">Buttons</h1>
+  <ButtonDefault class="mb-4" label="Primary Button" />
+  <ButtonDefault :type="ButtonType.SECONDARY" class="mb-4" label="Secondary Button" />
+  <ButtonDefault class="mb-4" label="Button with Icon">
     <template #before>
       <svg
         class="w-6 h-6"
@@ -32,10 +20,7 @@
       </svg>
     </template>
   </ButtonDefault>
-  <ButtonDefault
-    class="mb-4"
-    label="Button with Icon"
-  >
+  <ButtonDefault class="mb-4" label="Button with Icon">
     <template #after>
       <svg
         class="w-6 h-6"
@@ -56,16 +41,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import ButtonDefault, { ButtonType } from '/@components/base/ButtonDefault.vue'
-
+import { defineComponent } from 'vue';
+import ButtonDefault, { ButtonType } from '@components/base/ButtonDefault.vue';
 
 export default defineComponent({
-  components: {ButtonDefault},
-  setup () {
+  components: { ButtonDefault },
+  setup() {
     return {
       ButtonType,
-    }
+    };
   },
-})
+});
 </script>

@@ -1,12 +1,7 @@
 <template>
-  <Modal
-    title="Add to Watchlist"
-  >
+  <Modal title="Add to Watchlist">
     <template #button>
-      <ButtonDefault
-        :type="ButtonType.SECONDARY"
-        label="Watch"
-      >
+      <ButtonDefault :type="ButtonType.SECONDARY" label="Watch">
         <template #before>
           <svg
             class="w-5 h-5"
@@ -25,10 +20,7 @@
       </ButtonDefault>
     </template>
     <template #content>
-      <div
-        v-for="(watchlist, index) in watchlists"
-        :key="index"
-      >
+      <div v-for="(watchlist, index) in watchlists" :key="index">
         <div
           class="cursor-pointer bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-300"
           @click="addToWatchlist(watchlist)"
@@ -38,60 +30,53 @@
       </div>
     </template>
     <template #actions="slotProps">
-      <ButtonDefault
-        label="Close"
-        @click="slotProps.close()"
-      />
+      <ButtonDefault label="Close" @click="slotProps.close()" />
     </template>
   </Modal>
 </template>
 
 <script lang="ts">
-
-import { AssetSymbol, Watchlist } from '/@common/models'
-import { Query } from '/@common/Query'
-import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
-import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue'
-import Modal from '/@components/base/GoModal.vue'
+import { AssetSymbol, Watchlist } from '@common/models';
+import { Query } from '@utils/parse/Query';
+import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue';
+import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue';
+import Modal from '@components/base/GoModal.vue';
 
 export default defineComponent({
-  components : {Modal, ButtonDefault},
-  props      : {
+  components: { Modal, ButtonDefault },
+  props: {
     assetSymbol: {
-      type     : AssetSymbol,
-      required : true,
+      type: AssetSymbol,
+      required: true,
     },
   },
-  setup (props) {
-    let liveSubscription = null
+  setup(props) {
+    let liveSubscription = null;
 
-    const watchlists : Watchlist[] = ref([])
+    const watchlists: Watchlist[] = ref([]);
 
     const addToWatchlist = async watchlist => {
-      watchlist.relation('symbols').add(props.assetSymbol)
-      await watchlist.save()
-      alert('added')
-    }
+      watchlist.relation('symbols').add(props.assetSymbol);
+      await watchlist.save();
+      alert('added');
+    };
 
     onBeforeMount(async () => {
-      const q          = new Query(Watchlist)
-      liveSubscription = await q.liveQuery(watchlists.value)
-    })
+      const q = new Query(Watchlist);
+      liveSubscription = await q.liveQuery(watchlists.value);
+    });
 
     onUnmounted(async () => {
       if (liveSubscription) {
-        await liveSubscription.unsubscribe()
+        await liveSubscription.unsubscribe();
       }
-    })
-
+    });
 
     return {
       watchlists,
       addToWatchlist,
       ButtonType,
-    }
+    };
   },
-
-
-})
+});
 </script>

@@ -1,93 +1,88 @@
-import { Holding } from '/@common/models/Holding'
-import { Query } from '/@common/Query'
-import { HoldingHelper } from '/@store/Holding/HoldingHelper'
-import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
-import { useAssetPriceStore, useTransactionStore } from './'
-
+import { Holding } from '@common/models/Holding';
+import { HoldingHelper } from '@store/Holding/HoldingHelper';
+import { Query } from '@utils/parse/Query';
+import { defineStore } from 'pinia';
+import { ref, watch } from 'vue';
+import { useAssetPriceStore } from './';
 
 interface StoreState {
-  subscriptionPromise : Promise<void>
-  holdings : Holding[]
+  subscriptionPromise: Promise<void>;
+  holdings: Holding[];
 }
-
 
 export const useHoldingStore = defineStore({
   // name of the store
   id: 'holding',
 
-  state: () : StoreState => ({
-    subscriptionPromise : null,
-    holdings            : [],
+  state: (): StoreState => ({
+    subscriptionPromise: null,
+    holdings: [],
   }),
   getters: {},
 
   actions: {
-    async _init () {
+    async _init() {
+      HoldingHelper.createMissingHoldings().then(() => HoldingHelper.findOutdatedHoldings());
 
-      HoldingHelper.createMissingHoldings().then(() => HoldingHelper.findOutdatedHoldings())
+      const priceStore = useAssetPriceStore();
+      await priceStore.subscribe();
 
-      const priceStore       = useAssetPriceStore()
-      await priceStore.subscribe()
+      const symbols = ref([]);
 
-      const symbols = ref([])
-
-      const q = Query.create(Holding).limit(9999)
-      q.include('symbol')
+      const q = Query.create(Holding).limit(9999);
+      q.include('symbol');
 
       await q.liveQuery(this.holdings, async (holding, op) => {
-
-        await HoldingHelper.maybeUpdateOutdated(holding)
+        await HoldingHelper.maybeUpdateOutdated(holding);
 
         if (!holding.symbol) {
-          return
+          return;
         }
 
-        const index = symbols.value.findIndex(symbol => symbol.id === holding.symbol.id)
+        const index = symbols.value.findIndex(symbol => symbol.id === holding.symbol.id);
 
         if (op === 'deleted') {
-          symbols.value.splice(index, 1)
+          symbols.value.splice(index, 1);
         } else if (index === -1) {
-          symbols.value.push(holding.symbol)
+          symbols.value.push(holding.symbol);
         } else {
           // no-op, already present
         }
-      })
+      });
 
-      watch(() => symbols, async () => {
+      watch(
+        () => symbols,
+        async () => {
+          await priceStore.watch(symbols.value, assetPrice => {
+            const holding: Holding = this.holdings.find(holding => {
+              return holding.symbol && holding.symbol.id === assetPrice.symbol.id;
+            });
 
-        await priceStore.watch(symbols.value, assetPrice => {
-          const holding : Holding = this.holdings.find(holding => {
-            return holding.symbol && holding.symbol.id === assetPrice.symbol.id
-          })
+            if (!holding) {
+              return;
+            }
 
-          if (!holding) {
-            return
-          }
-
-          holding.lastPrice = assetPrice
-        })
-
-      },
-      {
-        immediate: true,
-      })
-
+            holding.lastPrice = assetPrice;
+          });
+        },
+        {
+          immediate: true,
+        }
+      );
     },
-    async subscribe () {
+    async subscribe() {
       if (this.subscriptionPromise) {
-        return this.subscriptionPromise
+        return this.subscriptionPromise;
       }
 
-      this.subscriptionPromise = this._init()
+      this.subscriptionPromise = this._init();
 
-      return this.subscriptionPromise
+      return this.subscriptionPromise;
     },
 
-    reset () {
+    reset() {
       // `this` is the store instance
-      this.holdings = []
+      this.holdings = [];
     },
-  }
-  ,
-})
+  },
+});

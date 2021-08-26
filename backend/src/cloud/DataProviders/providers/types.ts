@@ -4,30 +4,27 @@
  *
  *
  */
-import { Mutex } from 'async-mutex'
-import { Dayjs } from 'dayjs'
-
+import { Mutex } from 'async-mutex';
+import { Dayjs } from 'dayjs';
 
 export interface Exchange {
-  code : string;
-  name : string;
-  country : string;
-  currency : string;
+  code: string;
+  name: string;
+  country: string;
+  currency: string;
 }
-
 
 export interface AssetSymbol {
-  name : string,
-  symbol : string,
-  exchange : string,
-  currency? : string,
-  ISIN? : string,
-  type? : string,
+  name: string;
+  symbol: string;
+  exchange: string;
+  currency?: string;
+  ISIN?: string;
+  type?: string;
 }
 
-
 export type SymbolDataResolution =
-  '1minute'
+  | '1minute'
   | '5minutes'
   | '30minutes'
   | '15minutes'
@@ -35,8 +32,7 @@ export type SymbolDataResolution =
   | '4hours'
   | 'day'
   | 'week'
-  | 'month'
-
+  | 'month';
 
 export enum APIErrorType {
   QUOTA_ERROR = 1,
@@ -44,29 +40,24 @@ export enum APIErrorType {
   UNKNOWN_ERROR,
 }
 
-
 export class APIError {
+  type: APIErrorType;
+  error: unknown;
+  retryAfterSeconds: number;
 
-  type : APIErrorType
-  error : unknown
-  retryAfterSeconds : number
-
-
-  constructor (type : APIErrorType, error : unknown = null) {
-    this.type  = type
-    this.error = error
+  constructor(type: APIErrorType, error: unknown = null) {
+    this.type = type;
+    this.error = error;
   }
-
 }
 
-
 export interface EndOfDayData {
-  date : string,
-  open : number,
-  high : number,
-  low : number,
-  close : number,
-  volume : number,
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
   // "unadjustedVolume" : number,
   // "change" : number,
   // "changePercent" : number,
@@ -74,7 +65,6 @@ export interface EndOfDayData {
   // "label" : string,
   // "changeOverTime" :number
 }
-
 
 /**
  *
@@ -87,7 +77,7 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  symbol : string;
+  symbol: string;
   /**
    *
    * @type {number}
@@ -135,31 +125,31 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  companyName : string;
+  companyName: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  currency : string;
+  currency: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  isin? : string;
+  isin?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  cusip? : string;
+  cusip?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  exchangeCode : string;
+  exchangeCode: string;
   /**
    *
    * @type {string}
@@ -171,19 +161,19 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  industry : string;
+  industry: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  website? : string;
+  website?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  description : string;
+  description: string;
   /**
    *
    * @type {string}
@@ -195,49 +185,49 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  sector : string;
+  sector: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  country? : string;
+  country?: string;
   /**
    *
    * @type {number}
    * @memberof CompanyProfile
    */
-  fullTimeEmployees? : number;
+  fullTimeEmployees?: number;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  phone? : string;
+  phone?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  address? : string;
+  address?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  city? : string;
+  city?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  state? : string;
+  state?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  zip? : string;
+  zip?: string;
   /**
    *
    * @type {number}
@@ -255,15 +245,14 @@ export interface CompanyProfile {
    * @type {string}
    * @memberof CompanyProfile
    */
-  image? : string;
+  image?: string;
   /**
    *
    * @type {string}
    * @memberof CompanyProfile
    */
-  ipoDate? : string;
+  ipoDate?: string;
 }
-
 
 /**
  *
@@ -276,135 +265,134 @@ export interface CompanyQuote {
    * @type {string}
    * @memberof CompanyQuote
    */
-  symbol : string;
+  symbol: string;
   /**
    *
    * @type {string}
    * @memberof CompanyQuote
    */
-  name : string;
+  name: string;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  price : number;
+  price: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  changesPercentage : number;
+  changesPercentage: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  change : number;
+  change: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  dayLow : number;
+  dayLow: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  dayHigh : number;
+  dayHigh: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  yearHigh : number;
+  yearHigh: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  yearLow : number;
+  yearLow: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  marketCap : number;
+  marketCap: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  priceAvg50 : number;
+  priceAvg50: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  priceAvg200 : number;
+  priceAvg200: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  volume : number;
+  volume: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  avgVolume : number;
+  avgVolume: number;
   /**
    *
    * @type {string}
    * @memberof CompanyQuote
    */
-  exchange : string;
+  exchange: string;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  open : number;
+  open: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  previousClose : number;
+  previousClose: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  eps : number;
+  eps: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  pe : number;
+  pe: number;
   /**
    *
    * @type {string}
    * @memberof CompanyQuote
    */
-  earningsAnnouncement : string;
+  earningsAnnouncement: string;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  sharesOutstanding? : number;
+  sharesOutstanding?: number;
   /**
    *
    * @type {number}
    * @memberof CompanyQuote
    */
-  timestamp : number;
+  timestamp: number;
 }
-
 
 /**
  *
@@ -417,119 +405,102 @@ export interface EndOfDayPrice {
    * @type {string}
    * @memberof EndOfDayPrice
    */
-  date : string;
+  date: string;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  open : number;
+  open: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  high : number;
+  high: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  low : number;
+  low: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  close : number;
+  close: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  adjClose? : number;
+  adjClose?: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  volume : number;
+  volume: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  unadjustedVolume? : number;
+  unadjustedVolume?: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  change? : number;
+  change?: number;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  vwap? : number;
+  vwap?: number;
   /**
    *
    * @type {string}
    * @memberof EndOfDayPrice
    */
-  label? : string;
+  label?: string;
   /**
    *
    * @type {number}
    * @memberof EndOfDayPrice
    */
-  changeOverTime? : number;
+  changeOverTime?: number;
 }
-
 
 export interface TimeSeriesData {
-  resolution : SymbolDataResolution
-  data : EndOfDayData[]
+  resolution: SymbolDataResolution;
+  data: EndOfDayData[];
 }
-
 
 export interface DataProviderInterface {
+  throttleRequestQuotaMs: number;
+  mutex: Mutex;
 
-  throttleRequestQuotaMs : number
-  mutex : Mutex
+  name(): string;
 
+  fetchSupportedExchanges(): Promise<Array<Exchange>>;
 
-  name () : string
+  fetchSupportedSymbols(exchangeCode?: string): Promise<Array<AssetSymbol>>;
 
-  fetchSupportedExchanges () : Promise<Array<Exchange>>
+  searchSymbols(query: string): Promise<Array<AssetSymbol>>;
 
-  fetchSupportedSymbols (exchangeCode ? : string) : Promise<Array<AssetSymbol>>
+  fetchSymbolTimeSeriesData?(
+    symbol: string,
+    from: Dayjs,
+    to: Dayjs,
+    resolution: SymbolDataResolution
+  ): Promise<TimeSeriesData>;
 
-  searchSymbols (query : string) : Promise<Array<AssetSymbol>>
+  getCompanyProfile?(symbol: string): Promise<CompanyProfile>;
 
-  fetchSymbolTimeSeriesData? (
-    symbol : string,
-    from : Dayjs,
-    to : Dayjs,
-    resolution : SymbolDataResolution,
-  ) : Promise<TimeSeriesData>
+  getCompanyQuote(symbol: string): Promise<CompanyQuote>;
 
-
-  getCompanyProfile? (
-    symbol : string,
-  ) : Promise<CompanyProfile>
-
-
-  getCompanyQuote (
-    symbol : string,
-  ) : Promise<CompanyQuote>
-
-
-  getCompanyQuotes (
-    symbols : string[],
-  ) : Promise<CompanyQuote[]>
-
-
+  getCompanyQuotes(symbols: string[]): Promise<CompanyQuote[]>;
 }
-
-

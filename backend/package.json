@@ -14,19 +14,21 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "scripts": {
-    "start": "npm run serve",
-    "serve": "ts-node src/server.ts",
-    "serve-debug": "nodemon --watch \"src/**\" --watch \"../common/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"npm run start\"",
-    "watch-ts": "tsc -w",
-    "debug": "npm run serve-debug",
-    "lint": " eslint --cache .  --ext ts",
-    "lint-fix": "eslint --cache --fix .  --ext ts",
-    "dev-dependencies-link-fmp": "npm link financialmodelingprep-openapi",
-    "dev-dependencies-link-eod": "npm link eodhistoricaldata-openapi",
-    "dev-dependencies-link-parse-server": "npm link parse-server"
+    "pre-commit": "yarn run lint && yarn run prettier",
+    "lint": "eslint --cache --fix . --ext .js,.ts,.vue",
+    "prettier": "prettier --write  src/ spec/",
+    "start": "yarn run serve",
+    "serve": "ts-node -r tsconfig-paths/register src/server.ts",
+    "serve-debug": "nodemon --watch \"src/**\" --watch \"../common/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run start\"",
+    "debug": "yarn run serve-debug",
+    "dev-dependencies-link-fmp": "yarn link financialmodelingprep-openapi",
+    "dev-dependencies-link-eod": "yarn link eodhistoricaldata-openapi",
+    "dev-dependencies-link-parse-server": "yarn link parse-server"
   },
   "engines": {
-    "ts-node": ">=10"
+    "node": ">=14.0",
+    "ts-node": ">=10",
+    "npm": "please-use-yarn"
   },
   "dependencies": {
     "async-mutex": "^0.3.1",
@@ -41,7 +43,7 @@
     "module-alias": "^2.2.2",
     "netmask": ">=2.0.1",
     "parse": "3.2.0",
-    "parse-server": "github:GoPlan-Finance/parse-server#master",
+    "parse-server": "https://github.com/GoPlan-Finance/parse-server#master",
     "ts-money": "^0.4.6",
     "ts-node": "^10.0.0"
   },
@@ -51,6 +53,7 @@
     "@types/crypto-js": "^4.0.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.4",
     "@types/parse": "^2.18.6",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
@@ -62,9 +65,11 @@
     "eslint-config-standard": "16.0.2",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-only-warn": "^1.0.2",
     "eslint-plugin-promise": "4.3.1",
     "eslint-plugin-varspacing": "^1.2.2",
     "jasmine": "3.8.0",
+    "jest": "^27.0.6",
     "mongodb-runner": "4.8.3",
     "nodemon": "^2.0.12",
     "nyc": "15.1.0",

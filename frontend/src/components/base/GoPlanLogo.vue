@@ -1,17 +1,6 @@
 <template>
-  <svg
-    fill="none"
-    height="40"
-    viewBox="0 0 167 40"
-    width="167"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      cx="19"
-      cy="18.5"
-      fill="#1F2937"
-      r="18.5"
-    />
+  <svg fill="none" height="40" viewBox="0 0 167 40" width="167" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="19" cy="18.5" fill="#1F2937" r="18.5" />
     <line
       stroke="white"
       stroke-linecap="round"
@@ -51,8 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
-
-export default defineComponent({})
+export default defineComponent({});
 </script>

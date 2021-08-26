@@ -1,55 +1,101 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-semibold">
-      Card
-    </h3>
+    <h3 class="text-gray-700 text-3xl font-semibold">Card</h3>
     <div class="mt-4 mb-3">
-      <h4 class="text-gray-700">
-        Stacked
-      </h4>
+      <h4 class="text-gray-700">Stacked</h4>
 
       <div class="max-w-sm rounded bg-white overflow-hidden shadow-lg mt-6">
         <img
           alt="Sunset in the mountains"
           class="w-full"
           src="https://picsum.photos/id/1016/384/234"
-        >
+        />
         <div class="px-6 py-4">
-          <div class="text-gray-900 font-bold text-xl mb-2">
-            The Coldest Sunset
-          </div>
+          <div class="text-gray-900 font-bold text-xl mb-2">The Coldest Sunset</div>
           <p class="text-gray-700 text-base">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Voluptatibus quia, nulla! Maiores et perferendis eaque,
-            exercitationem praesentium nihil.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla!
+            Maiores et perferendis eaque, exercitationem praesentium nihil.
           </p>
         </div>
         <div class="px-6 pt-4 pb-2">
           <span
-            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-          >#photography</span>
+            class="
+              inline-block
+              bg-gray-200
+              rounded-full
+              px-3
+              py-1
+              text-sm
+              font-semibold
+              text-gray-700
+              mr-2
+              mb-2
+            "
+            >#photography</span
+          >
           <span
-            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-          >#travel</span>
+            class="
+              inline-block
+              bg-gray-200
+              rounded-full
+              px-3
+              py-1
+              text-sm
+              font-semibold
+              text-gray-700
+              mr-2
+              mb-2
+            "
+            >#travel</span
+          >
           <span
-            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-          >#winter</span>
+            class="
+              inline-block
+              bg-gray-200
+              rounded-full
+              px-3
+              py-1
+              text-sm
+              font-semibold
+              text-gray-700
+              mr-2
+              mb-2
+            "
+            >#winter</span
+          >
         </div>
       </div>
     </div>
-    <hr>
+    <hr />
     <div class="mt-5">
-      <h4 class="text-gray-700">
-        Horizontal
-      </h4>
+      <h4 class="text-gray-700">Horizontal</h4>
       <div class="max-w-sm w-full lg:max-w-full lg:flex mt-6">
         <div
-          class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+          class="
+            h-48
+            lg:h-auto lg:w-48
+            flex-none
+            bg-cover
+            rounded-t
+            lg:rounded-t-none lg:rounded-l
+            text-center
+            overflow-hidden
+          "
           style="background-image: url('https://picsum.photos/id/0/192/213')"
           title="Woman holding a mug"
         />
         <div
-          class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"
+          class="
+            border-r border-b border-l border-gray-400
+            lg:border-l-0 lg:border-t lg:border-gray-400
+            bg-white
+            rounded-b
+            lg:rounded-b-none lg:rounded-r
+            p-4
+            flex flex-col
+            justify-between
+            leading-normal
+          "
         >
           <div class="mb-8">
             <p class="text-sm text-gray-600 flex items-center">
@@ -68,9 +114,8 @@
               Can coffee make you a better developer?
             </div>
             <p class="text-gray-700 text-base">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Voluptatibus quia, nulla! Maiores et perferendis eaque,
-              exercitationem praesentium nihil.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla!
+              Maiores et perferendis eaque, exercitationem praesentium nihil.
             </p>
           </div>
           <div class="flex items-center">
@@ -78,14 +123,10 @@
               alt="Avatar of Jonathan Reinink"
               class="w-10 h-10 rounded-full mr-4"
               src="https://via.placeholder.com/50"
-            >
+            />
             <div class="text-sm">
-              <p class="text-gray-900 leading-none">
-                Jonathan Reinink
-              </p>
-              <p class="text-gray-600">
-                Aug 18
-              </p>
+              <p class="text-gray-900 leading-none">Jonathan Reinink</p>
+              <p class="text-gray-600">Aug 18</p>
             </div>
           </div>
         </div>
@@ -95,35 +136,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-
+import { defineComponent, ref } from 'vue';
 
 interface User {
-  username : string;
-  email : string;
-  password : string;
-  confirm : string;
+  username: string;
+  email: string;
+  password: string;
+  confirm: string;
 }
 
-
 export default defineComponent({
-  setup () {
+  setup() {
     const user = ref<User>({
-      username : '',
-      email    : '',
-      password : '',
-      confirm  : '',
-    })
+      username: '',
+      email: '',
+      password: '',
+      confirm: '',
+    });
 
     const register = () => {
-      const data = JSON.parse(JSON.stringify(user.value))
-      console.log('Registered: ', data)
-    }
+      const data = JSON.parse(JSON.stringify(user.value));
+      console.log('Registered: ', data);
+    };
 
     return {
       user,
       register,
-    }
+    };
   },
-})
+});
 </script>

@@ -1,14 +1,12 @@
 <template>
   <div class="flex justify-center items-center h-screen bg-gray-200 px-6">
     <div class="p-8 max-w-sm w-full bg-white shadow-md rounded-md">
-      <div
-        class="flex justify-center items-center"
-      >
+      <div class="flex justify-center items-center">
         <go-plan-logo />
       </div>
 
-      <br>
-      <br>
+      <br />
+      <br />
 
       <div v-if="hasClientKey === 'anonymous'">
         <center>
@@ -26,17 +24,15 @@
 </template>
 
 <script lang="ts">
-
-import { User } from '/@common/models'
-import { sleep } from '/@common/utils'
-import { AuthStore } from 'store'
-import { defineComponent, getCurrentInstance, inject, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import GoPlanLogo from '/@components/base/GoPlanLogo.vue'
-import CreateMasterKey from './CreateMasterKey.vue'
-import GoogleButton from './googleButton.vue'
-import UnlockMasterKey from './UnlockMasterKey.vue'
-
+import { AuthStore } from '@/store';
+import { User } from '@common/models';
+import { sleep } from '@utils/ProcessUtils';
+import { defineComponent, getCurrentInstance, inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import GoPlanLogo from '@components/base/GoPlanLogo.vue';
+import CreateMasterKey from './CreateMasterKey.vue';
+import GoogleButton from './googleButton.vue';
+import UnlockMasterKey from './UnlockMasterKey.vue';
 
 export default defineComponent({
   components: {
@@ -45,33 +41,31 @@ export default defineComponent({
     CreateMasterKey,
     UnlockMasterKey,
   },
-  setup () {
+  setup() {
+    const app = getCurrentInstance();
+    const gapi = app.appContext.config.globalProperties.$gapi;
+    const router = useRouter();
+    const authStore = inject('$authStore') as AuthStore;
 
-    const app       = getCurrentInstance()
-    const gapi      = app.appContext.config.globalProperties.$gapi
-    const router    = useRouter()
-    const authStore = inject('$authStore') as AuthStore
-
-    const hasClientKey = ref('anonymous')
-
+    const hasClientKey = ref('anonymous');
 
     const signInGoogle = async () => {
       try {
         // const client = await gapi.getGapiClient() // @todo this is a hack,
-        const auth = await gapi.getAuthInstance()
+        const auth = await gapi.getAuthInstance();
         await auth.signIn({
-          'prompt'     : 'select_account',
-          'grant_type' : 'authorization_code',
-          'scope'      : 'profile',
-        })
+          prompt: 'select_account',
+          grant_type: 'authorization_code',
+          scope: 'profile',
+        });
 
-        const currentGoogleUser = auth.currentUser.get()
+        const currentGoogleUser = auth.currentUser.get();
         await User.logInWith('google', {
           authData: {
-            id       : currentGoogleUser.getId(),
-            id_token : currentGoogleUser.getAuthResponse().id_token,
+            id: currentGoogleUser.getId(),
+            id_token: currentGoogleUser.getAuthResponse().id_token,
           },
-        })
+        });
 
         // const profile           = currentGoogleUser.getBasicProfile()
         // await Parse.Cloud.run('User--updateGoogleInfo', {
@@ -84,38 +78,34 @@ export default defineComponent({
         //     email     : profile.getEmail(),
         //   },
         // })
-        const user = await User.currentAsync() as User
+        const user = (await User.currentAsync()) as User;
 
         if (!user) {
-          return
+          return;
         }
 
-        hasClientKey.value = await authStore.hasClientKey() ? 'yes' : 'no'
-
-
+        hasClientKey.value = (await authStore.hasClientKey()) ? 'yes' : 'no';
       } catch (error) {
-        console.error(error)
+        console.error(error);
         // this.$notifyError({
         //   title : 'Authentification failed',
         //   text  : error,
         // })
       }
-    }
+    };
 
     const clientKeyValid = async () => {
-
       // @todo Show spinner
-      await sleep(1000)
-      await router.push({name: 'transactions'})
-    }
-
+      await sleep(1000);
+      await router.push({ name: 'transactions' });
+    };
 
     return {
       hasClientKey,
       clientKeyValid,
       signInGoogle,
       GoogleButton,
-    }
+    };
   },
-})
+});
 </script>

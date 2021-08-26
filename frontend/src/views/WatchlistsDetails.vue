@@ -4,23 +4,12 @@
       {{ watchlist.name }}
     </h1>
 
-    <DataTable
-      :config="config"
-      :rows="sortedItems"
-    >
-      <template
-        #beforeFilters(right)
-      >
-        <AssetSearch
-          v-model="selectedAsset"
-          placeholder="Add Symbol"
-        />
+    <DataTable :config="config" :rows="sortedItems">
+      <template #beforeFilters(right)>
+        <AssetSearch v-model="selectedAsset" placeholder="Add Symbol" />
       </template>
 
-
-      <template
-        #field(ticker)="{ row }"
-      >
+      <template #field(ticker)="{ row }">
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.tickerName"
@@ -34,9 +23,7 @@
         </span>
       </template>
 
-      <template
-        #field(name)="{ row }"
-      >
+      <template #field(name)="{ row }">
         <AppLink
           v-if="row.symbol"
           :ticker="row.symbol.tickerName"
@@ -50,30 +37,18 @@
         </span>
       </template>
 
-      <template
-        #field(dayPLChange)="{ row }"
-      >
+      <template #field(dayPLChange)="{ row }">
         <PriceChange
           v-if="row.lastPrice"
           :compare-from="row.lastPrice.previousClose"
-          :compare-to=" row.lastPrice.price"
+          :compare-to="row.lastPrice.price"
         />
-        <span v-else>
-          --
-        </span>
+        <span v-else> -- </span>
       </template>
 
-      <template
-        #actions="{row}"
-      >
-        <div
-          class="cursor-pointer hover:text-red-600 text-gray-300"
-          @click="remove(row)"
-        >
-          <GoIcons
-            name="Trash"
-            class="h-6 w-6"
-          />
+      <template #actions="{ row }">
+        <div class="cursor-pointer hover:text-red-600 text-gray-300" @click="remove(row)">
+          <GoIcons name="Trash" class="h-6 w-6" />
         </div>
       </template>
     </DataTable>
@@ -81,169 +56,164 @@
 </template>
 
 <script lang="ts">
-import { Watchlist, WatchlistItem } from '/@common/models'
-import { Holding } from '/@common/models/Holding'
-import { Query } from '/@common/Query'
-import AssetSearch from '/@components/AssetSearch.vue'
-import { TableConfig } from '/@components/DataTable'
-import DataTable from '/@components/DataTable.vue'
-import PriceChange from '/@components/PriceChange.vue'
-import AppLink from '/@components/router/AppLink.vue'
-import { useAssetPriceStore } from '/@store/index'
-import { Screens } from '/@utils/screens'
-import { defineComponent, onBeforeMount, onUnmounted, reactive, ref, shallowReactive, toRef, toRefs, watch } from 'vue'
-
+import { Watchlist, WatchlistItem } from '@common/models';
+import { Holding } from '@common/models/Holding';
+import { Query } from '@utils/parse/Query';
+import AssetSearch from '@components/AssetSearch.vue';
+import { TableConfig } from '@components/DataTable';
+import DataTable from '@components/DataTable.vue';
+import PriceChange from '@components/PriceChange.vue';
+import AppLink from '@components/router/AppLink.vue';
+import { useAssetPriceStore } from '@/store';
+import { Screens } from '@/utils/screens';
+import {
+  defineComponent,
+  onBeforeMount,
+  onUnmounted,
+  reactive,
+  ref,
+  shallowReactive,
+  toRef,
+  toRefs,
+  watch,
+} from 'vue';
 
 export default defineComponent({
-  components : {PriceChange, AssetSearch, AppLink, DataTable},
-  props      : {
+  components: { PriceChange, AssetSearch, AppLink, DataTable },
+  props: {
     id: {
-      type     : String,
-      required : true,
+      type: String,
+      required: true,
     },
   },
-  setup (props) {
-    let liveSubscription  = null
-    let liveSubscription2 = null
-    const selectedAsset   = ref(null)
-    const watchlistId     = toRef(props, 'id')
-    const watchlistItems  = shallowReactive([])
-    const priceStore      = useAssetPriceStore()
+  setup(props) {
+    let liveSubscription = null;
+    let liveSubscription2 = null;
+    const selectedAsset = ref(null);
+    const watchlistId = toRef(props, 'id');
+    const watchlistItems = shallowReactive([]);
+    const priceStore = useAssetPriceStore();
 
-    const config : TableConfig = {
+    const config: TableConfig = {
       fields: {
         name: {
           classes: 'text-bold',
         },
-        ticker    : {},
-        createdAt : {
-          format  : 'date',
-          justify : 'right'
+        ticker: {},
+        createdAt: {
+          format: 'date',
+          justify: 'right',
         },
         dayPLChange: {
-          format  : 'percent',
-          justify : 'right',
-          value   : (row : Holding) => {
+          format: 'percent',
+          justify: 'right',
+          value: (row: Holding) => {
             if (!row.lastPrice || row.lastPrice.price === 0) {
-              return null
+              return null;
             }
 
-            return (row.lastPrice.previousClose / row.lastPrice.price) - 1
+            return row.lastPrice.previousClose / row.lastPrice.price - 1;
           },
         },
         lastPrice: {
-          justify : 'right',
-          value   : (row: Holding) => {
-            return row.lastPrice?.price ?? null
-          }
-        }
+          justify: 'right',
+          value: (row: Holding) => {
+            return row.lastPrice?.price ?? null;
+          },
+        },
       },
       tableLayout: {
         [Screens.DEFAULT]: [
-          [
-            'ticker', 'name',
-          ],
-          [
-            'lastPrice',
-            'dayPLChange'
-          ]
+          ['ticker', 'name'],
+          ['lastPrice', 'dayPLChange'],
         ],
-        [Screens.SM]: [
-          [
-            'ticker', 'name',
-          ],
-          'lastPrice',
-          'dayPLChange',
-          'createdAt',
-        ],
+        [Screens.SM]: [['ticker', 'name'], 'lastPrice', 'dayPLChange', 'createdAt'],
       },
       settings: {
-        actions           : true,
-        translationPrefix : 'watchlist.table',
+        actions: true,
+        translationPrefix: 'watchlist.table',
       },
-    }
-
+    };
 
     const data = reactive({
-      watchlist   : null,
-      items       : [],
-      sortedItems : [],
-    })
+      watchlist: null,
+      items: [],
+      sortedItems: [],
+    });
 
-    async function remove (watchlistItem : WatchlistItem) {
-      watchlistItem.destroy()
+    async function remove(watchlistItem: WatchlistItem) {
+      watchlistItem.destroy();
     }
 
     onBeforeMount(async () => {
-      await priceStore.subscribe()
+      await priceStore.subscribe();
 
-      const q          = Query.create(Watchlist)
-      data.watchlist   = await q.get(watchlistId.value)
+      const q = Query.create(Watchlist);
+      data.watchlist = await q.get(watchlistId.value);
       liveSubscription = await q.liveQuery(null, async wl => {
-        data.watchlist = wl
-      })
+        data.watchlist = wl;
+      });
 
-      const q2          = Query.create(WatchlistItem)
-      q2.equalTo('watchlist', data.watchlist)
-      q2.include('symbol')
-      liveSubscription2 = await q2.liveQuery(watchlistItems)
-    })
+      const q2 = Query.create(WatchlistItem);
+      q2.equalTo('watchlist', data.watchlist);
+      q2.include('symbol');
+      liveSubscription2 = await q2.liveQuery(watchlistItems);
+    });
 
     onUnmounted(async () => {
       if (liveSubscription) {
-        await liveSubscription.unsubscribe()
+        await liveSubscription.unsubscribe();
       }
       if (liveSubscription2) {
-        await liveSubscription2.unsubscribe()
+        await liveSubscription2.unsubscribe();
       }
-    })
+    });
 
     watch(selectedAsset, async () => {
       if (!selectedAsset.value) {
-        return
+        return;
       }
       if (data.items.find(item => item.symbol.id === selectedAsset.value.id)) {
-        console.warn('Symbol already exists')
-        selectedAsset.value = null
-        return
+        console.warn('Symbol already exists');
+        selectedAsset.value = null;
+        return;
       }
 
-      const wi = new WatchlistItem()
+      const wi = new WatchlistItem();
 
-      wi.watchlist = data.watchlist
-      wi.symbol    = selectedAsset.value
+      wi.watchlist = data.watchlist;
+      wi.symbol = selectedAsset.value;
 
-      await wi.save()
+      await wi.save();
       //data.items.push(await wi.save())
 
-      selectedAsset.value = null
-    })
+      selectedAsset.value = null;
+    });
 
+    watch(
+      watchlistItems,
+      async () => {
+        data.sortedItems = watchlistItems;
 
-    watch(watchlistItems, async () => {
+        const symbols = watchlistItems.map(item => item.symbol);
 
-      data.sortedItems = watchlistItems
+        await priceStore.watch(symbols, assetPrice => {
+          const item = data.sortedItems.find(item => {
+            return item.symbol && item.symbol.id === assetPrice.symbol.id;
+          });
 
-      const symbols = watchlistItems.map(item => item.symbol)
-
-      await priceStore.watch(symbols, assetPrice => {
-
-        const item = data.sortedItems.find(item => {
-          return item.symbol && item.symbol.id === assetPrice.symbol.id
-        })
-
-        item.lastPrice = assetPrice
-      })
-
-    }, {immediate: true})
-
+          item.lastPrice = assetPrice;
+        });
+      },
+      { immediate: true }
+    );
 
     return {
       remove,
       selectedAsset,
       ...toRefs(data),
       config,
-    }
+    };
   },
-})
+});
 </script>

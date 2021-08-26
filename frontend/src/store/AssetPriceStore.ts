@@ -1,8 +1,7 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { AssetPrice, AssetSymbol } from '/@common/models'
-import { Query } from '/@common/Query'
-import { LiveQueryUpdateFn } from '/@common/Query/Query'
-import { defineStore } from 'pinia'
+import { AssetPrice, AssetSymbol } from '@common/models';
+import { Query } from '@utils/parse/Query';
+import { defineStore } from 'pinia';
 // const db = new IndexedDB('companyProfile')
 
 export const useAssetPriceStore = defineStore({
@@ -10,18 +9,15 @@ export const useAssetPriceStore = defineStore({
   id: 'assetPrice',
 
   state: () => ({
-    liveSubscription : null,
-    assetPrices      : [],
+    liveSubscription: null,
+    assetPrices: [],
   }),
   // optional getters
   getters: {},
 
-
   // optional actions
   actions: {
-
-    async subscribe () {
-
+    async subscribe() {
       // if (this.liveSubscription) {
       //
       // }
@@ -33,27 +29,23 @@ export const useAssetPriceStore = defineStore({
       // this.liveSubscription = await q.liveQuery(this.assetPrices,assetPrice => {
       //
       // })
-
-
     },
-    async watch (assetSymbols : AssetSymbol[], updateFn : LiveQueryUpdateFn<AssetPrice> = null) {
-
+    async watch(assetSymbols: AssetSymbol[], updateFn: LiveQueryUpdateFn<AssetPrice> = null) {
       if (this.liveSubscription) {
-        await this.liveSubscription.unsubscribe()
+        await this.liveSubscription.unsubscribe();
       }
 
-      const q = Query.create(AssetPrice)
-      q.descending('recordedAt')
-      q.include('symbol')
-      q.containedIn('symbol', assetSymbols)
+      const q = Query.create(AssetPrice);
+      q.descending('recordedAt');
+      q.include('symbol');
+      q.containedIn('symbol', assetSymbols);
 
-      this.liveSubscription = await q.liveQuery(this.assetPrices, updateFn)
+      this.liveSubscription = await q.liveQuery(this.assetPrices, updateFn);
     },
 
-    reset () {
+    reset() {
       // `this` is the store instance
-      this.holdings = []
+      this.holdings = [];
     },
-  }
-  ,
-})
+  },
+});

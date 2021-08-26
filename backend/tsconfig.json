@@ -1,39 +1,53 @@
 {
-  // Most ts-node options can be specified here using their programmatic names.
   "ts-node": {
-    // It is faster to skip typechecking.
-    // Remove if you want ts-node to do typechecking.
     "transpileOnly": false,
-
     "files": true,
-
     "compilerOptions": {
-      // compilerOptions specified here will override those declared below,
-      // but *only* in ts-node.  Useful if you want ts-node and tsc to use
-      // different options with a single tsconfig.json.
+      "resolveJsonModule": true
     }
   },
   "compilerOptions": {
     "module": "CommonJS",
-//    "esModuleInterop": true,
+    //    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "baseUrl": ".",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "./src",
     "paths": {
-      "/@common/*": [
-        "./../../common/*"
+      "@/*": [
+        "src/*"
       ],
-      "/*": [
-        "./"
+      "@cloud/*": [
+        "src/cloud/*"
+      ],
+      "@models": [
+        "../common/src/models/index.ts"
+      ],
+      "@models/*": [
+        "../common/src/models/*"
+      ],
+      "@locales/*": [
+        "../common/src/locales/*"
+      ],
+      "@common/*": [
+        "../common/src/*"
+      ],
+      "@utils/*": [
+        "../utils/src/*"
       ]
-    },
+    }
   },
   "include": [
-    "src/**/*",
-    "../common/**/*"
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "spec/**/*.ts"
+  ],
+  "exclude": [
+    "coverage/*",
+    "logs/*"
   ]
 }

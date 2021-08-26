@@ -32,8 +32,8 @@
 
 <!--<script lang="ts">-->
 <!--import {defineComponent, reactive} from 'vue'-->
-<!--import DataTable, {TableConfig} from '/@components/DataTable.vue'-->
-<!--import Modal from '/@components/Modal.vue'-->
+<!--import DataTable, {TableConfig} from '@components/DataTable.vue'-->
+<!--import Modal from '@components/Modal.vue'-->
 
 <!--export default defineComponent({-->
 <!--  components: {Modal, DataTable},-->

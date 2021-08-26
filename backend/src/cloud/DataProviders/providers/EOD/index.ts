@@ -3,34 +3,31 @@
  *
  *
  */
-import { processBatch } from '/@common/utils'
-import { Mutex } from 'async-mutex'
-import { AxiosError } from 'axios'
+import { processBatch } from '@utils/ProcessUtils';
+import { Mutex } from 'async-mutex';
+import { AxiosError } from 'axios';
 
-import * as dayjs from 'dayjs'
-import * as EODApi from 'eodhistoricaldata-openapi'
-import * as Types from '../types'
-
+import dayjs from 'dayjs';
+import * as EODApi from 'eodhistoricaldata-openapi';
+import * as Types from '../types';
 
 export class EOD implements Types.DataProviderInterface {
+  private readonly config: EODApi.Configuration;
+  mutex = new Mutex();
+  throttleRequestQuotaMs = 0;
 
-  private readonly config : EODApi.Configuration
-  mutex                  = new Mutex()
-  throttleRequestQuotaMs = 0
-
-  constructor (apiKey : string) {
+  constructor(apiKey: string) {
     this.config = new EODApi.Configuration({
       apiKey,
-    })
+    });
   }
 
-  private static handleError (error : AxiosError) : void {
-    const response = error.response
+  private static handleError(error: AxiosError): void {
+    const response = error.response;
 
     if (response.status === 429) {
       // X-RateLimit-Limit: 2000
       // X-RateLimit-Remaining: 1994
-
       // const s  = response.data['X-Rate-Limit-Retry-After-Seconds'] || 0
       // const ms = response.data['X-Rate-Limit-Retry-After-Milliseconds'] || 0
       // const err             = new Types.APIError(Types.APIErrorType.QUOTA_ERROR)
@@ -38,94 +35,87 @@ export class EOD implements Types.DataProviderInterface {
       // throw err
     }
 
-    throw new Types.APIError(Types.APIErrorType.UNKNOWN_ERROR, response)
+    throw new Types.APIError(Types.APIErrorType.UNKNOWN_ERROR, response);
   }
 
+  async fetchSupportedExchanges(): Promise<Array<Types.Exchange>> {
+    const listApi = new EODApi.ExchangesApi(this.config);
 
-  async fetchSupportedExchanges () : Promise<Array<Types.Exchange>> {
+    const response = await listApi.listExchanges();
 
-    const listApi = new EODApi.ExchangesApi(this.config)
-
-    const response = await listApi.listExchanges()
-
-    const exchanges : Types.Exchange[] = []
+    const exchanges: Types.Exchange[] = [];
 
     for (const exchange of response.data) {
       exchanges.push({
-        currency : exchange.Currency,
-        code     : exchange.Code,
-        country  : exchange.Country,
-        name     : exchange.Name,
-      })
+        currency: exchange.Currency,
+        code: exchange.Code,
+        country: exchange.Country,
+        name: exchange.Name,
+      });
     }
 
-    return exchanges
+    return exchanges;
   }
 
+  async fetchSupportedSymbols(): Promise<Array<Types.AssetSymbol>> {
+    const listApi = new EODApi.ExchangesApi(this.config);
+    const assets: Array<Types.AssetSymbol> = [];
 
-  async fetchSupportedSymbols () : Promise<Array<Types.AssetSymbol>> {
+    const exchanges = await this.fetchSupportedExchanges();
 
-    const listApi                           = new EODApi.ExchangesApi(this.config)
-    const assets : Array<Types.AssetSymbol> = []
+    console.log(`Found ${exchanges.length} exchanges`);
+    await processBatch(
+      exchanges,
+      async (exchange: Types.Exchange) => {
+        console.log(`Getting symbols for  ${exchange.code}`);
+        const response = await listApi.listSymbols(exchange.code);
 
+        for (const asset of response.data) {
+          assets.push({
+            currency: asset.Currency,
+            symbol: asset.Code,
+            exchange: asset.Exchange,
+            name: asset.Name,
+            type: asset.Type,
+            ISIN: asset.Isin,
+          });
+        }
+      },
+      null,
+      4
+    );
 
-    const exchanges = await this.fetchSupportedExchanges()
-
-    console.log(`Found ${exchanges.length} exchanges`)
-    await processBatch(exchanges, async (exchange : Types.Exchange) => {
-
-      console.log(`Getting symbols for  ${exchange.code}`)
-      const response = await listApi.listSymbols(exchange.code)
-
-      for (const asset of response.data) {
-        assets.push({
-          currency : asset.Currency,
-          symbol   : asset.Code,
-          exchange : asset.Exchange,
-          name     : asset.Name,
-          type     : asset.Type,
-          ISIN     : asset.Isin,
-        })
-
-      }
-
-    }, null, 4)
-
-    return assets
+    return assets;
   }
 
+  async searchSymbols(query: string): Promise<Array<Types.AssetSymbol>> {
+    const listApi = new EODApi.AssetsApi(this.config);
 
-  async searchSymbols (query : string) : Promise<Array<Types.AssetSymbol>> {
+    const response = await listApi.searchAsset(query);
 
-    const listApi = new EODApi.AssetsApi(this.config)
-
-    const response = await listApi.searchAsset(query)
-
-    const assets : Array<Types.AssetSymbol> = []
+    const assets: Array<Types.AssetSymbol> = [];
 
     for (const asset of response.data) {
-
       assets.push({
-        currency : asset.Currency,
-        symbol   : asset.Code,
-        exchange : asset.Exchange,
-        name     : asset.Name,
-        type     : asset.Type,
-        ISIN     : asset.ISIN,
-      })
+        currency: asset.Currency,
+        symbol: asset.Code,
+        exchange: asset.Exchange,
+        name: asset.Name,
+        type: asset.Type,
+        ISIN: asset.ISIN,
+      });
     }
 
-    return assets
+    return assets;
   }
 
-  async fetchSymbolTimeSeriesData (
-    symbol : string,
-    from : dayjs.Dayjs,
-    to : dayjs.Dayjs,
-    resolution : Types.SymbolDataResolution,
-  ) : Promise<Types.TimeSeriesData> {
-
-    return null
+  async fetchSymbolTimeSeriesData(
+    symbol: string,
+    from: dayjs.Dayjs,
+    to: dayjs.Dayjs,
+    resolution: Types.SymbolDataResolution
+  ): Promise<Types.TimeSeriesData> {
+    return null;
     /*
      const historyApi = new EODApi.HistoryApi(this.config)
 
@@ -184,75 +174,67 @@ export class EOD implements Types.DataProviderInterface {
      */
   }
 
-  async getCompanyProfile (tickerName : string) : Promise<Types.CompanyProfile> {
-
+  async getCompanyProfile(tickerName: string): Promise<Types.CompanyProfile> {
     try {
+      const assetApi = new EODApi.AssetsApi(this.config);
 
-      const assetApi = new EODApi.AssetsApi(this.config)
-
-      const response = await assetApi.assetFundamentalsGeneralSection(tickerName)
-      const general  = response.data
+      const response = await assetApi.assetFundamentalsGeneralSection(tickerName);
+      const general = response.data;
 
       return {
-        symbol            : general.Code,
-        companyName       : general.Name,
-        currency          : general.CurrencyCode,
-        isin              : general.ISIN,
-        cusip             : general.CUSIP,
-        exchangeCode      : general.Exchange,
-        industry          : general.Industry,
-        website           : general.WebURL,
-        description       : general.Description,
-        sector            : general.Sector,
-        country           : general.CountryISO,
-        fullTimeEmployees : general.FullTimeEmployees,
-        phone             : general.Phone,
-        address           : general.AddressData?.Street,
-        city              : general.AddressData?.City,
-        state             : general.AddressData?.State,
-        zip               : general.AddressData?.ZIP,
-        image             : general.LogoURL && general.LogoURL.toLowerCase()
-                                                      .startsWith('http') ? general.LogoURL : `https://eodhistoricaldata.com/${general.LogoURL}`,
-        ipoDate           : general.IPODate,
-      }
-
+        symbol: general.Code,
+        companyName: general.Name,
+        currency: general.CurrencyCode,
+        isin: general.ISIN,
+        cusip: general.CUSIP,
+        exchangeCode: general.Exchange,
+        industry: general.Industry,
+        website: general.WebURL,
+        description: general.Description,
+        sector: general.Sector,
+        country: general.CountryISO,
+        fullTimeEmployees: general.FullTimeEmployees,
+        phone: general.Phone,
+        address: general.AddressData?.Street,
+        city: general.AddressData?.City,
+        state: general.AddressData?.State,
+        zip: general.AddressData?.ZIP,
+        image:
+          general.LogoURL && general.LogoURL.toLowerCase().startsWith('http')
+            ? general.LogoURL
+            : `https://eodhistoricaldata.com/${general.LogoURL}`,
+        ipoDate: general.IPODate,
+      };
     } catch (error) {
-      EOD.handleError(error)
+      EOD.handleError(error);
     }
   }
 
-  async getCompanyQuote (symbol : string) : Promise<Types.CompanyQuote> {
+  async getCompanyQuote(symbol: string): Promise<Types.CompanyQuote> {
+    const data = await this.getCompanyQuotes([symbol]);
 
-    const data = await this.getCompanyQuotes([
-      symbol,
-    ])
-
-    return data.pop()
+    return data.pop();
   }
 
-
-  public name () : string {
-    return 'EOD'
+  public name(): string {
+    return 'EOD';
   }
 
+  async getCompanyProfiles(symbols: string[]): Promise<Types.CompanyProfile[]> {
+    const promises = await Object.values(symbols).map(
+      async symbol => await this.getCompanyProfile(symbol)
+    );
 
-  async getCompanyProfiles (symbols : string[]) : Promise<Types.CompanyProfile[]> {
-
-    const promises = await Object.values(symbols).map(async symbol => await this.getCompanyProfile(symbol))
-
-    return await Promise.all(promises)
+    return await Promise.all(promises);
   }
 
-  async getCompanyQuotes (symbols : string[]) : Promise<Types.CompanyQuote[]> {
+  async getCompanyQuotes(symbols: string[]): Promise<Types.CompanyQuote[]> {
+    const api = new EODApi.AssetsApi(this.config);
 
+    // const response = await api.realTimeQuote(symbols.pop(), symbols.join(','));
 
-    const api = new EODApi.AssetsApi(this.config)
-
-    const response = await api.realTimeQuote(symbols.pop(), symbols.join(','))
-
-
-    const quotes : Array<Types.CompanyQuote> = []
-/*
+    const quotes: Array<Types.CompanyQuote> = [];
+    /*
     for (const quote of response.data) {
       quotes.push({
         symbol            : quote.code,
@@ -269,8 +251,6 @@ export class EOD implements Types.DataProviderInterface {
       })
     }*/
 
-    return quotes
+    return quotes;
   }
-
 }
-

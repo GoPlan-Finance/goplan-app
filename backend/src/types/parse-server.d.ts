@@ -1,11 +1,7 @@
 // This file contain duplicate types from Parse-Server that are not yet updated
 
 declare module 'parse-server' {
-
   export namespace SchemaMigrations {
-    export type CLPType = '*' | ('find' | 'count' | 'get' | 'update' | 'create' | 'delete') /*| 'addField'*/[];
-
-
     export type FieldValueType =
       | 'String'
       | 'Boolean'
@@ -19,86 +15,72 @@ declare module 'parse-server' {
       | 'Array'
       | 'Object';
 
-
     interface FieldInterface {
-      type : FieldValueType,
-      targetClass? : string,
-      required? : boolean,
-      defaultValue? : any,
+      type: FieldValueType;
+      targetClass?: string;
+      required?: boolean;
+      defaultValue?: number | string | unknown;
     }
 
     type ClassNameType = '_User' | '_Role' | string;
 
-
-    export interface CLPInterface {
-      requiresAuthentication? : boolean;
-      '*'? : boolean;
-    }
-
-
     export interface ProtectedFieldsInterface {
-      [key : string] : string[];
+      [key: string]: string[];
     }
 
     interface FieldsInterface {
-      [key : string] : FieldInterface,
+      [key: string]: FieldInterface;
     }
-
-
 
     export interface IndexInterface {
-      [key : string] : number;
+      [key: string]: number;
     }
-
 
     export interface IndexesInterface {
-      [key : string] : IndexInterface;
+      [key: string]: IndexInterface;
     }
 
-
-    export interface MigrationsOptions {
-      schemas : JSONSchema[];
-      strict : boolean;
-      deleteExtraFields : boolean;
-      recreateModifiedFields : boolean;
-    }
-
-
-
-    interface CPLInterface {
-      requiresAuthentication? : boolean,
-      '*'? : boolean,
-    }
-
+    export type CLPOperation = 'find' | 'count' | 'get' | 'update' | 'create' | 'delete';
+    type CLPPermission =
+      | 'requiresAuthentication'
+      | '*'
+      | /* @Typescript 4.1+ `user:${string}` | `role:${string}` */ string;
+    type CLPInfo = { [key: string]: boolean };
+    type CLPData = { [key: string]: CLPOperation[] };
+    type CLPValue = { [key: string]: boolean };
+    type CLPInterface = { [key: string]: CLPValue };
 
     export interface CPLsInterface {
-      find? : CPLInterface,
-      count? : CPLInterface,
-      get? : CPLInterface,
-      update? : CPLInterface,
-      create? : CPLInterface,
-      delete? : CPLInterface,
-      addField? : CPLInterface,
-      protectedFields? : ProtectedFieldsInterface
+      find?: CLPInterface;
+      count?: CLPInterface;
+      get?: CLPInterface;
+      update?: CLPInterface;
+      create?: CLPInterface;
+      delete?: CLPInterface;
+      addField?: CLPInterface;
+      protectedFields?: ProtectedFieldsInterface;
     }
-
 
     export interface JSONSchema {
-      fields : FieldsInterface,
-      indexes : IndexesInterface,
-      classLevelPermissions : CPLsInterface,
+      fields: FieldsInterface;
+      indexes: IndexesInterface;
+      classLevelPermissions: CPLsInterface;
     }
 
-
-    export class CLPHelper {
-      static requiresAuthentication (ops : CLPType) : CPLsInterface ;
-
-      static requiresAnonymous (ops : CLPType) : CPLsInterface ;
+    export interface MigrationsOptions {
+      schemas: JSONSchema[];
+      strict: boolean;
+      deleteExtraFields: boolean;
+      recreateModifiedFields: boolean;
     }
 
+    export class CLP {
+      static allow(perms: CLPData): CLPInterface;
+    }
 
-    function makeSchema (className : ClassNameType, schema : Omit<JSONSchema, 'className'>) : JSONSchema ;
-
-
+    function makeSchema(
+      className: ClassNameType,
+      schema: Omit<JSONSchema, 'className'>
+    ): JSONSchema;
   }
 }

@@ -4,11 +4,14 @@
   "description": "a financial planning platform for the general public.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: TBD !\" && exit 1",
+    "pre-commit": "yarn run lint && yarn run prettier && yarn run yml-sort",
+    "lint-fix": "eslint --cache --fix . --ext .js,.ts,.vue",
+    "prettier": "prettier --write  src/ spec/",
+    "test": "jest",
     "dev": "vite",
     "build": "cross-env NODE_ENV=production vite build  --emptyOutDir=true",
     "lint": "eslint --cache . --ext .js,.ts,.vue",
-    "lint-fix": "eslint --cache --fix . --ext .js,.ts,.vue && yml-sorter -i src/locales/en.yml -o src/locales/en.yml"
+    "yml-sort": "yml-sorter -i src/locales/en.yml -o src/locales/en.yml"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,9 @@
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/GoPlan-Finance/GoPlan-app/issues"
+  },
+  "engines": {
+    "npm": "please-use-yarn"
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
@@ -47,6 +53,18 @@
     "vue-router": "^4.0.11"
   },
   "devDependencies": {
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-only-warn": "^1.0.2",
+    "@vue/cli-plugin-babel": "~4.5.9",
+    "@vue/cli-plugin-eslint": "~4.5.9",
+    "@vue/eslint-config-airbnb": "^5.3.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/cli-plugin-unit-jest": "^4.5.13",
+    "@types/jest": "^27.0.0",
+    "jest": "^27.0.6",
+    "jest-css-modules-transform": "^4.3.0",
+    "ts-jest": "^27.0.4",
+    "@vue/test-utils": "^1.2.2",
     "@intlify/vite-plugin-vue-i18n": "^2.4.0",
     "@tailwindcss/forms": "^0.3.3",
     "@types/concurrently": "^6.0.1",

@@ -1,16 +1,15 @@
-import { SchemaMigrations } from 'parse-server'
-
+import { SchemaMigrations } from 'parse-server';
 
 export default SchemaMigrations.makeSchema('AssetIndustry', {
   fields: {
-    name: {type: 'String'},
+    name: { type: 'String' },
   },
   indexes: {
-    name: {name: 1},
+    name: { name: 1 },
   },
   classLevelPermissions: {
-    ...SchemaMigrations.CLPHelper.requiresAuthentication([
-      'find', 'get', 'count',
-    ]),
+    ...SchemaMigrations.CLP.allow({
+      requiresAuthentication: ['find', 'get', 'count'],
+    }),
   },
-})
+});

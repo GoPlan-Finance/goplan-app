@@ -6,23 +6,21 @@
  *
  */
 
-require('./triggers/beforeLogin')
-
+require('./triggers/beforeLogin');
 
 interface RequestInterface {
-  master? : boolean,
-  user? : Parse.User,
+  master?: boolean;
+  user?: Parse.User;
 }
 
-
-export const assertUser = ({master, user} : RequestInterface) : void => {
+export const assertUser = ({ master, user }: RequestInterface): void => {
   if (master) {
-    return
+    return;
   }
 
   if (user) {
-    return
+    return;
   }
 
-  throw new Parse.Error(Parse.Error.OPERATION_FORBIDDEN, 'Please log-in')
-}
+  throw new Parse.Error(Parse.Error.OPERATION_FORBIDDEN, 'Please log-in');
+};
