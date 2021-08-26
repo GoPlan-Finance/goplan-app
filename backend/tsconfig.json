@@ -8,7 +8,6 @@
   },
   "compilerOptions": {
     "module": "CommonJS",
-    //    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "noImplicitAny": true,

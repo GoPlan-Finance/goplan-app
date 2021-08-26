@@ -20,12 +20,8 @@
   ],
   "scripts": {
     "auto-changelog": "auto-changelog",
-    "pre-commit": "concurrently   --kill-others-on-fail   -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils run pre-commit\" \"yarn --cwd backend run pre-commit\"  \"yarn --cwd frontend run pre-commit\" \"yarn --cwd common run pre-commit\"",
-    "test": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  run test\" \"yarn --cwd backend run server-test\"  \"yarn --cwd frontend  run ui-test\" \"yarn --cwd common run common-test\"",
-    "yarn-update": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  update\" \"yarn --cwd backend update\"  \"yarn --cwd frontend  update\"",
-    "yarn-install": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  install\" \"yarn --cwd backend  install\"  \"yarn --cwd frontend  install\"",
-    "yarn-install-force": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  install --force  --cache-folder .yarncache/utils\" \"yarn --cwd backend  install --force  --cache-folder .yarncache/backend\"  \"yarn --cwd frontend  install --force  --cache-folder .yarncache/ui\"",
-    "yarn-build": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  run test\" \"yarn --cwd backend run serverbuild\"  \"yarn --cwd frontend  ui-build\""
+    "pre-commit": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common,Changelog\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils run pre-commit\" \"yarn --cwd backend run pre-commit\"  \"yarn --cwd frontend run pre-commit\" \"yarn --cwd common run pre-commit\" \"yarn run auto-changelog\"",
+    "test": "concurrently  -p \"[{name}]\" -n \"Utils,Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd utils  run test\" \"yarn --cwd backend run backend-test\"  \"yarn --cwd frontend  run frontend-test\" \"yarn --cwd common run common-test\""
   },
   "dependencies": {},
   "devDependencies": {
@@ -41,7 +37,6 @@
     "template": "keepachangelog",
     "releaseSummary": true,
     "sortCommits": "date-desc",
-    "startingDate": "2021-08-01",
     "commitLimit": true
   }
 }

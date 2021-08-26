@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Merged
 
+- Bump @typescript-eslint/parser from 4.29.2 to 4.29.3 in /backend [`#485`](https://github.com/sadortun/GoPlan-app/pull/485)
+- Bump jasmine from 3.8.0 to 3.9.0 in /backend [`#484`](https://github.com/sadortun/GoPlan-app/pull/484)
 - Bump @types/express from 4.17.11 to 4.17.13 in /backend [`#464`](https://github.com/sadortun/GoPlan-app/pull/464)
 - Bump vue and @vue/compiler-sfc in /frontend [`#459`](https://github.com/sadortun/GoPlan-app/pull/459)
 - Bump @types/crypto-js from 4.0.1 to 4.0.2 in /backend [`#463`](https://github.com/sadortun/GoPlan-app/pull/463)
@@ -80,7 +82,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump papaparse from 5.3.0 to 5.3.1 in /frontend [`#312`](https://github.com/sadortun/GoPlan-app/pull/312)
 - Bump dayjs from 1.10.4 to 1.10.5 in /backend [`#310`](https://github.com/sadortun/GoPlan-app/pull/310)
 - Holdings improvements [`#267`](https://github.com/sadortun/GoPlan-app/pull/267)
-- Bump vue-router from 4.0.6 to 4.0.8 in /frontend [`#268`](https://github.com/sadortun/GoPlan-app/pull/268)
 - Bump @types/node from 15.0.2 to 15.0.3 in /frontend [`#265`](https://github.com/sadortun/GoPlan-app/pull/265)
 - Bump vite from 2.2.4 to 2.3.2 in /frontend [`#266`](https://github.com/sadortun/GoPlan-app/pull/266)
 - Bump hosted-git-info from 2.8.8 to 2.8.9 in /backend [`#263`](https://github.com/sadortun/GoPlan-app/pull/263)
@@ -132,7 +133,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace CryptoJS by WebCrypto [`#211`](https://github.com/sadortun/GoPlan-app/pull/211)
 - Add GoSelect base component [`#210`](https://github.com/sadortun/GoPlan-app/pull/210)
 - Table layout [`#208`](https://github.com/sadortun/GoPlan-app/pull/208)
-- Bump vue-i18n from 9.1.4 to 9.1.5 in /frontend [`#205`](https://github.com/sadortun/GoPlan-app/pull/205)
 - Split the formatting of values to the calculation to enable sorting [`#204`](https://github.com/sadortun/GoPlan-app/pull/204)
 - Account selector [`#203`](https://github.com/sadortun/GoPlan-app/pull/203)
 - Path aliases [`#202`](https://github.com/sadortun/GoPlan-app/pull/202)
@@ -268,4 +268,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Update schemas [`0d289ac`](https://github.com/sadortun/GoPlan-app/commit/0d289ac73d49d429cfb94ef66fc81361ac67ef04)
+- Fix tests, updated packages, and fixed CI [`0adf955`](https://github.com/sadortun/GoPlan-app/commit/0adf955338123a34b427ca8d57204acbb970cd06)

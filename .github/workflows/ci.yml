@@ -1,4 +1,4 @@
-name: ci
+name: Run Tests
 
 on:
   push:
@@ -9,94 +9,53 @@ on:
       - '**'
 
 jobs:
-  build-common:
-    defaults:
-      run:
-        working-directory: ./common
-    runs-on: ubuntu-18.04
-    timeout-minutes: 30
-    env:
-      MONGODB_VERSION: 3.6.9
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: npm i
-      - run: npm run lint
-        #    - run: npm test -- --maxWorkers=4
-        #    - run: npm run integration
-        env:
-          CI: true
-      - run: bash <(curl -s https://codecov.io/bash)
-  build-backend:
-    defaults:
-      run:
-        working-directory: ./backend
-    runs-on: ubuntu-18.04
-    timeout-minutes: 30
-    env:
-      MONGODB_VERSION: 3.6.9
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: npm ci
-      - run: cp config/config.defaults.ts config/config.ts
-#      - run: npm run build
-      - run: npm run lint
-#      - run: npm install -g mongodb-runner
-#      - run: mongodb-runner start
-#    - run: npm test -- --maxWorkers=4
-#    - run: npm run integration
-        env:
-          CI: true
-      - run: bash <(curl -s https://codecov.io/bash)
   build-frontend:
-    defaults:
-      run:
-        working-directory: ./frontend
     runs-on: ubuntu-18.04
     timeout-minutes: 30
     env:
       MONGODB_VERSION: 3.6.9
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14'
-    - name: Cache Node.js modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-            ${{ runner.os }}-node-
-    - run: npm ci
-#    - run: npm run build
-    - run: npm run lint
-#    - run: npm test -- --maxWorkers=4
-#    - run: npm run integration
-      env:
-        CI: true
-    - run: bash <(curl -s https://codecov.io/bash)
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile  --cache-folder .yarncache
+
+      - run: yarn --cwd frontend run lint
+
+      - run: yarn --cwd frontend run frontend-test
+        env:
+          CI: true
+
+  build-backend:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 30
+    env:
+      MONGODB_VERSION: 4.4.6
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile  --cache-folder .yarncache
+
+      - run: yarn --cwd backend run lint
+
+      - run: yarn --cwd backend run backend-test
+        env:
+          CI: true
+
 
 
