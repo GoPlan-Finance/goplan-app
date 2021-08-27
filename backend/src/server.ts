@@ -69,7 +69,7 @@ const parseConfig = {
       // '',
     ],
   },
-  schemas: {
+  schema: {
     strict: true,
     definitions: schemas,
   },
