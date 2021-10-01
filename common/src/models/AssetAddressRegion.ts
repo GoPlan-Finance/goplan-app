@@ -1,4 +1,4 @@
-import { BaseObject } from '@utils/parse/BaseObject';
+import { BaseObject } from '@goplan-finance/utils';
 
 export class AssetAddressRegion extends BaseObject {
   static className = 'AssetAddressRegion';

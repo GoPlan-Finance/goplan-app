@@ -14,6 +14,7 @@ import { Server } from 'http';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { ParseServer } from 'parse-server';
+import { Money } from 'ts-money';
 import userConfig from '../config/config';
 
 // Load environment dependent configuration
@@ -22,6 +23,10 @@ import defaultConfig from '../config/config.defaults';
 import { ProviderConfigInterface } from './cloud/DataProviders/providers';
 import config from './config';
 import { schemas } from './Migrations/schemas';
+
+import { MoneyUtils } from '@goplan-finance/utils';
+
+console.log(MoneyUtils);
 
 config.load({
   ...defaultConfig,

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
@@ -24,9 +25,6 @@
       "@models": [
         "../common/src/models/index.ts"
       ],
-      "@utils/*": [
-        "../utils/src/*"
-      ],
       "@components/*": [
         "src/components/*"
       ],
@@ -48,8 +46,7 @@
       "webpack-env",
       "jest",
       "parse"
-    ],
-    "allowSyntheticDefaultImports": true
+    ]
   },
   "include": [
     "types/*.d.ts",

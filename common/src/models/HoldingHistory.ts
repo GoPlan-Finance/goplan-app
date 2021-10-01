@@ -1,5 +1,5 @@
 import { AssetSymbol, Holding } from '.';
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 
 export class HoldingHistory extends SecureObject {
   static className = 'HoldingHistory';

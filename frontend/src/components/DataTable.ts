@@ -1,5 +1,5 @@
 import { Screens } from '@/utils/screens';
-import { CurrencyUtils } from '@utils/CurrencyUtils';
+import { CurrencyUtils } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 
 /* eslint-disable no-use-before-define */

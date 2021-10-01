@@ -4,8 +4,7 @@
  *
  */
 import { StockExchange } from '@common/models';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
-import { processBatch } from '@utils/ProcessUtils';
+import { CacheableQuery, ProcessUtils } from '@goplan-finance/utils';
 // noinspection ES6PreferShortImport
 import { DataProvider } from '../providers';
 
@@ -26,7 +25,7 @@ Parse.Cloud.job('DataProviders--FetchAllExchanges', async request => {
   for (const [providerName, exchanges] of Object.entries(exchangesProviders)) {
     log.info(`Processing ${exchanges.length} symbols for ${providerName}`);
 
-    await processBatch(
+    await ProcessUtils.processBatch(
       exchanges,
       async (apiExchange: DataProviderInterfaces.Exchange) => {
         const exchange = await CacheableQuery.create(StockExchange).findOrCreate(

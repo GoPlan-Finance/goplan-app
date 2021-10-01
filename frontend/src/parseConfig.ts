@@ -18,7 +18,7 @@ if (import.meta.env.VITE_APP_PARSE_API_LOCATION === 'local') {
 window.Parse.enableLocalDatastore();
 Parse.CoreManager.setStorageController(Parse.IndexedDB);
 
-// import { SecureObject } from '@utils/parse/SecureObject'
+// import { SecureObject } from '@goplan-finance/utils'
 // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // // @ts-ignore
 // const ParseObjectController = Parse.CoreManager.getObjectController()

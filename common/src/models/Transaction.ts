@@ -1,5 +1,5 @@
 import { Account, AssetSymbol, Holding, User } from '.';
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 
 export type TransactionType = 'transfer' | 'buy' | 'sell' | 'dividends' | 'fees';
 

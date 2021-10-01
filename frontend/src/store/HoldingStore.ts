@@ -1,6 +1,6 @@
 import { Holding } from '@common/models/Holding';
 import { HoldingHelper } from '@store/Holding/HoldingHelper';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { useAssetPriceStore } from './';

@@ -5,8 +5,7 @@
  */
 // noinspection ES6PreferShortImport
 import { AssetSymbol, StockExchange } from '@common/models';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
-import { processBatch } from '@utils/ProcessUtils';
+import { CacheableQuery, ProcessUtils } from '@goplan-finance/utils';
 
 import { assertUser } from '../../Auth';
 
@@ -24,7 +23,7 @@ Parse.Cloud.define('Assets--Search', async request => {
   for (const [providerName, symbols] of Object.entries(results)) {
     const MAX_SYMBOLS = 15;
 
-    await processBatch(
+    await ProcessUtils.processBatch(
       symbols.slice(0, MAX_SYMBOLS),
       async (symbol: Types.AssetSymbol): Promise<void> => {
         const exchange = await CacheableQuery.create(StockExchange).findOrCreate(

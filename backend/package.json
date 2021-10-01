@@ -30,6 +30,7 @@
     "npm": "please-use-yarn"
   },
   "dependencies": {
+    "@goplan-finance/utils": "github:goplan-finance/utils#master",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "convict": "^6.1.0",
@@ -44,7 +45,7 @@
     "parse": "3.2.0",
     "parse-server": "https://github.com/GoPlan-Finance/parse-server#master",
     "ts-money": "^0.4.6",
-    "ts-node": "^10.0.0"
+    "ts-node": "^10.2.1"
   },
   "devDependencies": {
     "@types/concurrently": "^6.0.1",
@@ -73,7 +74,7 @@
     "nyc": "15.1.0",
     "prettier": "2.3.2",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.3"
   },
   "peerDependencies": {
     "redis": ">=3.1.1"

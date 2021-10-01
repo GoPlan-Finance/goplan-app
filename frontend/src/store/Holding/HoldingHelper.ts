@@ -1,5 +1,5 @@
 import { Holding, Transaction } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { HoldingHistoryHelper } from '@store/Holding/HoldingHistoryHelper';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';

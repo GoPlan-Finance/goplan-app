@@ -1,5 +1,4 @@
-import { BaseObject } from '@utils/parse/BaseObject';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
+import { BaseObject, CacheableQuery } from '@goplan-finance/utils';
 import { StockExchange } from './StockExchange';
 
 export class AssetSymbol extends BaseObject {

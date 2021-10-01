@@ -29,9 +29,6 @@
       "@common/*": [
         "./src/*"
       ],
-      "@utils/*": [
-        "../utils/src/*"
-      ]
     }
   },
   "include": [

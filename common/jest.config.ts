@@ -100,7 +100,7 @@ export default {
   },
 
   // moduleNameMapper : {
-  //   '^@utils/(.*)$' : '<rootDir>/src/$1',
+  //   '^@goplan-finance/utils/(.*)$' : '<rootDir>/src/$1',
   //   '^@models/(.*)$' : '<rootDir>/src/models/$1',
   //   '^@models$'      : '<rootDir>/src/models/index.ts',
   // },

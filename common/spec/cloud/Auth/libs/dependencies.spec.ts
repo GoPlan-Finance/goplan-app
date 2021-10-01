@@ -1,4 +1,4 @@
-import { MoneyUtils } from '@utils/MoneyUtils';
+import { MoneyUtils } from '@goplan-finance/utils';
 import { Money } from 'ts-money';
 
 describe('dependencies', () => {

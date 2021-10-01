@@ -1,8 +1,8 @@
 // vite.config.js
-import path, { resolve } from 'path'
-import vue from '@vitejs/plugin-vue'
-import pluginRewriteAll from 'vite-plugin-rewrite-all'
 import vueI18n from '@intlify/vite-plugin-vue-i18n'
+import vue from '@vitejs/plugin-vue'
+import path, { resolve } from 'path'
+import pluginRewriteAll from 'vite-plugin-rewrite-all'
 
 // https://vitejs.dev/config/
 export default {
@@ -13,6 +13,10 @@ export default {
 
   esmExternals: true,
   optimizeDeps: {
+    include: [
+      '@goplan-finance/utils'
+    ],
+
     exclude: [
       'parse', // @todo check if ok to ignore
     ]
@@ -28,7 +32,6 @@ export default {
       { find: '@models', replacement: resolve('../common/src/models'), },
       { find: '@locales', replacement: resolve('../common/src/locales'), },
       { find: '@common', replacement: resolve('../common/src'), },
-      { find: '@utils', replacement: resolve('../utils/src'), },
       { find: '@components', replacement: resolve('./src/components'), },
       { find: '@pages', replacement: resolve('./src/pages'), },
       { find: '@views', replacement: resolve('./src/views'), },

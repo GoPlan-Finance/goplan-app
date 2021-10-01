@@ -1,9 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { AssetPrice, AssetSymbol } from '@common/models';
-import { Query } from '@utils/parse/Query';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
-import { ArrayUtils } from '@utils/ArrayUtils';
+import { ArrayUtils, CacheableQuery, Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
 import { DataProvider } from '../../DataProviders/providers';

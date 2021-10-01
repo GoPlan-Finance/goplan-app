@@ -5,8 +5,7 @@
  */
 import { Account, AssetSymbol, Transaction } from '@common/models';
 import { TransactionType } from '@common/models/Transaction';
-import { Query } from '@utils/parse/Query';
-import { StringUtils } from '@utils/StringUtils';
+import { Query, StringUtils } from '@goplan-finance/utils';
 
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';

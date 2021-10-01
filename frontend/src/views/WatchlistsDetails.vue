@@ -58,7 +58,7 @@
 <script lang="ts">
 import { Watchlist, WatchlistItem } from '@common/models';
 import { Holding } from '@common/models/Holding';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import AssetSearch from '@components/AssetSearch.vue';
 import { TableConfig } from '@components/DataTable';
 import DataTable from '@components/DataTable.vue';

@@ -1,7 +1,6 @@
-import { Query } from '@utils/parse/Query';
+import { Query, SecureObject } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import { AssetPrice, AssetSymbol, Transaction, User } from '.';
-import { SecureObject } from '@utils/parse/SecureObject';
 
 const createMutex = new Mutex();
 

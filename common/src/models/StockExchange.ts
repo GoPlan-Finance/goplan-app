@@ -1,4 +1,4 @@
-import { BaseObject } from '@utils/parse/BaseObject';
+import { BaseObject } from '@goplan-finance/utils';
 
 export class StockExchange extends BaseObject {
   static className = 'StockExchange';

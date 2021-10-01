@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import { Account, AssetSymbol, Transaction } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import AccountSelect from '@components/AccountSelect.vue';
 import AssetSearch from '@components/AssetSearch.vue';
 import Modal from '@components/base/GoModal.vue';

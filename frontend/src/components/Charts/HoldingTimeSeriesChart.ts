@@ -4,8 +4,7 @@
  *
  */
 import { HoldingTimeSeries } from '@common/models';
-import { ArrayUtils } from '@utils/ArrayUtils';
-import { Query } from '@utils/parse/Query';
+import { ArrayUtils, Query } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 

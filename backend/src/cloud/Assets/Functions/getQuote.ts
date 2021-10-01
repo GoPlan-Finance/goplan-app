@@ -5,7 +5,7 @@
  */
 // noinspection ES6PreferShortImport
 import { AssetSymbol } from '@common/models';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
+import { CacheableQuery } from '@goplan-finance/utils';
 import { assertUser } from '../../Auth';
 
 import { DataProvider } from '../../DataProviders/providers';

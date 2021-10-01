@@ -3,7 +3,7 @@
  *
  *
  */
-import { processBatch } from '@utils/ProcessUtils';
+import { ProcessUtils } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import { AxiosError } from 'axios';
 
@@ -64,7 +64,7 @@ export class EOD implements Types.DataProviderInterface {
     const exchanges = await this.fetchSupportedExchanges();
 
     console.log(`Found ${exchanges.length} exchanges`);
-    await processBatch(
+    await ProcessUtils.processBatch(
       exchanges,
       async (exchange: Types.Exchange) => {
         console.log(`Getting symbols for  ${exchange.code}`);

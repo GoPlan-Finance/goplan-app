@@ -4,7 +4,7 @@
  *
  */
 import { assertEncryptedObject } from '@common/Auth';
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 import { Holding } from '@common/models/Holding';
 import { assertUser } from '../../Auth';
 

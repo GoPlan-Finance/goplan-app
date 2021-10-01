@@ -1,6 +1,6 @@
 // import {IndexedDB} from './base/IndexedDB'
 import { Account } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 
 // const db = new IndexedDB('companyProfile')

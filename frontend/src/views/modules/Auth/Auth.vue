@@ -26,7 +26,7 @@
 <script lang="ts">
 import { AuthStore } from '@/store';
 import { User } from '@common/models';
-import { sleep } from '@utils/ProcessUtils';
+import { ProcessUtils } from '@goplan-finance/utils';
 import { defineComponent, getCurrentInstance, inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import GoPlanLogo from '@components/base/GoPlanLogo.vue';
@@ -96,7 +96,7 @@ export default defineComponent({
 
     const clientKeyValid = async () => {
       // @todo Show spinner
-      await sleep(1000);
+      await ProcessUtils.sleep(1000);
       await router.push({ name: 'transactions' });
     };
 

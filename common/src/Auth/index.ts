@@ -4,7 +4,7 @@
  *
  */
 
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 import { Crypto } from '../Crypto';
 
 const assertEncryptedField = (object: Parse.Object, fieldName: string): void => {

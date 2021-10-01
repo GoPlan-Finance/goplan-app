@@ -5,7 +5,7 @@
  */
 
 import { Holding, HoldingTimeSeries } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 
 Parse.Cloud.afterDelete(Holding, async request => {
   const holding: Holding = request.object;

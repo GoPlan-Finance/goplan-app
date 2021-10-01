@@ -4,8 +4,7 @@
  *
  */
 import { AssetSymbol, StockExchange } from '@common/models';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
-import { processBatch } from '@utils/ProcessUtils';
+import { CacheableQuery, ProcessUtils } from '@goplan-finance/utils';
 // noinspection ES6PreferShortImport
 import { DataProvider, ProviderSymbols } from '../providers';
 
@@ -37,7 +36,7 @@ Parse.Cloud.job('DataProviders--FetchAllSymbols', async request => {
 
     let saveQueue: AssetSymbol[] = [];
 
-    await processBatch(
+    await ProcessUtils.processBatch(
       symbols,
       async (apiSymbol: DataProviderInterfaces.AssetSymbol) => {
         const exchange = !apiSymbol.exchange

@@ -1,5 +1,4 @@
-import { BaseObject } from '@utils/parse/BaseObject';
-import { LiveQueryUpdateFn, Query } from '@utils/parse/Query';
+import { BaseObject, Query, QueryUtils } from '@goplan-finance/utils';
 import { AssetSymbol } from './AssetSymbol';
 
 export class AssetPrice extends BaseObject {
@@ -163,7 +162,7 @@ export class AssetPrice extends BaseObject {
 
   static async liveQuery(
     symbol: AssetSymbol,
-    fn: LiveQueryUpdateFn<AssetPrice>
+    fn: QueryUtils.LiveQueryUpdateFn<AssetPrice>
   ): Promise<Parse.LiveQuerySubscription> {
     const q = Query.create(AssetPrice);
 

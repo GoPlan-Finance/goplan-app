@@ -29,26 +29,27 @@
   },
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
-    "parse": "^3.2.0",
-    "typescript": "4.3.5",
+    "@goplan-finance/utils": "github:goplan-finance/utils#master",
     "async-mutex": "^0.3.1",
     "crypto-js": "^4.0.0",
     "papaparse": "^5.3.1",
+    "parse": "^3.2.0",
     "ts-money": "^0.4.6",
-    "ts-node": "^9.1.1"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.24",
-    "jest": "^27.0.6",
-    "prettier": "^2.3.2",
-    "ts-jest": "^27.0.3",
     "@types/crypto-js": "^4.0.1",
+    "@types/jest": "^26.0.24",
     "@types/node": "^14.17.2",
     "@types/parse": "^2.18.6",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.27.0",
     "eslint-plugin-varspacing": "^1.2.2",
-    "eslint-plugin-vue": "^7.10.0"
+    "eslint-plugin-vue": "^7.10.0",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.3"
   }
 }

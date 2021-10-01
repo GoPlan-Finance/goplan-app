@@ -3,9 +3,8 @@
  *
  *
  */
-// eslint-disable-next-line  @typescript-eslint/no-var-requires
 
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 
 SecureObject.setServerMode();
 

@@ -5,7 +5,7 @@
  */
 import { Transaction } from '@common/models';
 import { Holding } from '@common/models/Holding';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 
 export const findHolding = async (transaction: Transaction): Promise<Holding | null> => {

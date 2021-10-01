@@ -1,5 +1,4 @@
-import { BaseObject } from '@utils/parse/BaseObject';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
+import { BaseObject, CacheableQuery } from '@goplan-finance/utils';
 
 import { AssetAddressRegion } from './AssetAddressRegion';
 import { AssetIndustry } from './AssetIndustry';

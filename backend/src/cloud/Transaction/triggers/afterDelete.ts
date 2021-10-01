@@ -5,7 +5,7 @@
  */
 import { Transaction } from '@common/models';
 import { Holding } from '@common/models/Holding';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { findHolding } from './afterSave';
 
 Parse.Cloud.afterDelete(Transaction, async request => {

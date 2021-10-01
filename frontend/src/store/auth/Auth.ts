@@ -1,6 +1,6 @@
 import { Crypto, DecryptedKey, DerivedKey, EncryptedKey } from '@common/Crypto';
 import { User } from '@common/models';
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 import { Session } from './index';
 
 export class AuthStore {

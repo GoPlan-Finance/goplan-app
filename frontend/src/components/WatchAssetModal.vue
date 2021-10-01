@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { AssetSymbol, Watchlist } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue';
 import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';

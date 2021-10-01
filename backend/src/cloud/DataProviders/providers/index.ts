@@ -5,7 +5,7 @@
  *
  */
 import { AssetSymbol } from '@common/models';
-import { sleep } from '@utils/ProcessUtils';
+import { ProcessUtils } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -72,7 +72,7 @@ class GlobalProvider {
         if (throttleMs > 0) {
           console.warn(`Quota exceeded, retrying in ${throttleMs} ms`);
 
-          await sleep(throttleMs);
+          await ProcessUtils.sleep(throttleMs);
         }
 
         return await fn();

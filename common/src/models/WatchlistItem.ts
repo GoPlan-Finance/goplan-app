@@ -1,6 +1,6 @@
 import { AssetSymbol, Watchlist } from '@common/models';
 import { User } from '@common/models/User';
-import { BaseObject } from '@utils/parse/BaseObject';
+import { BaseObject } from '@goplan-finance/utils';
 
 export class WatchlistItem extends BaseObject {
   static className = 'WatchlistItem';

@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { Watchlist, WatchlistItem } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 import AddWatchlist from '@components/AddWatchlist.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import dayjs from 'dayjs';

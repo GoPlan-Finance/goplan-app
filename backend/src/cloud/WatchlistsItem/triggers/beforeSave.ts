@@ -5,8 +5,8 @@
  */
 
 import { WatchlistItem } from '@common/models';
-import { BaseObject } from '@utils/parse/BaseObject';
-import { Query } from '@utils/parse/Query';
+
+import { Query } from '@goplan-finance/utils';
 import { assertUser } from '../../Auth';
 
 Parse.Cloud.beforeSave(

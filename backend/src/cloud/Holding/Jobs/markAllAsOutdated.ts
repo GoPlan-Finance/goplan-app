@@ -4,7 +4,7 @@
  *
  */
 import { Holding } from '@common/models';
-import { Query } from '@utils/parse/Query';
+import { Query } from '@goplan-finance/utils';
 
 Parse.Cloud.job('Holdings--MarkAllAsOutdated', async request => {
   const q = Query.create(Holding);

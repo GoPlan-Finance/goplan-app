@@ -5,7 +5,7 @@
  */
 // noinspection ES6PreferShortImport
 import { AssetSymbol } from '@common/models';
-import { CacheableQuery } from '@utils/parse/CacheableQuery';
+import { CacheableQuery } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 
 import { DataProvider } from '../../DataProviders/providers';

@@ -5,7 +5,7 @@
  */
 import { assertEncryptedObject } from '@common/Auth';
 import { Holding, Transaction } from '@common/models';
-import { SecureObject } from '@utils/parse/SecureObject';
+import { SecureObject } from '@goplan-finance/utils';
 import { assertUser } from '../../Auth';
 
 Parse.Cloud.beforeSave(
