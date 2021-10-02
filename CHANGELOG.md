@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Merged
 
+- Bump @types/node from 16.6.2 to 16.10.2 in /frontend [`#601`](https://github.com/sadortun/GoPlan-app/pull/601)
+- Bump @vitejs/plugin-vue from 1.2.3 to 1.9.2 in /frontend [`#600`](https://github.com/sadortun/GoPlan-app/pull/600)
+- Bump ansi-regex from 5.0.0 to 5.0.1 in /frontend [`#599`](https://github.com/sadortun/GoPlan-app/pull/599)
+- Bump postcss from 8.3.5 to 8.3.8 in /frontend [`#594`](https://github.com/sadortun/GoPlan-app/pull/594)
+- Bump @types/jest from 26.0.23 to 27.0.2 in /backend [`#589`](https://github.com/sadortun/GoPlan-app/pull/589)
+- Bump parse from 3.2.0 to 3.3.1 in /backend [`#582`](https://github.com/sadortun/GoPlan-app/pull/582)
+- Bump concurrently from 6.2.1 to 6.2.2 in /backend [`#583`](https://github.com/sadortun/GoPlan-app/pull/583)
+- Bump concurrently from 6.1.0 to 6.2.2 in /frontend [`#584`](https://github.com/sadortun/GoPlan-app/pull/584)
+- Bump pinia from 2.0.0-beta.3 to 2.0.0-rc.10 in /frontend [`#585`](https://github.com/sadortun/GoPlan-app/pull/585)
+- Bump nodemon from 2.0.12 to 2.0.13 in /backend [`#586`](https://github.com/sadortun/GoPlan-app/pull/586)
+- Bump @tailwindcss/forms from 0.3.3 to 0.3.4 in /frontend [`#587`](https://github.com/sadortun/GoPlan-app/pull/587)
+- Bump typescript from 4.3.5 to 4.4.3 in /frontend [`#588`](https://github.com/sadortun/GoPlan-app/pull/588)
+- Bump echarts from 5.1.2 to 5.2.1 in /frontend [`#590`](https://github.com/sadortun/GoPlan-app/pull/590)
+- Bump eslint-plugin-vue from 7.11.1 to 7.18.0 in /frontend [`#591`](https://github.com/sadortun/GoPlan-app/pull/591)
+- Bump async-mutex from 0.3.1 to 0.3.2 in /frontend [`#592`](https://github.com/sadortun/GoPlan-app/pull/592)
+- Bump parse from 3.3.0 to 3.3.1 in /frontend [`#595`](https://github.com/sadortun/GoPlan-app/pull/595)
+- Bump axios from 0.21.1 to 0.22.0 in /backend [`#596`](https://github.com/sadortun/GoPlan-app/pull/596)
+- Bump vite from 2.5.0 to 2.6.2 in /frontend [`#597`](https://github.com/sadortun/GoPlan-app/pull/597)
 - Bump @typescript-eslint/parser from 4.29.2 to 4.29.3 in /backend [`#485`](https://github.com/sadortun/GoPlan-app/pull/485)
 - Bump jasmine from 3.8.0 to 3.9.0 in /backend [`#484`](https://github.com/sadortun/GoPlan-app/pull/484)
 - Bump @types/express from 4.17.11 to 4.17.13 in /backend [`#464`](https://github.com/sadortun/GoPlan-app/pull/464)
@@ -270,4 +288,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Fix tests, updated packages, and fixed CI [`333370a`](https://github.com/sadortun/GoPlan-app/commit/333370aa6b3b2522943a99682cd712eee9a393aa)
+- Move Utils submodule to a separate  NPM Package [`f983e0f`](https://github.com/sadortun/GoPlan-app/commit/f983e0f404a4c8d98a1257c3b4496c206f917be3)

@@ -59,6 +59,7 @@ import PriceChange from '@components/PriceChange.vue';
 import { RangeValue, TableLayout, TableRow } from '@components/DataTable';
 import DataTable from '@components/DataTable.vue';
 import AppLink from '@components/router/AppLink.vue';
+import { ArrayUtils } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue';
 

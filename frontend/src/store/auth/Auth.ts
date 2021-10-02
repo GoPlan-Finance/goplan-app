@@ -1,11 +1,10 @@
-import { Crypto, DecryptedKey, DerivedKey, EncryptedKey } from '@common/Crypto';
 import { User } from '@common/models';
-import { SecureObject } from '@goplan-finance/utils';
+import { CryptoUtils, SecureObject } from '@goplan-finance/utils';
 import { Session } from './index';
 
 export class AuthStore {
   public static maybeLoadDerivedKey(): void {
-    const derivedKey = Session.get<DerivedKey>('derivedKey');
+    const derivedKey = Session.get<CryptoUtils.DerivedKey>('derivedKey');
     SecureObject.setSessionDerivedKey(derivedKey);
   }
 
@@ -13,7 +12,7 @@ export class AuthStore {
     AuthStore.storeDerivedKey(null);
   }
 
-  private static storeDerivedKey(derivedKey: DerivedKey): void {
+  private static storeDerivedKey(derivedKey: CryptoUtils.DerivedKey): void {
     // @todo ensure SessionStorage is safe storage for tokens
     Session.set('derivedKey', derivedKey);
     SecureObject.setSessionDerivedKey(derivedKey);
@@ -54,9 +53,15 @@ export class AuthStore {
       throw 'No client key';
     }
 
-    const clientKey = user.get('clientKey') as EncryptedKey;
-    const derived = await Crypto.PBKDF2(masterKey, Crypto.strToBuff(clientKey.s));
-    const key = (await Crypto.decrypt(derived, clientKey)) as DecryptedKey;
+    const clientKey = user.get('clientKey') as CryptoUtils.EncryptedKey;
+    const derived = await CryptoUtils.Crypto.PBKDF2(
+      masterKey,
+      CryptoUtils.Crypto.strToBuff(clientKey.s)
+    );
+    const key = (await CryptoUtils.Crypto.decrypt(
+      derived,
+      clientKey
+    )) as CryptoUtils.Crypto.DecryptedKey;
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key';
@@ -83,7 +88,7 @@ export class AuthStore {
     return false;
   }
 
-  public async createMasterKey(newMasterKey: string): Promise<EncryptedKey> {
+  public async createMasterKey(newMasterKey: string): Promise<CryptoUtils.EncryptedKey> {
     if (await this.hasClientKey()) {
       throw 'Master Key already exists';
     }
@@ -96,18 +101,18 @@ export class AuthStore {
     //
 
     // 2. We generate our super secret key that we will use to actually encrypt the user's data
-    const encryptionKey = Crypto.randomWords(128);
-    const salt = Crypto.randomSalt();
+    const encryptionKey = CryptoUtils.Crypto.randomWords(128);
+    const salt = CryptoUtils.Crypto.randomSalt();
 
-    const derived = await Crypto.PBKDF2(newMasterKey, salt);
+    const derived = await CryptoUtils.Crypto.PBKDF2(newMasterKey, salt);
 
-    const encryptedKey = await Crypto.encrypt(derived, {
-      encryptionKey: Crypto.buffToStr(encryptionKey),
+    const encryptedKey = await CryptoUtils.Crypto.encrypt(derived, {
+      encryptionKey: CryptoUtils.Crypto.buffToStr(encryptionKey),
     });
 
     return {
       ...encryptedKey /* contains ct, iv, kVer, aVer */,
-      s: Crypto.buffToStr(salt),
+      s: CryptoUtils.Crypto.buffToStr(salt),
     };
   }
 

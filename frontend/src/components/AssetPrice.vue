@@ -19,6 +19,7 @@
 <script lang="ts">
 import { AssetPrice, AssetSymbol } from '@common/models';
 import PriceChange from '@components/PriceChange.vue';
+import { CurrencyUtils } from '@goplan-finance/utils';
 import { computed, onUnmounted, onBeforeMount, ref, defineComponent } from 'vue';
 
 export default defineComponent({

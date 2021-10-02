@@ -98,6 +98,7 @@ import DataTable from '../components/DataTable.vue';
 import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue';
+import { CurrencyUtils, StringUtils } from '@goplan-finance/utils';
 
 export default defineComponent({
   components: {
@@ -136,25 +137,25 @@ export default defineComponent({
           quantity: {
             justify: 'right',
             format: value => {
-              return value === 0 ? '' : padDecimals(value, 0, 2);
+              return value === 0 ? '' : StringUtils.padDecimals(value, 0, 2);
             },
           },
           price: {
             justify: 'right',
             format: (value, row) => {
-              return value === 0 ? '' : formatCurrency(value, row.currency, false);
+              return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency, false);
             },
           },
           totalExcludingFees: {
             justify: 'right',
             format: (value, row) => {
-              return value === 0 ? '' : formatCurrency(value, row.currency);
+              return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency);
             },
           },
           fees: {
             justify: 'right',
             format: (value, row) => {
-              return value === 0 ? '' : formatCurrency(value, row.currency);
+              return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency);
             },
           },
         },

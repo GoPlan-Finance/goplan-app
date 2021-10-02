@@ -26,6 +26,15 @@ export const useAccountStore = defineStore({
       const q = Query.create(Account);
       q.limit(100000);
       q.descending('updatedAt');
+
+      const nbAccounts = await q.count();
+      if (nbAccounts === 0) {
+        console.log('CREATING DEFAULT ACCOUNT');
+        const account = new Account();
+        account.name = 'Default Account';
+        await account.save();
+      }
+
       this.liveSubscription = await q.liveQuery(this.accounts);
     },
     async subscribe() {

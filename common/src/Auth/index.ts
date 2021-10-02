@@ -4,13 +4,12 @@
  *
  */
 
-import { SecureObject } from '@goplan-finance/utils';
-import { Crypto } from '../Crypto';
+import { CryptoUtils, SecureObject } from '@goplan-finance/utils';
 
 const assertEncryptedField = (object: Parse.Object, fieldName: string): void => {
   const value = object.get(fieldName);
 
-  if (value !== undefined && !Crypto.isEncrypted(value)) {
+  if (value !== undefined && !CryptoUtils.Crypto.isEncrypted(value)) {
     throw `Field "${fieldName}" is not encrypted as expected.`;
   }
 };

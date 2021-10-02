@@ -1071,12 +1071,15 @@
     strip-json-comments "^3.1.1"
 
 "@goplan-finance/utils@github:goplan-finance/utils#master":
-  version "1.0.0"
-  resolved "https://codeload.github.com/goplan-finance/utils/tar.gz/2d4d0dba233992ab6a4e7db7558a46e16d09d427"
+  version "1.0.1"
+  resolved "https://codeload.github.com/goplan-finance/utils/tar.gz/84d38d48c88733bb7f91c701fe602335c7615368"
   dependencies:
     async-mutex "^0.3.1"
+    axios "^0.22.0"
+    crypto-js "^4.1.1"
     parse "^3.2.0"
     prettier "^2.3.2"
+    ts-money "^0.4.6"
     ts-node "^10.1.0"
     typescript "^4.4.3"
 
