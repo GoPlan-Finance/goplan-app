@@ -3,19 +3,7 @@
     <template #button>
       <ButtonDefault :type="ButtonType.SECONDARY" label="Import CSV">
         <template #before>
-          <svg
-            class="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path
-              clip-rule="evenodd"
-              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              fill-rule="evenodd"
-            />
-          </svg>
+          <UploadIcon class="h-5" />
         </template>
       </ButtonDefault>
     </template>
@@ -103,9 +91,9 @@
               {{ line }}
             </li>
           </ol>
-          <span v-if="logs.length" class="text-green-600"
-            >You can still import even if there is warnings above</span
-          >
+          <span v-if="logs.length" class="text-green-600">
+            You can still import even if there is warnings above
+          </span>
         </div>
       </template>
       <template v-if="currentStep === ImportStepEnum.DoImport" />
@@ -130,11 +118,12 @@
   </Modal>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import ButtonDefault, { ButtonType } from '../base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
 import { DefaultCSVImporter } from './DefaultCSVImporter';
+import { UploadIcon } from '@heroicons/vue/outline';
 
 enum ImportStepEnum {
   Instructions,
@@ -142,67 +131,38 @@ enum ImportStepEnum {
   DoImport,
 }
 
-export default defineComponent({
-  components: { Modal, ButtonDefault },
-  props: {},
-  setup() {
-    const data = reactive({
-      currentStep: ImportStepEnum.Instructions,
-      opened: false,
-      logs: [],
-      validRows: [],
-    });
+const currentStep = ref<ImportStepEnum>(ImportStepEnum.Instructions);
+const opened = ref(false);
+const logs = ref([]);
+const validRows = ref([]);
 
-    const csvImporter = new DefaultCSVImporter();
+const csvImporter = new DefaultCSVImporter();
 
-    const reset = () => {
-      data.validRows = [];
-      data.logs = [];
-    };
+const reset = () => {
+  validRows.value = [];
+  logs.value = [];
+};
 
-    const opened = () => {
-      reset();
-    };
-    const closed = () => {
-      reset();
-    };
+const closed = () => {
+  reset();
+};
 
-    const logger = (i: number, msg: string) => {
-      data.logs.unshift(`Line ${Number.parseInt(i) + 1}: ${msg}`);
-    };
+const logger = (i: number, msg: string) => {
+  logs.value.unshift(`Line ${Number.parseInt(i) + 1}: ${msg}`);
+};
 
-    const fileSelected = async ({ target }) => {
-      data.logs = [];
-      data.validRows = await csvImporter.validateCSV(target.files[0], logger);
-    };
+const fileSelected = async ({ target }) => {
+  logs.value = [];
+  validRows.value = await csvImporter.validateCSV(target.files[0], logger);
+};
 
-    const doImport = async () => {
-      data.logs = [];
-      const rows = data.validRows;
-      data.validRows = [];
+const doImport = async () => {
+  logs.value = [];
+  const rows = validRows.value;
+  validRows.value = [];
 
-      await csvImporter.importCSV(rows, logger);
+  await csvImporter.importCSV(rows, logger);
 
-      data.logs.push('Completed');
-    };
-
-    // onBeforeMount(async () => {
-    //
-    // })
-    //
-    // onUnmounted(async () => {
-    //
-    // })
-
-    return {
-      ImportStepEnum,
-      ...toRefs(data),
-      fileSelected,
-      doImport,
-      ButtonType,
-      opened,
-      closed,
-    };
-  },
-});
+  logs.value.push('Completed');
+};
 </script>

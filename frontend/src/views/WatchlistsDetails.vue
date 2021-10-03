@@ -48,7 +48,7 @@
 
       <template #actions="{ row }">
         <div class="cursor-pointer hover:text-red-600 text-gray-300" @click="remove(row)">
-          <GoIcons name="Trash" class="h-6 w-6" />
+          <TrashIcon class="h-6 w-6" />
         </div>
       </template>
     </DataTable>
@@ -66,6 +66,7 @@ import PriceChange from '@components/PriceChange.vue';
 import AppLink from '@components/router/AppLink.vue';
 import { useAssetPriceStore } from '@/store';
 import { Screens } from '@/utils/screens';
+import { TrashIcon } from '@heroicons/vue/solid';
 import {
   defineComponent,
   onBeforeMount,

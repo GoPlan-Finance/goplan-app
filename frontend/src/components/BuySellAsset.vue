@@ -4,7 +4,7 @@
       <slot name="button">
         <ButtonDefault :label="transaction?.id ? 'Edit' : 'Buy/Sell'">
           <template v-if="!transaction?.id" #before>
-            <GoIcons name="PlusCircle" class="h-6 w-6" />
+            <PlusCircleIcon class="h-6 w-6" />
           </template>
         </ButtonDefault>
       </slot>
@@ -82,7 +82,7 @@
   </Modal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Account, AssetSymbol, Transaction } from '@common/models';
 import { Query } from '@goplan-finance/utils';
 import AccountSelect from '@components/AccountSelect.vue';
@@ -91,129 +91,105 @@ import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
 import { computed, defineComponent, ref, toRef } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
+import { PlusCircleIcon } from '@heroicons/vue/outline';
 
-export default defineComponent({
-  components: { AccountSelect, AssetSearch, Modal, ButtonDefault },
-  props: {
-    assetSymbol: {
-      type: AssetSymbol,
-      default: null,
-    },
-    transaction: {
-      type: Transaction,
-      default: null,
-    },
+const props = defineProps<{
+  assetSymbol: AssetSymbol;
+  transaction: Transaction;
+}>();
+
+const transactionProp = toRef(props, 'transaction');
+const transactionInternal = ref<Transaction>(new Transaction());
+const isModalOpen = ref(false);
+
+const symbol = computed({
+  get() {
+    return transactionInternal.value.symbolName;
   },
-  setup(props) {
-    const transactionProp = toRef(props, 'transaction');
-    const transactionInternal = ref<Transaction>(new Transaction());
-    const isModalOpen = ref(false);
-
-    const symbol = computed({
-      get() {
-        return transactionInternal.value.symbolName;
-      },
-      set(value: AssetSymbol | string | null) {
-        if (value instanceof AssetSymbol) {
-          transactionInternal.value.symbol = value;
-          transactionInternal.value.symbolName = null;
-          transactionInternal.value.currency = value.currency;
-        } else {
-          transactionInternal.value.symbolName = value;
-          transactionInternal.value.symbol = null;
-        }
-      },
-    });
-
-    const quantity = computed<string>({
-      get() {
-        return transactionInternal.value.quantity
-          ? transactionInternal.value.quantity.toString()
-          : '';
-      },
-      set(value) {
-        transactionInternal.value.quantity = parseFloat(value);
-      },
-    });
-
-    const price = computed<string>({
-      get() {
-        return transactionInternal.value.price ? transactionInternal.value.price.toString() : '';
-      },
-      set(value) {
-        transactionInternal.value.price = parseFloat(value);
-      },
-    });
-
-    const account = computed<Account>({
-      get() {
-        return transactionInternal.value.account;
-      },
-      set(value) {
-        transactionInternal.value.account = value;
-      },
-    });
-
-    const executedAt = computed<string>({
-      get() {
-        return dayjs(transactionInternal.value.executedAt).format('YYYY-MM-DD');
-      },
-      set(value) {
-        transactionInternal.value.executedAt = dayjs(value).toDate();
-      },
-    });
-
-    const isValid = computed<boolean>(
-      () =>
-        transactionInternal.value &&
-        !!transactionInternal.value.symbolName &&
-        !isNaN(transactionInternal.value.price) &&
-        !isNaN(transactionInternal.value.quantity) &&
-        dayjs(transactionInternal.value.executedAt).isValid() &&
-        !!transactionInternal.value.account
-    );
-
-    const save = async (type: 'buy' | 'sell' | undefined) => {
-      if (transactionInternal.value.isNew()) {
-        transactionInternal.value.type = type;
-      }
-
-      transactionInternal.value.totalExcludingFees =
-        transactionInternal.value.quantity * transactionInternal.value.quantity;
-
-      await transactionInternal.value.save();
-      transactionInternal.value = new Transaction();
-      isModalOpen.value = false;
-    };
-
-    const modalOpened = async () => {
-      if (transactionProp.value) {
-        transactionInternal.value = await Query.create(Transaction).getObjectById(
-          transactionProp.value.id
-        );
-      }
-
-      if (props.assetSymbol) {
-        transactionInternal.value.symbol = props.assetSymbol;
-      }
-
-      if (!transactionInternal.value.executedAt) {
-        transactionInternal.value.executedAt = new Date();
-      }
-    };
-
-    return {
-      save,
-      isValid,
-      isModalOpen,
-      symbol,
-      executedAt,
-      quantity,
-      price,
-      account,
-      transactionInternal,
-      modalOpened,
-    };
+  set(value: AssetSymbol | string | null) {
+    if (value instanceof AssetSymbol) {
+      transactionInternal.value.symbol = value;
+      transactionInternal.value.symbolName = null;
+      transactionInternal.value.currency = value.currency;
+    } else {
+      transactionInternal.value.symbolName = value;
+      transactionInternal.value.symbol = null;
+    }
   },
 });
+
+const quantity = computed<string>({
+  get() {
+    return transactionInternal.value.quantity ? transactionInternal.value.quantity.toString() : '';
+  },
+  set(value) {
+    transactionInternal.value.quantity = parseFloat(value);
+  },
+});
+
+const price = computed<string>({
+  get() {
+    return transactionInternal.value.price ? transactionInternal.value.price.toString() : '';
+  },
+  set(value) {
+    transactionInternal.value.price = parseFloat(value);
+  },
+});
+
+const account = computed<Account>({
+  get() {
+    return transactionInternal.value.account;
+  },
+  set(value) {
+    transactionInternal.value.account = value;
+  },
+});
+
+const executedAt = computed<string>({
+  get() {
+    return dayjs(transactionInternal.value.executedAt).format('YYYY-MM-DD');
+  },
+  set(value) {
+    transactionInternal.value.executedAt = dayjs(value).toDate();
+  },
+});
+
+const isValid = computed<boolean>(
+  () =>
+    transactionInternal.value &&
+    !!transactionInternal.value.symbolName &&
+    !isNaN(transactionInternal.value.price) &&
+    !isNaN(transactionInternal.value.quantity) &&
+    dayjs(transactionInternal.value.executedAt).isValid() &&
+    !!transactionInternal.value.account
+);
+
+const save = async (type: 'buy' | 'sell' | undefined) => {
+  if (transactionInternal.value.isNew()) {
+    transactionInternal.value.type = type;
+  }
+
+  transactionInternal.value.totalExcludingFees =
+    transactionInternal.value.quantity * transactionInternal.value.quantity;
+
+  await transactionInternal.value.save();
+  transactionInternal.value = new Transaction();
+  isModalOpen.value = false;
+};
+
+const modalOpened = async () => {
+  if (transactionProp.value) {
+    transactionInternal.value = await Query.create(Transaction).getObjectById(
+      transactionProp.value.id
+    );
+  }
+
+  if (props.assetSymbol) {
+    transactionInternal.value.symbol = props.assetSymbol;
+  }
+
+  if (!transactionInternal.value.executedAt) {
+    transactionInternal.value.executedAt = new Date();
+  }
+};
 </script>

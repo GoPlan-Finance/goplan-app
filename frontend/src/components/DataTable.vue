@@ -49,11 +49,10 @@
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
-        <GoIcons
+        <ChevronDownIcon
           v-if="fields[subRow] === sort.header"
           :class="sort.order === 'asc' ? '' : 'transform rotate-180'"
           class="w-5 h-5"
-          name="ChevronDown"
         />
       </div>
     </div>
@@ -113,7 +112,6 @@ import {
   TableRow,
   ValueFn,
 } from '@components/DataTable';
-import GoIcons from '@components/Icons/GoIcons.vue';
 import { getCurrentBreakpoint } from '@/utils/screens';
 import {
   computed,
@@ -125,9 +123,10 @@ import {
   ref,
   toRefs,
 } from 'vue';
+import { ChevronDownIcon } from '@heroicons/vue/outline';
 
 export default defineComponent({
-  components: { GoIcons, SearchField },
+  components: { SearchField, ChevronDownIcon },
   props: {
     config: {
       type: Object as PropType<TableConfig>,

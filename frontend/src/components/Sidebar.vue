@@ -26,7 +26,7 @@
     >
       <div class="flex items-center justify-center mt-8">
         <router-link class="flex items-center" to="/">
-          <go-plan-logo />
+          <GoPlanLogo />
         </router-link>
       </div>
 
@@ -38,37 +38,32 @@
         </navigation-item>
 
         <navigation-item title="Holdings" to="/holdings">
-          <GoIcons name="MenuAlt2" type="outline" class="h-5 w-5" />
+          <MenuAlt2Icon class="h-5 w-5" />
         </navigation-item>
 
         <navigation-item title="Transactions" to="/transactions">
-          <GoIcons name="SwitchHorizontal" type="outline" class="h-5 w-5" />
+          <SwitchHorizontalIcon class="h-5 w-5" />
         </navigation-item>
 
         <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">Research</div>
         <navigation-item title="Watchlists" to="/watchlists">
-          <GoIcons name="TrendingUp" type="outline" class="h-5 w-5" />
+          <TrendingUpIcon class="h-5 w-5" />
         </navigation-item>
       </nav>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import GoPlanLogo from '@components/base/GoPlanLogo.vue';
-import { ChartBarIcon } from '@heroicons/vue/outline';
-import { defineComponent } from 'vue';
-import { useSidebar } from '../hooks/useSidebar';
+import {
+  ChartBarIcon,
+  MenuAlt2Icon,
+  SwitchHorizontalIcon,
+  TrendingUpIcon,
+} from '@heroicons/vue/solid';
+import { useSidebar } from '@/hooks/useSidebar';
 import NavigationItem from './NavigationItem.vue';
 
-export default defineComponent({
-  components: { GoPlanLogo, NavigationItem, ChartBarIcon },
-  setup() {
-    const { isOpen } = useSidebar();
-
-    return {
-      isOpen,
-    };
-  },
-});
+const { isOpen } = useSidebar();
 </script>
