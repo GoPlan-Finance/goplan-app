@@ -31,7 +31,7 @@ import { SearchIcon } from '@heroicons/vue/outline';
 withDefaults(
   defineProps<{
     modelValue: string;
-    placeholder: string;
+    placeholder?: string;
     inputClass: string;
   }>(),
   {
