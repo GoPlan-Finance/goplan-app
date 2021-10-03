@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-      <GoIcons name="Search" class="h-5 w-5 text-gray-300" />
+      <SearchIcon class="h-5 w-5 text-gray-300" />
     </span>
 
     <input
@@ -25,24 +25,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { SearchIcon } from '@heroicons/vue/outline';
 
-export default defineComponent({
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      default: 'Search',
-    },
-    inputClass: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['update:modelValue'],
-});
+withDefaults(
+  defineProps<{
+    modelValue: string;
+    placeholder: string;
+    inputClass: string;
+  }>(),
+  {
+    placeholder: 'Search',
+  }
+);
+
+defineEmits<{
+  (e: 'update:modelValue');
+}>();
 </script>

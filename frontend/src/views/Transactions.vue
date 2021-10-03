@@ -1,7 +1,7 @@
 <template>
   <HeadlineActions :headline="$t('transactions.headline')">
     <ImportTransactionsModal />
-    <buy-sell-asset />
+    <BuySellAsset />
   </HeadlineActions>
 
   <DataTable :config="config" :rows="rows">
@@ -74,12 +74,11 @@
       <buy-sell-asset v-if="row.type === 'BUY' || row.type === 'SELL'" :transaction="row">
         <!--      @todo case sensitive row.type-->
         <template #button>
-          <GoIcons name="Pencil" class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300" />
+          <PencilIcon class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300" />
         </template>
       </buy-sell-asset>
       <div v-else class="h-6 w-6" />
-      <GoIcons
-        name="Trash"
+      <TashIcon
         class="h-6 w-6 cursor-pointer hover:text-red-600 text-gray-300"
         @click="remove(row)"
       />
@@ -99,6 +98,7 @@ import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue';
 import { CurrencyUtils, StringUtils } from '@goplan-finance/utils';
+import { ArrowCircleLeftIcon, PencilIcon, TrashIcon } from '@heroicons/vue/solid';
 
 export default defineComponent({
   components: {
@@ -107,6 +107,9 @@ export default defineComponent({
     DataTable,
     AppLink,
     ImportTransactionsModal,
+    ArrowCircleLeftIcon,
+    PencilIcon,
+    TrashIcon,
   },
   setup() {
     const data = reactive({

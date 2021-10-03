@@ -20,8 +20,6 @@ import router from './router';
 import { AuthStore } from './store';
 import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue';
 
-import GoIcons from '@components/Icons/GoIcons.vue';
-
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
@@ -42,7 +40,6 @@ app.component('Private', Private);
 app.component('DefaultLayout', DashboardLayout);
 app.component('EmptyLayout', EmptyLayout);
 app.component('StyleguideLayout', StyleguideLayout);
-app.component('GoIcons', GoIcons);
 
 app.provide('$authStore', authStore);
 
