@@ -1,39 +1,61 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
     "noEmit": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "/@common/*": [
-        "./../../common/*"
+      "@styleguide/*": [
+        "./src/styleguide/*"
       ],
-      "/@components/*": [
-        "./components/*"
+      "@/*": [
+        "src/*"
       ],
-      "/@views/*": [
-        "./views/*"
+      "@locales/*": [
+        "../common/src/locales/*"
       ],
-      "/@styleguide/*": [
-        "./styleguide/*"
+      "@models/*": [
+        "../common/src/models/*"
       ],
-      "/@store/*": [
-        "./store/*"
+      "@models": [
+        "../common/src/models/index.ts"
       ],
-      "/@utils/*": [
-        "./utils/*"
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@views/*": [
+        "src/views/*"
+      ],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@common/*": [
+        "../common/src/*"
       ]
     },
     "types": [
-      "@intlify/vite-plugin-vue-i18n/client"
+      "@intlify/vite-plugin-vue-i18n/client",
+      "webpack-env",
+      "jest",
+      "parse"
     ]
   },
   "include": [
+    "types/*.d.ts",
     "src/**/*",
-    "../common/**/*"
+    "src/**/*.yml",
+    "../common/src/**/*.yml",
+    "spec/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

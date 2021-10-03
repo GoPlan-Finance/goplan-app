@@ -1,23 +1,22 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { Transaction } from '/@common/models'
-import { Holding } from '/@common/models/Holding'
-import { Query } from '/@common/Query'
-import { defineStore } from 'pinia'
+import { Transaction } from '@common/models';
+import { Query } from '@goplan-finance/utils';
+import { defineStore } from 'pinia';
 
 // const db = new IndexedDB('companyProfile')
 
 interface StoreState {
-  subscriptionPromise : Promise<void>
-  transactions : Transaction[]
+  subscriptionPromise: Promise<void>;
+  transactions: Transaction[];
 }
 
 export const useTransactionStore = defineStore({
   // name of the store
   id: 'transaction',
 
-  state: () : StoreState => ({
-    subscriptionPromise : null,
-    transactions        : [],
+  state: (): StoreState => ({
+    subscriptionPromise: null,
+    transactions: [],
   }),
   // optional getters
   getters: {
@@ -26,31 +25,31 @@ export const useTransactionStore = defineStore({
     //
     // },
     // use getters in other getters
-    doubleCountPlusOne () {
-      return this.doubleCount * 2
+    doubleCountPlusOne() {
+      return this.doubleCount * 2;
     },
   },
   // optional actions
   actions: {
-    async _init () {
-      const q               = Query.create(Transaction)
-      q.limit(100000)
-      q.descending('executedAt')
-      q.include('symbol')
-      await q.liveQuery(this.transactions)
+    async _init() {
+      const q = Query.create(Transaction);
+      q.limit(100000);
+      q.descending('executedAt');
+      q.include('symbol');
+      await q.liveQuery(this.transactions);
     },
-    async subscribe () {
+    async subscribe() {
       if (this.subscriptionPromise) {
-        return this.subscriptionPromise
+        return this.subscriptionPromise;
       }
 
-      this.subscriptionPromise = this._init()
+      this.subscriptionPromise = this._init();
 
-      return this.subscriptionPromise
+      return this.subscriptionPromise;
     },
-    reset () {
+    reset() {
       // `this` is the store instance
-      this.transactions = []
+      this.transactions = [];
     },
   },
-})
+});

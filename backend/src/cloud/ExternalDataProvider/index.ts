@@ -6,4 +6,4 @@
  *
  */
 
-require('./triggers/beforeSave')
+require('./triggers/beforeSave');

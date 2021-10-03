@@ -1,18 +1,12 @@
 <template>
-  <apexchart
-    :options="chartOptions"
-    :series="series"
-    height="350"
-    type="donut"
-  />
+  <apexchart :options="chartOptions" :series="series" height="350" type="donut" />
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue'
-
+import { defineComponent, reactive, toRefs } from 'vue';
 
 export default defineComponent({
-  setup () {
+  setup() {
     const data = reactive({
       chartOptions: {
         chart: {
@@ -20,8 +14,8 @@ export default defineComponent({
         },
         responsive: [
           {
-            breakpoint : 480,
-            options    : {
+            breakpoint: 480,
+            options: {
               chart: {
                 width: 200,
               },
@@ -32,15 +26,12 @@ export default defineComponent({
           },
         ],
       },
-      series: [
-        44, 55, 41, 17, 15,
-      ],
-    })
+      series: [44, 55, 41, 17, 15],
+    });
 
     return {
       ...toRefs(data),
-    }
+    };
   },
-})
-
+});
 </script>

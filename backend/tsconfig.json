@@ -1,25 +1,49 @@
 {
+  "ts-node": {
+    "transpileOnly": false,
+    "files": true,
+    "compilerOptions": {
+      "resolveJsonModule": true
+    }
+  },
   "compilerOptions": {
     "module": "CommonJS",
-//    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "target": "ESNext",
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "baseUrl": ".",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "./src",
     "paths": {
-      "/@common/*": [
-        "./../../common/*"
+      "@/*": [
+        "src/*"
       ],
-      "/*": [
-        "./"
-      ]
-    },
+      "@cloud/*": [
+        "src/cloud/*"
+      ],
+      "@models": [
+        "../common/src/models/index.ts"
+      ],
+      "@models/*": [
+        "../common/src/models/*"
+      ],
+      "@locales/*": [
+        "../common/src/locales/*"
+      ],
+      "@common/*": [
+        "../common/src/*"
+      ],
+    }
   },
   "include": [
-    "src/**/*",
-    "../common/**/*"
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "spec/**/*.ts"
+  ],
+  "exclude": [
+    "coverage/*",
+    "logs/*"
   ]
 }

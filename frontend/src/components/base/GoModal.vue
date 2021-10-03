@@ -8,12 +8,22 @@
       v-if="opened"
       class="modal z-30 fixed p-4 w-full h-full top-0 left-0 flex items-center justify-center"
     >
-      <div
-        class="absolute w-full h-full bg-gray-900 opacity-50"
-        @click="close(true)"
-      />
+      <div class="absolute w-full h-full bg-gray-900 opacity-50" @click="close(true)" />
       <div class="bg-white md:max-w-lg w-full mx-auto rounded-lg shadow-lg z-30 overflow-y-auto">
-        <div class="absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-30">
+        <div
+          class="
+            absolute
+            top-0
+            right-0
+            cursor-pointer
+            flex flex-col
+            items-center
+            mt-4
+            mr-4
+            text-white text-sm
+            z-30
+          "
+        >
           <svg
             class="fill-current text-white"
             height="18"
@@ -35,10 +45,7 @@
             <p class="text-2xl font-bold">
               {{ title }}
             </p>
-            <div
-              class="modal-close cursor-pointer z-30"
-              @click="close"
-            >
+            <div class="modal-close cursor-pointer z-30" @click="close">
               <svg
                 class="fill-current text-black"
                 height="18"
@@ -54,21 +61,12 @@
           </div>
 
           <!--Body-->
-          <slot
-            :close="close"
-            name="content"
-          />
+          <slot :close="close" name="content" />
 
           <!--Footer-->
           <div class="flex justify-end pt-2 gap-4 flex-wrap">
-            <slot
-              :close="close"
-              name="actions"
-            >
-              <ButtonDefault
-                label="Close"
-                @click="close"
-              />
+            <slot :close="close" name="actions">
+              <ButtonDefault label="Close" @click="close" />
             </slot>
           </div>
         </div>
@@ -78,9 +76,8 @@
 </template>
 
 <script lang="ts">
-import ButtonDefault from '/@components/base/ButtonDefault.vue'
-import { defineComponent, ref, toRefs, watch } from 'vue'
-
+import ButtonDefault from '@components/base/ButtonDefault.vue';
+import { defineComponent, ref, toRefs, watch } from 'vue';
 
 export default defineComponent({
   components: {
@@ -88,52 +85,53 @@ export default defineComponent({
   },
   props: {
     title: {
-      type     : String,
-      required : true,
+      type: String,
+      required: true,
     },
     canClickOutside: {
-      type    : Boolean,
-      default : true,
+      type: Boolean,
+      default: true,
     },
     modelValue: {
-      type    : Boolean,
-      default : false,
+      type: Boolean,
+      default: false,
     },
   },
-  emits: [
-    'opened', 'closed', 'update:modelValue',
-  ],
-  setup (props, {emit}) {
-    const opened = ref(props.modelValue)
+  emits: ['opened', 'closed', 'update:modelValue'],
+  setup(props, { emit }) {
+    const opened = ref(props.modelValue);
 
-    function close (isBackdrop = false) {
+    function close(isBackdrop = false) {
       if (!props.canClickOutside && isBackdrop) {
-        return
+        return;
       }
 
-      opened.value = false
-      emit('closed')
-      emit('update:modelValue', false)
+      opened.value = false;
+      emit('closed');
+      emit('update:modelValue', false);
     }
 
-    function open () {
-      opened.value = true
-      emit('opened')
-      emit('update:modelValue', true)
+    function open() {
+      opened.value = true;
+      emit('opened');
+      emit('update:modelValue', true);
     }
 
-    watch(() => props.modelValue, value => {
-      value ? open() : close()
-    })
+    watch(
+      () => props.modelValue,
+      value => {
+        value ? open() : close();
+      }
+    );
 
     return {
       ...toRefs(props),
       open,
       close,
       opened,
-    }
+    };
   },
-})
+});
 </script>
 
 <style scoped>

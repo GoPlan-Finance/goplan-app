@@ -1,46 +1,53 @@
 // import {IndexedDB} from './base/IndexedDB'
-import { Account } from '/@common/models'
-import { Query } from '/@common/Query'
-import { defineStore } from 'pinia'
-
+import { Account } from '@common/models';
+import { Query } from '@goplan-finance/utils';
+import { defineStore } from 'pinia';
 
 // const db = new IndexedDB('companyProfile')
 
 interface StoreState {
-  subscriptionPromise : Promise<void>
-  accounts : Account[]
+  subscriptionPromise: Promise<void>;
+  accounts: Account[];
 }
-
 
 export const useAccountStore = defineStore({
   id: 'account',
 
-  state: () : StoreState => ({
-    subscriptionPromise : null,
-    accounts            : [],
+  state: (): StoreState => ({
+    subscriptionPromise: null,
+    accounts: [],
   }),
   actions: {
-    async _init () {
+    async _init() {
       if (this.liveSubscription) {
-        return
+        return;
       }
 
-      const q               = Query.create(Account)
-      q.limit(100000)
-      q.descending('updatedAt')
-      this.liveSubscription = await q.liveQuery(this.accounts)
+      const q = Query.create(Account);
+      q.limit(100000);
+      q.descending('updatedAt');
+
+      const nbAccounts = await q.count();
+      if (nbAccounts === 0) {
+        console.log('CREATING DEFAULT ACCOUNT');
+        const account = new Account();
+        account.name = 'Default Account';
+        await account.save();
+      }
+
+      this.liveSubscription = await q.liveQuery(this.accounts);
     },
-    async subscribe () {
+    async subscribe() {
       if (this.subscriptionPromise) {
-        return this.subscriptionPromise
+        return this.subscriptionPromise;
       }
 
-      this.subscriptionPromise = this._init()
+      this.subscriptionPromise = this._init();
 
-      return this.subscriptionPromise
+      return this.subscriptionPromise;
     },
-    reset () {
-      this.accounts = []
+    reset() {
+      this.accounts = [];
     },
   },
-})
+});

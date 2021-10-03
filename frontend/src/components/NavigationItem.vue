@@ -13,32 +13,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   props: {
     title: {
-      type    : String,
-      default : '',
+      type: String,
+      default: '',
     },
     to: {
-      type    : String,
-      default : '',
+      type: String,
+      default: '',
     },
   },
-  setup () {
-    const activeClass   = ref(
-      'bg-gray-600 bg-opacity-25 text-white border-gray-100',
-    )
+  setup() {
+    const activeClass = ref('bg-gray-600 bg-opacity-25 text-white border-gray-100');
     const inactiveClass = ref(
-      'text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-white',
-    )
+      'text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-white'
+    );
 
     return {
       activeClass,
       inactiveClass,
-    }
+    };
   },
-})
+});
 </script>

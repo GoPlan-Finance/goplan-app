@@ -1,31 +1,42 @@
 <template>
-  <component :is="icon" />
+  <!--  @todo fix dynamic imports-->
+  <!--  <component :is="icon" />-->
+  <QuestionMarkCircleIcon />
 </template>
 
 <script>
-import { defineAsyncComponent, defineComponent } from 'vue'
-import { icons } from './icons'
+import QuestionMarkCircleIcon from '@heroicons/vue/solid/QuestionMarkCircleIcon';
+import { defineAsyncComponent, defineComponent } from 'vue';
+import { icons } from './icons';
 
 export default defineComponent({
+  components: {
+    // @todo fix dynamic imports
+    QuestionMarkCircleIcon,
+  },
   props: {
     name: {
-      type      : String,
-      required  : true,
-      validator : value => Object.values(icons).includes(value)
+      type: String,
+      required: true,
+      validator: value => Object.values(icons).includes(value),
     },
     type: {
-      type      : String,
-      default   : 'solid',
-      validator : value => value === 'solid' || value === 'outline'
-    }
+      type: String,
+      default: 'solid',
+      validator: value => value === 'solid' || value === 'outline',
+    },
   },
-  setup (props) {
+  setup(props) {
+    // @todo fix dynamic imports
+    return {};
+
     return {
       icon: defineAsyncComponent({
-        loader      : () => import(`../../../node_modules/@heroicons/vue/${props.type}/esm/${props.name}Icon.js`),
-        suspensible : false,
-      })
-    }
-  }
-})
+        loader: () =>
+          import(`../../../node_modules/@heroicons/vue/${props.type}/esm/${props.name}Icon.js`),
+        suspensible: false,
+      }),
+    };
+  },
+});
 </script>

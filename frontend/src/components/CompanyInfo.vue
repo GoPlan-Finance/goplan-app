@@ -2,14 +2,9 @@
   <div class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
     <div class="min-w-full sm:grid sm:grid-cols-6 sm:gap-4 mb-2">
       <dt class="text-sm font-medium text-gray-500">
-        <img
-          v-if="data.info.image"
-          :src="data.info.image"
-        >
+        <img v-if="data.info.image" :src="data.info.image" />
       </dt>
-      <dd
-        class="mt-1 text-sm text-gray-900 sm:mt-0"
-      >
+      <dd class="mt-1 text-sm text-gray-900 sm:mt-0">
         <h2 class="text-xl font-semibold text-gray-700 leading-tight">
           {{ data.info.companyName }}
         </h2>
@@ -39,90 +34,87 @@
 </template>
 
 <script lang="ts">
-import { AssetProfile, AssetSymbol } from '/@common/models'
-import { defineComponent, onBeforeMount, reactive } from 'vue'
-import DataField from './base/DataField.vue'
-
+import { AssetProfile, AssetSymbol } from '@common/models';
+import { defineComponent, onBeforeMount, reactive } from 'vue';
+import DataField from './base/DataField.vue';
 
 export default defineComponent({
-  components : {DataField},
-  props      : {
+  components: { DataField },
+  props: {
     assetSymbol: {
-      type     : AssetSymbol,
-      required : true,
+      type: AssetSymbol,
+      required: true,
     },
   },
-  setup (props) {
-
+  setup(props) {
     const data = reactive({
-      info    : {},
-      details : [],
-    })
+      info: {},
+      details: [],
+    });
 
     onBeforeMount(async () => {
+      const info: AssetProfile = await AssetProfile.fetchProfile(props.assetSymbol);
 
-      const info = await AssetProfile.fetchBySymbol(props.assetSymbol)
-
-      data.info = info
+      data.info = info;
 
       data.details = [
         {
-          label : 'company_name',
-          data  : info.name,
+          label: 'company_name',
+          data: info.name,
         },
         {
-          label : 'symbol',
-          data  : info.symbol.symbol,
+          label: 'symbol',
+          data: info.symbol.tickerName,
         },
         // {
         //   label : 'isin',
         //   data  : info.isin
         // },
         {
-          label : 'exchange',
-          data  : info.exchange.name,
+          label: 'exchange',
+          data: info.exchange.name,
         },
         {
-          label : 'sector',
-          data  : info.sector.name,
+          label: 'sector',
+          data: info.sector.name,
         },
         {
-          label : 'industry',
-          data  : info.industry.name,
+          label: 'industry',
+          data: info.industry.name,
         },
         {
-          label : 'country',
-          data  : info.country,
+          label: 'country',
+          data: info.country,
         },
         {
-          label : 'address',
-          data  : `${info.address}, ${info.zip} ${info.city}`,
+          label: 'address',
+          data: `${info.address}, ${info.zip} ${info.city}`,
         },
         {
-          type  : 'number',
-          label : 'full_time_employees',
-          data  : info.fullTimeEmployees,
+          type: 'number',
+          label: 'full_time_employees',
+          data: info.fullTimeEmployees,
+        },
+        // {
+        //   label : 'ceo',
+        //   data  : info.ceo,
+        // },
+        {
+          type: 'url',
+          label: 'website',
+          data: info.website,
         },
         {
-          label : 'ceo',
-          data  : info.ceo,
+          type: 'date',
+          label: 'ipo_date',
+          data: info.ipoDate,
         },
-        {
-          type  : 'url',
-          label : 'website',
-          data  : info.website,
-        },
-        {
-          type  : 'date',
-          label : 'ipo_date',
-          data  : info.ipoDate,
-        },
-      ]
-    })
+      ];
+    });
 
     return {
       data,
-    }
+    };
   },
-})
+});
 </script>

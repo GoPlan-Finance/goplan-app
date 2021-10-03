@@ -3,14 +3,13 @@
  *
  *
  */
-import { AuthStore } from './auth'
+import { AuthStore } from './auth';
 
-import {useUserStore} from './User/UserStore'
-import {useTransactionStore} from './TransactionStore'
-import {useAccountStore} from './AccountStore'
-import {useHoldingStore} from './HoldingStore'
-import {useAssetPriceStore} from './AssetPriceStore'
-
+import { useUserStore } from './User/UserStore';
+import { useTransactionStore } from './TransactionStore';
+import { useAccountStore } from './AccountStore';
+import { useHoldingStore } from './HoldingStore';
+import { useAssetPriceStore } from './AssetPriceStore';
 
 export {
   AuthStore,
@@ -19,4 +18,4 @@ export {
   useAssetPriceStore,
   useHoldingStore,
   useUserStore,
-}
+};

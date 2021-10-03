@@ -1,32 +1,17 @@
 <template>
   <div>
-    <h3 class="text-gray-700 text-3xl font-semibold">
-      Forms
-    </h3>
+    <h3 class="text-gray-700 text-3xl font-semibold">Forms</h3>
 
     <div class="mt-4">
-      <h3 class="text-gray-700 text-xl font-bold mb-6">
-        Model Form
-      </h3>
+      <h3 class="text-gray-700 text-xl font-bold mb-6">Model Form</h3>
 
       <div class="mt-4">
-        <div
-          class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden border"
-        >
+        <div class="max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden border">
           <form>
-            <div
-              class="flex justify-between items-center px-5 py-3 text-gray-700 border-b"
-            >
-              <h3 class="text-sm">
-                Add Category
-              </h3>
+            <div class="flex justify-between items-center px-5 py-3 text-gray-700 border-b">
+              <h3 class="text-sm">Add Category</h3>
               <button>
-                <svg
-                  class="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     d="M6 18L18 6M6 6l12 12"
                     stroke-linecap="round"
@@ -41,15 +26,8 @@
               <label class="text-xs">Name</label>
 
               <div class="mt-2 relative rounded-lg shadow-sm">
-                <span
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600"
-                >
-                  <svg
-                    class="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-600">
+                  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
                       stroke-linecap="round"
@@ -60,20 +38,45 @@
                 </span>
 
                 <input
-                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-blue-600"
+                  class="
+                    form-input
+                    w-full
+                    px-12
+                    py-2
+                    appearance-none
+                    rounded-lg
+                    focus:border-blue-600
+                  "
                   type="text"
-                >
+                />
               </div>
             </div>
 
             <div class="flex justify-between items-center px-5 py-3">
               <button
-                class="px-3 py-1 text-gray-700 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 focus:outline-none"
+                class="
+                  px-3
+                  py-1
+                  text-gray-700 text-sm
+                  rounded-lg
+                  bg-gray-200
+                  hover:bg-gray-300
+                  focus:outline-none
+                "
               >
                 Cancel
               </button>
               <button
-                class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-500 focus:outline-none"
+                class="
+                  px-3
+                  py-1
+                  bg-blue-600
+                  text-white
+                  rounded-lg
+                  text-sm
+                  hover:bg-blue-500
+                  focus:outline-none
+                "
               >
                 Save
               </button>
@@ -84,70 +87,64 @@
     </div>
 
     <div class="mt-8">
-      <h3 class="text-gray-700 text-xl font-bold mb-6">
-        Forms
-      </h3>
+      <h3 class="text-gray-700 text-xl font-bold mb-6">Forms</h3>
 
       <div class="mt-4">
         <div class="p-6 bg-white rounded-lg shadow-md">
-          <h2 class="text-lg text-gray-700 font-semibold capitalize">
-            Account settings
-          </h2>
+          <h2 class="text-lg text-gray-700 font-semibold capitalize">Account settings</h2>
 
           <form @submit.prevent="register">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
               <div>
-                <label
-                  class="text-gray-700"
-                  for="username"
-                >Username</label>
+                <label class="text-gray-700" for="username">Username</label>
                 <input
                   v-model="user.username"
                   class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="text"
-                >
+                />
               </div>
 
               <div>
-                <label
-                  class="text-gray-700"
-                  for="emailAddress"
-                >Email Address</label>
+                <label class="text-gray-700" for="emailAddress">Email Address</label>
                 <input
                   v-model="user.email"
                   class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="email"
-                >
+                />
               </div>
 
               <div>
-                <label
-                  class="text-gray-700"
-                  for="password"
-                >Password</label>
+                <label class="text-gray-700" for="password">Password</label>
                 <input
                   v-model="user.password"
                   class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="password"
-                >
+                />
               </div>
 
               <div>
-                <label
-                  class="text-gray-700"
-                  for="passwordConfirmation"
-                >Password Confirmation</label>
+                <label class="text-gray-700" for="passwordConfirmation"
+                  >Password Confirmation</label
+                >
                 <input
                   v-model="user.confirm"
                   class="form-input w-full mt-2 rounded-lg focus:border-blue-600"
                   type="password"
-                >
+                />
               </div>
             </div>
 
             <div class="flex justify-end mt-4">
               <button
-                class="px-4 py-2 bg-gray-800 text-gray-200 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                class="
+                  px-4
+                  py-2
+                  bg-gray-800
+                  text-gray-200
+                  rounded-lg
+                  hover:bg-gray-700
+                  focus:outline-none focus:bg-gray-700
+                "
               >
                 Save
               </button>
@@ -156,62 +153,48 @@
         </div>
       </div>
     </div>
-    <h3 class="text-gray-700 text-xl font-bold my-6">
-      SearchBar
-    </h3>
+    <h3 class="text-gray-700 text-xl font-bold my-6">SearchBar</h3>
     <SearchBar class="mb-6" />
 
-    <h3 class="text-gray-700 text-xl font-bold mb-6">
-      Data Field
-    </h3>
+    <h3 class="text-gray-700 text-xl font-bold mb-6">Data Field</h3>
     <div class="p-6 bg-white rounded-lg shadow-md">
-      <DataField
-        class="mb-2"
-        data="Data"
-        label="Label"
-      />
-      <DataField
-        class="mb-2"
-        data="Data"
-        label="Label"
-      />
+      <DataField class="mb-2" data="Data" label="Label" />
+      <DataField class="mb-2" data="Data" label="Label" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import DataField from '/@components/base/DataField.vue'
-import SearchBar from '/@components/SearchBar.vue'
-
+import { defineComponent, ref } from 'vue';
+import DataField from '@components/base/DataField.vue';
+import SearchBar from '@components/SearchBar.vue';
 
 interface User {
-  username : string;
-  email : string;
-  password : string;
-  confirm : string;
+  username: string;
+  email: string;
+  password: string;
+  confirm: string;
 }
 
-
 export default defineComponent({
-  components: {DataField, SearchBar},
-  setup () {
+  components: { DataField, SearchBar },
+  setup() {
     const user = ref<User>({
-      username : '',
-      email    : '',
-      password : '',
-      confirm  : '',
-    })
+      username: '',
+      email: '',
+      password: '',
+      confirm: '',
+    });
 
     const register = () => {
-      const data = JSON.parse(JSON.stringify(user.value))
-      console.log('Registered: ', data)
-    }
+      const data = JSON.parse(JSON.stringify(user.value));
+      console.log('Registered: ', data);
+    };
 
     return {
       user,
       register,
-    }
+    };
   },
-})
+});
 </script>

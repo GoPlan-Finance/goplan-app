@@ -111,3 +111,5 @@ dist
 /backend/node_modules2
 /backend/config/server.key
 /backend/config/server.cert
+/.idea/workspace.xml
+.yarncache
