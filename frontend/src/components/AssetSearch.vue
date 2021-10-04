@@ -4,13 +4,13 @@
       v-model="input"
       :input-class="searchFieldClass"
       :placeholder="placeholder"
-      @keyup.enter="selectElement()"
+      @keyup.enter="selectElement(symbols[0])"
     />
     <ul
-      v-if="symbols.data.length && isOpen"
+      v-if="symbols.length && isOpen"
       class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-40"
     >
-      <li v-for="symbol in symbols.data" :key="symbol">
+      <li v-for="symbol in symbols" :key="symbol">
         <a
           class="hover:bg-gray-100 block px-4 py-2"
           href="#"
@@ -24,10 +24,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { AssetSymbol } from '@common/models';
 import SearchField from '@components/base/SearchField.vue';
-import { computed, defineComponent, reactive, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
   if (tickerName.length === 0) {
@@ -39,104 +39,86 @@ const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
   });
 };
 
-export default defineComponent({
-  components: { SearchField },
-  props: {
-    placeholder: {
-      type: String,
-      default: 'Search',
-    },
-    allowText: {
-      type: Boolean,
-      default: false,
-    },
-    modelValue: {
-      required: false,
-      validator: prop =>
-        prop instanceof AssetSymbol ||
-        typeof prop === 'string' ||
-        prop === null ||
-        prop === undefined,
-    },
-    searchFieldClass: {
-      type: String,
-      default: '',
-    },
+const props = withDefaults(
+  defineProps<{
+    searchFieldClass?: string;
+    allowText?: boolean;
+    placeholder?: string;
+    assetSymbol?: AssetSymbol | string | undefined;
+  }>(),
+  {
+    placeholder: 'Search',
+    allowText: false,
+  }
+);
+
+const emit = defineEmits<{
+  (e: 'update:ticker-name', ticker: string): void;
+}>();
+
+const isOpen = ref(false);
+const symbols = ref<AssetSymbol[]>([]);
+const tickerName = ref<string>('');
+
+watch(
+  () => props.assetSymbol,
+  () => {
+    if (props.assetSymbol instanceof AssetSymbol) {
+      tickerName.value = props.assetSymbol.tickerName;
+    } else if (typeof props.assetSymbol === 'string') {
+      tickerName.value = props.assetSymbol;
+    }
+  }
+);
+
+const update = async () => {
+  if (!tickerName.value) {
+    return;
+  }
+
+  if (props.assetSymbol && tickerName.value === props.assetSymbol.tickerName) {
+    symbols.value = [];
+    return;
+  }
+
+  isOpen.value = true;
+  symbols.value = await getSymbols(tickerName.value);
+};
+
+const input = computed<string>({
+  get() {
+    return tickerName.value;
   },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const isOpen = ref(false);
-    const symbols: { data: AssetSymbol[] } = reactive({ data: [] });
-
-    const tickerName = ref<string>('');
-
-    watch(
-      () => props.modelValue,
-      () => {
-        if (props.modelValue instanceof AssetSymbol) {
-          tickerName.value = props.modelValue.tickerName;
-        } else if (typeof props.modelValue === 'string') {
-          tickerName.value = props.modelValue;
-        }
-      }
-    );
-
-    const update = async () => {
-      if (!tickerName.value) {
-        return;
-      }
-
-      if (props.modelValue && tickerName.value === props.modelValue.tickerName) {
-        symbols.data = [];
-        return;
-      }
-
-      isOpen.value = true;
-      symbols.data = await getSymbols(tickerName.value);
-    };
-
-    const input = computed<string>({
-      get() {
-        return tickerName.value;
-      },
-      set(param: string) {
-        if (tickerName.value === param) {
-          return;
-        }
-
-        if (param === '') {
-          emit('update:modelValue', '');
-          return;
-        }
-
-        tickerName.value = param;
-
-        update();
-
-        if (props.allowText) {
-          emit('update:modelValue', tickerName.value);
-        }
-      },
-    });
-
-    function selectElement(symbol?: AssetSymbol | undefined) {
-      if (!symbol && symbols.data.length) {
-        symbol = symbols.data[0];
-      }
-
-      symbols.data = [];
-      tickerName.value = symbol ? symbol.tickerName : '';
-      isOpen.value = false;
-      emit('update:modelValue', symbol);
+  set(param: string) {
+    if (tickerName.value === param) {
+      return;
     }
 
-    return {
-      input,
-      symbols,
-      tickerName,
-      isOpen,
-      selectElement,
-    };
+    if (param === '') {
+      emit('update:ticker-name', '');
+      return;
+    }
+
+    tickerName.value = param;
+
+    update();
+
+    if (props.allowText) {
+      emit('update:ticker-name', tickerName.value);
+    }
   },
 });
+
+const resetDropDown = () => {
+  symbols.value = [];
+  isOpen.value = false;
+};
+
+const selectElement = (symbol: AssetSymbol) => {
+  console.log(symbol);
+
+  tickerName.value = symbol.tickerName;
+  resetDropDown();
+  emit('update:ticker-name', symbol.symbol);
+};
 </script>

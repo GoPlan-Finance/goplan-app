@@ -13,7 +13,7 @@ export class AssetProfile extends BaseObject {
     super(AssetProfile.className);
   }
 
-  get name(): AssetSymbol {
+  get name(): string {
     return this.get('name');
   }
 

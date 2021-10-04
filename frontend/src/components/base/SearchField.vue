@@ -6,7 +6,7 @@
 
     <input
       :class="inputClass"
-      :value="$props.modelValue"
+      :value="modelValue"
       class="
         w-100
         min-w-full
@@ -31,11 +31,12 @@ import { SearchIcon } from '@heroicons/vue/outline';
 withDefaults(
   defineProps<{
     modelValue: string;
-    placeholder: string;
-    inputClass: string;
+    placeholder?: string;
+    inputClass?: string;
   }>(),
   {
     placeholder: 'Search',
+    inputClass: 'text',
   }
 );
 
