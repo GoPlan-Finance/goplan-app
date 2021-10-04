@@ -4,7 +4,7 @@
       v-model="input"
       :input-class="searchFieldClass"
       :placeholder="placeholder"
-      @keyup.enter="selectElement()"
+      @keyup.enter="selectElement(symbols[0])"
     />
     <ul
       v-if="symbols.length && isOpen"
@@ -41,10 +41,10 @@ const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
 
 const props = withDefaults(
   defineProps<{
+    searchFieldClass?: string;
+    allowText?: boolean;
     placeholder?: string;
-    allowText: boolean;
-    modelValue?: AssetSymbol;
-    searchFieldClass: string;
+    assetSymbol?: AssetSymbol | string | undefined;
   }>(),
   {
     placeholder: 'Search',
@@ -53,21 +53,20 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', ticker: string): void;
+  (e: 'update:ticker-name', ticker: string): void;
 }>();
 
 const isOpen = ref(false);
 const symbols = ref<AssetSymbol[]>([]);
-
 const tickerName = ref<string>('');
 
 watch(
-  () => props.modelValue,
+  () => props.assetSymbol,
   () => {
-    if (props.modelValue instanceof AssetSymbol) {
-      tickerName.value = props.modelValue.tickerName;
-    } else if (typeof props.modelValue === 'string') {
-      tickerName.value = props.modelValue;
+    if (props.assetSymbol instanceof AssetSymbol) {
+      tickerName.value = props.assetSymbol.tickerName;
+    } else if (typeof props.assetSymbol === 'string') {
+      tickerName.value = props.assetSymbol;
     }
   }
 );
@@ -77,7 +76,7 @@ const update = async () => {
     return;
   }
 
-  if (props.modelValue && tickerName.value === props.modelValue.tickerName) {
+  if (props.assetSymbol && tickerName.value === props.assetSymbol.tickerName) {
     symbols.value = [];
     return;
   }
@@ -96,7 +95,7 @@ const input = computed<string>({
     }
 
     if (param === '') {
-      emit('update:modelValue', '');
+      emit('update:ticker-name', '');
       return;
     }
 
@@ -105,19 +104,21 @@ const input = computed<string>({
     update();
 
     if (props.allowText) {
-      emit('update:modelValue', tickerName.value);
+      emit('update:ticker-name', tickerName.value);
     }
   },
 });
 
-function selectElement(symbol?: AssetSymbol | undefined) {
-  if (!symbol && symbols.value.length) {
-    symbol = symbols.value[0];
-  }
-
+const resetDropDown = () => {
   symbols.value = [];
-  tickerName.value = symbol ? symbol.tickerName : '';
   isOpen.value = false;
-  emit('update:modelValue', symbol.symbol);
-}
+};
+
+const selectElement = (symbol: AssetSymbol) => {
+  console.log(symbol);
+
+  tickerName.value = symbol.tickerName;
+  resetDropDown();
+  emit('update:ticker-name', symbol.symbol);
+};
 </script>

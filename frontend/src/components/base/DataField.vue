@@ -3,104 +3,72 @@
     <dt class="text-sm font-medium text-gray-500">
       {{ label }}
     </dt>
-    <dd class="mt-1 text-sm text-gray-900 sm:mt-0" v-html="formattedValue" />
+    <dd class="mt-1 text-sm text-gray-900 sm:mt-0" v-html="getValue" />
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { defineComponent, onBeforeMount, ref, watch } from 'vue';
+import { computed, defineComponent, h, onBeforeMount, ref, watch } from 'vue';
+dayjs.extend(localizedFormat);
 
-export default defineComponent({
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    data: {
-      type: [String, Array, Number],
-      required: true,
-    },
-    type: {
-      type: String,
-      default: 'string',
-      validator(value: string) {
-        // The value must match one of these strings
-        return (
-          [
-            'percent',
-            'string',
-            'moneyChange',
-            'moneyRange',
-            'money',
-            'number',
-            'url',
-            'date',
-            'datetime',
-          ].indexOf(value) !== -1
-        );
-      },
-    },
-  },
-  setup(props) {
-    dayjs.extend(localizedFormat);
+type DataType =
+  | 'percent'
+  | 'string'
+  | 'moneyChange'
+  | 'moneyRange'
+  | 'money'
+  | 'number'
+  | 'url'
+  | 'date'
+  | 'datetime';
 
-    const formattedValue = ref('');
+export interface DataFieldItem {
+  label: string;
+  data: string | string[] | number | Date;
+  type?: DataType;
+}
 
-    const redGreen = (val, suffix) => {
-      const style = val >= 0 ? 'green' : 'red';
-      return `<span class="text-${style}-500"> ${val} ${suffix}</span>`;
-    };
+const props = withDefaults(defineProps<DataFieldItem>(), { type: 'string' });
 
-    const getValue = () => {
-      switch (props.type) {
-        case 'string':
-          return props.data;
+const redGreen = (value, suffix) => {
+  return `<span class="${
+    value >= 0 ? 'text-green-500' : 'text-red-500'
+  }"> ${value} ${suffix}</span>`;
+};
 
-        case 'number':
-          return Number(props.data).toLocaleString();
+const getValue = computed(() => {
+  switch (props.type) {
+    case 'string':
+      return props.data;
 
-        case 'percent':
-          return redGreen(parseFloat(props.data).toFixed(2), ' %');
+    case 'number':
+      return Number(props.data).toLocaleString();
 
-        case 'money':
-          return `${props.data} $`; /* @todo set currency */
+    case 'percent':
+      return redGreen(parseFloat(props.data).toFixed(2), ' %');
 
-        case 'moneyChange':
-          return redGreen(props.data, ' $');
+    case 'money':
+      return `${props.data} $`; /* @todo set currency */
 
-        case 'date':
-          return dayjs(props.data).format('ll');
+    case 'moneyChange':
+      return redGreen(props.data, ' $');
 
-        case 'datetime':
-          return dayjs(props.data).format('lll');
+    case 'date':
+      return dayjs(props.data).format('ll');
 
-        case 'url':
-          return `<a target="_blank" href="${props.data}">${props.data}</a>`;
+    case 'datetime':
+      return dayjs(props.data).format('lll');
 
-        case 'moneyRange':
-          return `${props.data[0]} $ - ${props.data[1]} $`; /* @todo set currency */
+    case 'url':
+      return `<a target="_blank" href="${props.data}">${props.data}</a>`;
 
-        default:
-          throw `Unknown type ${props.type}`;
-      }
-    };
+    case 'moneyRange':
+      return `${props.data[0]} $ - ${props.data[1]} $`; /* @todo set currency */
 
-    onBeforeMount(() => {
-      formattedValue.value = getValue();
-    });
-
-    watch(
-      () => props,
-      () => {
-        formattedValue.value = getValue();
-      }
-    );
-
-    return {
-      formattedValue,
-    };
-  },
+    default:
+      throw `Unknown type ${props.type}`;
+  }
 });
 </script>

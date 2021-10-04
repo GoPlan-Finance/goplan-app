@@ -6,7 +6,7 @@
 
     <input
       :class="inputClass"
-      :value="$props.modelValue"
+      :value="modelValue"
       class="
         w-100
         min-w-full
@@ -32,10 +32,11 @@ withDefaults(
   defineProps<{
     modelValue: string;
     placeholder?: string;
-    inputClass: string;
+    inputClass?: string;
   }>(),
   {
     placeholder: 'Search',
+    inputClass: 'text',
   }
 );
 
