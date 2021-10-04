@@ -3,8 +3,8 @@
  * https://jestjs.io/docs/configuration
  */
 
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
-const tsConfigFile = require("./tsconfig");
+const {pathsToModuleNameMapper} = require('ts-jest/utils')
+const tsConfigFile              = require('./tsconfig')
 
 export default {
   // All imported modules in your tests should be mocked automatically
@@ -17,16 +17,16 @@ export default {
   // cacheDirectory: "C:\\Users\\sam\\AppData\\Local\\Temp\\jest",
 
   // Automatically clear mock calls and instances between every test
-  clearMocks: true,
+  clearMocks : true,
 
   // Indicates whether the coverage information should be collected while executing the test
-  collectCoverage: true,
+  collectCoverage : true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory : 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -34,7 +34,7 @@ export default {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider : 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -85,18 +85,18 @@ export default {
   // ],
 
   // The root directory that Jest should scan for tests and modules within
-  rootDir: process.cwd(),
+  rootDir : process.cwd(),
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: ["<rootDir>"],
+  roots : ['<rootDir>'],
 
-  modulePaths: ["<rootDir>/src"],
+  modulePaths : ['<rootDir>/src'],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with
   // a single module moduleNameMapper: {},
 
-  moduleNameMapper: {
-    ...pathsToModuleNameMapper(tsConfigFile.compilerOptions.paths, { prefix: __dirname }),
+  moduleNameMapper : {
+    ...pathsToModuleNameMapper(tsConfigFile.compilerOptions.paths, {prefix : __dirname}),
   },
 
   // moduleNameMapper : {
@@ -138,7 +138,7 @@ export default {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ["./spec/setup.ts"],
+  setupFiles : ['./spec/setup.ts'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -189,8 +189,8 @@ export default {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip
   // transformation transformIgnorePatterns: [ "\\\\node_modules\\\\", "\\.pnp\\.[^\\\\]+$" ],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+  transform : {
+    '^.+\\.(ts|tsx)$' : 'ts-jest',
   },
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will
@@ -204,4 +204,4 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}

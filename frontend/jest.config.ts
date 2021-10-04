@@ -144,7 +144,7 @@ export default {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles : ['./spec/setup.ts'],
+  setupFiles : ['<rootDir>/spec/setup.ts'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -156,7 +156,7 @@ export default {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment : 'jsdom',
+  "testEnvironment": "<rootDir>/spec/test-env.ts",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
