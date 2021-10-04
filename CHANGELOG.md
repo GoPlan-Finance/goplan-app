@@ -288,4 +288,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Move Utils submodule to a separate  NPM Package [`f983e0f`](https://github.com/sadortun/GoPlan-app/commit/f983e0f404a4c8d98a1257c3b4496c206f917be3)
+- Update utils library [`961dad9`](https://github.com/sadortun/GoPlan-app/commit/961dad93a44dc45acfad560deb1668190ca53ec3)

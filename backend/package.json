@@ -30,7 +30,7 @@
     "npm": "please-use-yarn"
   },
   "dependencies": {
-    "@goplan-finance/utils": "github:goplan-finance/utils#master",
+    "@goplan-finance/utils": "^1.0.2",
     "async-mutex": "^0.3.1",
     "axios": "^0.22.0",
     "convict": "^6.1.0",

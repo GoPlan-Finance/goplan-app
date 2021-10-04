@@ -1,5 +1,5 @@
 import { User } from '@common/models';
-import { CryptoUtils, SecureObject } from '@goplan-finance/utils';
+import { Crypto, CryptoUtils, SecureObject } from '@goplan-finance/utils';
 import { Session } from './index';
 
 export class AuthStore {
@@ -54,14 +54,8 @@ export class AuthStore {
     }
 
     const clientKey = user.get('clientKey') as CryptoUtils.EncryptedKey;
-    const derived = await CryptoUtils.Crypto.PBKDF2(
-      masterKey,
-      CryptoUtils.Crypto.strToBuff(clientKey.s)
-    );
-    const key = (await CryptoUtils.Crypto.decrypt(
-      derived,
-      clientKey
-    )) as CryptoUtils.Crypto.DecryptedKey;
+    const derived = await Crypto.PBKDF2(masterKey, Crypto.strToBuff(clientKey.s));
+    const key = (await Crypto.decrypt(derived, clientKey)) as Crypto.DecryptedKey;
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key';
@@ -101,18 +95,18 @@ export class AuthStore {
     //
 
     // 2. We generate our super secret key that we will use to actually encrypt the user's data
-    const encryptionKey = CryptoUtils.Crypto.randomWords(128);
-    const salt = CryptoUtils.Crypto.randomSalt();
+    const encryptionKey = Crypto.randomWords(128);
+    const salt = Crypto.randomSalt();
 
-    const derived = await CryptoUtils.Crypto.PBKDF2(newMasterKey, salt);
+    const derived = await Crypto.PBKDF2(newMasterKey, salt);
 
-    const encryptedKey = await CryptoUtils.Crypto.encrypt(derived, {
-      encryptionKey: CryptoUtils.Crypto.buffToStr(encryptionKey),
+    const encryptedKey = await Crypto.encrypt(derived, {
+      encryptionKey: Crypto.buffToStr(encryptionKey),
     });
 
     return {
       ...encryptedKey /* contains ct, iv, kVer, aVer */,
-      s: CryptoUtils.Crypto.buffToStr(salt),
+      s: Crypto.buffToStr(salt),
     };
   }
 
