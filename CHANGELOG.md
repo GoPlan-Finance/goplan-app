@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Merged
 
+- Fix Icons and start refactor to script setup [`#602`](https://github.com/sadortun/GoPlan-app/pull/602)
+- Rework project structure [`#489`](https://github.com/sadortun/GoPlan-app/pull/489)
 - Bump @types/node from 16.6.2 to 16.10.2 in /frontend [`#601`](https://github.com/sadortun/GoPlan-app/pull/601)
 - Bump @vitejs/plugin-vue from 1.2.3 to 1.9.2 in /frontend [`#600`](https://github.com/sadortun/GoPlan-app/pull/600)
 - Bump ansi-regex from 5.0.0 to 5.0.1 in /frontend [`#599`](https://github.com/sadortun/GoPlan-app/pull/599)
@@ -288,4 +290,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Move Utils submodule to a separate  NPM Package [`f983e0f`](https://github.com/sadortun/GoPlan-app/commit/f983e0f404a4c8d98a1257c3b4496c206f917be3)
+- Update Utils, and fix path issues [`72e9275`](https://github.com/sadortun/GoPlan-app/commit/72e9275fb9dbeb0e1305eed9ba75efb019454e5b)

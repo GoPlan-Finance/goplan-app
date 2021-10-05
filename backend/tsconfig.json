@@ -34,7 +34,7 @@
       ],
       "@common/*": [
         "../common/src/*"
-      ],
+      ]
     }
   },
   "include": [
