@@ -95,7 +95,7 @@ import { PlusCircleIcon } from '@heroicons/vue/outline';
 
 const props = defineProps<{
   assetSymbol: AssetSymbol;
-  transaction: Transaction;
+  transaction?: Transaction;
 }>();
 
 const transactionProp = toRef(props, 'transaction');
