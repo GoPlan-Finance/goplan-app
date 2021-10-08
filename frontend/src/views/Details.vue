@@ -12,7 +12,7 @@
         </div>
       </template>
       <template #default>
-        <buy-sell-asset :asset-symbol="assetSymbol" />
+        <BuySellAsset :asset-symbol="assetSymbol" />
         <WatchAssetModal :asset-symbol="assetSymbol" />
       </template>
     </HeadlineActions>
@@ -23,79 +23,55 @@
       <CandlestickChart :asset-symbol="assetSymbol" />
     </div>
 
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 gap-4">
       <div>
         <CompanyQuote :asset-symbol="assetSymbol" />
       </div>
-      <div class="col-span-3">
+      <div>
         <CompanyInfo :asset-symbol="assetSymbol" />
       </div>
     </div>
   </template>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { AssetSymbol } from '@common/models';
-import AssetPriceVue from '@components/AssetPrice.vue';
 import BuySellAsset from '@components/BuySellAsset.vue';
 import CandlestickChart from '@components/Charts/CandlestickChart.vue';
 import CompanyInfo from '@components/CompanyInfo.vue';
 import CompanyQuote from '@components/CompanyQuote.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import WatchAssetModal from '@components/WatchAssetModal.vue';
-import { defineComponent, onBeforeMount, onUnmounted, reactive, toRefs, watch } from 'vue';
+import { onBeforeMount, onUnmounted, ref, watch } from 'vue';
+import AssetPrice from "@components/AssetPrice.vue";
 
-export default defineComponent({
-  components: {
-    CompanyQuote,
-    HeadlineActions,
-    WatchAssetModal,
-    CompanyInfo,
-    AssetPrice: AssetPriceVue,
-    CandlestickChart,
-    BuySellAsset,
-  },
-  props: {
-    ticker: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    const data: {
-      liveSubscription: Parse.LiveQuerySubscription;
-      loading: boolean;
-      assetSymbol: AssetSymbol | null;
-    } = reactive({
-      loading: false,
-      assetSymbol: null,
-    });
+const props = defineProps<{
+  ticker: string;
+}>();
 
-    const loadAssetSymbol = async () => {
-      data.loading = true;
-      data.assetSymbol = await AssetSymbol.fetchSymbolByTicker(props.ticker);
-      data.loading = false;
+const liveSubscription = ref<Parse.LiveQuerySubscription>();
+const loading = ref(false);
+const assetSymbol = ref<AssetSymbol>();
 
-      if (data.liveSubscription) {
-        await data.liveSubscription.unsubscribe();
-      }
-    };
+const loadAssetSymbol = async () => {
+  loading.value = true;
+  assetSymbol.value = await AssetSymbol.fetchSymbolByTicker(props.ticker);
+  loading.value = false;
 
-    watch(() => props.ticker, loadAssetSymbol);
+  if (liveSubscription.value) {
+    await liveSubscription.value.unsubscribe();
+  }
+};
 
-    onBeforeMount(async () => {
-      await loadAssetSymbol();
-    });
+watch(() => props.ticker, loadAssetSymbol);
 
-    onUnmounted(async () => {
-      if (data.liveSubscription) {
-        await data.liveSubscription.unsubscribe();
-      }
-    });
+onBeforeMount(async () => {
+  await loadAssetSymbol();
+});
 
-    return {
-      ...toRefs(data),
-    };
-  },
+onUnmounted(async () => {
+  if (liveSubscription.value) {
+    await liveSubscription.value.unsubscribe();
+  }
 });
 </script>

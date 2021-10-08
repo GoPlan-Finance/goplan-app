@@ -16,41 +16,31 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { AssetPrice, AssetSymbol } from '@common/models';
 import PriceChange from '@components/PriceChange.vue';
 import { CurrencyUtils } from '@goplan-finance/utils';
-import { computed, onUnmounted, onBeforeMount, ref, defineComponent } from 'vue';
+import { onBeforeMount, onUnmounted, ref } from 'vue';
 
-export default defineComponent({
-  components: { PriceChange },
-  props: {
-    symbol: {
-      type: AssetSymbol,
-      required: true,
-    },
-  },
-  setup(props) {
-    let liveSubscription = null;
+const props = defineProps<{
+  symbol: AssetSymbol;
+}>();
 
-    const price = ref(null);
+let liveSubscription = null;
 
-    onBeforeMount(async () => {
-      liveSubscription = await AssetPrice.liveQuery(props.symbol, assetPrice => {
-        price.value = assetPrice;
-      });
-    });
+const price = ref(null);
 
-    onUnmounted(async () => {
-      if (liveSubscription) {
-        await liveSubscription.unsubscribe();
-      }
-    });
-
-    return {
-      formatCurrency: CurrencyUtils.formatCurrency,
-      price,
-    };
-  },
+onBeforeMount(async () => {
+  liveSubscription = await AssetPrice.liveQuery(props.symbol, assetPrice => {
+    price.value = assetPrice;
+  });
 });
+
+onUnmounted(async () => {
+  if (liveSubscription) {
+    await liveSubscription.unsubscribe();
+  }
+});
+
+const formatCurrency = CurrencyUtils.formatCurrency;
 </script>
