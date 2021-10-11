@@ -78,7 +78,7 @@
     "babel-jest": "^27.0.6",
     "concurrently": "^6.2.2",
     "cross-env": "^7.0.2",
-    "eslint": "^7.32.0",
+    "eslint": "^8.0.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-only-warn": "^1.0.2",
     "eslint-plugin-varspacing": "^1.2.2",
