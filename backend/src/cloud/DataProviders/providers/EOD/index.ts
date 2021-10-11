@@ -8,8 +8,11 @@ import { Mutex } from 'async-mutex';
 import { AxiosError } from 'axios';
 
 import dayjs from 'dayjs';
-import * as EODApi from 'eodhistoricaldata-openapi';
+import * as EODApi from 'eodhistoricaldata-openapi/languages/javascript/src';
+import { AssetQuote, Period } from 'eodhistoricaldata-openapi/languages/javascript/src';
 import * as Types from '../types';
+import { EndOfDayData } from '../types';
+import { SymbolDataResolution } from '@common/types/types';
 
 export class EOD implements Types.DataProviderInterface {
   private readonly config: EODApi.Configuration;
@@ -113,65 +116,54 @@ export class EOD implements Types.DataProviderInterface {
     symbol: string,
     from: dayjs.Dayjs,
     to: dayjs.Dayjs,
-    resolution: Types.SymbolDataResolution
+    resolution: SymbolDataResolution
   ): Promise<Types.TimeSeriesData> {
-    return null;
-    /*
-     const historyApi = new EODApi.HistoryApi(this.config)
+    const assetApi = new EODApi.AssetsApi(this.config);
 
-     const query = async (
-     out : Types.SymbolDataResolution,
-     res : '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour',
-     ) : Promise<Types.TimeSeriesData> => {
-     const response = await historyApi.intraDayPrices(symbol, res)
-     return {resolution: out, data: response.data.reverse()}
-     }
+    let period = Period.D;
+    switch (resolution) {
+      case '1minute':
+      case '5minutes':
+      case '30minutes':
+      case '15minutes':
+      case 'hour':
+      case '4hours':
+      case 'day':
+        period = Period.D;
+        break;
+      case 'week':
+        period = Period.W;
+        break;
+      case 'month':
+        period = Period.M;
+        break;
+      default:
+        throw `Resolution ${resolution} not implemented`;
+    }
 
-     // The day values here are purely from observation of what the API returns. For long term historical data,
-     // we will probably need to fetch from a different source, or cache data.
+    const response = await assetApi.endOfDayHistorical(
+      symbol,
+      period,
+      from.toISOString(),
+      to.toISOString()
+    );
 
-     switch (resolution) {
-     case '1minute':
-     if (dayjs().diff(from, 'days') < 2) {
-     return await query('1minute', '1min')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case '5minutes':
-     if (dayjs().diff(from, 'days') < 11) {
-     return await query('5minutes', '5min')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case '15minutes':
-     if (dayjs().diff(from, 'days') < 18) {
-     return await query('15minutes', '15min')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case '30minutes':
-     if (dayjs().isAfter(from.subtract(42, 'days'))) {
-     return await query('30minutes', '30min')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case 'hour':
-     if (dayjs().diff(from, 'days') < 48) {
-     return await query('hour', '1hour')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case            '4hours'            :
-     if (dayjs().diff(from, 'days') < 85) {
-     return await query('4hours', '4hour')
-     }
-     // eslint-disable-next-line no-fallthrough
-     case            'day'   :
-     case            'month' :
-     case            'week'  : {
-     const eod = await historyApi.dailyPrices(symbol, from.toISOString(), to.toISOString())
-     return {resolution: 'day', data: eod.data.historical.reverse()}
-     }
-     default:
-     throw `Resolution ${resolution} not implemented`
-     }
+    const endOfDayData: EndOfDayData[] = response.data.map(item => {
+      const ratio = item.adjusted_close / item.close;
+      return {
+        date: item.date,
+        open: +(item.open * ratio).toFixed(3),
+        high: +(item.high * ratio).toFixed(3),
+        low: +(item.low * ratio).toFixed(3),
+        close: +item.adjusted_close.toFixed(3),
+        volume: item.volume,
+      };
+    });
 
-     */
+    return {
+      data: endOfDayData,
+      resolution,
+    };
   }
 
   async getCompanyProfile(tickerName: string): Promise<Types.CompanyProfile> {
@@ -180,7 +172,6 @@ export class EOD implements Types.DataProviderInterface {
 
       const response = await assetApi.assetFundamentalsGeneralSection(tickerName);
       const general = response.data;
-
       return {
         symbol: general.Code,
         companyName: general.Name,
@@ -202,7 +193,7 @@ export class EOD implements Types.DataProviderInterface {
         image:
           general.LogoURL && general.LogoURL.toLowerCase().startsWith('http')
             ? general.LogoURL
-            : `https://eodhistoricaldata.com/${general.LogoURL}`,
+            : `https://eodhistoricaldata.com${general.LogoURL}`,
         ipoDate: general.IPODate,
       };
     } catch (error) {
@@ -211,9 +202,36 @@ export class EOD implements Types.DataProviderInterface {
   }
 
   async getCompanyQuote(symbol: string): Promise<Types.CompanyQuote> {
-    const data = await this.getCompanyQuotes([symbol]);
+    const api = new EODApi.AssetsApi(this.config);
 
-    return data.pop();
+    const responseRealTime = await api.realTimeQuote(symbol);
+    const quote: AssetQuote = responseRealTime.data;
+    const responseTechnical = await api.assetFundamentalsCompact(symbol);
+    const { Technicals } = responseTechnical.data;
+
+    return {
+      avgVolume: 0,
+      earningsAnnouncement: '',
+      eps: 0,
+      exchange: '',
+      marketCap: 0,
+      name: '',
+      pe: 0,
+      price: 0,
+      priceAvg200: Technicals['200DayMA'],
+      priceAvg50: Technicals['50DayMA'],
+      yearHigh: Technicals['52WeekHigh'],
+      yearLow: Technicals['52WeekLow'],
+      symbol: quote.code,
+      changesPercentage: quote.change_p,
+      change: quote.change,
+      dayLow: quote.low,
+      dayHigh: quote.high,
+      volume: quote.volume,
+      open: quote.open,
+      previousClose: quote.previousClose,
+      timestamp: quote.timestamp,
+    };
   }
 
   public name(): string {
@@ -231,26 +249,34 @@ export class EOD implements Types.DataProviderInterface {
   async getCompanyQuotes(symbols: string[]): Promise<Types.CompanyQuote[]> {
     const api = new EODApi.AssetsApi(this.config);
 
-    // const response = await api.realTimeQuote(symbols.pop(), symbols.join(','));
+    const responseRealTime = await api.realTimeQuote(symbols.pop(), symbols.join(','));
+    const quote: AssetQuote = responseRealTime.data;
 
-    const quotes: Array<Types.CompanyQuote> = [];
-    /*
-    for (const quote of response.data) {
-      quotes.push({
-        symbol            : quote.code,
-        changesPercentage : quote.change_p,
-        change            : quote.change,
-        dayLow            : quote.low,
-        dayHigh           : quote.high,
-        volume            : quote.volume,
-        open              : quote.open,
-        previousClose     : quote.previousClose,
-        timestamp         : quote.timestamp,
-
-
-      })
-    }*/
-
-    return quotes;
+    // console.log(response.data);
+    return [
+      {
+        avgVolume: 0,
+        earningsAnnouncement: '',
+        eps: 0,
+        exchange: '',
+        marketCap: 0,
+        name: '',
+        pe: 0,
+        price: 0,
+        priceAvg200: 0,
+        priceAvg50: 0,
+        yearHigh: 0,
+        yearLow: 0,
+        symbol: quote.code,
+        changesPercentage: quote.change_p,
+        change: quote.change,
+        dayLow: quote.low,
+        dayHigh: quote.high,
+        volume: quote.volume,
+        open: quote.open,
+        previousClose: quote.previousClose,
+        timestamp: quote.timestamp,
+      },
+    ];
   }
 }

@@ -21,7 +21,5 @@ Parse.Cloud.define('Assets--GetQuote', async request => {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Symbol ${assetSymbolId} not found`);
   }
 
-  const result = await DataProvider.getCompanyQuote(assetSymbol);
-
-  return result;
+  return DataProvider.getCompanyQuote(assetSymbol);
 });

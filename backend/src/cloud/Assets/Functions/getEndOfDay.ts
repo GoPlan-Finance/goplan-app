@@ -23,12 +23,5 @@ Parse.Cloud.define('Assets--GetEndOfDay', async request => {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Symbol ${assetSymbolId} not found`);
   }
 
-  const result = await DataProvider.getSymbolTimeSeriesData(
-    assetSymbol,
-    dayjs(from),
-    dayjs(to),
-    resolution
-  );
-
-  return result;
+  return DataProvider.getSymbolTimeSeriesData(assetSymbol, dayjs(from), dayjs(to), resolution);
 });

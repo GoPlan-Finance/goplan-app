@@ -29,18 +29,18 @@ Parse.Cloud.define('Assets--GetProfile', async request => {
     throw new Parse.Error(Parse.Error.OBJECT_NOT_FOUND, `Symbol ${assetSymbolId} not found`);
   }
 
-  let profile = await CacheableQuery.create(AssetProfile).findOneBy(
-    {
-      symbol: assetSymbol,
-    },
-    true
-  );
+  // let profile = await CacheableQuery.create(AssetProfile).findOneBy(
+  //   {
+  //     symbol: assetSymbol,
+  //   },
+  //   true
+  // );
+  //
+  // if (profile) {
+  //   return profile;
+  // }
 
-  if (profile) {
-    return profile;
-  }
-
-  profile = new AssetProfile();
+  const profile = new AssetProfile();
 
   const apiProfile = await DataProvider.getCompanyProfile(assetSymbol);
 

@@ -19,7 +19,7 @@
     "prettier": "prettier --write  src/ spec/",
     "backend-test": "jest",
     "backend-serve": "ts-node -r tsconfig-paths/register src/server.ts",
-    "backend-debug-watch": "nodemon --watch \"src/**\" --watch \"../common/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run start\"",
+    "backend-debug-watch": "nodemon --watch \"src/**\" --watch \"../common/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run backend-serve\"",
     "dev-dependencies-link-fmp": "yarn link financialmodelingprep-openapi",
     "dev-dependencies-link-eod": "yarn link eodhistoricaldata-openapi",
     "dev-dependencies-link-parse-server": "yarn link parse-server"

@@ -6,6 +6,7 @@
  */
 import { Mutex } from 'async-mutex';
 import { Dayjs } from 'dayjs';
+import { SymbolDataResolution } from '@common/types/types';
 
 export interface Exchange {
   code: string;
@@ -22,17 +23,6 @@ export interface AssetSymbol {
   ISIN?: string;
   type?: string;
 }
-
-export type SymbolDataResolution =
-  | '1minute'
-  | '5minutes'
-  | '30minutes'
-  | '15minutes'
-  | 'hour'
-  | '4hours'
-  | 'day'
-  | 'week'
-  | 'month';
 
 export enum APIErrorType {
   QUOTA_ERROR = 1,

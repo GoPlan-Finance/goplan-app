@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-full sm:grid sm:grid-cols-2 sm:gap-4">
+  <div class="min-w-full grid grid-cols-2 gap-4">
     <dt class="text-sm font-medium text-gray-500">
       {{ label }}
     </dt>
