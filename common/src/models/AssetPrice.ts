@@ -170,6 +170,7 @@ export class AssetPrice extends BaseObject {
     q.descending('recordedAt');
     q.limit(1);
 
+    console.log(q);
     return await q.liveQuery(null, fn);
   }
 }

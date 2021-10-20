@@ -241,9 +241,7 @@ class GlobalProvider {
   ): Promise<Types.CompanyQuote[]> {
     const tickers = assetSymbols.map(assetSymbol => assetSymbol.symbol);
 
-    const result = await GlobalProvider.getProvider(providerName).getCompanyQuotes(tickers);
-
-    return result;
+    return GlobalProvider.getProvider(providerName).getCompanyQuotes(tickers);
   }
 }
 

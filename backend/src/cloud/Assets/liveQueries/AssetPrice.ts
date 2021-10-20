@@ -67,6 +67,7 @@ class SubscriptionsHandler<T> {
 
         console.log(`Updating quotes for ${providerName} -> ${tickersNames.join(', ')} to update`);
         const results = await DataProvider.getCompanyQuotes(providerName, tickers);
+        console.log('results:', results);
         for (const result of results) {
           await this.mutex.runExclusive(async () => {
             const assetSymbol = await AssetSymbol.fetchSymbolByTicker(result.symbol, true);

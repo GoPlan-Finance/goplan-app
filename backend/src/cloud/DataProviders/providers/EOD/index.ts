@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import * as EODApi from 'eodhistoricaldata-openapi/languages/javascript/src';
 import { AssetQuote, Period } from 'eodhistoricaldata-openapi/languages/javascript/src';
 import * as Types from '../types';
-import { EndOfDayData } from '../types';
+import { CompanyQuote, EndOfDayData } from '../types';
 import { SymbolDataResolution } from '@common/types/types';
 
 export class EOD implements Types.DataProviderInterface {
@@ -202,36 +202,9 @@ export class EOD implements Types.DataProviderInterface {
   }
 
   async getCompanyQuote(symbol: string): Promise<Types.CompanyQuote> {
-    const api = new EODApi.AssetsApi(this.config);
+    const quotes = await this.getCompanyQuotes([symbol]);
 
-    const responseRealTime = await api.realTimeQuote(symbol);
-    const quote: AssetQuote = responseRealTime.data;
-    const responseTechnical = await api.assetFundamentalsCompact(symbol);
-    const { Technicals } = responseTechnical.data;
-
-    return {
-      avgVolume: 0,
-      earningsAnnouncement: '',
-      eps: 0,
-      exchange: '',
-      marketCap: 0,
-      name: '',
-      pe: 0,
-      price: 0,
-      priceAvg200: Technicals['200DayMA'],
-      priceAvg50: Technicals['50DayMA'],
-      yearHigh: Technicals['52WeekHigh'],
-      yearLow: Technicals['52WeekLow'],
-      symbol: quote.code,
-      changesPercentage: quote.change_p,
-      change: quote.change,
-      dayLow: quote.low,
-      dayHigh: quote.high,
-      volume: quote.volume,
-      open: quote.open,
-      previousClose: quote.previousClose,
-      timestamp: quote.timestamp,
-    };
+    return quotes[0];
   }
 
   public name(): string {
@@ -246,37 +219,42 @@ export class EOD implements Types.DataProviderInterface {
     return await Promise.all(promises);
   }
 
-  async getCompanyQuotes(symbols: string[]): Promise<Types.CompanyQuote[]> {
+  mapAssetQuoteToCompanyQuote(quote: AssetQuote): CompanyQuote {
+    return {
+      avgVolume: 0,
+      earningsAnnouncement: '',
+      eps: 0,
+      exchange: '',
+      marketCap: 0,
+      name: '',
+      pe: 0,
+      price: 0,
+      priceAvg200: 0,
+      priceAvg50: 0,
+      yearHigh: 0,
+      yearLow: 0,
+      symbol: quote.code,
+      changesPercentage: quote.change_p,
+      change: quote.change,
+      dayLow: quote.low,
+      dayHigh: quote.high,
+      volume: quote.volume,
+      open: quote.open,
+      previousClose: quote.previousClose,
+      timestamp: quote.timestamp,
+    };
+  }
+
+  async getCompanyQuotes(symbols: string[]): Promise<CompanyQuote[]> {
     const api = new EODApi.AssetsApi(this.config);
 
     const responseRealTime = await api.realTimeQuote(symbols.pop(), symbols.join(','));
-    const quote: AssetQuote = responseRealTime.data;
 
-    // console.log(response.data);
-    return [
-      {
-        avgVolume: 0,
-        earningsAnnouncement: '',
-        eps: 0,
-        exchange: '',
-        marketCap: 0,
-        name: '',
-        pe: 0,
-        price: 0,
-        priceAvg200: 0,
-        priceAvg50: 0,
-        yearHigh: 0,
-        yearLow: 0,
-        symbol: quote.code,
-        changesPercentage: quote.change_p,
-        change: quote.change,
-        dayLow: quote.low,
-        dayHigh: quote.high,
-        volume: quote.volume,
-        open: quote.open,
-        previousClose: quote.previousClose,
-        timestamp: quote.timestamp,
-      },
-    ];
+    let quotes = responseRealTime.data;
+    // console.log('quote', quote);
+    if (!Array.isArray(quotes)) {
+      quotes = [quotes];
+    }
+    return quotes.map(quote => this.mapAssetQuoteToCompanyQuote(quote));
   }
 }
