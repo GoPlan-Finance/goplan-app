@@ -1,5 +1,4 @@
 <template>
-  {{ symbol }}
   <div
     v-if="price"
     class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg"
@@ -29,24 +28,21 @@
   import { AssetPrice, AssetSymbol } from '@common/models'
   import PriceChange from '@components/PriceChange.vue'
   import { CurrencyUtils } from '@goplan-finance/utils'
-  import { onBeforeMount, onUnmounted, ref } from 'vue'
+  import { onUnmounted, ref } from 'vue'
 
   const props = defineProps<{
     symbol: AssetSymbol
   }>()
 
   const liveSubscription = ref<Parse.LiveQuerySubscription>()
+  const price = ref<AssetPrice>()
 
-  const price = ref()
-
-  onBeforeMount(async () => {
-    liveSubscription.value = await AssetPrice.liveQuery(
-      props.symbol,
-      assetPrice => {
-        price.value = assetPrice
-      }
-    )
-  })
+  liveSubscription.value = await AssetPrice.liveQuery(
+    props.symbol,
+    assetPrice => {
+      price.value = assetPrice
+    }
+  )
 
   onUnmounted(async () => {
     if (liveSubscription) {
