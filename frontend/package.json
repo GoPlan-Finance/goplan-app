@@ -64,7 +64,7 @@
     "@types/papaparse": "^5.2.6",
     "@types/parse": "^2.18.10",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
-    "@typescript-eslint/parser": "^4.29.2",
+    "@typescript-eslint/parser": "^5.3.0",
     "@vitejs/plugin-vue": "^1.9.2",
     "@vue/cli-plugin-babel": "~4.5.9",
     "@vue/cli-plugin-eslint": "~4.5.9",
