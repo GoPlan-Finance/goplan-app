@@ -8,8 +8,8 @@ import { Mutex } from 'async-mutex';
 import { AxiosError } from 'axios';
 
 import dayjs from 'dayjs';
-import * as EODApi from 'eodhistoricaldata-openapi/languages/javascript/src';
-import { AssetQuote, Period } from 'eodhistoricaldata-openapi/languages/javascript/src';
+import * as EODApi from 'eodhistoricaldata-openapi';
+import { AssetQuote, Period } from 'eodhistoricaldata-openapi';
 import * as Types from '../types';
 import { CompanyQuote, EndOfDayData } from '../types';
 import { SymbolDataResolution } from '@common/types/types';
@@ -250,7 +250,7 @@ export class EOD implements Types.DataProviderInterface {
 
     const responseRealTime = await api.realTimeQuote(symbols.pop(), symbols.join(','));
 
-    let quotes = responseRealTime.data;
+    let quotes: AssetQuote | AssetQuote[] = responseRealTime.data;
     // console.log('quote', quote);
     if (!Array.isArray(quotes)) {
       quotes = [quotes];

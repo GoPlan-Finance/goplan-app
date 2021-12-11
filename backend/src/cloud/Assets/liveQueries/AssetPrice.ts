@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { AssetPrice, AssetSymbol } from '@common/models';
-import { ArrayUtils, CacheableQuery, Query } from '@goplan-finance/utils';
+import { ArrayUtils, CacheableQuery, ObjectUtils, Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
 import { DataProvider } from '../../DataProviders/providers';
@@ -80,7 +80,7 @@ class SubscriptionsHandler<T> {
 
             assetPrice.symbol = assetSymbol;
             assetPrice.recordedAt = dayjs.unix(result.timestamp).toDate();
-            assetPrice.price = result.price;
+            assetPrice.price = result.open; //@todo verify if same as price
             assetPrice.changesPercentage = result.changesPercentage;
             assetPrice.change = result.change;
             assetPrice.dayLow = result.dayLow;
@@ -173,7 +173,7 @@ Parse.Cloud.beforeSubscribe(AssetPrice, async request => {
     }
 
     if (!where.$in) {
-      where.$in = [where];
+      where.$in = ObjectUtils.deepClone([where]);
     }
 
     for (const symbol of where.$in) {

@@ -40,44 +40,44 @@
 </template>
 
 <script setup lang="ts">
-  import { AssetSymbol } from '@common/models'
-  import BuySellAsset from '@components/BuySellAsset.vue'
-  import CandlestickChart from '@components/Charts/CandleStickChart/CandlestickChart.vue'
-  import CompanyInfo from '@components/CompanyInfo.vue'
-  import CompanyQuote from '@components/CompanyQuote.vue'
-  import HeadlineActions from '@components/HeadlineActions.vue'
-  import WatchAssetModal from '@components/WatchAssetModal.vue'
-  import { onBeforeMount, onUnmounted, ref, watch } from 'vue'
-  import AssetPrice from '@components/AssetPrice.vue'
-  import GSkeleton from '@components/base/GSkeleton.vue'
+import { AssetSymbol } from '@common/models';
+import BuySellAsset from '@components/BuySellAsset.vue';
+import CandlestickChart from '@components/Charts/CandleStickChart/CandlestickChart.vue';
+import CompanyInfo from '@components/CompanyInfo.vue';
+import CompanyQuote from '@components/CompanyQuote.vue';
+import HeadlineActions from '@components/HeadlineActions.vue';
+import WatchAssetModal from '@components/WatchAssetModal.vue';
+import { onBeforeMount, onUnmounted, ref, watch } from 'vue';
+import AssetPrice from '@components/AssetPrice.vue';
+import GSkeleton from '@components/base/GSkeleton.vue';
 
-  const props = defineProps<{
-    ticker: string
-  }>()
+const props = defineProps<{
+  ticker: string;
+}>();
 
-  const liveSubscription = ref<Parse.LiveQuerySubscription>()
-  const loading = ref(false)
-  const assetSymbol = ref<AssetSymbol>()
+const liveSubscription = ref<Parse.LiveQuerySubscription>();
+const loading = ref(false);
+const assetSymbol = ref<AssetSymbol>();
 
-  const loadAssetSymbol = async () => {
-    loading.value = true
-    assetSymbol.value = await AssetSymbol.fetchSymbolByTicker(props.ticker)
-    loading.value = false
+const loadAssetSymbol = async () => {
+  loading.value = true;
+  assetSymbol.value = await AssetSymbol.fetchSymbolByTicker(props.ticker);
+  loading.value = false;
 
-    if (liveSubscription.value) {
-      await liveSubscription.value.unsubscribe()
-    }
+  if (liveSubscription.value) {
+    await liveSubscription.value.unsubscribe();
   }
+};
 
-  watch(() => props.ticker, loadAssetSymbol)
+watch(() => props.ticker, loadAssetSymbol);
 
-  onBeforeMount(async () => {
-    await loadAssetSymbol()
-  })
+onBeforeMount(async () => {
+  await loadAssetSymbol();
+});
 
-  onUnmounted(async () => {
-    if (liveSubscription.value) {
-      await liveSubscription.value.unsubscribe()
-    }
-  })
+onUnmounted(async () => {
+  if (liveSubscription.value) {
+    await liveSubscription.value.unsubscribe();
+  }
+});
 </script>

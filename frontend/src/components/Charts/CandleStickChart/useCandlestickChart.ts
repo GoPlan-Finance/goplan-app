@@ -3,46 +3,46 @@
  *
  *
  */
-import { AssetSymbol } from '@models'
-import * as duration from 'dayjs/plugin/duration'
-import { Ref, ref } from 'vue'
-import dayjs, { Dayjs } from 'dayjs'
-import { TimeScaleInterface } from '@components/Charts/HoldingTimeSeriesChart'
+import { AssetSymbol } from '@models';
+import * as duration from 'dayjs/plugin/duration';
+import { Ref, ref } from 'vue';
+import dayjs, { Dayjs } from 'dayjs';
+import { TimeScaleInterface } from '@components/Charts/HoldingTimeSeriesChart';
 
 export type CandleData = {
-  date: dayjs.Dayjs | undefined
-  open: number
-  high: number
-  low: number
-  close: number
-  volume: number
-}
+  date: dayjs.Dayjs | undefined;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useCandleStickChart = (
   assetSymbol: AssetSymbol,
   currentScale: Ref<TimeScaleInterface>
 ) => {
-  const candleData = ref<CandleData[]>()
-  const loading = ref(false)
+  const candleData = ref<CandleData[]>();
+  const loading = ref(false);
 
   function calculateMA(dayCount) {
     if (!candleData.value) {
-      return []
+      return [];
     }
-    const result = []
+    const result = [];
     for (let i = 0, len = candleData.value.length; i < len; i++) {
       if (i < dayCount) {
-        result.push('-')
-        continue
+        result.push('-');
+        continue;
       }
-      let sum = 0
+      let sum = 0;
       for (let j = 0; j < dayCount; j++) {
-        sum += +candleData.value[i - j].close
+        sum += +candleData.value[i - j].close;
       }
-      result.push(+(sum / dayCount).toFixed(2))
+      result.push(+(sum / dayCount).toFixed(2));
     }
-    return result
+    return result;
   }
 
   const option = ref({
@@ -68,7 +68,7 @@ export const useCandleStickChart = (
       min: 'dataMin',
       max: 'dataMax',
       formatter(param) {
-        return 1
+        return 1;
       },
     },
     yAxis: {
@@ -106,7 +106,7 @@ export const useCandleStickChart = (
           label: {
             normal: {
               formatter(param) {
-                return param !== null ? Math.round(param.value) : ''
+                return param !== null ? Math.round(param.value) : '';
               },
             },
           },
@@ -129,7 +129,7 @@ export const useCandleStickChart = (
           ],
           tooltip: {
             formatter(param) {
-              return `${param.name}<br>${param.data.coord || ''}`
+              return `${param.name}<br>${param.data.coord || ''}`;
             },
           },
         },
@@ -205,9 +205,9 @@ export const useCandleStickChart = (
         },
       },
     ],
-  })
+  });
 
-  dayjs.extend(duration)
+  dayjs.extend(duration);
 
   const loadData = async (
     assetSymbol: AssetSymbol,
@@ -220,34 +220,33 @@ export const useCandleStickChart = (
       from: from.toISOString(),
       to: to.toISOString(),
       assetSymbolId: assetSymbol.id,
-    })
-  }
+    });
+  };
 
   const reloadData = async (min?: Dayjs, max?: Dayjs) => {
-    loading.value = true
-    const from =
-      min ?? dayjs().subtract(currentScale.value.visible.asSeconds(), 'seconds')
-    const to = max ?? dayjs()
-    const data = await loadData(assetSymbol, currentScale.value, from, to)
-    candleData.value = data
-    option.value.series[1].data = calculateMA(50)
-    option.value.series[2].data = calculateMA(200)
+    loading.value = true;
+    const from = min ?? dayjs().subtract(currentScale.value.visible.asSeconds(), 'seconds');
+    const to = max ?? dayjs();
+    const data = await loadData(assetSymbol, currentScale.value, from, to);
+    candleData.value = data;
+    option.value.series[1].data = calculateMA(50);
+    option.value.series[2].data = calculateMA(200);
 
-    const categories: string[] = []
-    const candles: number[][] = []
+    const categories: string[] = [];
+    const candles: number[][] = [];
     data.forEach(elem => {
-      categories.push(dayjs(elem.date).format('MM-DD-YYYY'))
-      candles.push([elem.open, elem.close, elem.low, elem.high])
-    })
-    option.value.xAxis.data = categories
-    option.value.series[0].data = candles
-    loading.value = false
-  }
+      categories.push(dayjs(elem.date).format('MM-DD-YYYY'));
+      candles.push([elem.open, elem.close, elem.low, elem.high]);
+    });
+    option.value.xAxis.data = categories;
+    option.value.series[0].data = candles;
+    loading.value = false;
+  };
 
   return {
     loading,
     option,
     reloadData,
     loadData,
-  }
-}
+  };
+};

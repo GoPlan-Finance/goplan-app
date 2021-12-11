@@ -1,5 +1,6 @@
-semi: false
+semi: true
 trailingComma: "es5"
 singleQuote: true
 arrowParens: "avoid"
-vueIndentScriptAndStyle: true
+printWidth: 100
+#vueIndentScriptAndStyle: true

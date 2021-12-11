@@ -170,7 +170,13 @@ export class AssetPrice extends BaseObject {
     q.descending('recordedAt');
     q.limit(1);
 
-    console.log(q);
+    const ap = await q.find();
+
+    if (ap) {
+      // load one price immediatly
+      fn(ap[0], null);
+    }
+
     return await q.liveQuery(null, fn);
   }
 }

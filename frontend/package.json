@@ -6,7 +6,7 @@
   "scripts": {
     "pre-commit": "yarn run lint && yarn run prettier && yarn run yml-sort",
     "prettier": "prettier --write  src/ spec/",
-    "lint": "eslint --cache . --ext .js,.ts,.vue",
+    "lint": "eslint --cache --fix . --ext .js,.ts,.vue",
     "yml-sort": "yml-sorter -i src/locales/en.yml -o src/locales/en.yml",
     "frontend-test": "jest",
     "frontend-serve": "vite",
@@ -41,7 +41,7 @@
     "echarts": "^5.2.1",
     "feather-icons": "^4.28.0",
     "papaparse": "^5.3.1",
-    "parse": "^3.3.1",
+    "parse": "3.3.1",
     "pinia": "^2.0.0-rc.10",
     "tailwindcss": "^2.2.7",
     "ts-money": "^0.4.6",

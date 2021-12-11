@@ -1,11 +1,11 @@
-import * as duration from 'dayjs/plugin/duration'
-import dayjs from 'dayjs'
-import { SymbolDataResolution } from '@common/types/types'
+import * as duration from 'dayjs/plugin/duration';
+import dayjs from 'dayjs';
+import { SymbolDataResolution } from '@common/types/types';
 
 export interface TimeScaleInterface {
-  label: string
-  visible: duration.Duration
-  resolution: SymbolDataResolution
+  label: string;
+  visible: duration.Duration;
+  resolution: SymbolDataResolution;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -56,38 +56,33 @@ export const useTimeScales = () => {
       visible: dayjs.duration(1000, 'year'),
       resolution: SymbolDataResolution.WEEK,
     },
-  ]
+  ];
 
-  const getScaleForRange = (
-    min: dayjs.Dayjs,
-    max: dayjs.Dayjs
-  ): TimeScaleInterface => {
-    const delta = dayjs.duration(max.diff(min))
+  const getScaleForRange = (min: dayjs.Dayjs, max: dayjs.Dayjs): TimeScaleInterface => {
+    const delta = dayjs.duration(max.diff(min));
 
-    const scale = timeScales.find(
-      s => delta.asMilliseconds() < s.visible.asMilliseconds()
-    )
+    const scale = timeScales.find(s => delta.asMilliseconds() < s.visible.asMilliseconds());
 
     if (!scale) {
-      throw 'Invalid scale'
+      throw 'Invalid scale';
     }
 
-    return scale
-  }
+    return scale;
+  };
 
   const getScaleByLabel = (label: string): TimeScaleInterface => {
-    const scale = timeScales.find(s => label === s.label)
+    const scale = timeScales.find(s => label === s.label);
 
     if (!scale) {
-      throw `Invalid scale "${label}"`
+      throw `Invalid scale "${label}"`;
     }
 
-    return timeScales.find(s => label === s.label)
-  }
+    return timeScales.find(s => label === s.label);
+  };
 
   return {
     getScaleByLabel,
     getScaleForRange,
     timeScales,
-  }
-}
+  };
+};

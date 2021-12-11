@@ -31,14 +31,14 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    TimeScaleInterface,
-    useTimeScales,
-  } from '@components/Charts/CandleStickChart/TimeScales/useTimeScales'
+import {
+  TimeScaleInterface,
+  useTimeScales,
+} from '@components/Charts/CandleStickChart/TimeScales/useTimeScales';
 
-  const { timeScales } = useTimeScales()
+const { timeScales } = useTimeScales();
 
-  defineProps<{
-    selected: TimeScaleInterface
-  }>()
+defineProps<{
+  selected: TimeScaleInterface;
+}>();
 </script>
