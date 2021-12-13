@@ -65,7 +65,7 @@
     "@types/parse": "^2.18.10",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
-    "@vitejs/plugin-vue": "^1.9.2",
+    "@vitejs/plugin-vue": "^2.0.0",
     "@vue/cli-plugin-babel": "~4.5.9",
     "@vue/cli-plugin-eslint": "~4.5.9",
     "@vue/cli-plugin-unit-jest": "next",
