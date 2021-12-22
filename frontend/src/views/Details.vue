@@ -16,8 +16,10 @@
         <WatchAssetModal :asset-symbol="assetSymbol" />
       </template>
     </HeadlineActions>
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <AssetPrice :symbol="assetSymbol" />
+    <div class="p-6 mb-6 bg-white rounded-lg">
+      <Suspense>
+        <AssetPrice :symbol="assetSymbol" />
+      </Suspense>
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
       <Suspense>
@@ -27,7 +29,6 @@
         </template>
       </Suspense>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <CompanyQuote :asset-symbol="assetSymbol" />

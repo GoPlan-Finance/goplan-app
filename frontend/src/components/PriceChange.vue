@@ -1,11 +1,11 @@
 <template>
-  <div v-if="compareTo && compareFrom" class="flex flex-wrap overflow-hidden">
+  <div v-if="compareTo && compareFrom" class="flex flex-wrap items-center overflow-hidden">
     <div
       v-if="type === 'percentage'"
       :class="[isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800']"
       class="rounded-lg p-1 ml-1"
     >
-      <span v-if="isPositive">+</span><span v-else>-</span> {{ percent.toFixed(2) }} %
+      <span v-if="isPositive">+</span> {{ percent.toFixed(2) }} %
     </div>
     <div
       v-if="type === 'total'"

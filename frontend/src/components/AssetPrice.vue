@@ -1,10 +1,7 @@
 <template>
-  <div v-if="price" class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
+  <div v-if="price" class="flex flex-wrap overflow-hidden gap-2">
     <div class="text-5xl font-bold">
-      {{ formatCurrency(price.price, symbol.currency, false, 'en-us', 'always') }}
-    </div>
-    <div class="text-gray-400 font-bold">
-      <!-- currency -->
+      {{ formatCurrency(price.price, symbol.currency, false, 'en-us', 'never') }}
     </div>
     <PriceChange :compare-from="price.previousClose" :compare-to="price.price" />
     <PriceChange
@@ -13,6 +10,9 @@
       :currency="symbol.currency"
       type="total"
     />
+  </div>
+  <div v-else>
+    {{ $t('details.no_price') }}
   </div>
 </template>
 
