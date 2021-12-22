@@ -8,8 +8,8 @@ import { Mutex } from 'async-mutex';
 import { AxiosError } from 'axios';
 
 import dayjs from 'dayjs';
-import * as EODApi from 'eodhistoricaldata-openapi/languages/javascript/src';
-import { AssetQuote, Period } from 'eodhistoricaldata-openapi/languages/javascript/src';
+import * as EODApi from 'eodhistoricaldata-openapi';
+import { AssetQuote, Period } from 'eodhistoricaldata-openapi';
 import * as Types from '../types';
 import { CompanyQuote, EndOfDayData } from '../types';
 import { SymbolDataResolution } from '@common/types/types';
