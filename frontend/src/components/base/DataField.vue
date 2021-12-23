@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-full sm:grid sm:grid-cols-2 sm:gap-4">
+  <div class="min-w-full grid grid-cols-1">
     <dt class="text-sm font-medium text-gray-500">
       {{ label }}
     </dt>
@@ -11,6 +11,7 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { computed, defineComponent, h, onBeforeMount, ref, watch } from 'vue';
+
 dayjs.extend(localizedFormat);
 
 type DataType =

@@ -16,14 +16,20 @@
         <WatchAssetModal :asset-symbol="assetSymbol" />
       </template>
     </HeadlineActions>
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <AssetPrice :symbol="assetSymbol" size="large" />
+    <div class="p-6 mb-6 bg-white rounded-lg">
+      <Suspense>
+        <AssetPrice :symbol="assetSymbol" />
+      </Suspense>
     </div>
     <div class="rounded-lg bg-white overflow-hidden p-6 mb-6">
-      <CandlestickChart :asset-symbol="assetSymbol" />
+      <Suspense>
+        <CandlestickChart :asset-symbol="assetSymbol" />
+        <template #fallback>
+          <GSkeleton style="height: 500px" />
+        </template>
+      </Suspense>
     </div>
-
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <CompanyQuote :asset-symbol="assetSymbol" />
       </div>
@@ -37,13 +43,14 @@
 <script setup lang="ts">
 import { AssetSymbol } from '@common/models';
 import BuySellAsset from '@components/BuySellAsset.vue';
-import CandlestickChart from '@components/Charts/CandlestickChart.vue';
+import CandlestickChart from '@components/Charts/CandleStickChart/CandlestickChart.vue';
 import CompanyInfo from '@components/CompanyInfo.vue';
 import CompanyQuote from '@components/CompanyQuote.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import WatchAssetModal from '@components/WatchAssetModal.vue';
 import { onBeforeMount, onUnmounted, ref, watch } from 'vue';
-import AssetPrice from "@components/AssetPrice.vue";
+import AssetPrice from '@components/AssetPrice.vue';
+import GSkeleton from '@components/base/GSkeleton.vue';
 
 const props = defineProps<{
   ticker: string;

@@ -12,6 +12,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { EOD } from './EOD';
 import { FMP } from './FMP';
 import * as Types from './types';
+import { SymbolDataResolution } from '@common/types/types';
 
 dayjs.extend(weekOfYear);
 
@@ -129,14 +130,14 @@ class GlobalProvider {
   }
 
   private static adjustResolution(
-    desiredResolution: Types.SymbolDataResolution,
-    currentResolution: Types.SymbolDataResolution,
+    desiredResolution: SymbolDataResolution,
+    currentResolution: SymbolDataResolution,
     data: Types.EndOfDayData[]
   ): Types.EndOfDayData[] {
     if (desiredResolution === currentResolution) {
       return data;
     }
-    const getDateId = (resolution: Types.SymbolDataResolution, date: dayjs.Dayjs): string => {
+    const getDateId = (resolution: SymbolDataResolution, date: dayjs.Dayjs): string => {
       switch (resolution) {
         case '1minute':
         case '5minutes':
@@ -201,7 +202,7 @@ class GlobalProvider {
     assetSymbol: AssetSymbol,
     from: dayjs.Dayjs,
     to: dayjs.Dayjs,
-    resolution: Types.SymbolDataResolution
+    resolution: SymbolDataResolution
   ): Promise<Types.EndOfDayData[]> {
     const result = await GlobalProvider.getProviderFor(assetSymbol).fetchSymbolTimeSeriesData(
       assetSymbol.get('symbol'),
@@ -231,11 +232,7 @@ class GlobalProvider {
   }
 
   async getCompanyQuote(assetSymbol: AssetSymbol): Promise<Types.CompanyQuote> {
-    const result = await GlobalProvider.getProviderFor(assetSymbol).getCompanyQuote(
-      assetSymbol.get('symbol')
-    );
-
-    return result;
+    return GlobalProvider.getProviderFor(assetSymbol).getCompanyQuote(assetSymbol.get('symbol'));
   }
 
   async getCompanyQuotes(
@@ -244,9 +241,7 @@ class GlobalProvider {
   ): Promise<Types.CompanyQuote[]> {
     const tickers = assetSymbols.map(assetSymbol => assetSymbol.symbol);
 
-    const result = await GlobalProvider.getProvider(providerName).getCompanyQuotes(tickers);
-
-    return result;
+    return GlobalProvider.getProvider(providerName).getCompanyQuotes(tickers);
   }
 }
 

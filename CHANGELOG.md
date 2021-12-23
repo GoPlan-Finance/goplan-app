@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+Various bug fixes
+
 ### Merged
 
+- Update Utils, and fix path issues [`#603`](https://github.com/sadortun/GoPlan-app/pull/603)
+- Bump @types/node from 15.14.9 to 16.10.2 in /backend [`#605`](https://github.com/sadortun/GoPlan-app/pull/605)
+- Refactor components to script setup and fix AssetSearch [`#604`](https://github.com/sadortun/GoPlan-app/pull/604)
 - Fix Icons and start refactor to script setup [`#602`](https://github.com/sadortun/GoPlan-app/pull/602)
 - Rework project structure [`#489`](https://github.com/sadortun/GoPlan-app/pull/489)
 - Bump @types/node from 16.6.2 to 16.10.2 in /frontend [`#601`](https://github.com/sadortun/GoPlan-app/pull/601)
@@ -290,4 +295,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Update Utils, and fix path issues [`72e9275`](https://github.com/sadortun/GoPlan-app/commit/72e9275fb9dbeb0e1305eed9ba75efb019454e5b)
+- Fix circular dependency on BeforeSubscribe [`6827916`](https://github.com/sadortun/GoPlan-app/commit/68279166ca87a699c791e26cc1f846195800ae3f)

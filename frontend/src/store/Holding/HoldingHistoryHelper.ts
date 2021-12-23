@@ -1,6 +1,6 @@
 import { Holding, Transaction } from '@common/models';
 import { HoldingHistory } from '@common/models/HoldingHistory';
-import { CandleData } from '@components/Charts/CandlestickChart';
+import { CandleData } from '@components/Charts/CandleStickChart/CandlestickChart';
 import { Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';

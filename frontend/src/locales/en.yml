@@ -13,6 +13,7 @@ details:
   sector: Sector
   symbol: Symbol
   website: Website
+  no_price: Currently no price information available for this stock
 holdings:
   headline: Holdings
   table:

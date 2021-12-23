@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BarChart from '@components/Charts/BarChart.vue';
-import CandlestickChart from '@components/Charts/CandlestickChart.vue';
+import CandlestickChart from '@components/Charts/CandleStickChart/CandlestickChart.vue';
 import DonutChart from '@components/Charts/DonutChart.vue';
 
 export default defineComponent({

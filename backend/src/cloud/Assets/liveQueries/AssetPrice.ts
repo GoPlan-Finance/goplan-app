@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { AssetPrice, AssetSymbol } from '@common/models';
-import { ArrayUtils, CacheableQuery, Query } from '@goplan-finance/utils';
+import { ArrayUtils, CacheableQuery, ObjectUtils, Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
 import { DataProvider } from '../../DataProviders/providers';
@@ -80,7 +80,7 @@ class SubscriptionsHandler<T> {
 
             assetPrice.symbol = assetSymbol;
             assetPrice.recordedAt = dayjs.unix(result.timestamp).toDate();
-            assetPrice.price = result.price;
+            assetPrice.price = result.open; //@todo verify if same as price
             assetPrice.changesPercentage = result.changesPercentage;
             assetPrice.change = result.change;
             assetPrice.dayLow = result.dayLow;
@@ -128,29 +128,33 @@ class SubscriptionsHandler<T> {
   }
 
   unsubscribe(requestId: number) {
-    const index = this.subscriptions.findIndex(subscription => {
-      return !!subscription.registrations.find(reqId => reqId === requestId);
-    });
+    try {
+      const index = this.subscriptions.findIndex(subscription => {
+        return !!subscription.registrations.find(reqId => reqId === requestId);
+      });
 
-    if (index === -1) {
-      return;
+      if (index === -1) {
+        return;
+      }
+
+      const existing = this.subscriptions[index];
+
+      existing.registrations = existing.registrations.filter(reqId => reqId !== requestId);
+
+      if (existing.registrations.length > 0) {
+        return;
+      }
+
+      this.subscriptions.splice(index, 1);
+
+      if (this.subscriptions.length > 0) {
+        return;
+      }
+
+      this.stop();
+    } catch (e) {
+      console.error(e);
     }
-
-    const existing = this.subscriptions[index];
-
-    existing.registrations = existing.registrations.filter(reqId => reqId !== requestId);
-
-    if (existing.registrations.length > 0) {
-      return;
-    }
-
-    this.subscriptions.splice(index, 1);
-
-    if (this.subscriptions.length > 0) {
-      return;
-    }
-
-    this.stop();
   }
 }
 
@@ -159,32 +163,36 @@ const handler = new SubscriptionsHandler(AssetSymbol, 60);
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 Parse.Cloud.beforeSubscribe(AssetPrice, async request => {
-  const query: Parse.Query = request.query;
+  try {
+    const query: Parse.Query = request.query;
 
-  const where = query.toJSON().where.symbol;
+    const where = query.toJSON().where.symbol;
 
-  if (!where) {
-    throw 'Query must include \'equalsTo("symbol" , symbol)';
-  }
-
-  if (!where.$in) {
-    where.$in = [where];
-  }
-
-  for (const symbol of where.$in) {
-    try {
-      const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(
-        symbol.objectId,
-        true
-      );
-
-      handler.subscribe(request.requestId, assetSymbol);
-    } catch (e) {
-      console.error(`Failed tu subscribe to ${symbol}`, e);
+    if (!where) {
+      throw 'Query must include \'equalsTo("symbol" , symbol)';
     }
-  }
 
-  await handler.runOnce();
+    if (!where.$in) {
+      where.$in = ObjectUtils.deepClone([where]);
+    }
+
+    for (const symbol of where.$in) {
+      try {
+        const assetSymbol = await CacheableQuery.create(AssetSymbol).getObjectById(
+          symbol.objectId,
+          true
+        );
+
+        handler.subscribe(request.requestId, assetSymbol);
+      } catch (e) {
+        console.error(`Failed tu subscribe to ${symbol}`, e);
+      }
+    }
+
+    await handler.runOnce();
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

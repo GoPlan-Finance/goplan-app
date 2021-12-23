@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 
 import * as FMPApi from 'financialmodelingprep-openapi';
 import * as Types from '../types';
+import { SymbolDataResolution } from '@common/types/types';
 
 // // Simple Examples
 //
@@ -67,12 +68,12 @@ export class FMP implements Types.DataProviderInterface {
     symbol: string,
     from: dayjs.Dayjs,
     to: dayjs.Dayjs,
-    resolution: Types.SymbolDataResolution
+    resolution: SymbolDataResolution
   ): Promise<Types.TimeSeriesData> {
     const historyApi = new FMPApi.HistoryApi(this.config);
 
     const query = async (
-      out: Types.SymbolDataResolution,
+      out: SymbolDataResolution,
       res: '1min' | '5min' | '15min' | '30min' | '1hour' | '4hour'
     ): Promise<Types.TimeSeriesData> => {
       const response = await historyApi.intraDayPrices(symbol, res);
@@ -85,39 +86,39 @@ export class FMP implements Types.DataProviderInterface {
     switch (resolution) {
       case '1minute':
         if (dayjs().diff(from, 'days') < 2) {
-          return await query('1minute', '1min');
+          return await query(SymbolDataResolution.DAY, '1min');
         }
       // eslint-disable-next-line no-fallthrough
       case '5minutes':
         if (dayjs().diff(from, 'days') < 11) {
-          return await query('5minutes', '5min');
+          return await query(SymbolDataResolution.DAY, '5min');
         }
       // eslint-disable-next-line no-fallthrough
       case '15minutes':
         if (dayjs().diff(from, 'days') < 18) {
-          return await query('15minutes', '15min');
+          return await query(SymbolDataResolution.DAY, '15min');
         }
       // eslint-disable-next-line no-fallthrough
       case '30minutes':
         if (dayjs().isAfter(from.subtract(42, 'days'))) {
-          return await query('30minutes', '30min');
+          return await query(SymbolDataResolution.DAY, '30min');
         }
       // eslint-disable-next-line no-fallthrough
       case 'hour':
         if (dayjs().diff(from, 'days') < 48) {
-          return await query('hour', '1hour');
+          return await query(SymbolDataResolution.DAY, '1hour');
         }
       // eslint-disable-next-line no-fallthrough
       case '4hours':
         if (dayjs().diff(from, 'days') < 85) {
-          return await query('4hours', '4hour');
+          return await query(SymbolDataResolution.DAY, '4hour');
         }
       // eslint-disable-next-line no-fallthrough
       case 'day':
       case 'month':
       case 'week': {
         const eod = await historyApi.dailyPrices(symbol, from.toISOString(), to.toISOString());
-        return { resolution: 'day', data: eod.data.historical.reverse() };
+        return { resolution: SymbolDataResolution.DAY, data: eod.data.historical.reverse() };
       }
       default:
         throw `Resolution ${resolution} not implemented`;

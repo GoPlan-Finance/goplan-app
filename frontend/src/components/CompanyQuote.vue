@@ -1,13 +1,15 @@
 <template>
-  <div class="flex flex-wrap overflow-hidden p-6 mb-6 bg-white rounded-lg">
-    <DataField
-      v-for="(detail, index) in details"
-      :key="index"
-      :data="detail.data"
-      :label="$t('quote.' + detail.label)"
-      :type="detail.type"
-      class="mb-2"
-    />
+  <div class="p-6 mb-6 bg-white rounded-lg grid grid-cols-2">
+    <template v-for="(detail, index) in details">
+      <DataField
+        v-if="detail.data"
+        :key="index"
+        :data="detail.data"
+        :label="$t('quote.' + detail.label)"
+        :type="detail.type"
+        class="mb-2 text-right"
+      />
+    </template>
   </div>
 </template>
 
