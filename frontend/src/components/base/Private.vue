@@ -5,28 +5,15 @@
   </template>
 </template>
 
-<script lang="ts">
-import { useUserStore } from '../../store';
-import { defineComponent, computed } from 'vue';
+<script setup lang="ts">
+import { useUserStore } from '@/store';
+import { computed } from 'vue';
 
-export enum ButtonType {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-}
+const props = defineProps<{
+  hide?: true;
+}>();
 
-export default defineComponent({
-  props: {
-    hide: {
-      default: true,
-      type: Boolean,
-    },
-  },
-  setup() {
-    const userStore = useUserStore();
+const userStore = useUserStore();
 
-    return {
-      privateMode: computed(() => userStore.privateMode),
-    };
-  },
-});
+const privateMode = computed(() => userStore.privateMode);
 </script>

@@ -322,4 +322,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Add summary to holdings table [`cda715a`](https://github.com/mkitzmann/GoPlan-app/commit/cda715ac395a834270337c2041df9b983a4ec92a)
+- Fix WatchAssetModal.vue [`67b242e`](https://github.com/mkitzmann/GoPlan-app/commit/67b242eab8d2ec2b3393120d6cbd4e29b18934bf)

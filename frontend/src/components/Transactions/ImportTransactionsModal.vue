@@ -1,7 +1,7 @@
 <template>
   <Modal :can-click-outside="false" title="Import Transactions" @closed="closed" @opened="opened">
     <template #button>
-      <ButtonDefault :type="ButtonType.SECONDARY" label="Import CSV">
+      <ButtonDefault type="secondary" label="Import CSV">
         <template #before>
           <UploadIcon class="h-5" />
         </template>
@@ -120,7 +120,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ButtonDefault, { ButtonType } from '../base/ButtonDefault.vue';
+import ButtonDefault from '../base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
 import { DefaultCSVImporter } from './DefaultCSVImporter';
 import { UploadIcon } from '@heroicons/vue/outline';

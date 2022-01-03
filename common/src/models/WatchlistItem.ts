@@ -1,9 +1,11 @@
-import { AssetSymbol, Watchlist } from '@common/models';
+import { AssetPrice, AssetSymbol, Watchlist } from '@common/models';
 import { User } from '@common/models/User';
 import { BaseObject } from '@goplan-finance/utils';
 
 export class WatchlistItem extends BaseObject {
   static className = 'WatchlistItem';
+
+  public lastPrice: AssetPrice | null = null;
 
   constructor() {
     super(WatchlistItem.className);

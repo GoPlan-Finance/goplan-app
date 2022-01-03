@@ -1,67 +1,67 @@
 <template>
-  <Modal title="Add Watchlist">
+  <Modal :title="t('New Watchlist')">
     <template #button>
-      <ButtonDefault label="New Watchlist">
+      <ButtonDefault :label="t('New Watchlist')">
         <template #before>
-          <svg
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-              fill-rule="evenodd"
-            />
-          </svg>
+          <PlusCircleIcon class="w-6 h-6" />
         </template>
       </ButtonDefault>
     </template>
     <template #content="{ close }">
-      <label>
-        <div class="text-gray-400 ml-2 mb-1">Name</div>
+      <GFormItem :label="t('Name')" :error="validationError">
         <input
           v-model="newWatchlistName"
           class="rounded w-full"
-          placeholder="Name"
           type="text"
-          @keypress.enter="createList() && close()"
+          @keypress.enter="createList(close)"
         />
-      </label>
+      </GFormItem>
     </template>
     <template #actions="{ close }">
       <ButtonDefault
         class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
-        label="Save"
-        @click="createList() && close()"
+        :label="t('Save')"
+        @click="createList(close)"
       />
     </template>
   </Modal>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Watchlist } from '@common/models';
-import { defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 import ButtonDefault from '@components/base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
+import GFormItem from '@components/base/GFormItem.vue';
+import { useI18n } from 'vue-i18n';
+import { PlusCircleIcon } from '@heroicons/vue/solid';
 
-export default defineComponent({
-  components: { Modal, ButtonDefault },
-  setup() {
-    const newWatchlistName = ref('');
+const { t } = useI18n();
 
-    const createList = async () => {
-      const watchlist = new Watchlist();
-      watchlist.set('name', newWatchlistName.value);
-      await watchlist.save();
-      newWatchlistName.value = '';
-    };
+const newWatchlistName = ref('');
+const validationError = ref(null);
 
-    return {
-      newWatchlistName,
-      createList,
-    };
-  },
+const isValid = computed(() => {
+  if (newWatchlistName.value.length < 1) {
+    validationError.value = t('Please enter a name');
+    return false;
+  }
+  return true;
 });
+
+const createList = async (close: CallableFunction) => {
+  if (!isValid.value) {
+    return;
+  }
+
+  try {
+    const watchlist = new Watchlist();
+    watchlist.set('name', newWatchlistName.value);
+    await watchlist.save();
+    newWatchlistName.value = '';
+    close();
+  } catch (e) {
+    alert(e);
+  }
+};
 </script>

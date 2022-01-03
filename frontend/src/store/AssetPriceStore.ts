@@ -2,6 +2,7 @@
 import { AssetPrice, AssetSymbol } from '@common/models';
 import { Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
+import { LiveQueryUpdateFn } from '@goplan-finance/utils/dist/parse/Query';
 // const db = new IndexedDB('companyProfile')
 
 export const useAssetPriceStore = defineStore({
