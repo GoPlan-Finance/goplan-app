@@ -1,17 +1,13 @@
 <template>
   <HeadlineActions :headline="$t('holdings.headline')">
-    <buy-sell-asset />
+    <BuySellAsset />
   </HeadlineActions>
-
-  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>
-
-  <holdings-table :rows="open.rows" :table-layout="open.tableLayout" />
-
-  <br />
-  <br />
-
-  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>
-  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />
+  <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
+  <HoldingsTable :rows="open.rows" :table-layout="open.tableLayout" />
+  <!--  <br />-->
+  <!--  <br />-->
+  <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
+  <!--  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />-->
 </template>
 
 <script lang="ts">

@@ -53,6 +53,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
+  (e: 'update:asset-symbol', assetSymbol: AssetSymbol): void;
   (e: 'update:ticker-name', ticker: string): void;
 }>();
 
@@ -102,10 +103,6 @@ const input = computed<string>({
     tickerName.value = param;
 
     update();
-
-    if (props.allowText) {
-      emit('update:ticker-name', tickerName.value);
-    }
   },
 });
 
@@ -119,6 +116,6 @@ const selectElement = (symbol: AssetSymbol) => {
 
   tickerName.value = symbol.tickerName;
   resetDropDown();
-  emit('update:ticker-name', symbol.symbol);
+  emit('update:asset-symbol', symbol);
 };
 </script>

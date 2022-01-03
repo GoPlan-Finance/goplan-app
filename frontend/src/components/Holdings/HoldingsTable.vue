@@ -1,7 +1,5 @@
 <template>
-  {{ totalOpen }}
   <DataTable :config="config" :rows="rows">
-    <!--Copied from Transactions.vue-->
     <template #field(symbolName)="{ value, row }">
       <AppLink v-if="row.symbol" :ticker="row.symbolName" class="font-bold" to="ticker_details">
         {{ value }}
@@ -10,7 +8,6 @@
         {{ value }}
       </span>
     </template>
-
     <template #field(name)="{ value, row }">
       <AppLink v-if="row.symbol" :ticker="row.symbolName" class="text-gray-500" to="ticker_details">
         {{ value }}
@@ -19,7 +16,6 @@
         {{ value }}
       </span>
     </template>
-
     <template #field(openPLPercent)="{ value }">
       <PriceChange
         v-if="value"
@@ -28,7 +24,7 @@
         :currency="value.currency"
         class="font-bold"
       />
-      <span v-else> -- </span>
+      <GSkeleton v-else class="h-6" />
     </template>
     <template #field(openPL)="{ value }">
       <PriceChange
@@ -38,7 +34,7 @@
         :currency="value.currency"
         type="total"
       />
-      <span v-else> -- </span>
+      <GSkeleton v-else class="h-6" />
     </template>
     <template #field(closedPL)="{ value }">
       <PriceChange
@@ -47,14 +43,13 @@
         :compare-to="value.to"
         :currency="value.currency"
       />
-      <span v-else> -- </span>
+      <GSkeleton v-else class="h-6" />
     </template>
   </DataTable>
 </template>
 
 <script lang="ts">
 import { Holding } from '@common/models/Holding';
-import AssetPriceChange from '@components/AssetPriceChange.vue';
 import PriceChange from '@components/PriceChange.vue';
 import { RangeValue, TableLayout, TableRow } from '@components/DataTable';
 import DataTable from '@components/DataTable.vue';
@@ -62,9 +57,13 @@ import AppLink from '@components/router/AppLink.vue';
 import { ArrayUtils } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 import { computed, defineComponent, PropType, reactive, toRefs } from 'vue';
+import GLoadingSpinner from '@components/base/GLoadingSpinner.vue';
+import GSkeleton from '@components/base/GSkeleton.vue';
 
 export default defineComponent({
   components: {
+    GSkeleton,
+    GLoadingSpinner,
     PriceChange,
     DataTable,
     AppLink,
@@ -81,7 +80,7 @@ export default defineComponent({
   },
   setup(props) {
     const totalOpen = computed(() =>
-      ArrayUtils.sum<Holding>(props.rows, elem => elem.openTotalPrice)
+      ArrayUtils.sum<Holding>(props.rows, elem => elem.openQty * elem.lastPrice.open)
     );
 
     const data = reactive({
@@ -207,7 +206,9 @@ export default defineComponent({
             justify: 'right',
             value: (row: Holding) => {
               // @todo currency
-              return totalOpen.value === 0 ? 0 : (row.openQty * row.openAvgPrice) / totalOpen.value;
+              return totalOpen.value === 0
+                ? 0
+                : (row.openQty * row.lastPrice.open) / totalOpen.value;
             },
           },
         },

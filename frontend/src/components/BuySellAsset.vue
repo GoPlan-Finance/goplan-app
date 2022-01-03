@@ -15,27 +15,27 @@
           <div class="text-gray-400 ml-2 mb-1">Asset</div>
 
           <!-- Leave :allow-text="false" until we add a way to set Currencies -->
-          <asset-search
-            v-model="symbol"
+          <AssetSearch
+            v-model:asset-symbol="symbol"
             :allow-text="false"
             class="w-full"
             search-field-class="border"
           />
         </label>
         <label class="col-start-1">
-          <div class="text-gray-400 ml-2 mb-1">Account</div>
+          <div class="text-gray-400 ml-2 mb-1">{{ t('Account') }}</div>
           <AccountSelect v-model="account" class="w-full" />
         </label>
         <label>
-          <div class="text-gray-400 ml-2 mb-1">Date</div>
+          <div class="text-gray-400 ml-2 mb-1">{{ t('Date') }}</div>
           <input v-model="executedAt" class="rounded w-full" placeholder="QTY" type="date" />
         </label>
         <label class="col-start-1">
-          <div class="text-gray-400 ml-2 mb-1">Quantity</div>
+          <div class="text-gray-400 ml-2 mb-1">{{ t('Quantity') }}</div>
           <input v-model="quantity" class="rounded w-full" min="0" type="number" />
         </label>
         <label>
-          <div class="text-gray-400 ml-2 mb-1">Price</div>
+          <div class="text-gray-400 ml-2 mb-1">{{ t('Price') }}</div>
           <input v-model="price" class="rounded w-full" min="0" step="0.01" type="number" />
         </label>
       </div>
@@ -44,17 +44,7 @@
       <template v-if="!transaction?.id">
         <ButtonDefault
           :disabled="!isValid"
-          class="
-            inline-flex
-            items-center
-            px-2
-            mr-1
-            bg-green-400
-            rounded-xl
-            cursor-pointer
-            hover:bg-gray-300
-            select-none
-          "
+          class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
           label="Buy"
           @click="save('buy')"
         />
@@ -63,17 +53,7 @@
       <template v-else>
         <ButtonDefault
           :disabled="!isValid"
-          class="
-            inline-flex
-            items-center
-            px-2
-            mr-1
-            bg-green-400
-            rounded-xl
-            cursor-pointer
-            hover:bg-gray-300
-            select-none
-          "
+          class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
           label="Save"
           @click="save()"
         />
@@ -89,12 +69,15 @@ import AccountSelect from '@components/AccountSelect.vue';
 import AssetSearch from '@components/AssetSearch.vue';
 import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
-import { computed, defineComponent, ref, toRef } from 'vue';
+import { computed, ref, toRef } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
 import { PlusCircleIcon } from '@heroicons/vue/outline';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
-  assetSymbol: AssetSymbol;
+  assetSymbol?: AssetSymbol;
   transaction?: Transaction;
 }>();
 
@@ -107,6 +90,7 @@ const symbol = computed({
     return transactionInternal.value.symbolName;
   },
   set(value: AssetSymbol | string | null) {
+    console.log('symbol', value);
     if (value instanceof AssetSymbol) {
       transactionInternal.value.symbol = value;
       transactionInternal.value.symbolName = null;
@@ -155,13 +139,12 @@ const executedAt = computed<string>({
 });
 
 const isValid = computed<boolean>(
-  () =>
-    transactionInternal.value &&
-    !!transactionInternal.value.symbolName &&
-    !isNaN(transactionInternal.value.price) &&
-    !isNaN(transactionInternal.value.quantity) &&
-    dayjs(transactionInternal.value.executedAt).isValid() &&
-    !!transactionInternal.value.account
+  () => !!transactionInternal.value
+  // !!transactionInternal.value.symbolName &&
+  // !isNaN(transactionInternal.value.price) &&
+  // !isNaN(transactionInternal.value.quantity) &&
+  // dayjs(transactionInternal.value.executedAt).isValid() &&
+  // !!transactionInternal.value.account
 );
 
 const save = async (type: 'buy' | 'sell' | undefined) => {
@@ -170,7 +153,7 @@ const save = async (type: 'buy' | 'sell' | undefined) => {
   }
 
   transactionInternal.value.totalExcludingFees =
-    transactionInternal.value.quantity * transactionInternal.value.quantity;
+    transactionInternal.value.price * transactionInternal.value.quantity;
 
   await transactionInternal.value.save();
   transactionInternal.value = new Transaction();

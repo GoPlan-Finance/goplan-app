@@ -1,48 +1,31 @@
 <template>
-  <select
-    class="rounded"
-    name="type"
-    :value="$props.modelValue?.id"
-    @input="update('id', $event.target.value)"
-  >
-    <option value="">Please select</option>
+  <select class="rounded" name="type" :value="modelValue?.id" @input="update($event.target.value)">
     <option v-for="account in accountStore.accounts" :key="account.id" :value="account.id">
       {{ account.name }}
     </option>
   </select>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Account } from '@common/models';
-import { useAccountStore } from '@store/index';
-import { defineComponent, onBeforeMount } from 'vue';
+import { useAccountStore } from '@/store';
+import { computed } from 'vue';
 
-export default defineComponent({
-  props: {
-    modelValue: {
-      required: true,
-      validator: prop => prop instanceof Account || prop === null || prop === undefined,
-    },
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const accountStore = useAccountStore();
+const props = defineProps<{
+  modelValue?: Account;
+}>();
 
-    onBeforeMount(async () => {
-      await accountStore.subscribe();
-    });
+const emit = defineEmits<{
+  (e: 'update:modelValue', fn): void;
+}>();
 
-    function update(key, value) {
-      emit(
-        'update:modelValue',
-        accountStore.accounts.find(account => account.id === value)
-      );
-    }
+const accountStore = useAccountStore();
+await accountStore.subscribe();
 
-    return {
-      update,
-      accountStore,
-    };
-  },
-});
+const update = (value: string) => {
+  emit(
+    'update:modelValue',
+    accountStore.accounts.find(account => account.id === value)
+  );
+};
 </script>
