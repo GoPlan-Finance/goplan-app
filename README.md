@@ -93,13 +93,21 @@ Feel free to submit a PR if you want to add items to the Roadmap!
 - [ ] Integrations with brokers
 
 
-
 # How To Use
 
 ```bash
 git clone https://github.com/GoPlan-Finance/GoPlan-app.git
 cd goplan-app
 ```
+
+### Prerequisites
+
+- Node 8 or newer
+- MongoDB version 3.6
+
+### Install MongoDB
+
+If you haven't already installed MongoDB, head over to https://docs.mongodb.com/manual/installation/ for instructions
 
 ### Build project
 
@@ -110,8 +118,10 @@ yarn install
 
 ### Run the backend
 
-- Copy `backend/config/config.defaults.ts` to `backend/config/config.ts`
-- Edit the configuration file to set your Database URL, Master Key, and Data provider(s) API Keys
+- Copy `backend/config/config.defaults.ts` to `backend/config/config.ts` and Edit the configuration file:
+  - Database URL:
+  - Master Key: Can be any arbitrary string
+  - Data provider(s) API Keys: We currently only support https://eodhistoricaldata.com, further API providers are planned in the future.
 
 ```
 cd backend
@@ -124,6 +134,8 @@ yarn run backend-serve
 cd frontend
 yarn run frontend-serve
 ```
+
+visit https://local.goplan.finance:3000
 
 ## Testing and debugging
 ### Backend
@@ -149,6 +161,21 @@ When you are ready to test your changes:
 yarn run serve-debug
 ```
 
+### (Optionally) Parse Dashboard
+
+Parse Dashboard is a standalone dashboard for managing the GoPlan Parse Server. (https://github.com/parse-community/parse-dashboard)
+
+install dashboard locally
+
+```
+npm install -g parse-dashboard
+```
+
+Launch dashboard
+
+```
+parse-dashboard --dev --appId goplan-finance --masterKey yourMasterKey --serverURL "http://localhost:1337/parse"
+```
 
 # How to contribute
 
