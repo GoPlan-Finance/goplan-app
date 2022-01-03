@@ -41,7 +41,7 @@
     "echarts": "^5.2.1",
     "feather-icons": "^4.28.0",
     "papaparse": "^5.3.1",
-    "parse": "3.3.1",
+    "parse": "3.4.1",
     "pinia": "^2.0.0-rc.10",
     "tailwindcss": "^3.0.0",
     "ts-money": "^0.4.6",
