@@ -14,19 +14,14 @@ export default {
   },
 
   parse: {
-    masterKey   : '',
-    databaseUri : ''
+    masterKey   : 'yourMasterKey', // Can be any arbitrary string
+    databaseUri : 'mongodb://localhost:27017' // Change this for your mongodb instance uri
   },
 
   dataProviders: [
     {
       name   : 'eod',
-      apiKey : '',
+      apiKey : '', // Receive an API Key from https://eodhistoricaldata.com
     },
-    // {
-    //   name   : 'yahoo',
-    //   apiKey : '',
-    // }
-
   ]
 }
