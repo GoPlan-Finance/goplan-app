@@ -102,7 +102,7 @@ cd goplan-app
 
 ### Prerequisites
 
-- Node 8 or newer
+- Node 14 or newer
 - MongoDB version 3.6
 
 ### Install MongoDB
