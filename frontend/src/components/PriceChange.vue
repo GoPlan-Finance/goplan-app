@@ -5,7 +5,8 @@
       :class="[isPositive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800']"
       class="rounded-lg p-1 ml-1"
     >
-      <span v-if="isPositive">+</span> {{ percent.toFixed(2) }} %
+      <span v-if="isPositive">+</span>
+      {{ percent.toLocaleString(undefined, { maximumFractionDigits: 2 }) }} %
     </div>
     <div
       v-if="type === 'total'"
