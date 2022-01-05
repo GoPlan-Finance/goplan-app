@@ -29,14 +29,17 @@
             class="w-full"
             search-field-class="border w-full"
           />
+          <div class="text-red-600" v-if="errors.symbol">{{ errors.symbol }}</div>
         </label>
         <label class="col-start-1">
           <div class="text-gray-400 ml-2 mb-1">{{ t('Account') }}</div>
           <AccountSelect v-model="transactionInternal.account" class="w-full" />
+          <div class="text-red-600" v-if="errors.account">{{ errors.account }}</div>
         </label>
         <label>
           <div class="text-gray-400 ml-2 mb-1">{{ t('Date') }}</div>
           <input v-model="executedAt" class="rounded w-full" placeholder="QTY" type="date" />
+          <div class="text-red-600" v-if="errors.executedAt">{{ errors.executedAt }}</div>
         </label>
         <label class="col-start-1">
           <div class="text-gray-400 ml-2 mb-1">{{ t('Quantity') }}</div>
@@ -45,7 +48,9 @@
             class="rounded w-full"
             min="0"
             type="number"
+            required
           />
+          <div class="text-red-600" v-if="errors.quantity">{{ errors.quantity }}</div>
         </label>
         <label>
           <div class="text-gray-400 ml-2 mb-1">{{ t('Price') }}</div>
@@ -55,27 +60,27 @@
             min="0"
             step="0.01"
             type="number"
+            required
           />
+          <div class="text-red-600" v-if="errors.price">{{ errors.price }}</div>
         </label>
       </div>
     </template>
     <template #actions>
-      <template v-if="!transaction?.id">
-        <ButtonDefault
-          :disabled="!isValid"
-          class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
-          label="Buy"
-          @click="buy"
-        />
-        <ButtonDefault :disabled="!isValid" class="bg-red-500" label="Sell" @click="sell" />
+      <template v-if="transaction?.id">
+        <ButtonDefault :label="t('Save')" @click="save" />
       </template>
       <template v-else>
-        <ButtonDefault
-          :disabled="!isValid"
-          class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
-          label="Save"
-          @click="save"
-        />
+        <ButtonDefault :label="t('Buy')" @click="buy">
+          <template #before>
+            <PlusCircleIcon class="h-6 w-6" />
+          </template>
+        </ButtonDefault>
+        <ButtonDefault type="secondary" :label="t('Sell')" @click="sell">
+          <template #before>
+            <MinusCircleIcon class="h-6 w-6" />
+          </template>
+        </ButtonDefault>
       </template>
     </template>
   </Modal>
@@ -89,9 +94,9 @@ import AccountSelect from '@components/AccountSelect.vue';
 import AssetSearch from '@components/AssetSearch.vue';
 import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
-import { PlusCircleIcon } from '@heroicons/vue/outline';
+import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/outline';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -104,13 +109,20 @@ const props = defineProps<{
 const createTransaction = () => {
   const newTransaction = new Transaction();
   newTransaction.executedAt = new Date();
-  newTransaction.quantity = 0;
+  newTransaction.quantity = null;
   newTransaction.price = null;
   newTransaction.executedAt = new Date();
   newTransaction.currency = 'USD'; // TODO: Handle different currencies
   return newTransaction;
 };
 
+const errors = reactive({
+  symbol: null,
+  account: null,
+  executedAt: null,
+  quantity: null,
+  price: null,
+});
 const transactionInternal = ref<Transaction>(props.transaction ?? createTransaction());
 const isModalOpen = ref(false);
 
@@ -123,21 +135,56 @@ const executedAt = computed<string>({
   },
 });
 
-const isValid = computed<boolean>(
-  () => !!transactionInternal.value
-  // !!transactionInternal.value.symbolName &&
-  // !isNaN(transactionInternal.value.price) &&
-  // !isNaN(transactionInternal.value.quantity) &&
-  // dayjs(transactionInternal.value.executedAt).isValid() &&
-  // !!transactionInternal.value.account
-);
-
 const reset = () => {
   transactionInternal.value = createTransaction();
   isModalOpen.value = false;
 };
 
+const isValid = computed<boolean>(() => {
+  if (!transactionInternal.value.symbol) {
+    errors.symbol = t('Please select an asset');
+  } else {
+    errors.symbol = null;
+  }
+  if (!transactionInternal.value.account) {
+    errors.account = t('Please select an account');
+  } else {
+    errors.account = null;
+  }
+  if (
+    !dayjs(transactionInternal.value.executedAt).isValid() ||
+    dayjs(transactionInternal.value.executedAt).isAfter(new Date())
+  ) {
+    errors.executedAt = t('Please select a valid date');
+  } else {
+    errors.executedAt = null;
+  }
+  if (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity)) {
+    errors.quantity = t('Please select a quantity');
+  } else if (transactionInternal.value.quantity <= 0) {
+    errors.quantity = t('Please select a quantity above zero');
+  } else {
+    errors.quantity = null;
+  }
+  if (!transactionInternal.value.price || isNaN(transactionInternal.value.price)) {
+    errors.price = t('Please select a price');
+  } else if (transactionInternal.value.price <= 0) {
+    errors.price = t('Please select a price above zero');
+  } else {
+    errors.price = null;
+  }
+
+  if (Object.values(errors).filter(error => error !== null).length > 0) {
+    return false;
+  }
+  return true;
+});
+
 const save = async (type: 'buy' | 'sell' | undefined) => {
+  if (!isValid.value) {
+    return;
+  }
+
   if (transactionInternal.value.isNew()) {
     transactionInternal.value.type = type;
   }
@@ -145,8 +192,12 @@ const save = async (type: 'buy' | 'sell' | undefined) => {
   transactionInternal.value.totalExcludingFees =
     transactionInternal.value.price * transactionInternal.value.quantity;
 
-  await transactionInternal.value.save();
-  reset();
+  try {
+    await transactionInternal.value.save();
+    reset();
+  } catch (e) {
+    alert(e);
+  }
 };
 
 const buy = async () => {
