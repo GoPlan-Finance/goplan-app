@@ -1,5 +1,5 @@
 <template>
-  <AssetSearch @update:asset-symbol="gotoDetailPage" />
+  <AssetSearch @update:asset-symbol="gotoDetailPage" search-field-class="border-0 rounded-lg" />
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @keyup.esc="close(true)">
     <div @click="open">
       <slot name="button" />
     </div>

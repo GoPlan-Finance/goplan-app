@@ -24,7 +24,11 @@
         </slot>
       </label>
 
-      <SearchField v-if="config.search && alignment === 'right'" v-model="search" />
+      <SearchField
+        v-if="config.search && alignment === 'right'"
+        v-model:value="search"
+        input-class="border-0"
+      />
 
       <slot v-if="alignment === 'right'" :name="`afterFilters(${alignment})`" />
     </div>

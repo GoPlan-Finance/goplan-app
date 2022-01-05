@@ -1,31 +1,42 @@
 <template>
   <div class="relative">
     <SearchField
-      :model-value="input"
+      v-model:value="input"
       :input-class="searchFieldClass"
-      :placeholder="placeholder"
-      @keyup.enter="selectElement(symbols[0])"
-      @update:model-value="onInput"
+      :placeholder="placeholder ?? t('Search')"
+      @keyup.enter="selectElement(symbols[activeElement])"
+      @keyup.up="activeElement > 0 ? (activeElement -= 1) : null"
+      @keyup.down="activeElement < symbols.length - 1 ? (activeElement += 1) : null"
+      @update:value="onInput"
+      @blur="onBlur"
     />
     <ul
       v-if="isOpen"
-      class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-40"
+      class="absolute bg-white max-h-56 shadow-2xl rounded-lg mt-2 overflow-y-scroll z-40"
     >
-      <li v-for="symbol in symbols" :key="symbol">
-        <a
-          class="hover:bg-gray-100 block px-4 py-2"
-          href="#"
-          @click.prevent="selectElement(symbol)"
-        >
-          <div class="w-14 min-w-min">{{ symbol.tickerName }}</div>
-          <div class="text-gray-500 text-sm">{{ symbol.name }}</div>
-        </a>
-      </li>
-      <li v-if="loading" class="text-gray-500 block px-4 py-2">
+      <li
+        v-if="symbols.length === 0 && loading"
+        class="text-gray-500 block px-4 py-2 animate-pulse"
+      >
         {{ t('Loading...') }}
       </li>
       <li v-else-if="symbols.length === 0" class="text-gray-500 block px-4 py-2">
         {{ t('No Assets found') }}
+      </li>
+      <li v-else v-for="(symbol, index) in symbols" :key="index">
+        <div
+          class="hover:bg-gray-100 block px-4 py-2 cursor-pointer select-none"
+          :class="[
+            activeElement === index ? 'bg-gray-100' : '',
+            loading ? 'text-gray-300 animate-pulse' : '',
+          ]"
+          @click="selectElement(symbol)"
+        >
+          <div class="w-14 min-w-min">{{ symbol.tickerName }}</div>
+          <div class="text-sm" :class="loading ? 'text-gray-300' : 'text-gray-500'">
+            {{ symbol.name }}
+          </div>
+        </div>
       </li>
     </ul>
   </div>
@@ -34,7 +45,7 @@
 <script setup lang="ts">
 import { AssetSymbol } from '@common/models';
 import SearchField from '@components/base/SearchField.vue';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -44,10 +55,8 @@ const props = withDefaults(
     searchFieldClass?: string;
     allowText?: boolean;
     placeholder?: string;
-    assetSymbol?: AssetSymbol | string | undefined;
   }>(),
   {
-    placeholder: 'Search',
     allowText: false,
   }
 );
@@ -58,11 +67,14 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 const loading = ref(false);
+const activeElement = ref(0);
 const input = ref('');
 const symbols = ref<AssetSymbol[]>([]);
 
 const resetDropDown = () => {
+  input.value = '';
   symbols.value = [];
+  activeElement.value = 0;
   isOpen.value = false;
 };
 
@@ -83,8 +95,15 @@ const onInput = async (value: string) => {
   await getSymbols(value);
 };
 
+const onBlur = () => {
+  // The timeout prevents the dropdown from closing before the click is registered
+  setTimeout(() => {
+    isOpen.value = false;
+    input.value = '';
+  }, 100);
+};
+
 const selectElement = (symbol: AssetSymbol) => {
-  input.value = symbol.tickerName;
   resetDropDown();
   emit('update:asset-symbol', symbol);
 };
