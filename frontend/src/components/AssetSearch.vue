@@ -1,13 +1,14 @@
 <template>
   <div class="relative">
     <SearchField
-      v-model="input"
+      :model-value="input"
       :input-class="searchFieldClass"
       :placeholder="placeholder"
       @keyup.enter="selectElement(symbols[0])"
+      @update:model-value="onInput"
     />
     <ul
-      v-if="symbols.length && isOpen"
+      v-if="isOpen"
       class="absolute bg-white shadow-2xl rounded-lg mt-2 min-w-full overflow-hidden z-40"
     >
       <li v-for="symbol in symbols" :key="symbol">
@@ -20,6 +21,12 @@
           <div class="text-gray-500 text-sm">{{ symbol.name }}</div>
         </a>
       </li>
+      <li v-if="loading" class="text-gray-500 block px-4 py-2">
+        {{ t('Loading...') }}
+      </li>
+      <li v-else-if="symbols.length === 0" class="text-gray-500 block px-4 py-2">
+        {{ t('No Assets found') }}
+      </li>
     </ul>
   </div>
 </template>
@@ -27,17 +34,10 @@
 <script setup lang="ts">
 import { AssetSymbol } from '@common/models';
 import SearchField from '@components/base/SearchField.vue';
-import { computed, ref, watch } from 'vue';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const getSymbols = async (tickerName: string): Promise<AssetSymbol[]> => {
-  if (tickerName.length === 0) {
-    return [];
-  }
-
-  return Parse.Cloud.run('Assets--Search', {
-    query: tickerName,
-  });
-};
+const { t } = useI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -54,67 +54,37 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (e: 'update:asset-symbol', assetSymbol: AssetSymbol): void;
-  (e: 'update:ticker-name', ticker: string): void;
 }>();
 
 const isOpen = ref(false);
+const loading = ref(false);
+const input = ref('');
 const symbols = ref<AssetSymbol[]>([]);
-const tickerName = ref<string>('');
-
-watch(
-  () => props.assetSymbol,
-  () => {
-    if (props.assetSymbol instanceof AssetSymbol) {
-      tickerName.value = props.assetSymbol.tickerName;
-    } else if (typeof props.assetSymbol === 'string') {
-      tickerName.value = props.assetSymbol;
-    }
-  }
-);
-
-const update = async () => {
-  if (!tickerName.value) {
-    return;
-  }
-
-  if (props.assetSymbol && tickerName.value === props.assetSymbol.tickerName) {
-    symbols.value = [];
-    return;
-  }
-
-  isOpen.value = true;
-  symbols.value = await getSymbols(tickerName.value);
-};
-
-const input = computed<string>({
-  get() {
-    return tickerName.value;
-  },
-  set(param: string) {
-    if (tickerName.value === param) {
-      return;
-    }
-
-    if (param === '') {
-      emit('update:ticker-name', '');
-      return;
-    }
-
-    tickerName.value = param;
-
-    update();
-  },
-});
 
 const resetDropDown = () => {
   symbols.value = [];
   isOpen.value = false;
 };
 
-const selectElement = (symbol: AssetSymbol) => {
-  console.log(symbol);
+const getSymbols = async (tickerName: string): Promise<void> => {
+  if (tickerName === '') {
+    resetDropDown();
+    return;
+  }
+  loading.value = true;
+  symbols.value = await Parse.Cloud.run('Assets--Search', {
+    query: tickerName,
+  });
+  loading.value = false;
+};
 
-  tickerName.value = symbol.tickerName;
+const onInput = async (value: string) => {
+  isOpen.value = true;
+  await getSymbols(value);
+};
+
+const selectElement = (symbol: AssetSymbol) => {
+  input.value = symbol.tickerName;
   resetDropDown();
   emit('update:asset-symbol', symbol);
 };
