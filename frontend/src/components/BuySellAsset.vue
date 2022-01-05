@@ -11,8 +11,11 @@
     </template>
     <template #content>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5">
-        <label class="col-span-1 md:col-span-2">
-          <div class="text-gray-400 ml-2 mb-1">{{ t('Asset') }}</div>
+        <GFormItem
+          :label="t('Asset')"
+          :error="!transactionInternal.symbol ? errors.symbol : null"
+          class="col-span-1 md:col-span-2"
+        >
           <div v-if="transactionInternal.symbol" class="bg-gray-100 px-4 py-2 rounded relative">
             <div>
               <div class="w-14 min-w-min">{{ transactionInternal.symbol.tickerName }}</div>
@@ -29,41 +32,30 @@
             class="w-full"
             search-field-class="border w-full"
           />
-          <div class="text-red-600" v-if="errors.symbol">{{ errors.symbol }}</div>
-        </label>
-        <label class="col-start-1">
-          <div class="text-gray-400 ml-2 mb-1">{{ t('Account') }}</div>
+        </GFormItem>
+        <GFormItem :label="t('Account')" :error="errors.account">
           <AccountSelect v-model="transactionInternal.account" class="w-full" />
-          <div class="text-red-600" v-if="errors.account">{{ errors.account }}</div>
-        </label>
-        <label>
-          <div class="text-gray-400 ml-2 mb-1">{{ t('Date') }}</div>
-          <input v-model="executedAt" class="rounded w-full" placeholder="QTY" type="date" />
-          <div class="text-red-600" v-if="errors.executedAt">{{ errors.executedAt }}</div>
-        </label>
-        <label class="col-start-1">
-          <div class="text-gray-400 ml-2 mb-1">{{ t('Quantity') }}</div>
+        </GFormItem>
+        <GFormItem :label="t('Date')" :error="errors.executedAt">
+          <input v-model="executedAt" class="rounded w-full" type="date" />
+        </GFormItem>
+        <GFormItem :label="t('Quantity')" :error="errors.quantity">
           <input
             v-model="transactionInternal.quantity"
             class="rounded w-full"
             min="0"
             type="number"
-            required
           />
-          <div class="text-red-600" v-if="errors.quantity">{{ errors.quantity }}</div>
-        </label>
-        <label>
-          <div class="text-gray-400 ml-2 mb-1">{{ t('Price') }}</div>
+        </GFormItem>
+        <GFormItem :label="t('Price')" :error="errors.price">
           <input
             v-model="transactionInternal.price"
             class="rounded w-full"
             min="0"
             step="0.01"
             type="number"
-            required
           />
-          <div class="text-red-600" v-if="errors.price">{{ errors.price }}</div>
-        </label>
+        </GFormItem>
       </div>
     </template>
     <template #actions>
@@ -94,10 +86,11 @@ import AccountSelect from '@components/AccountSelect.vue';
 import AssetSearch from '@components/AssetSearch.vue';
 import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
-import { computed, reactive, ref } from 'vue';
+import { computed, provide, reactive, ref } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
 import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/outline';
 import { useI18n } from 'vue-i18n';
+import GFormItem from '@components/base/GFormItem.vue';
 
 const { t } = useI18n();
 
