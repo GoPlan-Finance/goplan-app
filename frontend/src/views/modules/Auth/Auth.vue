@@ -8,10 +8,8 @@
       <br />
       <br />
 
-      <div v-if="hasClientKey === 'anonymous'">
-        <center>
-          <google-button @clicked="signInGoogle" />
-        </center>
+      <div v-if="hasClientKey === 'anonymous'" class="flex justify-center">
+        <google-button @clicked="signInGoogle" />
       </div>
       <div v-else-if="hasClientKey === 'yes'">
         <unlock-master-key @keyValid="clientKeyValid" />
