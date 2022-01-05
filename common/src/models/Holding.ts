@@ -7,7 +7,7 @@ const createMutex = new Mutex();
 export class Holding extends SecureObject {
   static className = 'Holding';
 
-  private _lastPrice: AssetPrice = null;
+  private _lastPrice: AssetPrice | null = null;
 
   constructor() {
     super(Holding.className, [
@@ -66,7 +66,7 @@ export class Holding extends SecureObject {
     this.set('isOutdated', value);
   }
 
-  get lastPrice(): AssetPrice {
+  get lastPrice(): AssetPrice | null {
     return this._lastPrice;
   }
 

@@ -93,6 +93,29 @@
       <slot :row="row" name="actions" />
     </div>
   </div>
+  <div :style="tableTemplate" class="mb-2 grid gap-2 px-4 py-3">
+    <div
+      v-for="(cell, cellIndex) in tableLayout"
+      :key="cellIndex"
+      class="grid grid-cols-none gap-1 items-center"
+    >
+      <div
+        v-for="(header, headerIndex) in cell"
+        :key="headerIndex"
+        :class="[
+          fields[header].classes,
+          {
+            'text-right justify-end': fields[header].justify === 'right',
+            'text-center justify-center': fields[header].justify === 'center',
+          },
+        ]"
+      >
+        <Private :hide="fields[header].private === true">
+          <slot :name="`summary(${header})`" />
+        </Private>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

@@ -32,7 +32,7 @@ export default defineComponent({
         tableLayout: {
           [Screens.DEFAULT]: [
             ['symbolName', 'openQty'],
-            ['openPL', 'openTotalPrice'],
+            ['currentTotalPrice', 'openPLPercent'],
           ],
           [Screens.SM]: [
             ['symbolName', 'name'],

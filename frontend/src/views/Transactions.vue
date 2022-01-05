@@ -82,10 +82,10 @@
 
 <script setup lang="ts">
 import { Transaction } from '@common/models';
-import { useAccountStore, useTransactionStore } from '@store/index';
+import { useAccountStore, useTransactionStore } from '@/store';
 import { Screens } from '@/utils/screens';
 import dayjs from 'dayjs';
-import { defineComponent, onBeforeMount, reactive, ref, toRefs, watch } from 'vue';
+import { onBeforeMount, reactive, ref, watch } from 'vue';
 import BuySellAsset from '../components/BuySellAsset.vue';
 import DataTable from '../components/DataTable.vue';
 import HeadlineActions from '../components/HeadlineActions.vue';
@@ -100,13 +100,9 @@ const { t } = useI18n();
 const rows = ref([]);
 const config = reactive({
   fields: {
-    type: {
-      width: '10%',
-    },
+    type: {},
     executedAt: {
-      justify: 'right',
       format: 'date',
-      width: '20%',
     },
     name: {
       value: (transaction: Transaction) => {
@@ -147,12 +143,16 @@ const config = reactive({
     },
   },
   tableLayout: {
-    [Screens.DEFAULT]: ['type', ['executedAt', 'name'], ['quantity', 'price']],
-    [Screens.SM]: ['type', 'executedAt', ['name', 'symbolName'], 'quantity', 'price'],
+    [Screens.DEFAULT]: [
+      ['executedAt', 'type'],
+      ['symbolName', 'name'],
+      ['quantity', 'price'],
+    ],
+    [Screens.SM]: ['type', 'executedAt', ['symbolName', 'name'], 'quantity', 'price'],
     [Screens.XL]: [
       'type',
       'executedAt',
-      ['name', 'symbolName'],
+      ['symbolName', 'name'],
       'quantity',
       'price',
       ['totalExcludingFees'],
