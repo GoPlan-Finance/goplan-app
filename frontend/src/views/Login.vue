@@ -55,16 +55,7 @@
 
         <div class="mt-6">
           <button
-            class="
-              py-2
-              px-4
-              text-center
-              bg-blue-600
-              rounded-lg
-              w-full
-              text-white text-sm
-              hover:bg-blue-500
-            "
+            class="py-2 px-4 text-center bg-blue-600 rounded-lg w-full text-white text-sm hover:bg-blue-500"
             type="submit"
           >
             Sign in

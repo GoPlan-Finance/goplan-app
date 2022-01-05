@@ -12,23 +12,7 @@
           <div class="flex">
             <div class="relative">
               <select
-                class="
-                  appearance-none
-                  h-full
-                  rounded-l
-                  border
-                  block
-                  appearance-none
-                  w-full
-                  bg-white
-                  border-gray-400
-                  text-gray-700
-                  py-2
-                  px-4
-                  pr-8
-                  leading-tight
-                  focus:outline-none focus:bg-white focus:border-gray-500
-                "
+                class="appearance-none h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
                 <option>5</option>
                 <option>10</option>
@@ -36,16 +20,7 @@
               </select>
 
               <div
-                class="
-                  pointer-events-none
-                  absolute
-                  inset-y-0
-                  right-0
-                  flex
-                  items-center
-                  px-2
-                  text-gray-700
-                "
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
               >
                 <svg
                   class="fill-current h-4 w-4"
@@ -61,29 +36,7 @@
 
             <div class="relative">
               <select
-                class="
-                  appearance-none
-                  h-full
-                  rounded-r
-                  border-t
-                  sm:rounded-r-none sm:border-r-0
-                  border-r border-b
-                  block
-                  appearance-none
-                  w-full
-                  bg-white
-                  border-gray-400
-                  text-gray-700
-                  py-2
-                  px-4
-                  pr-8
-                  leading-tight
-                  focus:outline-none
-                  focus:border-l
-                  focus:border-r
-                  focus:bg-white
-                  focus:border-gray-500
-                "
+                class="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500"
               >
                 <option>All</option>
                 <option>Active</option>
@@ -91,16 +44,7 @@
               </select>
 
               <div
-                class="
-                  pointer-events-none
-                  absolute
-                  inset-y-0
-                  right-0
-                  flex
-                  items-center
-                  px-2
-                  text-gray-700
-                "
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
               >
                 <svg
                   class="fill-current h-4 w-4"
@@ -125,22 +69,7 @@
             </span>
 
             <input
-              class="
-                appearance-none
-                rounded-r rounded-l
-                sm:rounded-l-none
-                border border-gray-400 border-b
-                block
-                pl-8
-                pr-6
-                py-2
-                w-full
-                bg-white
-                text-sm
-                placeholder-gray-400
-                text-gray-700
-                focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none
-              "
+              class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
               placeholder="Search"
             />
           </div>
@@ -152,62 +81,22 @@
               <thead>
                 <tr>
                   <th
-                    class="
-                      px-5
-                      py-3
-                      border-b-2 border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      font-semibold
-                      text-gray-600
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                   >
                     User
                   </th>
                   <th
-                    class="
-                      px-5
-                      py-3
-                      border-b-2 border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      font-semibold
-                      text-gray-600
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                   >
                     Role
                   </th>
                   <th
-                    class="
-                      px-5
-                      py-3
-                      border-b-2 border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      font-semibold
-                      text-gray-600
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                   >
                     Created at
                   </th>
                   <th
-                    class="
-                      px-5
-                      py-3
-                      border-b-2 border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      font-semibold
-                      text-gray-600
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                   >
                     Status
                   </th>
@@ -253,45 +142,18 @@
               </tbody>
             </table>
             <div
-              class="
-                px-5
-                py-5
-                bg-white
-                border-t
-                flex flex-col
-                xs:flex-row
-                items-center
-                xs:justify-between
-              "
+              class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"
             >
               <span class="text-xs xs:text-sm text-gray-900">Showing 1 to 4 of 50 Entries</span>
 
               <div class="inline-flex mt-2 xs:mt-0">
                 <button
-                  class="
-                    text-sm
-                    bg-gray-300
-                    hover:bg-gray-400
-                    text-gray-800
-                    font-semibold
-                    py-2
-                    px-4
-                    rounded-l
-                  "
+                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l"
                 >
                   Prev
                 </button>
                 <button
-                  class="
-                    text-sm
-                    bg-gray-300
-                    hover:bg-gray-400
-                    text-gray-800
-                    font-semibold
-                    py-2
-                    px-4
-                    rounded-r
-                  "
+                  class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r"
                 >
                   Next
                 </button>
@@ -308,80 +170,28 @@
       <div class="flex flex-col mt-6">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div
-            class="
-              align-middle
-              inline-block
-              min-w-full
-              shadow
-              overflow-hidden
-              sm:rounded-lg
-              border-b border-gray-200
-            "
+            class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
           >
             <table class="min-w-full">
               <thead>
                 <tr>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Name
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Title
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Status
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-100
-                      text-left text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Role
                   </th>
@@ -423,45 +233,19 @@
 
                   <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
                     <span
-                      class="
-                        px-2
-                        inline-flex
-                        text-xs
-                        leading-5
-                        font-semibold
-                        rounded-full
-                        bg-green-100
-                        text-green-800
-                      "
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                       >{{ u.status }}</span
                     >
                   </td>
 
                   <td
-                    class="
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                      border-b border-gray-200
-                      text-sm
-                      leading-5
-                      text-gray-500
-                    "
+                    class="px-6 py-4 whitespace-nowrap border-b border-gray-200 text-sm leading-5 text-gray-500"
                   >
                     {{ u.role }}
                   </td>
 
                   <td
-                    class="
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                      text-right
-                      border-b border-gray-200
-                      text-sm
-                      leading-5
-                      font-medium
-                    "
+                    class="px-6 py-4 whitespace-nowrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                   >
                     <a class="text-blue-600 hover:text-blue-900" href="#">Edit</a>
                   </td>

@@ -3,17 +3,7 @@
     v-for="scale in timeScales"
     :key="scale.label"
     :class="currentScaleLabel === scale.label ? 'bg-gray-300' : ''"
-    class="
-      inline-flex
-      items-center
-      px-2
-      mr-1
-      bg-gray-100
-      rounded-xl
-      cursor-pointer
-      hover:bg-gray-300
-      select-none
-    "
+    class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
   >
     <input
       v-model="currentScaleLabel"

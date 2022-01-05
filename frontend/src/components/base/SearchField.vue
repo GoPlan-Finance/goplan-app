@@ -7,17 +7,7 @@
     <input
       :class="inputClass"
       :value="modelValue"
-      class="
-        w-100
-        min-w-full
-        max-w-full
-        rounded
-        pl-10
-        pr-4
-        py-2
-        border-0
-        focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-      "
+      class="w-100 min-w-full max-w-full rounded pl-10 pr-4 py-2 border-0 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
       :placeholder="placeholder"
       type="text"
       @input="$emit('update:modelValue', $event.target.value)"

@@ -8,16 +8,7 @@
       <input
         v-model="masterKey"
         autocomplete="new-password"
-        class="
-          form-input
-          mt-2
-          bg-gray-100
-          border-1 border-gray-300
-          block
-          w-full
-          rounded-md
-          focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-        "
+        class="form-input mt-2 bg-gray-100 border-1 border-gray-300 block w-full rounded-md focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
         type="password"
       />
     </label>
@@ -27,16 +18,7 @@
       <input
         v-model="masterKey2"
         autocomplete="new-password"
-        class="
-          form-input
-          mt-2
-          bg-gray-100
-          border-1 border-gray-300
-          block
-          w-full
-          rounded-md
-          focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50
-        "
+        class="form-input mt-2 bg-gray-100 border-1 border-gray-300 block w-full rounded-md focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
         type="password"
       />
     </label>
@@ -56,17 +38,7 @@
       <button
         id="acceptTestingBtn"
         :disabled="!acceptTesting || masterKey.length < 7 || masterKey !== masterKey2"
-        class="
-          py-2
-          px-4
-          text-center
-          font-bold
-          bg-blue-600
-          rounded-md
-          w-full
-          text-white text-sm
-          hover:bg-blue-500
-        "
+        class="py-2 px-4 text-center font-bold bg-blue-600 rounded-md w-full text-white text-sm hover:bg-blue-500"
         type="submit"
       >
         Sign in

@@ -38,14 +38,7 @@
           'flex-row-reverse': fields[subRow].justify === 'right',
           'text-center justify-center': fields[subRow].justify === 'center',
         }"
-        class="
-          flex
-          cursor-pointer
-          hover:text-gray-600
-          select-none
-          whitespace-nowrap
-          overflow-hidden overflow-ellipsis
-        "
+        class="flex cursor-pointer hover:text-gray-600 select-none whitespace-nowrap overflow-hidden overflow-ellipsis"
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
