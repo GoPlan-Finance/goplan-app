@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 export type CompareFn = (a: unknown, b: unknown) => number;
 export type FormatFn = (value: unknown, row: unknown) => void;
 export type ValueFn = (row: unknown, header: TableHeader) => unknown;
-export type SearchFn = (value: unknown, searchString: string) => boolean;
+export type SearchFn = (searchString: string, value: unknown) => boolean;
 
 export interface TableHeader {
   key?: string;
@@ -54,8 +54,8 @@ export interface TableConfig {
       direction: 'asc' | 'desc';
     };
   };
-  filters: Record<string, any>;
-  search: {
+  filters?: Record<string, any>;
+  search?: {
     handler: SearchFn;
   };
 }

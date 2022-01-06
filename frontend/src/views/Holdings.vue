@@ -3,82 +3,60 @@
     <BuySellAsset />
   </HeadlineActions>
   <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
-  <HoldingsTable :rows="open.rows" :table-layout="open.tableLayout" />
+  <HoldingsTable :holdings="openHoldings" :table-layout="openTableLayout" />
   <!--  <br />-->
   <!--  <br />-->
   <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
   <!--  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />-->
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import BuySellAsset from '@components/BuySellAsset.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import HoldingsTable from '@components/Holdings/HoldingsTable.vue';
 import { Screens } from '@/utils/screens';
-import dayjs from 'dayjs';
-import { computed, defineComponent, onBeforeMount, reactive, toRefs } from 'vue';
+import { computed } from 'vue';
 import { useHoldingStore } from '@/store';
+import { Holding } from '@models';
+import { TableLayoutCollection } from '@components/DataTable';
 
-export default defineComponent({
-  components: {
-    HoldingsTable,
-    BuySellAsset,
-    HeadlineActions,
-  },
-  setup() {
-    const data = reactive({
-      open: {
-        rows: [],
-        tableLayout: {
-          [Screens.DEFAULT]: [
-            ['symbolName', 'openQty'],
-            ['currentTotalPrice', 'openPLPercent'],
-          ],
-          [Screens.SM]: [
-            ['symbolName', 'name'],
-            ['openQty', 'lastBuyAt'],
-            ['openTotalPrice', 'openAvgPrice'],
-            ['currentTotalPrice', 'currentAvgPrice'],
-            ['openPL', 'openPLPercent'],
-          ],
-          [Screens.MD]: [
-            ['symbolName', 'name'],
-            ['openQty', 'lastBuyAt'],
-            ['openTotalPrice', 'openAvgPrice'],
-            ['currentTotalPrice', 'currentAvgPrice'],
-            ['openPL', 'openPLPercent'],
-            'weight',
-          ],
-        },
-      },
-      closed: {
-        rows: [],
-        tableLayout: {
-          [Screens.DEFAULT]: [['symbolName'], ['closedPL']],
-          [Screens.SM]: [['symbolName', 'name'], ['lastSellAt'], ['closedPL']],
-        },
-      },
-    });
+const openTableLayout: TableLayoutCollection = {
+  [Screens.DEFAULT]: [
+    ['symbolName', 'openQty'],
+    ['currentTotalPrice', 'openPLPercent'],
+  ],
+  [Screens.SM]: [
+    ['symbolName', 'name'],
+    ['openQty', 'lastBuyAt'],
+    ['openTotalPrice', 'openAvgPrice'],
+    ['currentTotalPrice', 'currentAvgPrice'],
+    ['openPL', 'openPLPercent'],
+  ],
+  [Screens.MD]: [
+    ['symbolName', 'name'],
+    ['openQty', 'lastBuyAt'],
+    ['openTotalPrice', 'openAvgPrice'],
+    ['currentTotalPrice', 'currentAvgPrice'],
+    ['openPL', 'openPLPercent'],
+    ['weight'],
+  ],
+};
 
-    const holdingStore = useHoldingStore();
+const closedTableLayout: TableLayoutCollection = {
+  [Screens.DEFAULT]: [['symbolName'], ['closedPL']],
+  [Screens.SM]: [['symbolName', 'name'], ['lastSellAt'], ['closedPL']],
+};
 
-    onBeforeMount(async () => {
-      await holdingStore.subscribe();
-    });
+const holdingStore = useHoldingStore();
+await holdingStore.subscribe();
 
-    data.open.rows = computed(() => {
-      // console.debug('Holdings Computed(open)')
-      return holdingStore.holdings.filter(row => row.openQty !== 0);
-    });
-    data.closed.rows = computed(() => {
-      // console.debug('Holdings Computed(closed)')
-      return holdingStore.holdings.filter(row => row.openQty === 0);
-    });
+const openHoldings = computed<Holding[]>(() => {
+  // console.debug('Holdings Computed(open)')
+  return holdingStore.holdings.filter(holding => holding.openQty !== 0);
+});
 
-    return {
-      ...toRefs(data),
-      dayjs,
-    };
-  },
+const closedHoldings = computed<Holding[]>(() => {
+  // console.debug('Holdings Computed(closed)')
+  return holdingStore.holdings.filter(holding => holding.openQty === 0);
 });
 </script>

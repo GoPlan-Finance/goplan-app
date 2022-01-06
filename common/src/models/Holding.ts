@@ -8,6 +8,7 @@ export class Holding extends SecureObject {
   static className = 'Holding';
 
   private _lastPrice: AssetPrice | null = null;
+  public importRawData: unknown | null = null;
 
   constructor() {
     super(Holding.className, [
