@@ -322,4 +322,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Add GFormItem.vue component and implement in BuySellAsset.vue [`a3ddbc4`](https://github.com/mkitzmann/GoPlan-app/commit/a3ddbc434b56541b5721793b95f436af87015c82)
+- Add summary to holdings table [`cda715a`](https://github.com/mkitzmann/GoPlan-app/commit/cda715ac395a834270337c2041df9b983a4ec92a)

@@ -46,7 +46,7 @@ import CompanyInfo from '@components/CompanyInfo.vue';
 import CompanyQuote from '@components/CompanyQuote.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import WatchAssetModal from '@components/WatchAssetModal.vue';
-import { onBeforeMount, onUnmounted, ref, watch } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import AssetPrice from '@components/AssetPrice.vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
 
@@ -57,7 +57,11 @@ const props = defineProps<{
 const liveSubscription = ref<Parse.LiveQuerySubscription>();
 const assetSymbol = ref<AssetSymbol>();
 
-assetSymbol.value = await AssetSymbol.fetchSymbolByTicker(props.ticker);
+try {
+  assetSymbol.value = await AssetSymbol.fetchSymbolByTicker(props.ticker);
+} catch (e) {
+  alert(e);
+}
 
 if (liveSubscription.value) {
   await liveSubscription.value.unsubscribe();

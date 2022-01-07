@@ -215,12 +215,17 @@ export const useCandleStickChart = (
     from?: dayjs.Dayjs,
     to?: dayjs.Dayjs
   ): Promise<CandleData[]> => {
-    return Parse.Cloud.run('Assets--GetEndOfDay', {
-      resolution: currentScale.resolution,
-      from: from.toISOString(),
-      to: to.toISOString(),
-      assetSymbolId: assetSymbol.id,
-    });
+    try {
+      const result = Parse.Cloud.run('Assets--GetEndOfDay', {
+        resolution: currentScale.resolution,
+        from: from.toISOString(),
+        to: to.toISOString(),
+        assetSymbolId: assetSymbol.id,
+      });
+      return result;
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const reloadData = async (min?: Dayjs, max?: Dayjs) => {
