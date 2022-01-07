@@ -54,7 +54,7 @@ Feel free to submit a PR if you want to add items to the Roadmap!
 - [x] Transactions #7
     - Show all buy/sell/split transactions
     - Actions: Add/Edit/Delete
-- [ ] Holdings
+- [x] Holdings
     - shares, purchase date, average price, initial value, current price, current value, increase value, increase percentage, percentage of portfolio
     - actions: Buy/Sell/View
 - [x] Stock Detail Page
@@ -65,7 +65,7 @@ Feel free to submit a PR if you want to add items to the Roadmap!
     - Delete Account
 - [ ] Dockerize the application, and simplify initial setup
 - [x] CSV import/export of transactions
-- [x] Multiple Accounts  #6
+- [ ] Multiple Accounts  #6
     - Show all accounts by this user
     - Actions: Add/Edit/Delete
 
