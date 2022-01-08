@@ -205,7 +205,7 @@ class GlobalProvider {
     resolution: SymbolDataResolution
   ): Promise<Types.EndOfDayData[]> {
     const result = await GlobalProvider.getProviderFor(assetSymbol).fetchSymbolTimeSeriesData(
-      assetSymbol.get('symbol'),
+      assetSymbol.get('tickerName') ?? assetSymbol.get('symbol'),
       from,
       to,
       resolution
