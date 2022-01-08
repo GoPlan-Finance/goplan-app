@@ -79,7 +79,7 @@ const props = defineProps<{
 
 const totalBookValue = computed(() =>
   ArrayUtils.sum<Holding>(props.holdings, elem => {
-    return elem.buyTotalPrice;
+    return elem.openTotalPrice; // TODO: Handle different currencies
   })
 );
 
@@ -88,7 +88,7 @@ const totalOpen = computed(() =>
     if (!elem.lastPrice) {
       return;
     }
-    return elem.openQty * elem.lastPrice.open;
+    return elem.openQty * elem.lastPrice.open; // TODO: Handle different currencies
   })
 );
 
