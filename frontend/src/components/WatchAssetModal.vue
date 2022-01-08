@@ -1,31 +1,21 @@
 <template>
   <Modal title="Add to Watchlist">
     <template #button>
-      <ButtonDefault :type="ButtonType.SECONDARY" label="Watch">
+      <ButtonDefault type="secondary" label="Watch">
         <template #before>
-          <svg
-            class="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path
-              clip-rule="evenodd"
-              d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-              fill-rule="evenodd"
-            />
-          </svg>
+          <EyeIcon class="h-5" />
         </template>
       </ButtonDefault>
     </template>
     <template #content>
-      <div v-for="(watchlist, index) in watchlists" :key="index">
-        <div
-          class="cursor-pointer bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-300"
-          @click="addToWatchlist(watchlist)"
-        >
-          {{ watchlist.get('name') }}
+      <div class="flex flex-col gap-2">
+        <div v-for="(watchlist, index) in watchlists" :key="index">
+          <div
+            class="cursor-pointer bg-gray-100 px-4 py-2 rounded-lg hover:bg-gray-300"
+            @click="addToWatchlist(watchlist)"
+          >
+            {{ watchlist.name }}
+          </div>
         </div>
       </div>
     </template>
@@ -35,48 +25,42 @@
   </Modal>
 </template>
 
-<script lang="ts">
-import { AssetSymbol, Watchlist } from '@common/models';
+<script setup lang="ts">
+import { AssetSymbol, Watchlist, WatchlistItem } from '@common/models';
 import { Query } from '@goplan-finance/utils';
-import { defineComponent, onBeforeMount, onUnmounted, ref } from 'vue';
-import ButtonDefault, { ButtonType } from './base/ButtonDefault.vue';
+import { onUnmounted, ref } from 'vue';
+import ButtonDefault from './base/ButtonDefault.vue';
+import { EyeIcon } from '@heroicons/vue/solid';
 import Modal from '@components/base/GoModal.vue';
+import { useI18n } from 'vue-i18n';
 
-export default defineComponent({
-  components: { Modal, ButtonDefault },
-  props: {
-    assetSymbol: {
-      type: AssetSymbol,
-      required: true,
-    },
-  },
-  setup(props) {
-    let liveSubscription = null;
+const { t } = useI18n();
 
-    const watchlists: Watchlist[] = ref([]);
+const props = defineProps<{
+  assetSymbol: AssetSymbol;
+}>();
 
-    const addToWatchlist = async watchlist => {
-      watchlist.relation('symbols').add(props.assetSymbol);
-      await watchlist.save();
-      alert('added');
-    };
+const liveSubscription = ref<Parse.LiveQuerySubscription>();
+const watchlists = ref<Watchlist[]>([]);
 
-    onBeforeMount(async () => {
-      const q = new Query(Watchlist);
-      liveSubscription = await q.liveQuery(watchlists.value);
-    });
+const addToWatchlist = async (watchlist: Watchlist) => {
+  try {
+    const watchlistItem = new WatchlistItem();
+    watchlistItem.watchlist = watchlist;
+    watchlistItem.symbol = props.assetSymbol;
+    await watchlistItem.save();
+    alert(t('Added to watchlist'));
+  } catch (e) {
+    alert(t('Error trying to add to watchlist: ') + e);
+  }
+};
 
-    onUnmounted(async () => {
-      if (liveSubscription) {
-        await liveSubscription.unsubscribe();
-      }
-    });
+const query = new Query(Watchlist);
+liveSubscription.value = await query.liveQuery(watchlists.value);
 
-    return {
-      watchlists,
-      addToWatchlist,
-      ButtonType,
-    };
-  },
+onUnmounted(async () => {
+  if (liveSubscription) {
+    await liveSubscription.unsubscribe();
+  }
 });
 </script>
