@@ -86,9 +86,9 @@ import AccountSelect from '@components/AccountSelect.vue';
 import AssetSearch from '@components/AssetSearch.vue';
 import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
-import { computed, provide, reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
-import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/outline';
+import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/vue/outline';
 import { useI18n } from 'vue-i18n';
 import GFormItem from '@components/base/GFormItem.vue';
 
@@ -105,7 +105,6 @@ const createTransaction = () => {
   newTransaction.quantity = null;
   newTransaction.price = null;
   newTransaction.executedAt = new Date();
-  newTransaction.currency = 'USD'; // TODO: Handle different currencies
   return newTransaction;
 };
 
@@ -184,6 +183,8 @@ const save = async (type: 'buy' | 'sell' | undefined) => {
 
   transactionInternal.value.totalExcludingFees =
     transactionInternal.value.price * transactionInternal.value.quantity;
+
+  transactionInternal.value.currency = transactionInternal.value.symbol.currency ?? 'USD';
 
   try {
     await transactionInternal.value.save();
