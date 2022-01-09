@@ -63,7 +63,7 @@ class SubscriptionsHandler<T> {
 
       for (const batch of batches) {
         const tickers = batch.map(subscription => subscription.symbol);
-        const tickersNames = tickers.map(ticker => ticker.symbol);
+        const tickersNames = tickers.map(ticker => ticker.tickerName);
 
         console.log(`Updating quotes for ${providerName} -> ${tickersNames.join(', ')} to update`);
         const results = await DataProvider.getCompanyQuotes(providerName, tickers);
