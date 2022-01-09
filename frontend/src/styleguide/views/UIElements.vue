@@ -170,74 +170,27 @@
         <div class="flex rounded-lg bg-white py-4 px-4 overflow-x-auto">
           <div class="flex rounded mr-4">
             <a
-              class="
-                py-2
-                px-3
-                leading-tight
-                bg-white
-                border border-gray-200
-                text-blue-700
-                border-r-0
-                ml-0
-                rounded-l
-                hover:bg-blue-500 hover:text-white
-              "
+              class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 ml-0 rounded-l hover:bg-blue-500 hover:text-white"
               href="#"
               ><span>Previous</span></a
             >
             <a
-              class="
-                py-2
-                px-3
-                leading-tight
-                bg-white
-                border border-gray-200
-                text-blue-700
-                border-r-0
-                hover:bg-blue-500 hover:text-white
-              "
+              class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
               href="#"
               ><span>1</span></a
             >
             <a
-              class="
-                py-2
-                px-3
-                leading-tight
-                bg-white
-                border border-gray-200
-                text-blue-700
-                border-r-0
-                hover:bg-blue-500 hover:text-white
-              "
+              class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
               href="#"
               ><span>2</span></a
             >
             <a
-              class="
-                py-2
-                px-3
-                leading-tight
-                bg-white
-                border border-gray-200
-                text-blue-700
-                border-r-0
-                hover:bg-blue-500 hover:text-white
-              "
+              class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 border-r-0 hover:bg-blue-500 hover:text-white"
               href="#"
               ><span>3</span></a
             >
             <a
-              class="
-                py-2
-                px-3
-                leading-tight
-                bg-white
-                border border-gray-200
-                text-blue-700
-                rounded-r
-                hover:bg-blue-500 hover:text-white
-              "
+              class="py-2 px-3 leading-tight bg-white border border-gray-200 text-blue-700 rounded-r hover:bg-blue-500 hover:text-white"
               href="#"
               ><span>Next</span></a
             >

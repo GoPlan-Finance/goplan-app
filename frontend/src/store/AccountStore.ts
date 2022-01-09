@@ -32,6 +32,7 @@ export const useAccountStore = defineStore({
         console.log('CREATING DEFAULT ACCOUNT');
         const account = new Account();
         account.name = 'Default Account';
+        account.currency = 'USD';
         await account.save();
       }
 

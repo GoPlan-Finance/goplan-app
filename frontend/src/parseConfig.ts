@@ -11,8 +11,8 @@ Parse.initialize('goplan-finance');
 
 window.Parse.serverURL = 'https://goplan.finance/parse';
 
-if (import.meta.env.VITE_APP_PARSE_API_LOCATION === 'local') {
-  window.Parse.serverURL = 'http://local.goplan.finance:1337/parse';
+if (import.meta.env.DEV) {
+  window.Parse.serverURL = 'http://localhost:1337/parse';
 }
 
 window.Parse.enableLocalDatastore();

@@ -69,36 +69,40 @@ class SubscriptionsHandler<T> {
         const results = await DataProvider.getCompanyQuotes(providerName, tickers);
         for (const result of results) {
           await this.mutex.runExclusive(async () => {
-            const assetSymbol = await AssetSymbol.fetchSymbolByTicker(result.symbol, true);
-            const assetPrice = await Query.create(AssetPrice).findOrCreate(
-              {
-                symbol: assetSymbol,
-              },
-              true,
-              false
-            );
+            try {
+              const assetSymbol = await AssetSymbol.fetchSymbolByTicker(result.symbol, true);
+              const assetPrice = await Query.create(AssetPrice).findOrCreate(
+                {
+                  symbol: assetSymbol,
+                },
+                true,
+                false
+              );
 
-            assetPrice.symbol = assetSymbol;
-            assetPrice.recordedAt = dayjs.unix(result.timestamp).toDate();
-            assetPrice.price = result.open; //@todo verify if same as price
-            assetPrice.changesPercentage = result.changesPercentage;
-            assetPrice.change = result.change;
-            assetPrice.dayLow = result.dayLow;
-            assetPrice.dayHigh = result.dayHigh;
-            assetPrice.yearHigh = result.yearHigh;
-            assetPrice.yearLow = result.yearLow;
-            assetPrice.marketCap = result.marketCap;
-            assetPrice.priceAvg50 = result.priceAvg50;
-            assetPrice.priceAvg200 = result.priceAvg200;
-            assetPrice.volume = result.volume;
-            assetPrice.avgVolume = result.avgVolume;
-            assetPrice.open = result.open;
-            assetPrice.previousClose = result.previousClose;
-            assetPrice.eps = result.eps;
-            assetPrice.pe = result.pe;
-            assetPrice.sharesOutstanding = result.sharesOutstanding;
+              assetPrice.symbol = assetSymbol;
+              assetPrice.recordedAt = dayjs.unix(result.timestamp).toDate();
+              assetPrice.price = result.open; //@todo verify if same as price
+              assetPrice.changesPercentage = result.changesPercentage;
+              assetPrice.change = result.change;
+              assetPrice.dayLow = result.dayLow;
+              assetPrice.dayHigh = result.dayHigh;
+              assetPrice.yearHigh = result.yearHigh;
+              assetPrice.yearLow = result.yearLow;
+              assetPrice.marketCap = result.marketCap;
+              assetPrice.priceAvg50 = result.priceAvg50;
+              assetPrice.priceAvg200 = result.priceAvg200;
+              assetPrice.volume = result.volume;
+              assetPrice.avgVolume = result.avgVolume;
+              assetPrice.open = result.open;
+              assetPrice.previousClose = result.previousClose;
+              assetPrice.eps = result.eps;
+              assetPrice.pe = result.pe;
+              assetPrice.sharesOutstanding = result.sharesOutstanding;
 
-            await assetPrice.save(null, AssetPrice.useMasterKey(true));
+              await assetPrice.save(null, AssetPrice.useMasterKey(true));
+            } catch (e) {
+              console.error(e);
+            }
           });
         }
       }

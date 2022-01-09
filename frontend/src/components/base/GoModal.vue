@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @keyup.esc="close(true)">
     <div @click="open">
       <slot name="button" />
     </div>
@@ -11,18 +11,7 @@
       <div class="absolute w-full h-full bg-gray-900 opacity-50" @click="close(true)" />
       <div class="bg-white md:max-w-lg w-full mx-auto rounded-lg shadow-lg z-30 overflow-y-auto">
         <div
-          class="
-            absolute
-            top-0
-            right-0
-            cursor-pointer
-            flex flex-col
-            items-center
-            mt-4
-            mr-4
-            text-white text-sm
-            z-30
-          "
+          class="absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-30"
         >
           <svg
             class="fill-current text-white"

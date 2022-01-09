@@ -32,17 +32,7 @@
     </template>
     <template #actions="{ close }">
       <ButtonDefault
-        class="
-          inline-flex
-          items-center
-          px-2
-          mr-1
-          bg-green-400
-          rounded-xl
-          cursor-pointer
-          hover:bg-gray-300
-          select-none
-        "
+        class="inline-flex items-center px-2 mr-1 bg-green-400 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
         label="Save"
         @click="createList() && close()"
       />

@@ -38,15 +38,7 @@
                 </span>
 
                 <input
-                  class="
-                    form-input
-                    w-full
-                    px-12
-                    py-2
-                    appearance-none
-                    rounded-lg
-                    focus:border-blue-600
-                  "
+                  class="form-input w-full px-12 py-2 appearance-none rounded-lg focus:border-blue-600"
                   type="text"
                 />
               </div>
@@ -54,29 +46,12 @@
 
             <div class="flex justify-between items-center px-5 py-3">
               <button
-                class="
-                  px-3
-                  py-1
-                  text-gray-700 text-sm
-                  rounded-lg
-                  bg-gray-200
-                  hover:bg-gray-300
-                  focus:outline-none
-                "
+                class="px-3 py-1 text-gray-700 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 focus:outline-none"
               >
                 Cancel
               </button>
               <button
-                class="
-                  px-3
-                  py-1
-                  bg-blue-600
-                  text-white
-                  rounded-lg
-                  text-sm
-                  hover:bg-blue-500
-                  focus:outline-none
-                "
+                class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-500 focus:outline-none"
               >
                 Save
               </button>
@@ -136,15 +111,7 @@
 
             <div class="flex justify-end mt-4">
               <button
-                class="
-                  px-4
-                  py-2
-                  bg-gray-800
-                  text-gray-200
-                  rounded-lg
-                  hover:bg-gray-700
-                  focus:outline-none focus:bg-gray-700
-                "
+                class="px-4 py-2 bg-gray-800 text-gray-200 rounded-lg hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
               >
                 Save
               </button>

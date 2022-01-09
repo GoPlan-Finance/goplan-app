@@ -205,7 +205,7 @@ class GlobalProvider {
     resolution: SymbolDataResolution
   ): Promise<Types.EndOfDayData[]> {
     const result = await GlobalProvider.getProviderFor(assetSymbol).fetchSymbolTimeSeriesData(
-      assetSymbol.get('symbol'),
+      assetSymbol.tickerName,
       from,
       to,
       resolution
@@ -239,7 +239,7 @@ class GlobalProvider {
     providerName: string,
     assetSymbols: AssetSymbol[]
   ): Promise<Types.CompanyQuote[]> {
-    const tickers = assetSymbols.map(assetSymbol => assetSymbol.symbol);
+    const tickers = assetSymbols.map(assetSymbol => assetSymbol.tickerName);
 
     return GlobalProvider.getProvider(providerName).getCompanyQuotes(tickers);
   }

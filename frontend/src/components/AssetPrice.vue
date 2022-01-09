@@ -8,7 +8,7 @@
       :compare-from="price.previousClose"
       :compare-to="price.price"
       :currency="symbol.currency"
-      type="total"
+      total
     />
   </div>
   <div v-else>

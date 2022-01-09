@@ -24,7 +24,11 @@
         </slot>
       </label>
 
-      <SearchField v-if="config.search && alignment === 'right'" v-model="search" />
+      <SearchField
+        v-if="config.search && alignment === 'right'"
+        v-model:value="search"
+        input-class="border-0"
+      />
 
       <slot v-if="alignment === 'right'" :name="`afterFilters(${alignment})`" />
     </div>
@@ -38,14 +42,7 @@
           'flex-row-reverse': fields[subRow].justify === 'right',
           'text-center justify-center': fields[subRow].justify === 'center',
         }"
-        class="
-          flex
-          cursor-pointer
-          hover:text-gray-600
-          select-none
-          whitespace-nowrap
-          overflow-hidden overflow-ellipsis
-        "
+        class="flex cursor-pointer hover:text-gray-600 select-none whitespace-nowrap overflow-hidden overflow-ellipsis"
         @click="setSort(subRow)"
       >
         {{ $t(settings.translationPrefix + '.' + subRow) }}
@@ -94,6 +91,29 @@
     </div>
     <div v-if="settings?.actions" class="flex justify-end gap-2 items-center">
       <slot :row="row" name="actions" />
+    </div>
+  </div>
+  <div :style="tableTemplate" class="mb-2 grid gap-2 px-4 py-3">
+    <div
+      v-for="(cell, cellIndex) in tableLayout"
+      :key="cellIndex"
+      class="grid grid-cols-none gap-1 items-center"
+    >
+      <div
+        v-for="(header, headerIndex) in cell"
+        :key="headerIndex"
+        :class="[
+          fields[header].classes,
+          {
+            'text-right justify-end': fields[header].justify === 'right',
+            'text-center justify-center': fields[header].justify === 'center',
+          },
+        ]"
+      >
+        <Private :hide="fields[header].private === true">
+          <slot :name="`summary(${header})`" />
+        </Private>
+      </div>
     </div>
   </div>
 </template>

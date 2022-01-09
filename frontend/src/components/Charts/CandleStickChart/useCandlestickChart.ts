@@ -25,6 +25,8 @@ export const useCandleStickChart = (
 ) => {
   const candleData = ref<CandleData[]>();
   const loading = ref(false);
+  const upColor = '#00da3c';
+  const downColor = '#ec0000';
 
   function calculateMA(dayCount) {
     if (!candleData.value) {
@@ -55,7 +57,7 @@ export const useCandleStickChart = (
     grid: {
       left: '5%',
       right: '5%',
-      bottom: '10%',
+      bottom: '15%',
     },
     xAxis: {
       type: 'category',
@@ -84,8 +86,8 @@ export const useCandleStickChart = (
         end: 100,
       },
       {
-        show: true,
         type: 'slider',
+        show: true,
         top: '90%',
         start: 50,
         end: 100,
@@ -97,10 +99,10 @@ export const useCandleStickChart = (
         type: 'candlestick',
         data: [],
         itemStyle: {
-          // color: upColor,
-          // color0: downColor,
-          // borderColor: upBorderColor,
-          // borderColor0: downBorderColor
+          color: upColor,
+          color0: downColor,
+          borderColor: upColor,
+          borderColor0: downColor,
         },
         markPoint: {
           label: {
@@ -115,16 +117,25 @@ export const useCandleStickChart = (
               name: 'highest value',
               type: 'max',
               valueDim: 'highest',
+              itemStyle: {
+                color: downColor,
+              },
             },
             {
               name: 'lowest value',
               type: 'min',
               valueDim: 'lowest',
+              itemStyle: {
+                color: downColor,
+              },
             },
             {
               name: 'average value on close',
               type: 'average',
               valueDim: 'close',
+              itemStyle: {
+                color: downColor,
+              },
             },
           ],
           tooltip: {
@@ -151,6 +162,9 @@ export const useCandleStickChart = (
                     show: false,
                   },
                 },
+                itemStyle: {
+                  color: downColor,
+                },
               },
               {
                 type: 'max',
@@ -164,6 +178,9 @@ export const useCandleStickChart = (
                   label: {
                     show: false,
                   },
+                },
+                itemStyle: {
+                  color: downColor,
                 },
               },
             ],
@@ -215,12 +232,17 @@ export const useCandleStickChart = (
     from?: dayjs.Dayjs,
     to?: dayjs.Dayjs
   ): Promise<CandleData[]> => {
-    return Parse.Cloud.run('Assets--GetEndOfDay', {
-      resolution: currentScale.resolution,
-      from: from.toISOString(),
-      to: to.toISOString(),
-      assetSymbolId: assetSymbol.id,
-    });
+    try {
+      const result = Parse.Cloud.run('Assets--GetEndOfDay', {
+        resolution: currentScale.resolution,
+        from: from.toISOString(),
+        to: to.toISOString(),
+        assetSymbolId: assetSymbol.id,
+      });
+      return result;
+    } catch (e) {
+      alert(e);
+    }
   };
 
   const reloadData = async (min?: Dayjs, max?: Dayjs) => {

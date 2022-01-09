@@ -28,16 +28,7 @@
       <button
         id="acceptTestingBtn"
         :disabled="!acceptTesting || masterKey.length < 7"
-        class="
-          py-2
-          px-4
-          text-center
-          bg-blue-600
-          rounded-md
-          w-full
-          text-white text-sm
-          hover:bg-blue-500
-        "
+        class="py-2 px-4 text-center bg-blue-600 rounded-md w-full text-white text-sm hover:bg-blue-500"
         type="submit"
       >
         Sign in
