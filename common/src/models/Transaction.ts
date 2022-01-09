@@ -1,7 +1,13 @@
 import { Account, AssetSymbol, Holding, User } from '.';
 import { SecureObject } from '@goplan-finance/utils';
 
-export type TransactionType = 'transfer' | 'buy' | 'sell' | 'dividends' | 'fees';
+export enum TransactionType {
+  TRANSFER = 'transfer',
+  BUY = 'buy',
+  SELL = 'sell',
+  DIVIDENDS = 'dividends',
+  FEES = 'fees',
+}
 
 export class Transaction extends SecureObject {
   static className = 'Transaction';

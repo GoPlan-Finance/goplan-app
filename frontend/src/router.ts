@@ -19,6 +19,7 @@ import Holdings from '@views/Holdings.vue';
 import Auth from '@views/modules/Auth/Auth.vue';
 import Profile from '@views/modules/Auth/Profile.vue';
 import Transactions from '@views/Transactions.vue';
+import Accounts from '@views/Accounts.vue';
 import Watchlists from '@views/Watchlists.vue';
 import WatchlistsDetails from '@views/WatchlistsDetails.vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
@@ -66,6 +67,12 @@ const appRoutes: RouteRecordRaw[] = [
     name: 'analytics',
     props: true,
     component: Analytics,
+  },
+  {
+    path: '/accounts',
+    name: 'accounts',
+    props: true,
+    component: Accounts,
   },
 
   {

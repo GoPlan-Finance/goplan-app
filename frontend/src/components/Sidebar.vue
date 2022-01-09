@@ -19,7 +19,9 @@
       </div>
 
       <nav class="mt-14">
-        <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">My Portfolio</div>
+        <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">
+          {{ t('My Portfolio') }}
+        </div>
 
         <navigation-item title="Analytics" to="/analytics">
           <ChartBarIcon class="h-5 w-5" />
@@ -31,6 +33,10 @@
 
         <navigation-item title="Transactions" to="/transactions">
           <SwitchHorizontalIcon class="h-5 w-5" />
+        </navigation-item>
+
+        <navigation-item title="Accounts" to="/accounts">
+          <CreditCardIcon class="h-5 w-5" />
         </navigation-item>
 
         <div class="ml-10 text-xs font-bold text-gray-400 tracking-wide mt-6">Research</div>
@@ -49,9 +55,12 @@ import {
   MenuAlt2Icon,
   SwitchHorizontalIcon,
   TrendingUpIcon,
+  CreditCardIcon,
 } from '@heroicons/vue/solid';
 import { useSidebar } from '@/hooks/useSidebar';
 import NavigationItem from './NavigationItem.vue';
+import { useI18n } from 'vue-i18n';
 
 const { isOpen } = useSidebar();
+const { t } = useI18n();
 </script>

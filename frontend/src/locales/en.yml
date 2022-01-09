@@ -1,3 +1,9 @@
+accounts:
+  headline: Accounts
+  table:
+    balance: Balance
+    name: Name
+    currency: Currency
 details:
   address: Address
   ceo: CEO
