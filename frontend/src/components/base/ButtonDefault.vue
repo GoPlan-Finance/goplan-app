@@ -17,26 +17,20 @@
 </template>
 
 <script setup lang="ts">
+import { ButtonType } from '@/types';
+
 const props = withDefaults(
   defineProps<{
     label: string;
-    type?: 'primary' | 'secondary';
-    disabled?: boolean;
+    type?: ButtonType;
+    disabled?: true;
   }>(),
   {
-    type: 'primary',
-    disabled: false,
+    type: ButtonType.PRIMARY,
   }
 );
 
 const emit = defineEmits<{
   (e: 'click'): void;
 }>();
-</script>
-
-<script lang="ts">
-export enum ButtonType {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-}
 </script>
