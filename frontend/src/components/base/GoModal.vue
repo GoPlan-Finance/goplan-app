@@ -31,7 +31,7 @@
         <div class="modal-content py-4 text-left px-6">
           <!--Title-->
           <div class="flex justify-between items-center pb-3">
-            <p class="text-2xl font-bold">
+            <p class="text-lg font-bold">
               {{ title }}
             </p>
             <div class="modal-close cursor-pointer z-30" @click="close">

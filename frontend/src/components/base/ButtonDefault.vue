@@ -5,7 +5,7 @@
       'text-gray-600 bg-gray-300 hover:bg-gray-400': type === ButtonType.SECONDARY,
     }"
     :disabled="disabled"
-    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-bold tracking-wide disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-default"
+    class="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-bold tracking-wide disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-default"
     @click="$emit('click', $event)"
   >
     <slot name="before" />
@@ -16,35 +16,21 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent, toRefs } from 'vue';
+<script setup lang="ts">
+import { ButtonType } from '@/types';
 
-export enum ButtonType {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
-}
+const props = withDefaults(
+  defineProps<{
+    label: string;
+    type?: ButtonType;
+    disabled?: true;
+  }>(),
+  {
+    type: ButtonType.PRIMARY,
+  }
+);
 
-export default defineComponent({
-  props: {
-    label: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      default: ButtonType.PRIMARY,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['click'],
-  setup(props) {
-    return {
-      ...toRefs(props),
-      ButtonType,
-    };
-  },
-});
+const emit = defineEmits<{
+  (e: 'click'): void;
+}>();
 </script>

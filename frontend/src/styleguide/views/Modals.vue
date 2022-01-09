@@ -8,17 +8,7 @@
   </Modal>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import ButtonDefault, { ButtonType } from '@components/base/ButtonDefault.vue';
+<script setup lang="ts">
+import ButtonDefault from '@components/base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
-
-export default defineComponent({
-  components: { Modal, ButtonDefault },
-  setup() {
-    return {
-      ButtonType,
-    };
-  },
-});
 </script>

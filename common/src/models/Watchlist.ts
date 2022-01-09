@@ -1,9 +1,14 @@
 import { User } from '@common/models/User';
-import { BaseObject } from '@goplan-finance/utils';
+import { BaseObject, Query } from '@goplan-finance/utils';
 import { AssetSymbol } from './AssetSymbol';
+import { WatchlistItem } from '@models/WatchlistItem';
 
 export class Watchlist extends BaseObject {
   static className = 'Watchlist';
+
+  public percentChange: number;
+  public symbolsCount: number;
+  public symbols: AssetSymbol[];
 
   constructor() {
     super(Watchlist.className);
@@ -13,8 +18,8 @@ export class Watchlist extends BaseObject {
     return this.get('name');
   }
 
-  get symbols(): AssetSymbol[] {
-    return this.get('symbols');
+  set name(value: string) {
+    this.set('name', value);
   }
 
   get createdBy(): User {
@@ -23,6 +28,10 @@ export class Watchlist extends BaseObject {
 
   set createdBy(value: User) {
     this.set('createdBy', value);
+  }
+
+  get updatedAt(): Date {
+    return this.get('updatedAt');
   }
 }
 
