@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { Watchlist } from '@common/models';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import ButtonDefault from '@components/base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
 import GFormItem from '@components/base/GFormItem.vue';
@@ -41,22 +41,23 @@ const { t } = useI18n();
 const newWatchlistName = ref('');
 const validationError = ref(null);
 
-const isValid = computed(() => {
+const isValid = () => {
   if (newWatchlistName.value.length < 1) {
     validationError.value = t('Please enter a name');
     return false;
   }
+  validationError.value = '';
   return true;
-});
+};
 
 const createList = async (close: CallableFunction) => {
-  if (!isValid.value) {
+  if (!isValid()) {
     return;
   }
 
   try {
     const watchlist = new Watchlist();
-    watchlist.set('name', newWatchlistName.value);
+    watchlist.name = newWatchlistName.value;
     await watchlist.save();
     newWatchlistName.value = '';
     close();

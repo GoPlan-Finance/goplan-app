@@ -34,7 +34,11 @@
             :compare-from="row.lastPrice.previousClose"
             :compare-to="row.lastPrice.price"
           />
-          <span v-else> -- </span>
+          <GSkeleton class="h-5" v-else />
+        </template>
+        <template #field(lastPrice)="{ row }">
+          <div v-if="row.lastPrice">{{ row.lastPrice.price }}</div>
+          <GSkeleton class="h-5" v-else />
         </template>
         <template #actions="{ row }">
           <div class="cursor-pointer hover:text-red-600 text-gray-300" @click="remove(row)">
@@ -65,6 +69,7 @@ import { TrashIcon } from '@heroicons/vue/solid';
 import { onUnmounted, ref, watch } from 'vue';
 import GEmptyState from '@components/base/GEmptyState.vue';
 import AddToWatchlist from '@components/AddToWatchlist.vue';
+import GSkeleton from '@components/base/GSkeleton.vue';
 
 const priceStore = useAssetPriceStore();
 
@@ -102,9 +107,6 @@ const config: TableConfig = {
     },
     lastPrice: {
       justify: 'right',
-      value: (row: Holding) => {
-        return row.lastPrice?.price ?? null;
-      },
     },
   },
   tableLayout: {
