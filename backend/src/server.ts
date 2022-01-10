@@ -70,6 +70,7 @@ const parseConfig = {
       'Transaction',
       'Holding',
       'AssetPrice',
+      'Account',
       // '',
       // '',
     ],
