@@ -122,9 +122,10 @@ const modalOpened = async () => {
   }
 };
 
-const remove = (account: Account) => {
+const remove = async () => {
   if (confirm(t('Do you really want to remove this account?'))) {
-    account.destroy();
+    await accountInternal.value.destroy();
+    isModalOpen.value = false;
   }
 };
 </script>
