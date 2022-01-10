@@ -19,7 +19,7 @@
           <input v-model="accountInternal.name" class="rounded w-full" type="text" />
         </GFormItem>
         <GFormItem :label="t('Currency')" :error="errors.currency">
-          <input v-model="accountInternal.currency" class="rounded w-full" type="text" />
+          <CurrencySelect v-model:value="accountInternal.currency" />
         </GFormItem>
       </div>
     </template>
@@ -56,11 +56,16 @@ import ButtonDefault from './base/ButtonDefault.vue';
 import { PlusCircleIcon, TrashIcon, SaveIcon } from '@heroicons/vue/outline';
 import { useI18n } from 'vue-i18n';
 import GFormItem from '@components/base/GFormItem.vue';
+import CurrencySelect from '@components/CurrencySelect.vue';
 
 const { t } = useI18n();
 
 const props = defineProps<{
   account?: Account;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update:account', account: Account);
 }>();
 
 const createAccount = (): Account => {
@@ -104,6 +109,7 @@ const save = async () => {
 
   try {
     await accountInternal.value.save();
+    emit('update:account', accountInternal.value);
     reset();
   } catch (e) {
     alert(e);
