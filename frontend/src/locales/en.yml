@@ -2,8 +2,8 @@ accounts:
   headline: Accounts
   table:
     balance: Balance
-    name: Name
     currency: Currency
+    name: Name
 details:
   address: Address
   ceo: CEO

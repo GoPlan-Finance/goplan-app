@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Merged
 
+- Fix accounts [`#685`](https://github.com/mkitzmann/GoPlan-app/pull/685)
+- Add CurrencySelect [`#684`](https://github.com/mkitzmann/GoPlan-app/pull/684)
+- Accounts View [`#681`](https://github.com/mkitzmann/GoPlan-app/pull/681)
+- Fix Watchlists [`#654`](https://github.com/mkitzmann/GoPlan-app/pull/654)
+- Fix transactions and holdingsTable [`#653`](https://github.com/mkitzmann/GoPlan-app/pull/653)
+- Fix github workflows and update readme [`#680`](https://github.com/mkitzmann/GoPlan-app/pull/680)
+- update installation instructions [`#647`](https://github.com/mkitzmann/GoPlan-app/pull/647)
+- Bump parse from 3.3.1 to 3.4.1 in /frontend [`#652`](https://github.com/mkitzmann/GoPlan-app/pull/652)
+- Bump @vue/eslint-config-typescript from 9.1.0 to 10.0.0 in /frontend [`#644`](https://github.com/mkitzmann/GoPlan-app/pull/644)
+- Bump concurrently from 6.5.1 to 7.0.0 in /frontend [`#651`](https://github.com/mkitzmann/GoPlan-app/pull/651)
+- Bump eslint-plugin-import from 2.25.3 to 2.25.4 in /backend [`#650`](https://github.com/mkitzmann/GoPlan-app/pull/650)
+- Bump parse from 3.4.0 to 3.4.1 in /backend [`#649`](https://github.com/mkitzmann/GoPlan-app/pull/649)
+- Bump concurrently from 6.5.1 to 7.0.0 in /backend [`#648`](https://github.com/mkitzmann/GoPlan-app/pull/648)
 - Update Readme [`#646`](https://github.com/mkitzmann/GoPlan-app/pull/646)
 - Fix Details Page [`#615`](https://github.com/mkitzmann/GoPlan-app/pull/615)
 - Bump eslint-plugin-promise from 5.2.0 to 6.0.0 in /backend [`#643`](https://github.com/mkitzmann/GoPlan-app/pull/643)
@@ -322,4 +335,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Commits
 
-- Fix WatchAssetModal.vue [`67b242e`](https://github.com/mkitzmann/GoPlan-app/commit/67b242eab8d2ec2b3393120d6cbd4e29b18934bf)
+- Adjust DefaultCSVImporter.ts [`9163ef4`](https://github.com/mkitzmann/GoPlan-app/commit/9163ef43c28ef9b8e3110b027d9d61d3fdfbab97)

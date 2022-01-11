@@ -35,6 +35,6 @@ export class CSVExporter {
     const tempLink = document.createElement('a');
     tempLink.href = window.URL.createObjectURL(csvData);
     tempLink.setAttribute('download', filename !== '' ? filename : 'transactions.csv');
-    // tempLink.click();
+    tempLink.click();
   }
 }
