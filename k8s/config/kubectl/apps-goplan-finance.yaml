@@ -1,0 +1,101 @@
+#
+#
+# Secret
+# $ kubectl create secret  generic apps-goplan-finance --from-literal=master_key=asdf --from-literal=mongodb_password=asdf
+#
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+  name: apps-goplan-finance
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: apps-goplan-finance
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apps-goplan-finance
+    version: v0.1
+  name: apps-goplan-finance
+  namespace: default
+spec:
+  minReadySeconds: 20
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: apps-goplan-finance
+  strategy:
+    rollingUpdate:
+      maxSurge: 5
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: apps-goplan-finance
+        version: v0.1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: apps-goplan-finance
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - image: ghcr.io/GoPlan-Finance/GoPlan-app:latest
+          env:
+          - name: MONGODB_HOST
+            value: mongodb.default.svc.cluster.local
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mongodb_password
+                name: apps-goplan-finance
+          - name: MASTER_KEY
+            valueFrom:
+              secretKeyRef:
+                key: master_key
+                name: apps-goplan-finance
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 300
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 5
+          name: app
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          securityContext:
+            privileged: true
+            procMount: Default
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
