@@ -14,6 +14,7 @@ env:
 
 jobs:
   test-frontend:
+    if: false
     runs-on: ubuntu-18.04
     timeout-minutes: 30
     env:
@@ -38,6 +39,7 @@ jobs:
           CI: true
 
   test-backend:
+    if: false
     runs-on: ubuntu-18.04
     timeout-minutes: 30
     env:
@@ -64,10 +66,10 @@ jobs:
 
 
   setup-build-publish:
-    needs: [ test-frontend, test-backend ]
+#    needs: [ test-frontend, test-backend ]
     name: Setup, Build, Publish
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+#    if: github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout
@@ -92,13 +94,21 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+
+#            type=schedule
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
+#            type=semver,pattern={{major}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${GITHUB_SHA}
-#          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
