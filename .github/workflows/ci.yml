@@ -14,7 +14,6 @@ env:
 
 jobs:
   test-frontend:
-    if: false
     runs-on: ubuntu-18.04
     timeout-minutes: 30
     env:
@@ -39,7 +38,6 @@ jobs:
           CI: true
 
   test-backend:
-    if: false
     runs-on: ubuntu-18.04
     timeout-minutes: 30
     env:
@@ -66,10 +64,10 @@ jobs:
 
 
   setup-build-publish:
-#    needs: [ test-frontend, test-backend ]
+    needs: [ test-frontend, test-backend ]
     name: Setup, Build, Publish
     runs-on: ubuntu-latest
-#    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout
@@ -98,7 +96,6 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha
-
 #            type=schedule
 #            type=semver,pattern={{version}}
 #            type=semver,pattern={{major}}.{{minor}}
