@@ -22,7 +22,7 @@
     "pre-commit": "concurrently  -p \"[{name}]\" -n \"Backend,Frontend,Common,Changelog\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\"  \"yarn --cwd backend run pre-commit\"  \"yarn --cwd frontend run pre-commit\" \"yarn --cwd common run pre-commit\" \"yarn run auto-changelog\"",
     "test": "concurrently  -p \"[{name}]\" -n \"Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd backend run backend-test\"  \"yarn --cwd frontend  run frontend-test\" \"yarn --cwd common run common-test\"",
     "dev-upgrade-dependencies": "yarn upgrade --latest && yarn --cwd backend  upgrade --latest  && yarn --cwd frontend   upgrade --latest  && yarn --cwd common   upgrade --latest",
-    "dev-link-utils": "concurrently  -p \"[{name}]\" -n \"Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd backend link @goplan-finance/utils\"  \"yarn --cwd frontend  link @goplan-finance/utils\" \"yarn --cwd common link @goplan-finance/utils\"",
+    "dev-link-utils": "yarn link @goplan-finance/utils",
     "dev-unlink-utils": "concurrently  -p \"[{name}]\" -n \"Backend,Frontend,Common\" -c \"yellow.bold,cyan.bold,green.bold,magenta.bold\" \"yarn --cwd backend unlink @goplan-finance/utils\"  \"yarn --cwd frontend  unlink @goplan-finance/utils\" \"yarn --cwd common unlink @goplan-finance/utils\" && yarn install --force"
   },
   "dependencies": {},

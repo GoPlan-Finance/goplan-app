@@ -55,7 +55,7 @@ export class AuthStore {
 
     const clientKey = user.get('clientKey') as CryptoUtils.EncryptedKey;
     const derived = await Crypto.PBKDF2(masterKey, Crypto.strToBuff(clientKey.s));
-    const key = (await Crypto.decrypt(derived, clientKey)) as Crypto.DecryptedKey;
+    const key = (await Crypto.decrypt(derived, clientKey)) as CryptoUtils.DecryptedKey;
 
     if (!key || typeof key !== 'object') {
       throw 'Invalid key';
