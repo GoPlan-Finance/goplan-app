@@ -1,33 +1,39 @@
 <template>
+  <ExportTransactionsModal
+    v-if="transactionStore.transactions.length > 0"
+    v-model:show="showExportModal"
+  />
+  <ImportTransactionsModal v-model:show="showImportModal" />
   <HeadlineActions :headline="$t('transactions.headline')">
-    <ImportTransactionsModal />
     <BuySellAsset />
+    <GDropdown>
+      <template #button="{ toggle }">
+        <ButtonDefault :type="ButtonType.SECONDARY" label="Export/Import" @click="toggle">
+          <template #before>
+            <CogIcon class="h-6 text-gray-500" />
+          </template>
+        </ButtonDefault>
+      </template>
+      <template #default="{ toggle }">
+        <div
+          @click="(showExportModal = true) && toggle()"
+          class="cursor-pointer select-none px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
+        >
+          {{ t('Export CSV') }}
+        </div>
+        <div
+          @click="(showImportModal = true) && toggle()"
+          class="cursor-pointer select-none px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
+        >
+          {{ t('Import CSV') }}
+        </div>
+      </template>
+    </GDropdown>
   </HeadlineActions>
   <template v-if="rows.length > 0">
     <DataTable :config="config" :rows="rows">
       <template #filters(accounts)="{ filter }">
-        <span>
-          <label
-            v-for="option in filter.options"
-            :key="option.label"
-            :class="filter.value && filter.value.id === option.value.id ? 'bg-gray-300' : ''"
-            class="inline-flex items-center px-2 mr-1 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-300 select-none"
-          >
-            <input
-              v-model="filter.value"
-              :text="option.label"
-              :value="option.value"
-              class="hidden"
-              name="radio"
-              type="radio"
-              @click="
-                filter.value =
-                  filter.value && filter.value.id === option.value.id ? null : filter.value
-              "
-            />
-            <span class="py-1 px-2 text-sm text-gray-700">{{ option.label }}</span>
-          </label>
-        </span>
+        <AccountSelect v-model="filter.value" class="w-full border-0" />
       </template>
       <template #field(name)="{ value, row }">
         <AppLink v-if="row.symbol" :ticker="row.symbolName" class="font-bold" to="ticker_details">
@@ -92,12 +98,19 @@ import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue';
 import { CurrencyUtils, StringUtils } from '@goplan-finance/utils';
-import { ArrowCircleLeftIcon, PencilIcon, TrashIcon } from '@heroicons/vue/solid';
+import { ArrowCircleLeftIcon, PencilIcon, TrashIcon, CogIcon } from '@heroicons/vue/solid';
 import { useI18n } from 'vue-i18n';
+import ExportTransactionsModal from '@components/Transactions/ExportTransactionsModal.vue';
+import AccountSelect from '@components/AccountSelect.vue';
+import GDropdown from '@components/base/GDropdown.vue';
+import { ButtonType } from '@/types';
+import ButtonDefault from '@components/base/ButtonDefault.vue';
 
 const { t } = useI18n();
 
 const rows = ref([]);
+const showExportModal = ref(false);
+const showImportModal = ref(false);
 const config = reactive({
   fields: {
     type: {},

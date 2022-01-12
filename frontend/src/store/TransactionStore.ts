@@ -36,6 +36,7 @@ export const useTransactionStore = defineStore({
       q.limit(100000);
       q.descending('executedAt');
       q.include('symbol');
+      q.include('account');
       await q.liveQuery(this.transactions);
     },
     async subscribe() {

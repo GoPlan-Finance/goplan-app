@@ -1,12 +1,11 @@
 <template>
-  <Modal :can-click-outside="false" title="Import Transactions" @closed="closed" @opened="opened">
-    <template #button>
-      <ButtonDefault type="secondary" label="Import CSV">
-        <template #before>
-          <UploadIcon class="h-5" />
-        </template>
-      </ButtonDefault>
-    </template>
+  <Modal
+    :model-value="show"
+    @update:model-value="$emit('update:show', $event)"
+    :can-click-outside="false"
+    title="Import Transactions"
+    @closed="closed"
+  >
     <template #content>
       <template v-if="currentStep === ImportStepEnum.Instructions">
         <p class="text-sm">
@@ -131,8 +130,11 @@ enum ImportStepEnum {
   DoImport,
 }
 
+const props = defineProps<{
+  show: boolean;
+}>();
+
 const currentStep = ref<ImportStepEnum>(ImportStepEnum.Instructions);
-const opened = ref(false);
 const logs = ref([]);
 const validRows = ref([]);
 

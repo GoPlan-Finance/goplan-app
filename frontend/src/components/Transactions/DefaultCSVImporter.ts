@@ -10,8 +10,9 @@ import { Query, StringUtils } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
 import * as Papa from 'papaparse';
+import { Currencies } from 'ts-money';
 
-type LoggerFn = (i: number, msg: string) => void;
+type LoggerFn = (i: string, msg: string) => void;
 
 export interface CsvDataInterface {
   currency: string;
@@ -21,10 +22,10 @@ export interface CsvDataInterface {
   fees: string;
   totalExcludingFees: string;
   type: TransactionType;
-  account: Account;
+  account?: Account;
   accountName: string;
   symbol: string;
-  assetSymbol: AssetSymbol | null;
+  assetSymbol?: AssetSymbol;
 }
 
 export class DefaultCSVImporter {
@@ -45,7 +46,7 @@ export class DefaultCSVImporter {
     });
   }
 
-  private async getOrCreateAccount(name: string): Promise<Account> {
+  private async getOrCreateAccount(name: string, currency: string | null): Promise<Account> {
     return await this.mutex.runExclusive(async () => {
       if (!this.accounts) {
         const q = new Query(Account);
@@ -53,17 +54,15 @@ export class DefaultCSVImporter {
         this.accounts = await q.find();
       }
 
-      let account = this.accounts.find(account => account.name === name);
+      let account = this.accounts.find(account => account.name === name || account.id === name);
 
-      if (account) {
-        return account;
+      if (!account) {
+        account = new Account();
+        account.name = name;
+        account.currency = currency ?? Currencies.USD.code;
+        await account.save();
+        this.accounts.push(account);
       }
-
-      account = new Account();
-      account.name = name;
-
-      await account.save();
-      this.accounts.push(account);
 
       return account;
     });
@@ -76,7 +75,7 @@ export class DefaultCSVImporter {
       throw '"date", "type", "currency", "accountName" fields are mandatory';
     }
 
-    row.account = await this.getOrCreateAccount(row.accountName);
+    row.account = await this.getOrCreateAccount(row.accountName, row.currency.toUpperCase());
     row.quantity = row.quantity || null;
     row.symbol = row.symbol ? row.symbol.toUpperCase() : null;
     row.type = row.type.toLowerCase() as TransactionType;
