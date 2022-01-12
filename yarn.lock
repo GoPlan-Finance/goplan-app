@@ -4037,6 +4037,13 @@ bson@^4.6.0:
   dependencies:
     buffer "^5.6.0"
 
+bson@^4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-4.6.1.tgz#2b5da517539bb0f7f3ffb54ac70a384ca899641c"
+  integrity sha512-I1LQ7Hz5zgwR4QquilLNZwbhPw0Apx7i7X9kGMBTsqPdml/03Q9NBtD9nt/19ahjlphktQImrnderxqpzeVDjw==
+  dependencies:
+    buffer "^5.6.0"
+
 buffer-alloc-unsafe@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-alloc-unsafe/-/buffer-alloc-unsafe-1.1.0.tgz#bd7dc26ae2972d0eda253be061dba992349c19f0"
@@ -7751,6 +7758,11 @@ intersect@1.0.1:
   resolved "https://registry.yarnpkg.com/intersect/-/intersect-1.0.1.tgz#332650e10854d8c0ac58c192bdc27a8bf7e7a30c"
   integrity sha1-MyZQ4QhU2MCsWMGSvcJ6i/fnoww=
 
+ip@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
+  integrity sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=
+
 ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
@@ -9841,6 +9853,18 @@ mongodb@^3.4.0:
     safe-buffer "^5.1.2"
   optionalDependencies:
     saslprep "^1.0.0"
+
+mongodb@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-4.3.0.tgz#beac457cf57ea1b5c76ec67b8bbd6a63254bbc7c"
+  integrity sha512-ovq9ZD9wEvab+LsaQOiwtne1Sy2egaHW8K/H5M18Tv+V5PgTRi+qdmxDGlbm94TSL3h56m6amstptu115Nzgow==
+  dependencies:
+    bson "^4.6.1"
+    denque "^2.0.1"
+    mongodb-connection-string-url "^2.3.2"
+    socks "^2.6.1"
+  optionalDependencies:
+    saslprep "^1.0.3"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -12108,6 +12132,11 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+smart-buffer@^4.1.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
+  integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -12137,6 +12166,14 @@ snapdragon@^0.8.1:
     source-map "^0.5.6"
     source-map-resolve "^0.5.0"
     use "^3.1.0"
+
+socks@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/socks/-/socks-2.6.1.tgz#989e6534a07cf337deb1b1c94aaa44296520d30e"
+  integrity sha512-kLQ9N5ucj8uIcxrDwjm0Jsqk06xdpBjGNQtpXy4Q8/QY2k+fY7nZH8CARy+hkbG+SGAovmzzuauCpBlb8FrnBA==
+  dependencies:
+    ip "^1.1.5"
+    smart-buffer "^4.1.0"
 
 sort-keys-length@^1.0.0:
   version "1.0.1"

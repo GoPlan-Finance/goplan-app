@@ -1,5 +1,7 @@
 // noinspection ES6PreferShortImport
 
+import { cloudInit } from '@cloud/main';
+
 /**
  *
  *
@@ -56,7 +58,11 @@ const parseConfig = {
   },
   allowClientClassCreation: false,
   databaseURI: config.get('parse.databaseUri'),
-  cloud: `${__dirname}/cloud/main.ts`,
+  cloud: (...aaa: unknown[]) => {
+    const cloudMain = require('./cloud/main');
+
+    cloudMain.cloudInit(config.get('parse.databaseUri'));
+  },
   appId: config.get('parse.appId'),
   masterKey: config.get('parse.masterKey') as string,
   serverURL: config.get('parse.serverUrl'), // Don't forget to change to https if needed
