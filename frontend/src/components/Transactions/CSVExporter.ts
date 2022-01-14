@@ -10,7 +10,6 @@ import { CsvDataInterface } from '@components/Transactions/DefaultCSVImporter';
 export class CSVExporter {
   mapTransactions(transactions: Transaction[]): CsvDataInterface[] {
     return transactions.map(transaction => {
-      console.log(transaction.account?.toJSON());
       return {
         currency: transaction.currency,
         date: transaction.executedAt?.toISOString(),
@@ -26,7 +25,6 @@ export class CSVExporter {
   }
 
   exportCSV(rows: CsvDataInterface[]): string {
-    console.log(rows);
     return Papa.unparse(rows);
   }
 
