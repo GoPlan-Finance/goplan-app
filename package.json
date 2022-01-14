@@ -36,7 +36,7 @@
     "breakingPattern": "Breaking change",
     "unreleased": true,
     "hideCredit": true,
-    "template": "keepachangelog",
+    "template": "compact",
     "releaseSummary": true,
     "sortCommits": "date-desc",
     "commitLimit": true
