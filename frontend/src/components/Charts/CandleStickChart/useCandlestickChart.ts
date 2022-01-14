@@ -7,7 +7,7 @@ import { AssetSymbol } from '@models';
 import * as duration from 'dayjs/plugin/duration';
 import { Ref, ref } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
-import { TimeScaleInterface } from '@components/Charts/HoldingTimeSeriesChart';
+import { TimeScaleInterface } from '@components/Charts/useHoldingTimeSeries';
 
 export type CandleData = {
   date: dayjs.Dayjs | undefined;
