@@ -1,5 +1,7 @@
-import dayjs from 'dayjs';
+// import 'https://cdnjs.cloudflare.com/ajax/libs/parse/3.3.1/parse.min.js';
 import 'parse/dist/parse';
+
+import dayjs from 'dayjs';
 
 import * as duration from 'dayjs/plugin/duration';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
