@@ -65,7 +65,7 @@ Feel free to submit a PR if you want to add items to the Roadmap!
     - Delete Account
 - [x] Dockerize the application, and simplify initial setup
 - [x] CSV import/export of transactions
-- [ ] Multiple Accounts  #6
+- [x] Multiple Accounts  #6
     - Show all accounts by this user
     - Actions: Add/Edit/Delete
 
