@@ -4,21 +4,42 @@
  *
  */
 
+import { MongoClient } from 'mongodb';
+import { Connection } from './MongoDB/Connection';
+
 import { SecureObject } from '@goplan-finance/utils';
 
-SecureObject.setServerMode();
+async function ensureIndexes(client: MongoClient): Promise<void> {
+  /// @todo Update when SchemaMigrations support unique indexes
+  const db = client.db();
 
-require('./Auth');
-require('./User');
+  await db
+    .collection('AssetSymbol')
+    .createIndex(
+      { symbol: 1, _p_exchange: 1 },
+      { name: 'assetsymbol_symbol_exchange', unique: true }
+    );
+}
 
-require('./Watchlists');
-require('./WatchlistsItem');
+export function cloudInit(databaseUrl: string) {
+  SecureObject.setServerMode();
 
-require('./Transaction');
-require('./Holding');
+  Connection.open(databaseUrl).then(async (client: MongoClient) => {
+    await ensureIndexes(client);
 
-require('./Account');
-require('./ExternalDataProvider');
+    require('./Auth');
+    require('./User');
 
-require('./Assets');
-require('./DataProviders');
+    require('./Watchlists');
+    require('./WatchlistsItem');
+
+    require('./Transaction');
+    require('./Holding');
+
+    require('./Account');
+    require('./ExternalDataProvider');
+
+    require('./Assets');
+    require('./DataProviders');
+  });
+}
