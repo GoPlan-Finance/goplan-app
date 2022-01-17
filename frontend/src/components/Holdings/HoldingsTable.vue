@@ -9,7 +9,12 @@
       </span>
     </template>
     <template #field(name)="{ value, row }">
-      <AppLink v-if="row.symbol" :ticker="row.symbolName" class="text-gray-500" to="ticker_details">
+      <AppLink
+        v-if="row.symbol"
+        :ticker="row.symbolName"
+        class="text-gray-500 font-light"
+        to="ticker_details"
+      >
         {{ value }}
       </AppLink>
       <span v-else>
@@ -74,23 +79,9 @@ const formatCurrency = CurrencyUtils.formatCurrency;
 
 const props = defineProps<{
   holdings: Holding[];
+  totalOpen: number;
   tableLayout: TableLayoutCollection;
 }>();
-
-const totalBookValue = computed(() =>
-  ArrayUtils.sum<Holding>(props.holdings, elem => {
-    return elem.openTotalPrice; // TODO: Handle different currencies
-  })
-);
-
-const totalOpen = computed(() =>
-  ArrayUtils.sum<Holding>(props.holdings, elem => {
-    if (!elem.lastPrice) {
-      return;
-    }
-    return elem.openQty * elem.lastPrice.open; // TODO: Handle different currencies
-  })
-);
 
 const config = reactive<TableConfig>({
   fields: {
@@ -217,7 +208,7 @@ const config = reactive<TableConfig>({
           return 0;
         }
         // @todo currency
-        return totalOpen.value === 0 ? 0 : (row.openQty * row.lastPrice.open) / totalOpen.value;
+        return props.totalOpen === 0 ? 0 : (row.openQty * row.lastPrice.open) / props.totalOpen;
       },
     },
   },

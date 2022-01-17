@@ -3,7 +3,11 @@
     <BuySellAsset />
   </HeadlineActions>
   <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
-  <HoldingsTable :holdings="openHoldings" :table-layout="openTableLayout" />
+  <HoldingsTable
+    :holdings="holdingStore.openHoldings"
+    :total-open="holdingStore.totalOpen"
+    :table-layout="openTableLayout"
+  />
   <!--  <br />-->
   <!--  <br />-->
   <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
@@ -49,14 +53,4 @@ const closedTableLayout: TableLayoutCollection = {
 
 const holdingStore = useHoldingStore();
 await holdingStore.subscribe();
-
-const openHoldings = computed<Holding[]>(() => {
-  // console.debug('Holdings Computed(open)')
-  return holdingStore.holdings.filter(holding => holding.openQty !== 0);
-});
-
-const closedHoldings = computed<Holding[]>(() => {
-  // console.debug('Holdings Computed(closed)')
-  return holdingStore.holdings.filter(holding => holding.openQty === 0);
-});
 </script>

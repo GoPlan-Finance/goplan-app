@@ -37,7 +37,7 @@ const appRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: Watchlists,
+    component: Analytics,
   },
   {
     path: '/watchlists',

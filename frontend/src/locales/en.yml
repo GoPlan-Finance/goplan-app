@@ -4,6 +4,13 @@ accounts:
     balance: Balance
     currency: Currency
     name: Name
+allocations:
+  type:
+    table:
+      type: Type
+      initialValue: Initial Value
+      currentValue: Current Value
+      weight: % Porfolio
 details:
   address: Address
   ceo: CEO
