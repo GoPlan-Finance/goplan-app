@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs, { Dayjs } from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -86,7 +86,7 @@ import {
   getScaleForRange,
   makeSeries,
   timeScales,
-} from './HoldingTimeSeriesChart';
+} from './useHoldingTimeSeries';
 
 dayjs.extend(duration);
 use([
@@ -147,103 +147,95 @@ use([
   LegendComponent,
 ]);
 
-export default defineComponent({
-  components: {
-    VChart,
-  },
-  provide: {
-    [THEME_KEY]: 'light',
-  },
-  props: {},
-  setup(props) {
-    const loading = ref(true);
-    const theChart = ref(null);
-    const currentScaleLabel = ref('Today');
-    let currentScale = reactive(getScaleByLabel('Today'));
+// [THEME_KEY]: 'light',
+const loading = ref(true);
+const theChart = ref(null);
+const currentScaleLabel = ref('Today');
+let currentScale = reactive(getScaleByLabel('Today'));
 
-    const currentData: CandleData[] = [];
+const currentData: CandleData[] = [];
 
-    const option = ref({
-      tooltip: {
-        trigger: 'item',
-        animation: false,
-        axisPointer: {
-          type: 'cross',
-        },
-        // appendToBody : true,
-        // order: 'valueDesc',
-        formatter(params) {
-          // noinspection UnnecessaryLocalVariableJS
-          const output = `${params.seriesName} : ${params.value.toFixed(2)} $`; // @todo formatCurrency()
-          // let output = '<b>' + params[0].name + '</b><br/>'
-          //   for (let i = 0 ; i < params.length ; i++) {
-          //     if (params[i].value !== 0) {
-          //       output += `${params[i].marker} <b>${params[i].seriesName}</b> : ${params[i].value.toFixed(2)} $`
-          //       if (i != params.length - 1) { // Append a <br/> tag if not last in loop
-          //         output += '<br/>'
-          //       }
-          //     }
-          //   }
-          //
-          return output;
-        },
-      },
-      legend: {
-        data: [],
-      },
-
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: {
-        type: 'category',
-        data: [],
-        // scale       : true,
-        boundaryGap: false,
-      },
-      yAxis: {
-        scale: true,
-        type: 'value',
-      },
-      // dataZoom : [
-      //   {
-      //     type  : 'inside',
-      //     start : 50,
-      //     end   : 100,
-      //   },
-      //   {
-      //     show  : true,
-      //     type  : 'slider',
-      //     top   : '90%',
-      //     start : 50,
-      //     end   : 100,
-      //   },
-      // ],
-      series: [],
-    });
-
-    const reloadData = async (min?: Dayjs, max?: Dayjs) => {
+const option = ref({
+  tooltip: {
+    trigger: 'item',
+    animation: false,
+    axisPointer: {
+      type: 'cross',
+    },
+    // appendToBody : true,
+    // order: 'valueDesc',
+    formatter(params) {
       // noinspection UnnecessaryLocalVariableJS
-      const { series, dates, legend } = await makeSeries();
+      const output = `${params.seriesName} : ${params.value.toFixed(2)} $`; // @todo formatCurrency()
+      // let output = '<b>' + params[0].name + '</b><br/>'
+      //   for (let i = 0 ; i < params.length ; i++) {
+      //     if (params[i].value !== 0) {
+      //       output += `${params[i].marker} <b>${params[i].seriesName}</b> : ${params[i].value.toFixed(2)} $`
+      //       if (i != params.length - 1) { // Append a <br/> tag if not last in loop
+      //         output += '<br/>'
+      //       }
+      //     }
+      //   }
+      //
+      return output;
+    },
+  },
+  legend: {
+    data: [],
+  },
 
-      option.value.xAxis.data = dates;
-      option.value.legend.data = legend;
-      option.value.series = series;
-      loading.value = false;
-    };
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
+  xAxis: {
+    type: 'category',
+    data: [],
+    // scale       : true,
+    boundaryGap: false,
+  },
+  yAxis: {
+    scale: true,
+    type: 'value',
+  },
+  // dataZoom : [
+  //   {
+  //     type  : 'inside',
+  //     start : 50,
+  //     end   : 100,
+  //   },
+  //   {
+  //     show  : true,
+  //     type  : 'slider',
+  //     top   : '90%',
+  //     start : 50,
+  //     end   : 100,
+  //   },
+  // ],
+  series: [],
+});
 
-    const scaleClicked = async (label: string) => {
-      currentScale = reactive(getScaleByLabel(label));
-      currentScaleLabel.value = currentScale.label;
+const reloadData = async (min?: Dayjs, max?: Dayjs) => {
+  // noinspection UnnecessaryLocalVariableJS
+  const { series, dates, legend } = await makeSeries();
 
-      await reloadData();
-    };
+  option.value.xAxis.data = dates;
+  option.value.legend.data = legend;
+  option.value.series = series;
+  loading.value = false;
+};
 
-    const onDataZoom = async event => {
-      /*
+const scaleClicked = async (label: string) => {
+  currentScale = reactive(getScaleByLabel(label));
+  currentScaleLabel.value = currentScale.label;
+
+  await reloadData();
+};
+
+const onDataZoom = async event => {
+  /*
       /// @see https://echarts.apache.org/en/api.html#echartsInstance.dispatchAction
       const {start, end} = Array.isArray(event.batch) ? event.batch.slice(-1).pop() : event
 
@@ -274,25 +266,12 @@ export default defineComponent({
         //await reloadData(min, max)
       }
 */
-    };
+};
 
-    //watch(() => props.assetSymbol, () => reloadData())
+//watch(() => props.assetSymbol, () => reloadData())
 
-    onBeforeMount(async () => {
-      await reloadData();
-    });
-
-    return {
-      theChart,
-      timeScales,
-      option,
-      onDataZoom,
-      scaleClicked,
-      currentScale,
-      currentScaleLabel,
-      loading,
-    };
-  },
+onBeforeMount(async () => {
+  await reloadData();
 });
 </script>
 <style scoped>

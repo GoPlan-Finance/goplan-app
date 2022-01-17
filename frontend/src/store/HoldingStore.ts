@@ -1,6 +1,6 @@
 import { Holding } from '@common/models/Holding';
 import { HoldingHelper } from '@store/Holding/HoldingHelper';
-import { Query } from '@goplan-finance/utils';
+import { ArrayUtils, Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { useAssetPriceStore } from './';
@@ -8,6 +8,12 @@ import { useAssetPriceStore } from './';
 interface StoreState {
   subscriptionPromise: Promise<void>;
   holdings: Holding[];
+}
+
+export interface TypeAllocation {
+  type: string;
+  initialValue: number;
+  currentValue: number;
 }
 
 export const useHoldingStore = defineStore({
@@ -18,7 +24,57 @@ export const useHoldingStore = defineStore({
     subscriptionPromise: null,
     holdings: [],
   }),
-  getters: {},
+  getters: {
+    /**
+     * Get an array of unique symbol types (Common Stock, Fund, ETF, ...)
+     */
+    types(): string[] {
+      return [...new Set<string>(this.holdings.map((holding: Holding) => holding.symbol.type))];
+    },
+
+    typeAllocations(): TypeAllocation[] {
+      return this.types.map(type => {
+        let initialValue = 0;
+        let currentValue = 0;
+
+        this.holdings.forEach((holding: Holding) => {
+          if (holding.symbol.type === type) {
+            initialValue += holding.openTotalPrice;
+            currentValue += holding.lastPrice?.price * holding.openQty;
+          }
+        });
+
+        return {
+          type,
+          initialValue,
+          currentValue,
+        };
+      });
+    },
+
+    openHoldings(): Holding[] {
+      return this.holdings.filter((holding: Holding) => holding.openQty !== 0);
+    },
+
+    closedHoldings(): Holding[] {
+      return this.holdings.filter((holding: Holding) => holding.openQty === 0);
+    },
+
+    totalBookValue(): number {
+      return ArrayUtils.sum<Holding>(this.holdings, elem => {
+        return elem.openTotalPrice; // TODO: Handle different currencies
+      });
+    },
+
+    totalOpen(): number {
+      return ArrayUtils.sum<Holding>(this.holdings, elem => {
+        if (!elem.lastPrice) {
+          return;
+        }
+        return elem.openQty * elem.lastPrice.open; // TODO: Handle different currencies
+      });
+    },
+  },
 
   actions: {
     async _init() {
