@@ -16,5 +16,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="eodhistoricaldata-openapi" />
+    <orderEntry type="module" module-name="utils" />
   </component>
 </module>

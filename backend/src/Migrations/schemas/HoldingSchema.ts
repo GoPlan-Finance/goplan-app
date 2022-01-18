@@ -4,7 +4,6 @@ export default SchemaMigrations.makeSchema('Holding', {
   fields: {
     createdBy: { type: 'Pointer', targetClass: '_User' },
     symbol: { type: 'Pointer', targetClass: 'AssetSymbol', required: false },
-    symbolName: { type: 'String' },
     currency: { type: 'String' },
 
     isOutdated: { type: 'Boolean', defaultValue: true },

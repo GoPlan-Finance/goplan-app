@@ -1,5 +1,9 @@
 import { AssetSymbol, Holding } from '.';
 import { SecureObject } from '@goplan-finance/utils';
+import {SymbolDataResolution} from "@common/types/types";
+
+
+
 
 export class HoldingTimeSeries extends SecureObject {
   static className = 'HoldingTimeSeries';
@@ -40,11 +44,11 @@ export class HoldingTimeSeries extends SecureObject {
     this.set('startAt', value);
   }
 
-  get period(): string {
+  get period(): SymbolDataResolution {
     return this.get('period');
   }
 
-  set period(value: string) {
+  set period(value: SymbolDataResolution) {
     this.set('period', value);
   }
 

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
 import {
@@ -76,17 +76,13 @@ import {
   VisualMapContinuousComponent,
   VisualMapPiecewiseComponent,
 } from 'echarts/components'; // -----------------
-import { use } from 'echarts/core';
-import { CanvasRenderer } from 'echarts/renderers';
-import { defineComponent, onBeforeMount, reactive, ref } from 'vue';
-import VChart, { THEME_KEY } from 'vue-echarts';
-import {
-  CandleData,
-  getScaleByLabel,
-  getScaleForRange,
-  makeSeries,
-  timeScales,
-} from './useHoldingTimeSeries';
+import {use} from 'echarts/core';
+import {CanvasRenderer} from 'echarts/renderers';
+import {onBeforeMount, reactive, ref} from 'vue';
+import VChart from 'vue-echarts';
+import {CandleData, getScaleByLabel, makeSeries, timeScales,} from './useHoldingTimeSeries';
+import {SymbolDataResolution} from "@common/types/types";
+import {HoldingTimeSeriesHelper} from "@store/Holding/HoldingTimeSeriesHelper";
 
 dayjs.extend(duration);
 use([
@@ -150,8 +146,8 @@ use([
 // [THEME_KEY]: 'light',
 const loading = ref(true);
 const theChart = ref(null);
-const currentScaleLabel = ref('Today');
-let currentScale = reactive(getScaleByLabel('Today'));
+const currentScaleLabel = ref('3 M');
+let currentScale = reactive(getScaleByLabel('3 M'));
 
 const currentData: CandleData[] = [];
 
@@ -217,9 +213,15 @@ const option = ref({
   series: [],
 });
 
-const reloadData = async (min?: Dayjs, max?: Dayjs) => {
+const reloadData = async (period: SymbolDataResolution) => {
+
+  period =SymbolDataResolution.DAY
+
+  const to = HoldingTimeSeriesHelper.getStartOfPeriod(  dayjs(), period)
+  const from = HoldingTimeSeriesHelper.getEndOfPeriod(    dayjs().subtract(currentScale.visible), period)
+
   // noinspection UnnecessaryLocalVariableJS
-  const { series, dates, legend } = await makeSeries();
+  const { series, dates, legend } = await makeSeries(from, to, period);
 
   option.value.xAxis.data = dates;
   option.value.legend.data = legend;
@@ -231,8 +233,14 @@ const scaleClicked = async (label: string) => {
   currentScale = reactive(getScaleByLabel(label));
   currentScaleLabel.value = currentScale.label;
 
-  await reloadData();
+  await reloadData(currentScale.resolution);
 };
+
+
+onBeforeMount(async () => {
+  await reloadData(currentScale.resolution);
+});
+
 
 const onDataZoom = async event => {
   /*
@@ -270,9 +278,7 @@ const onDataZoom = async event => {
 
 //watch(() => props.assetSymbol, () => reloadData())
 
-onBeforeMount(async () => {
-  await reloadData();
-});
+
 </script>
 <style scoped>
 .chart {
