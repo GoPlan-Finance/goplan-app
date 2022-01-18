@@ -5,6 +5,7 @@ export enum ButtonType {
 
 export enum DataType {
   PERCENT = 'percent',
+  PERCENT_CHANGE = 'percentChange',
   STRING = 'string',
   MONEY_CHANGE = 'moneyChange',
   MONEY_RANGE = 'moneyRange',

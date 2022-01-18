@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { CurrencyDollarIcon } from '@heroicons/vue/solid';
+import { CurrencyDollarIcon } from '@heroicons/vue/outline';
 import DataField, { DataFieldItem } from '@components/base/DataField.vue';
 
 const props = defineProps<{

@@ -20,10 +20,13 @@ const props = withDefaults(
 );
 
 const redGreen = (value: number, formattedValue: string) => {
-  return `<span class="${value >= 0 ? 'text-green-500' : 'text-red-500'}">${formattedValue}</span>`;
+  return `<span class="${value >= 0 ? 'text-green-600' : 'text-red-600'}">${formattedValue}</span>`;
 };
 
 const getValue = computed(() => {
+  const positive = (props.data as number) > 0;
+  const formattedPercent = `${parseFloat(props.data as string).toFixed(2)} %`;
+
   switch (props.type) {
     case DataType.STRING:
       return props.data;
@@ -32,9 +35,16 @@ const getValue = computed(() => {
       return Number(props.data).toLocaleString();
 
     case DataType.PERCENT:
+      const value = parseFloat(props.data as string);
+      if (isNaN(Number(props.data))) {
+        return;
+      }
+      return `${parseFloat(props.data as string).toFixed(2)} %`;
+
+    case DataType.PERCENT_CHANGE:
       return redGreen(
         parseFloat(props.data as string),
-        `${parseFloat(props.data as string).toFixed(2)} %`
+        positive ? `+ ${formattedPercent}` : `- ${formattedPercent}`
       );
 
     case DataType.MONEY:
@@ -45,7 +55,6 @@ const getValue = computed(() => {
       ); /* @todo set currency */
 
     case DataType.MONEY_CHANGE:
-      const positive = (props.data as number) > 0;
       const formattedValue = CurrencyUtils.formatCurrency(props.data as number, 'USD', true);
       return redGreen(
         props.data as number,
