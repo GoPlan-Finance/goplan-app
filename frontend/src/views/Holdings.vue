@@ -2,17 +2,22 @@
   <HeadlineActions :headline="$t('holdings.headline')">
     <BuySellAsset />
   </HeadlineActions>
-  <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
-  <HoldingsTable
-    :holdings="holdingStore.openHoldings"
-    :total-open="holdingStore.totalOpen"
-    :total-book-value="holdingStore.totalBookValue"
-    :table-layout="openTableLayout"
-  />
-  <!--  <br />-->
-  <!--  <br />-->
-  <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
-  <!--  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />-->
+  <template v-if="holdingStore.hasOpenHoldings">
+    <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
+    <HoldingsTable
+      :holdings="holdingStore.openHoldings"
+      :total-open="holdingStore.totalOpen"
+      :total-book-value="holdingStore.totalBookValue"
+      :table-layout="openTableLayout"
+    />
+    <!--  <br />-->
+    <!--  <br />-->
+    <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
+    <!--  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />-->
+  </template>
+  <GEmptyState v-else>
+    {{ t('No Holdings') }}
+  </GEmptyState>
 </template>
 
 <script setup lang="ts">
@@ -24,6 +29,10 @@ import { computed } from 'vue';
 import { useHoldingStore } from '@/store';
 import { Holding } from '@models';
 import { TableLayoutCollection } from '@components/DataTable';
+import GEmptyState from '@components/base/GEmptyState.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const openTableLayout: TableLayoutCollection = {
   [Screens.DEFAULT]: [
