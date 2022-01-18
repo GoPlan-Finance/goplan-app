@@ -10,6 +10,8 @@ allocations:
       type: Type
       initialValue: Initial Value
       currentValue: Current Value
+      openChangeTotal: Change Total
+      openChangePercent: Change Percent
       weight: % Porfolio
 details:
   address: Address
