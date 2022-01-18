@@ -79,6 +79,13 @@ class SubscriptionsHandler<T> {
                 false
               );
 
+              if (isNaN(result.timestamp)) {
+                console.error(
+                  `Invalid timestamp: ${result.timestamp}, for asset: ${assetSymbol.symbol}`
+                );
+                return;
+              }
+
               assetPrice.symbol = assetSymbol;
               assetPrice.recordedAt = dayjs.unix(result.timestamp).toDate();
               assetPrice.price = result.open; //@todo verify if same as price
