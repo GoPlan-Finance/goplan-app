@@ -80,6 +80,7 @@ const formatCurrency = CurrencyUtils.formatCurrency;
 const props = defineProps<{
   holdings: Holding[];
   totalOpen: number;
+  totalBookValue: number;
   tableLayout: TableLayoutCollection;
 }>();
 
