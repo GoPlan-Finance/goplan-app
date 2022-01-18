@@ -6,6 +6,7 @@
   <HoldingsTable
     :holdings="holdingStore.openHoldings"
     :total-open="holdingStore.totalOpen"
+    :total-book-value="holdingStore.totalBookValue"
     :table-layout="openTableLayout"
   />
   <!--  <br />-->
