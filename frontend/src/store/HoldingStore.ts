@@ -56,6 +56,10 @@ export const useHoldingStore = defineStore({
       return this.holdings.filter((holding: Holding) => holding.openQty !== 0);
     },
 
+    hasOpenHoldings(): boolean {
+      return this.openHoldings.length > 0;
+    },
+
     closedHoldings(): Holding[] {
       return this.holdings.filter((holding: Holding) => holding.openQty === 0);
     },
@@ -74,6 +78,14 @@ export const useHoldingStore = defineStore({
         return elem.openQty * elem.lastPrice.open; // TODO: Handle different currencies
       });
     },
+
+    totalChangeValue(): number {
+      return this.totalOpen - this.totalBookValue;
+    },
+
+    totalChangePercent(): number {
+      return (this.totalChangeValue / this.totalBookValue) * 100;
+    },
   },
 
   actions: {
@@ -85,7 +97,8 @@ export const useHoldingStore = defineStore({
 
       const symbols = ref([]);
 
-      const q = Query.create(Holding).limit(9999);
+      const q = Query.create(Holding);
+      q.limit(9999);
       q.include('symbol');
 
       await q.liveQuery(this.holdings, async (holding, op) => {
@@ -97,7 +110,7 @@ export const useHoldingStore = defineStore({
 
         const index = symbols.value.findIndex(symbol => symbol.id === holding.symbol.id);
 
-        if (op === 'deleted') {
+        if (op === 'delete') {
           symbols.value.splice(index, 1);
         } else if (index === -1) {
           symbols.value.push(holding.symbol);

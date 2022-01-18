@@ -8,23 +8,21 @@
     />
     <GStatistic
       class="text-right"
-      color="bg-green-500"
-      :label="t('Total Increase')"
-      :data="holdingStore.totalOpen - holdingStore.totalBookValue"
+      color="bg-green-600"
+      :label="t('Total Change')"
+      :data="holdingStore.totalChangeValue"
       :type="DataType.MONEY_CHANGE"
     >
       <template #icon>
-        <ArrowUpIcon />
+        <ArrowUpIcon class="rotate-45" />
       </template>
     </GStatistic>
     <GStatistic
       class="text-right"
-      color="bg-blue-500"
-      :label="t('Percent Increase')"
-      :data="
-        ((holdingStore.totalOpen - holdingStore.totalBookValue) / holdingStore.totalBookValue) * 100
-      "
-      :type="DataType.PERCENT"
+      color="bg-blue-600"
+      :label="t('Percent Change')"
+      :data="holdingStore.totalChangePercent"
+      :type="DataType.PERCENT_CHANGE"
     >
       <template #icon>
         <ClockIcon />
