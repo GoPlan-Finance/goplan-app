@@ -1,5 +1,5 @@
 <template>
-  <h2 class="font-bold">Asset Allocation</h2>
+  <GHeadline class="mb-4">{{ t('Asset Allocations') }}</GHeadline>
   <v-chart class="chart" :option="option" autoresize />
 </template>
 
@@ -11,8 +11,11 @@ import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/compo
 import VChart, { THEME_KEY } from 'vue-echarts';
 import { ref, provide, computed } from 'vue';
 import { useHoldingStore } from '@/store';
+import { useI18n } from 'vue-i18n';
 
 use([SVGRenderer, PieChart, TooltipComponent, LegendComponent]);
+
+const { t } = useI18n();
 
 const holdingStore = useHoldingStore();
 await holdingStore.subscribe();

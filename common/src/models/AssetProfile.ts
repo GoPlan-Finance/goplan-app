@@ -85,6 +85,10 @@ export class AssetProfile extends BaseObject {
     return this.get('description');
   }
 
+  get isin(): string {
+    return this.get('isin');
+  }
+
   get ceo(): string {
     return this.get('ceo');
   }

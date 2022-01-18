@@ -37,22 +37,19 @@
 
 <script setup lang="ts">
 import { AssetProfile, AssetSymbol } from '@common/models';
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import DataField from './base/DataField.vue';
 import { DataFieldItem } from '@components/base/DataField.vue';
+import { DataType } from '@/types';
 
 const props = defineProps<{
   assetSymbol: AssetSymbol;
 }>();
 
-const assetProfile = ref<AssetProfile>();
-const loading = ref(true);
-const details = ref<DataFieldItem[]>([]);
+const assetProfile = ref(await AssetProfile.fetchProfile(props.assetSymbol));
 
-onBeforeMount(async () => {
-  assetProfile.value = await AssetProfile.fetchProfile(props.assetSymbol);
-  loading.value = false;
-  details.value = [
+const details = computed<DataFieldItem[]>(() => {
+  return [
     {
       label: 'company_name',
       data: assetProfile.value.name,
@@ -61,10 +58,10 @@ onBeforeMount(async () => {
       label: 'symbol',
       data: assetProfile.value.symbol.tickerName,
     },
-    // {
-    //   label : 'isin',
-    //   data  : info.isin
-    // },
+    {
+      label: 'isin',
+      data: assetProfile.value.isin,
+    },
     {
       label: 'exchange',
       data: assetProfile.value.exchange.name,
@@ -86,7 +83,7 @@ onBeforeMount(async () => {
       data: `${assetProfile.value.address}, ${assetProfile.value.zip} ${assetProfile.value.city}`,
     },
     {
-      type: 'number',
+      type: DataType.NUMBER,
       label: 'full_time_employees',
       data: assetProfile.value.fullTimeEmployees,
     },
@@ -95,12 +92,12 @@ onBeforeMount(async () => {
     //   data  : assetProfile.value.ceo,
     // },
     {
-      type: 'url',
+      type: DataType.URL,
       label: 'website',
       data: assetProfile.value.website,
     },
     {
-      type: 'date',
+      type: DataType.NUMBER,
       label: 'ipo_date',
       data: assetProfile.value.ipoDate,
     },
