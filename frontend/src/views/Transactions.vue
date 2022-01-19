@@ -4,7 +4,7 @@
     v-model:show="showExportModal"
   />
   <ImportTransactionsModal v-model:show="showImportModal" />
-  <HeadlineActions :headline="$t('transactions.headline')">
+  <HeadlineActions :headline="t('transactions.headline')">
     <BuySellAsset />
     <GDropdown>
       <template #button="{ toggle }">
@@ -35,6 +35,9 @@
       <template #filters(accounts)="{ filter }">
         <AccountSelect v-model="filter.value" class="w-full border-0" />
       </template>
+      <template #filters(type)="{ filter }">
+        <TransactionTypeSelect v-model:value="filter.value" class="w-full border-0" />
+      </template>
       <template #field(name)="{ value, row }">
         <AppLink v-if="row.symbol" :ticker="row.symbolName" class="font-bold" to="ticker_details">
           <p class="font-normal text-sm">
@@ -57,12 +60,44 @@
         </span>
       </template>
       <template #field(type)="{ value }">
-        <div :class="value === 'BUY' ? 'text-blue-500' : 'text-yellow-500'" class="flex gap-2">
-          <ArrowCircleLeftIcon
-            :class="value === 'BUY' ? 'transform rotate-180' : ''"
-            class="h-6 w-6"
-          />
-          {{ $t(config.settings.translationPrefix + '.' + value.toLowerCase()) }}
+        <div v-if="value.toLowerCase() === TransactionType.BUY" class="flex gap-2 text-blue-500">
+          <ArrowCircleLeftIcon class="h-6 w-6 transform rotate-180" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
+          v-else-if="value.toLowerCase() === TransactionType.SELL"
+          class="flex gap-2 text-yellow-500"
+        >
+          <ArrowCircleLeftIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
+          v-else-if="value.toLowerCase() === TransactionType.DEPOSIT"
+          class="flex gap-2 text-green-600"
+        >
+          <PlusCircleIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
+          v-else-if="value.toLowerCase() === TransactionType.WITHDRAW"
+          class="flex gap-2 text-orange-500"
+        >
+          <MinusCircleIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
+          v-else-if="value.toLowerCase() === TransactionType.FEES"
+          class="flex gap-2 text-gray-500"
+        >
+          <InformationCircleIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
+          v-else-if="value.toLowerCase() === TransactionType.DIVIDENDS"
+          class="flex gap-2 text-lime-600"
+        >
+          <DotsCircleHorizontalIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
         </div>
       </template>
 
@@ -98,13 +133,24 @@ import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue';
 import { CurrencyUtils, StringUtils } from '@goplan-finance/utils';
-import { ArrowCircleLeftIcon, PencilIcon, TrashIcon, CogIcon } from '@heroicons/vue/solid';
+import {
+  ArrowCircleLeftIcon,
+  PencilIcon,
+  TrashIcon,
+  CogIcon,
+  PlusCircleIcon,
+  MinusCircleIcon,
+  InformationCircleIcon,
+  DotsCircleHorizontalIcon,
+} from '@heroicons/vue/solid';
 import { useI18n } from 'vue-i18n';
 import ExportTransactionsModal from '@components/Transactions/ExportTransactionsModal.vue';
 import AccountSelect from '@components/AccountSelect.vue';
 import GDropdown from '@components/base/GDropdown.vue';
 import { ButtonType } from '@/types';
 import ButtonDefault from '@components/base/ButtonDefault.vue';
+import TransactionTypeSelect from '@components/TransactionTypeSelect.vue';
+import { TransactionType } from '@models/Transaction';
 
 const { t } = useI18n();
 
@@ -190,33 +236,13 @@ const config = reactive({
       },
     },
     type: {
-      value: '',
-      options: [
-        {
-          value: '',
-          display: t('All Types'),
-        },
-        {
-          value: 'BUY',
-          label: t('Buy'),
-        },
-        {
-          value: 'SELL',
-          label: t('Sell'),
-        },
-        {
-          value: 'DIVIDENDS',
-          label: t('Dividends'),
-        },
-        {
-          value: 'FEES',
-          label: t('Fees'),
-        },
-        {
-          value: 'TRANSFER',
-          label: t('Transfers'),
-        },
-      ],
+      align: 'left',
+      value: null,
+      options: [],
+      handler: (value, row: Transaction) => {
+        console.log(value);
+        return row.type === value;
+      },
     },
   },
   search: {

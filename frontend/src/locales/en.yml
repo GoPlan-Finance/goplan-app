@@ -86,6 +86,13 @@ transactions:
     transfer: Transfer
     type: Type
     value: Value
+  type:
+    deposit: Deposit
+    withdraw: Withdraw
+    buy: Buy
+    sell: Sell
+    dividends: Dividends
+    fees: Fees
 watchlist:
   table:
     createdAt: Date Added
