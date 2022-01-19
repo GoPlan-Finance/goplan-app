@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 import * as duration from 'dayjs/plugin/duration';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
@@ -24,6 +25,7 @@ import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+dayjs.extend(customParseFormat)
 
 const app = createApp(App);
 
