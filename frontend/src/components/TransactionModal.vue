@@ -3,6 +3,7 @@
     v-model="isModalOpen"
     :title="transaction ? t('Edit Transaction') : t('Add Transaction')"
     @opened="modalOpened"
+    @closed="reset"
   >
     <template #button>
       <slot name="button">
@@ -106,7 +107,7 @@ const createTransaction = () => {
   newTransaction.executedAt = new Date();
   newTransaction.quantity = null;
   newTransaction.price = null;
-  newTransaction.type = TransactionType.SELL;
+  newTransaction.type = TransactionType.BUY;
   newTransaction.executedAt = new Date();
   return newTransaction;
 };
@@ -153,8 +154,8 @@ const showQuantityInput = computed<boolean>(() => {
 });
 
 const isValid = computed<boolean>(() => {
-  if (!transactionInternal.value.symbol) {
-    // errors.symbol = t('Please select an asset');
+  if (!transactionInternal.value.symbol && showAssetInput) {
+    errors.symbol = t('Please select an asset');
   } else {
     errors.symbol = null;
   }
@@ -171,10 +172,13 @@ const isValid = computed<boolean>(() => {
   } else {
     errors.executedAt = null;
   }
-  if (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity)) {
-    // errors.quantity = t('Please select a quantity');
-  } else if (transactionInternal.value.quantity <= 0) {
-    // errors.quantity = t('Please select a quantity above zero');
+  if (
+    showQuantityInput &&
+    (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity))
+  ) {
+    errors.quantity = t('Please select a quantity');
+  } else if (showQuantityInput && transactionInternal.value.quantity <= 0) {
+    errors.quantity = t('Please select a quantity above zero');
   } else {
     errors.quantity = null;
   }
@@ -200,7 +204,8 @@ const save = async () => {
   transactionInternal.value.totalExcludingFees =
     transactionInternal.value.price * transactionInternal.value.quantity;
 
-  transactionInternal.value.currency = transactionInternal.value.symbol?.currency ?? 'USD';
+  transactionInternal.value.currency =
+    transactionInternal.value.symbol?.currency ?? transactionInternal.value.account.currency;
 
   try {
     await transactionInternal.value.save();

@@ -5,7 +5,15 @@
   />
   <ImportTransactionsModal v-model:show="showImportModal" />
   <HeadlineActions :headline="t('transactions.headline')">
-    <BuySellAsset />
+    <BuySellAsset>
+      <template #button>
+        <ButtonDefault :label="t('Add Transaction')">
+          <template #before>
+            <PlusCircleIcon class="h-6 w-6" />
+          </template>
+        </ButtonDefault>
+      </template>
+    </BuySellAsset>
     <GDropdown>
       <template #button="{ toggle }">
         <ButtonDefault :type="ButtonType.SECONDARY" label="Export/Import" @click="toggle">
@@ -102,13 +110,11 @@
       </template>
 
       <template #actions="{ row }">
-        <BuySellAsset v-if="row.type === 'BUY' || row.type === 'SELL'" :transaction="row">
-          <!--      @todo case sensitive row.type-->
+        <BuySellAsset :transaction="row">
           <template #button>
             <PencilIcon class="h-6 w-6 cursor-pointer hover:text-blue-600 text-gray-300" />
           </template>
         </BuySellAsset>
-        <div v-else class="h-6 w-6" />
         <TrashIcon
           class="h-6 w-6 cursor-pointer hover:text-red-600 text-gray-300"
           @click="remove(row)"
@@ -127,7 +133,7 @@ import { useAccountStore, useTransactionStore } from '@/store';
 import { Screens } from '@/utils/screens';
 import dayjs from 'dayjs';
 import { onBeforeMount, reactive, ref, watch } from 'vue';
-import BuySellAsset from '../components/BuySellAsset.vue';
+import BuySellAsset from '@components/TransactionModal.vue';
 import DataTable from '../components/DataTable.vue';
 import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
@@ -240,7 +246,6 @@ const config = reactive({
       value: null,
       options: [],
       handler: (value, row: Transaction) => {
-        console.log(value);
         return row.type === value;
       },
     },
