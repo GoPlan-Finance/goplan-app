@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -76,13 +76,13 @@ import {
   VisualMapContinuousComponent,
   VisualMapPiecewiseComponent,
 } from 'echarts/components'; // -----------------
-import {use} from 'echarts/core';
-import {CanvasRenderer} from 'echarts/renderers';
-import {onBeforeMount, reactive, ref} from 'vue';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { onBeforeMount, reactive, ref } from 'vue';
 import VChart from 'vue-echarts';
-import {CandleData, getScaleByLabel, makeSeries, timeScales,} from './useHoldingTimeSeries';
-import {SymbolDataResolution} from "@common/types/types";
-import {HoldingTimeSeriesHelper} from "@store/Holding/HoldingTimeSeriesHelper";
+import { CandleData, getScaleByLabel, makeSeries, timeScales } from './useHoldingTimeSeries';
+import { SymbolDataResolution } from '@common/types/types';
+import { HoldingTimeSeriesHelper } from '@store/Holding/HoldingTimeSeriesHelper';
 
 dayjs.extend(duration);
 use([
@@ -213,15 +213,15 @@ const option = ref({
   series: [],
 });
 
-const reloadData = async (period: SymbolDataResolution) => {
-
-  period =SymbolDataResolution.DAY
-
-  const to = HoldingTimeSeriesHelper.getStartOfPeriod(  dayjs(), period)
-  const from = HoldingTimeSeriesHelper.getEndOfPeriod(    dayjs().subtract(currentScale.visible), period)
+const reloadData = async () => {
+  const to = HoldingTimeSeriesHelper.getStartOfPeriod(dayjs(), currentScale.resolution);
+  const from = HoldingTimeSeriesHelper.getEndOfPeriod(
+    dayjs().subtract(currentScale.visible),
+    currentScale.resolution
+  );
 
   // noinspection UnnecessaryLocalVariableJS
-  const { series, dates, legend } = await makeSeries(from, to, period);
+  const { series, dates, legend } = await makeSeries(from, to, currentScale.resolution);
 
   option.value.xAxis.data = dates;
   option.value.legend.data = legend;
@@ -233,14 +233,12 @@ const scaleClicked = async (label: string) => {
   currentScale = reactive(getScaleByLabel(label));
   currentScaleLabel.value = currentScale.label;
 
-  await reloadData(currentScale.resolution);
+  await reloadData();
 };
 
-
 onBeforeMount(async () => {
-  await reloadData(currentScale.resolution);
+  await reloadData();
 });
-
 
 const onDataZoom = async event => {
   /*

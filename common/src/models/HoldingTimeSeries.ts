@@ -1,9 +1,6 @@
 import { AssetSymbol, Holding } from '.';
 import { SecureObject } from '@goplan-finance/utils';
-import {SymbolDataResolution} from "@common/types/types";
-
-
-
+import { SymbolDataResolution } from '@common/types/types';
 
 export class HoldingTimeSeries extends SecureObject {
   static className = 'HoldingTimeSeries';
