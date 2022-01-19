@@ -1,9 +1,9 @@
 import { Holding, Transaction } from '@common/models';
 import { Query } from '@goplan-finance/utils';
-import { HoldingHistoryHelper } from '@store/Holding/HoldingHistoryHelper';
 import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
 import { useTransactionStore } from '../';
+import { HoldingTimeSeriesHelper } from '@store/Holding/HoldingTimeSeriesHelper';
 
 const holdingMutex = new Mutex();
 
@@ -14,7 +14,7 @@ export class HoldingHelper {
 
     console.log(`Updating holding "${holding.symbolName}"`);
 
-    const transactions = transactionsStore.transactions.filter(transaction => {
+    const transactions: Transaction[] = transactionsStore.transactions.filter(transaction => {
       if (
         !transaction.symbolName ||
         !holding.symbolName ||
@@ -102,7 +102,7 @@ export class HoldingHelper {
 
     await holding.save();
 
-    await HoldingHistoryHelper.updateHistory(holding, transactions);
+    await HoldingTimeSeriesHelper.updateHistory(holding, transactions);
   }
 
   public static async createMissingHoldings() {
@@ -137,10 +137,13 @@ export class HoldingHelper {
 
   public static async findOutdatedHoldings() {
     const isOutdatedQuery = (): Query<Holding> => {
-      return Query.or(
+      const q = Query.or(
         Query.create(Holding).notEqualTo('isOutdated', false),
         Query.create(Holding).doesNotExist('isOutdated')
-      ).include('symbol');
+      );
+
+      q.include('symbol');
+      return q;
     };
 
     const holdings = await isOutdatedQuery().findAll();

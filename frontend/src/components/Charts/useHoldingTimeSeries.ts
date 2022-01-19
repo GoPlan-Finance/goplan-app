@@ -7,6 +7,7 @@ import { HoldingTimeSeries } from '@common/models';
 import { ArrayUtils, Query } from '@goplan-finance/utils';
 import dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { SymbolDataResolution } from '@common/types/types';
 
 export type CandleData = {
   date: dayjs.Dayjs | undefined;
@@ -22,7 +23,7 @@ dayjs.extend(duration);
 export interface TimeScaleInterface {
   label: string;
   visible: duration.Duration;
-  resolution: string; // @todo use Backend Type.Resoulution
+  resolution: SymbolDataResolution; // @todo use Backend Type.Resoulution
 }
 
 // interface TimeRange {
@@ -36,46 +37,51 @@ export const timeScales: TimeScaleInterface[] = [
   //     visible: dayjs.duration(1, 'hour'),
   //     resolution: 'minute',
   // },
+  /*
   {
     label: 'Today',
     visible: dayjs.duration(1, 'day'),
-    resolution: '1minute',
+    // resolution: SymbolDataResolution._1_MINUTE,
+    resolution: SymbolDataResolution.DAY,
   },
   {
     label: 'Week',
     visible: dayjs.duration(7, 'day'),
-    resolution: '15minutes',
+    // resolution: SymbolDataResolution._15_MINUTES,
+    resolution: SymbolDataResolution.DAY,
   },
+
   {
     label: 'Month',
     visible: dayjs.duration(30, 'day'),
-    resolution: 'hour',
+    resolution: SymbolDataResolution.DAY,
   },
+    */
   {
     label: '3 M',
     visible: dayjs.duration(3, 'month'),
-    resolution: 'hour',
+    resolution: SymbolDataResolution.DAY,
   },
   {
     label: '1 Y',
     visible: dayjs.duration(1, 'year'),
-    resolution: 'day',
+    resolution: SymbolDataResolution.DAY,
   },
   {
     label: '3 Y',
     visible: dayjs.duration(3, 'year'),
-    resolution: 'week',
+    resolution: SymbolDataResolution.WEEK,
   },
   {
     label: '10 Y',
     visible: dayjs.duration(10, 'year'),
-    resolution: 'week',
+    resolution: SymbolDataResolution.WEEK,
     //resolution : 'month',
   },
   {
     label: 'All Time',
     visible: dayjs.duration(1000, 'year'),
-    resolution: 'week',
+    resolution: SymbolDataResolution.MONTH,
     //resolution : 'month',
   },
 ];
@@ -102,13 +108,18 @@ export const getScaleByLabel = (label: string): TimeScaleInterface => {
   return scale;
 };
 
-export const loadData = async (): Promise<unknown> => {
+export const loadData = async (
+  from: dayjs.Dayjs,
+  to: dayjs.Dayjs,
+  period: SymbolDataResolution
+): Promise<unknown> => {
   const q = Query.create(HoldingTimeSeries);
-  q.equalTo('period', 'day');
-  q.ascending('startAt');
-  q.include('holding');
-  q.include('holding.symbol');
 
+  q.equalTo('period', period);
+  q.greaterThanOrEqualTo('startAt', from.toDate());
+  q.lessThanOrEqualTo('startAt', to.toDate());
+
+  q.ascending('startAt');
   q.limit(9999999);
   const holdingTimeSeries = await q.find();
 
@@ -139,8 +150,12 @@ export const loadData = async (): Promise<unknown> => {
   };
 };
 
-export const makeSeries = async (): Promise<unknown> => {
-  const { series, dates, symbols } = await loadData();
+export const makeSeries = async (
+  from: dayjs.Dayjs,
+  to: dayjs.Dayjs,
+  period: SymbolDataResolution
+): Promise<unknown> => {
+  const { series, dates, symbols } = await loadData(from, to, period);
   const chartSeries = [];
 
   for (const [symbol, data] of Object.entries(series)) {

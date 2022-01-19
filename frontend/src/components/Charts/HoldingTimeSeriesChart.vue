@@ -20,8 +20,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import dayjs, { Dayjs } from 'dayjs';
+<script lang="ts" setup>
+import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
 import {
@@ -78,15 +78,11 @@ import {
 } from 'echarts/components'; // -----------------
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { defineComponent, onBeforeMount, reactive, ref } from 'vue';
-import VChart, { THEME_KEY } from 'vue-echarts';
-import {
-  CandleData,
-  getScaleByLabel,
-  getScaleForRange,
-  makeSeries,
-  timeScales,
-} from './useHoldingTimeSeries';
+import { onBeforeMount, reactive, ref } from 'vue';
+import VChart from 'vue-echarts';
+import { CandleData, getScaleByLabel, makeSeries, timeScales } from './useHoldingTimeSeries';
+import { SymbolDataResolution } from '@common/types/types';
+import { HoldingTimeSeriesHelper } from '@store/Holding/HoldingTimeSeriesHelper';
 
 dayjs.extend(duration);
 use([
@@ -150,8 +146,8 @@ use([
 // [THEME_KEY]: 'light',
 const loading = ref(true);
 const theChart = ref(null);
-const currentScaleLabel = ref('Today');
-let currentScale = reactive(getScaleByLabel('Today'));
+const currentScaleLabel = ref('3 M');
+let currentScale = reactive(getScaleByLabel('3 M'));
 
 const currentData: CandleData[] = [];
 
@@ -217,9 +213,15 @@ const option = ref({
   series: [],
 });
 
-const reloadData = async (min?: Dayjs, max?: Dayjs) => {
+const reloadData = async () => {
+  const to = HoldingTimeSeriesHelper.getStartOfPeriod(dayjs(), currentScale.resolution);
+  const from = HoldingTimeSeriesHelper.getEndOfPeriod(
+    dayjs().subtract(currentScale.visible),
+    currentScale.resolution
+  );
+
   // noinspection UnnecessaryLocalVariableJS
-  const { series, dates, legend } = await makeSeries();
+  const { series, dates, legend } = await makeSeries(from, to, currentScale.resolution);
 
   option.value.xAxis.data = dates;
   option.value.legend.data = legend;
@@ -233,6 +235,8 @@ const scaleClicked = async (label: string) => {
 
   await reloadData();
 };
+
+  await reloadData();
 
 const onDataZoom = async event => {
   /*
@@ -270,9 +274,7 @@ const onDataZoom = async event => {
 
 //watch(() => props.assetSymbol, () => reloadData())
 
-onBeforeMount(async () => {
-  await reloadData();
-});
+
 </script>
 <style scoped>
 .chart {

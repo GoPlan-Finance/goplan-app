@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/GoPlan-app.iml" filepath="$PROJECT_DIR$/.idea/GoPlan-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../eodhistoricaldata-openapi/.idea/eodhistoricaldata-openapi.iml" filepath="$PROJECT_DIR$/../eodhistoricaldata-openapi/.idea/eodhistoricaldata-openapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../utils/.idea/utils.iml" filepath="$PROJECT_DIR$/../utils/.idea/utils.iml" />
     </modules>
   </component>
 </project>
