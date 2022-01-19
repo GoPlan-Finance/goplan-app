@@ -236,9 +236,7 @@ const scaleClicked = async (label: string) => {
   await reloadData();
 };
 
-onBeforeMount(async () => {
   await reloadData();
-});
 
 const onDataZoom = async event => {
   /*
