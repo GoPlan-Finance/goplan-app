@@ -154,7 +154,7 @@ const showQuantityInput = computed<boolean>(() => {
 });
 
 const isValid = computed<boolean>(() => {
-  if (!transactionInternal.value.symbol && showAssetInput) {
+  if (!transactionInternal.value.symbol && showAssetInput.value) {
     errors.symbol = t('Please select an asset');
   } else {
     errors.symbol = null;
@@ -173,11 +173,11 @@ const isValid = computed<boolean>(() => {
     errors.executedAt = null;
   }
   if (
-    showQuantityInput &&
+    showQuantityInput.value &&
     (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity))
   ) {
     errors.quantity = t('Please select a quantity');
-  } else if (showQuantityInput && transactionInternal.value.quantity <= 0) {
+  } else if (showQuantityInput.value && transactionInternal.value.quantity <= 0) {
     errors.quantity = t('Please select a quantity above zero');
   } else {
     errors.quantity = null;
