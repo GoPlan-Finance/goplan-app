@@ -29,7 +29,11 @@ export const useHoldingStore = defineStore({
      * Get an array of unique symbol types (Common Stock, Fund, ETF, ...)
      */
     types(): string[] {
-      return [...new Set<string>(this.holdings.map((holding: Holding) => holding.symbol.type))];
+      return [
+        ...new Set<string>(
+          this.holdings.map((holding: Holding) => holding.symbol?.type).filter(v => !!v)
+        ),
+      ];
     },
 
     typeAllocations(): TypeAllocation[] {
@@ -38,7 +42,7 @@ export const useHoldingStore = defineStore({
         let currentValue = 0;
 
         this.holdings.forEach((holding: Holding) => {
-          if (holding.symbol.type === type) {
+          if (holding.symbol?.type === type) {
             initialValue += holding.openTotalPrice;
             currentValue += holding.lastPrice?.price * holding.openQty;
           }

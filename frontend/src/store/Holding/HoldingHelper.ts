@@ -137,16 +137,17 @@ export class HoldingHelper {
 
   public static async findOutdatedHoldings() {
     const isOutdatedQuery = (): Query<Holding> => {
-      const q = Query.or(
+      const q = Query.whereQueries('or', [
         Query.create(Holding).notEqualTo('isOutdated', false),
-        Query.create(Holding).doesNotExist('isOutdated')
-      );
+        Query.create(Holding).doesNotExist('isOutdated'),
+      ]);
 
       q.include('symbol');
       return q;
     };
 
     const holdings = await isOutdatedQuery().findAll();
+
     console.log(`Holdings->findOutdatedHoldings: Found ${holdings.length} to update`);
     for (const holding of holdings) {
       await HoldingHelper.maybeUpdateOutdated(holding);
@@ -158,7 +159,7 @@ export class HoldingHelper {
       try {
         await HoldingHelper.updateHolding(holding);
       } catch (e) {
-        console.error(`maybeUpdateOutdated(${holding.symbolName}) : ${e}`);
+        console.error(`maybeUpdateOutdated(${holding.symbolName})`, e);
       }
     }
   }

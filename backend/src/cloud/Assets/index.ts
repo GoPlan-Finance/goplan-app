@@ -5,6 +5,8 @@
  *
  */
 
+require('./triggers/afterFind');
+
 require('./Functions/search');
 require('./Functions/getEndOfDay');
 require('./Functions/getProfile');

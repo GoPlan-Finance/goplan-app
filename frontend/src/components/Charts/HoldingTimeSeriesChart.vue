@@ -162,7 +162,7 @@ const option = ref({
     // order: 'valueDesc',
     formatter(params) {
       // noinspection UnnecessaryLocalVariableJS
-      const output = `${params.seriesName} : ${params.value.toFixed(2)} $`; // @todo formatCurrency()
+      const output = `${params.seriesName} : ${params.value ? params.value.toFixed(2) : 'N/A'} $`; // @todo formatCurrency()
       // let output = '<b>' + params[0].name + '</b><br/>'
       //   for (let i = 0 ; i < params.length ; i++) {
       //     if (params[i].value !== 0) {
@@ -275,8 +275,6 @@ const onDataZoom = async event => {
 };
 
 //watch(() => props.assetSymbol, () => reloadData())
-
-
 </script>
 <style scoped>
 .chart {

@@ -7,14 +7,21 @@ import { SymbolDataResolution } from '@common/types/types';
 
 const holdingMutex = new Mutex();
 
+interface DateInfo {
+  executedAt: dayjs.Dayjs;
+  transaction: Transaction;
+  openQty: number;
+  avgPrice: number;
+}
+
 export class HoldingTimeSeriesHelper {
   private static dateGenerator(
     holding: Holding,
     transactions: Transaction[],
     period: SymbolDataResolution
-  ) {
+  ): DateInfo[] {
     if (transactions.length === 0) {
-      return;
+      return [];
     }
 
     const start = HoldingTimeSeriesHelper.getStartOfPeriod(
@@ -151,6 +158,10 @@ export class HoldingTimeSeriesHelper {
 
     const eodFormatted = await this.getEOD(dates, holding, period);
 
+    if (!eodFormatted) {
+      return;
+    }
+
     const existingPrices = await Query.create(HoldingTimeSeries).findBy({
       period,
       holding,
@@ -186,6 +197,7 @@ export class HoldingTimeSeriesHelper {
         price.close = openQty * date.avgPrice;
       }
 
+      price.isOutdated = false;
       prices.push(price);
     }
 

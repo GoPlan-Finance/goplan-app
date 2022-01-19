@@ -65,14 +65,14 @@
   </DataTable>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Holding } from '@common/models/Holding';
 import PriceChange from '@components/PriceChange.vue';
 import { RangeValue, TableConfig, TableLayoutCollection } from '@components/DataTable';
 import DataTable from '@components/DataTable.vue';
 import AppLink from '@components/router/AppLink.vue';
-import { ArrayUtils, CurrencyUtils } from '@goplan-finance/utils';
-import { computed, reactive } from 'vue';
+import { CurrencyUtils } from '@goplan-finance/utils';
+import { reactive } from 'vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
 
 const formatCurrency = CurrencyUtils.formatCurrency;
@@ -88,7 +88,15 @@ const config = reactive<TableConfig>({
   fields: {
     name: {
       value: (holding: Holding) => {
-        return holding?.symbol?.name ?? holding?.importRawData['description'] ?? '';
+        if (holding?.symbolName) {
+          return holding?.symbolName;
+        }
+
+        if (holding?.importRawData && holding?.importRawData['description']) {
+          return holding?.importRawData['description'];
+        }
+
+        return '??';
       },
     },
     symbolName: {},

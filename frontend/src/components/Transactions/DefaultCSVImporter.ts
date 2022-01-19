@@ -89,6 +89,15 @@ export class DefaultCSVImporter {
       row.assetSymbol = await AssetSymbol.fetchSymbolByTicker(row.symbol);
 
       if (!row.assetSymbol) {
+        // This should most likely be moved into AssetSymbol.AfterFind trigger.
+        const searchedSymbols: AssetSymbol[] = await Parse.Cloud.run('Assets--Search', {
+          query: row.symbol,
+        });
+
+        const exactMatch = searchedSymbols.find(symbol => symbol.tickerName === row.symbol);
+        if (exactMatch) {
+          row.assetSymbol = exactMatch;
+        }
         //        throw `Notice: Symbol ${row.symbol} not found.`
       }
     }

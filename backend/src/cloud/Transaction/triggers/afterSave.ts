@@ -39,6 +39,7 @@ Parse.Cloud.afterSave('Transaction', async request => {
       holding.setACL(transaction.getACL());
 
       holding.isOutdated = true;
+      // @todo Set HoldingTimeSeries.isOutdated based on transaction date
 
       await holding.save(null, Holding.useMasterKey(true));
     }
