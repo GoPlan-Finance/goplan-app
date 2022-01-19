@@ -1,8 +1,13 @@
 <template>
-  <Modal v-model="isModalOpen" :title="t('Buy/Sell Asset')" @opened="modalOpened">
+  <Modal
+    v-model="isModalOpen"
+    :title="transaction ? t('Edit Transaction') : t('Add Transaction')"
+    @opened="modalOpened"
+    @closed="reset"
+  >
     <template #button>
       <slot name="button">
-        <ButtonDefault :label="transaction?.id ? t('Edit') : t('Buy/Sell')">
+        <ButtonDefault :label="transaction ? t('Edit') : t('Buy/Sell')">
           <template v-if="!transaction?.id" #before>
             <PlusCircleIcon class="h-6 w-6" />
           </template>
@@ -11,6 +16,9 @@
     </template>
     <template #content>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-5">
+        <GFormItem :label="t('Type')" :error="errors.type">
+          <TransactionTypeSelect v-model:value="transactionInternal.type" class="w-full" />
+        </GFormItem>
         <GFormItem
           :label="t('Asset')"
           :error="!transactionInternal.symbol ? errors.symbol : null"
@@ -28,6 +36,7 @@
           </div>
           <AssetSearch
             v-else
+            :disabled="!showAssetInput"
             @update:asset-symbol="transactionInternal.symbol = $event"
             class="w-full"
             search-field-class="border w-full"
@@ -42,9 +51,10 @@
         <GFormItem :label="t('Quantity')" :error="errors.quantity">
           <input
             v-model="transactionInternal.quantity"
-            class="rounded w-full"
+            class="rounded w-full disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none"
             min="0"
             type="number"
+            :disabled="!showQuantityInput"
           />
         </GFormItem>
         <GFormItem :label="t('Price')" :error="errors.price">
@@ -59,20 +69,11 @@
       </div>
     </template>
     <template #actions>
-      <template v-if="transaction?.id">
+      <template v-if="transaction">
         <ButtonDefault :label="t('Save')" @click="save" />
       </template>
       <template v-else>
-        <ButtonDefault :label="t('Buy')" @click="buy">
-          <template #before>
-            <PlusCircleIcon class="h-6 w-6" />
-          </template>
-        </ButtonDefault>
-        <ButtonDefault type="secondary" :label="t('Sell')" @click="sell">
-          <template #before>
-            <MinusCircleIcon class="h-6 w-6" />
-          </template>
-        </ButtonDefault>
+        <ButtonDefault :label="t('Create')" @click="save" />
       </template>
     </template>
   </Modal>
@@ -88,9 +89,11 @@ import Modal from '@components/base/GoModal.vue';
 import dayjs from 'dayjs';
 import { computed, reactive, ref } from 'vue';
 import ButtonDefault from './base/ButtonDefault.vue';
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/vue/outline';
+import { PlusCircleIcon } from '@heroicons/vue/outline';
 import { useI18n } from 'vue-i18n';
 import GFormItem from '@components/base/GFormItem.vue';
+import TransactionTypeSelect from '@components/TransactionTypeSelect.vue';
+import { TransactionType } from '@models/Transaction';
 
 const { t } = useI18n();
 
@@ -104,6 +107,7 @@ const createTransaction = () => {
   newTransaction.executedAt = new Date();
   newTransaction.quantity = null;
   newTransaction.price = null;
+  newTransaction.type = TransactionType.BUY;
   newTransaction.executedAt = new Date();
   return newTransaction;
 };
@@ -114,7 +118,9 @@ const errors = reactive({
   executedAt: null,
   quantity: null,
   price: null,
+  type: null,
 });
+
 const transactionInternal = ref<Transaction>(props.transaction ?? createTransaction());
 const isModalOpen = ref(false);
 
@@ -132,8 +138,23 @@ const reset = () => {
   isModalOpen.value = false;
 };
 
+const showAssetInput = computed<boolean>(() => {
+  return [
+    TransactionType.SELL,
+    TransactionType.BUY,
+    TransactionType.FEES,
+    TransactionType.DIVIDENDS,
+  ].some(type => type === transactionInternal.value.type);
+});
+
+const showQuantityInput = computed<boolean>(() => {
+  return [TransactionType.SELL, TransactionType.BUY].some(
+    type => type === transactionInternal.value.type
+  );
+});
+
 const isValid = computed<boolean>(() => {
-  if (!transactionInternal.value.symbol) {
+  if (!transactionInternal.value.symbol && showAssetInput) {
     errors.symbol = t('Please select an asset');
   } else {
     errors.symbol = null;
@@ -151,9 +172,12 @@ const isValid = computed<boolean>(() => {
   } else {
     errors.executedAt = null;
   }
-  if (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity)) {
+  if (
+    showQuantityInput &&
+    (!transactionInternal.value.quantity || isNaN(transactionInternal.value.quantity))
+  ) {
     errors.quantity = t('Please select a quantity');
-  } else if (transactionInternal.value.quantity <= 0) {
+  } else if (showQuantityInput && transactionInternal.value.quantity <= 0) {
     errors.quantity = t('Please select a quantity above zero');
   } else {
     errors.quantity = null;
@@ -172,19 +196,16 @@ const isValid = computed<boolean>(() => {
   return true;
 });
 
-const save = async (type: 'buy' | 'sell' | undefined) => {
+const save = async () => {
   if (!isValid.value) {
     return;
-  }
-
-  if (transactionInternal.value.isNew()) {
-    transactionInternal.value.type = type;
   }
 
   transactionInternal.value.totalExcludingFees =
     transactionInternal.value.price * transactionInternal.value.quantity;
 
-  transactionInternal.value.currency = transactionInternal.value.symbol.currency ?? 'USD';
+  transactionInternal.value.currency =
+    transactionInternal.value.symbol?.currency ?? transactionInternal.value.account.currency;
 
   try {
     await transactionInternal.value.save();
@@ -192,14 +213,6 @@ const save = async (type: 'buy' | 'sell' | undefined) => {
   } catch (e) {
     alert(e);
   }
-};
-
-const buy = async () => {
-  await save('buy');
-};
-
-const sell = async () => {
-  await save('sell');
 };
 
 const modalOpened = async () => {

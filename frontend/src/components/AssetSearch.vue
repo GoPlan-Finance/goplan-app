@@ -9,6 +9,7 @@
       @keyup.down="activeElement < symbols.length - 1 ? (activeElement += 1) : null"
       @update:value="onInput"
       @blur="onBlur"
+      :disabled="disabled"
     />
     <ul
       v-if="isOpen"
@@ -55,6 +56,7 @@ const props = withDefaults(
     searchFieldClass?: string;
     allowText?: boolean;
     placeholder?: string;
+    disabled?: true;
   }>(),
   {
     allowText: false,

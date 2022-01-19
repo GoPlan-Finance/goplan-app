@@ -6,11 +6,12 @@
     <input
       :class="inputClass"
       :value="value"
-      class="w-100 rounded pl-10 pr-4 py-2 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50"
+      class="w-100 rounded pl-10 pr-4 py-2 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 focus:ring-opacity-50 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none"
       :placeholder="placeholder"
       type="text"
       @input="$emit('update:value', $event.target.value)"
       @blur="$emit('blur')"
+      :disabled="disabled"
     />
   </div>
 </template>
@@ -23,6 +24,7 @@ withDefaults(
     value: string;
     placeholder?: string;
     inputClass?: string;
+    disabled?: true;
   }>(),
   {
     placeholder: 'Search',
