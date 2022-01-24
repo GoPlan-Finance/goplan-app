@@ -13,6 +13,10 @@
     <img src="https://img.shields.io/discord/814937752956698650.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"
          alt="Discord">
   </a>
+<a href="https://github.com/GoPlan-Finance/GoPlan-app/actions/workflows/ci.yml"><img src="https://github.com/GoPlan-Finance/GoPlan-app/actions/workflows/ci.yml/badge.svg"></a>
+<a href="https://bestpractices.coreinfrastructure.org/projects/5557"><img src="https://bestpractices.coreinfrastructure.org/projects/5557/badge"></a>
+
+	
 </p>
 
 <p align="center">
