@@ -2,7 +2,8 @@ import { Account, AssetSymbol, Holding, User } from '.';
 import { SecureObject } from '@goplan-finance/utils';
 
 export enum TransactionType {
-  TRANSFER = 'transfer',
+  DEPOSIT = 'deposit',
+  WITHDRAW = 'withdraw',
   BUY = 'buy',
   SELL = 'sell',
   DIVIDENDS = 'dividends',
@@ -96,7 +97,7 @@ export class Transaction extends SecureObject {
   }
 
   set type(value: TransactionType) {
-    this.set('type', value.toUpperCase());
+    this.set('type', value);
   }
 
   get currency(): string {

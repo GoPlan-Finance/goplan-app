@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { AssetSymbol } from '@common/models';
-import BuySellAsset from '@components/BuySellAsset.vue';
+import BuySellAsset from '@components/TransactionModal.vue';
 import CandlestickChart from '@components/Charts/CandleStickChart/CandlestickChart.vue';
 import CompanyInfo from '@components/CompanyInfo.vue';
 import CompanyQuote from '@components/CompanyQuote.vue';

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import BuySellAsset from '@components/BuySellAsset.vue';
+import BuySellAsset from '@components/TransactionModal.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import HoldingsTable from '@components/Holdings/HoldingsTable.vue';
 import { Screens } from '@/utils/screens';
