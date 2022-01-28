@@ -25,7 +25,7 @@ import StyleguideLayout from './styleguide/layouts/StyleguideLayout.vue';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
-dayjs.extend(customParseFormat)
+dayjs.extend(customParseFormat);
 
 const app = createApp(App);
 

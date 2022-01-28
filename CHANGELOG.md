@@ -340,4 +340,4 @@ All notable changes to this project will be documented in this file. Dates are d
 - Bump babel-watch from 7.4.0 to 7.4.1 in /backend [`#29`](https://github.com/sadortun/GoPlan-app/pull/29)
 - Bump parse from 2.19.0 to 3.1.0 in /backend [`#30`](https://github.com/sadortun/GoPlan-app/pull/30)
 - Added basic project structure. [`#16`](https://github.com/sadortun/GoPlan-app/pull/16)
-- Updated Analytics Holding time series. [`0f29ce1`](https://github.com/sadortun/GoPlan-app/commit/0f29ce1c2cadb4311a8668146c28274f944857f6)
+- Fix various issues [`0fc489c`](https://github.com/sadortun/GoPlan-app/commit/0fc489c96b4f24114620507cd962fb672652160f)

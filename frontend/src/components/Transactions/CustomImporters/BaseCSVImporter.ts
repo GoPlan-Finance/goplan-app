@@ -17,24 +17,22 @@ type LoggerFn = (i: string, msg: string) => void;
 export interface CsvDataInterface {
   currency: string;
   date: dayjs.Dayjs;
-  price: number|null;
-  quantity: number|null;
-  fees: number|null;
-  totalExcludingFees: number|null;
+  price: number | null;
+  quantity: number | null;
+  fees: number | null;
+  totalExcludingFees: number | null;
   type: TransactionType;
   accountName: string;
   symbol: string;
 }
 
-export interface ImportRowDataInterface extends CsvDataInterface{
+export interface ImportRowDataInterface extends CsvDataInterface {
   account?: Account;
   assetSymbol?: AssetSymbol;
 }
 
-
 export abstract class BaseCSVImporter {
-
-  abstract prepareRow(row: unknown ): Promise<CsvDataInterface>
+  abstract prepareRow(row: unknown): Promise<CsvDataInterface>;
 
   mutex = new Mutex();
 
@@ -64,8 +62,8 @@ export abstract class BaseCSVImporter {
       let account = this.accounts.find(account => account.name === name || account.id === name);
 
       if (!account) {
-        if(!currency){
-          throw `You need to specify a currency for the account "${name}. To do so, create an account first, then retry the import`
+        if (!currency) {
+          throw `You need to specify a currency for the account "${name}. To do so, create an account first, then retry the import`;
         }
 
         account = new Account();
@@ -79,34 +77,28 @@ export abstract class BaseCSVImporter {
     });
   }
 
-
-
   protected async validateRow(unsafeRow: CsvDataInterface): Promise<ImportRowDataInterface> {
-
     if (!unsafeRow.type || !unsafeRow.date || !unsafeRow.accountName) {
       throw '"date", "type", "currency", "accountName" fields are mandatory';
     }
 
-
-    const row : ImportRowDataInterface= {
+    const row: ImportRowDataInterface = {
       accountName: unsafeRow.accountName.trim(),
       currency: unsafeRow.currency?.toUpperCase(),
-      quantity:  unsafeRow.quantity || null,
+      quantity: unsafeRow.quantity || null,
       type: unsafeRow.type.toLowerCase() as TransactionType,
-      symbol:  unsafeRow.symbol ? unsafeRow.symbol.toUpperCase().trim() : null,
+      symbol: unsafeRow.symbol ? unsafeRow.symbol.toUpperCase().trim() : null,
       date: unsafeRow.date,
       price: unsafeRow.price,
       fees: unsafeRow.fees,
       totalExcludingFees: unsafeRow.totalExcludingFees,
-    }
+    };
 
     row.account = await this.getOrCreateAccount(row.accountName, row.currency);
-
 
     // if (!row.account.currency) {
     //   throw '"date", "type", "currency", "accountName" fields are mandatory';
     // }
-
 
     if (!row.date?.isValid()) {
       throw 'The date format is invalid';
@@ -158,11 +150,7 @@ export abstract class BaseCSVImporter {
       throw 'fees missing';
     }
 
-    if (
-      row.totalExcludingFees &&
-      row.totalExcludingFees !== 0 &&
-      ['fees'].includes(row.type)
-    ) {
+    if (row.totalExcludingFees && row.totalExcludingFees !== 0 && ['fees'].includes(row.type)) {
       throw 'totalExcludingFees must be empty';
     }
 
@@ -178,20 +166,19 @@ export abstract class BaseCSVImporter {
   }
 
   async validateCSV(file: File, logger: LoggerFn): Promise<ImportRowDataInterface[]> {
-    const validRows :ImportRowDataInterface[]= [];
+    const validRows: ImportRowDataInterface[] = [];
 
     const data: unknown[] = await this.parseCSV(file);
     for (const [i, rawData] of Object.entries(data)) {
       try {
-
-        const rowData :CsvDataInterface =await this.prepareRow(rawData)
+        const rowData: CsvDataInterface = await this.prepareRow(rawData);
 
         validRows.push(await this.validateRow(rowData));
 
         logger(i, 'Valid');
       } catch (error) {
         logger(i, error);
-        console.error(`Import failed #${i}` , error, rawData)
+        console.error(`Import failed #${i}`, error, rawData);
       }
     }
 

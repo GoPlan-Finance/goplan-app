@@ -123,8 +123,8 @@ import ButtonDefault from '../base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
 import { BaseCSVImporter } from './CustomImporters/BaseCSVImporter';
 import { UploadIcon } from '@heroicons/vue/outline';
-import {DefaultCSVImporter} from "@components/Transactions/CustomImporters/DefaultCSVImporter";
-import {Canada_NationalBank_CDBN} from "@components/Transactions/CustomImporters/Canada_NationalBank_CDBN";
+import { DefaultCSVImporter } from '@components/Transactions/CustomImporters/DefaultCSVImporter';
+import { Canada_NationalBank_CDBN } from '@components/Transactions/CustomImporters/Canada_NationalBank_CDBN';
 
 enum ImportStepEnum {
   Instructions,
