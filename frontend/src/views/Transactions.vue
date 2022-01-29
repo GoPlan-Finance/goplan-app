@@ -129,7 +129,7 @@
 
 <script setup lang="ts">
 import { Transaction } from '@common/models';
-import { useAccountStore, useTransactionStore } from '@/store';
+import { useAccountStore, useNotificationStore, useTransactionStore } from '@/store';
 import { Screens } from '@/utils/screens';
 import dayjs from 'dayjs';
 import { onBeforeMount, reactive, ref, watch } from 'vue';
@@ -157,6 +157,7 @@ import { ButtonType } from '@/types';
 import ButtonDefault from '@components/base/ButtonDefault.vue';
 import TransactionTypeSelect from '@components/TransactionTypeSelect.vue';
 import { TransactionType } from '@models/Transaction';
+import { NotificationItem } from '@store/NotificationStore';
 
 const { t } = useI18n();
 
