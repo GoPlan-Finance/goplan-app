@@ -1,36 +1,28 @@
 import { defineStore } from 'pinia';
 import { Session } from '../auth';
+import { reactive } from 'vue';
 
-export const useUserStore = defineStore({
-  // name of the store
-  // it is used in devtools and allows restoring state
-  id: 'user',
-  // a function that returns a fresh state
-  state: () => {
-    // const user = await AuthStore.currentUser() as User
-    // const privateMode = user.profileInfo.privateMode || false
+export enum SessionKeys {
+  PRIVATE_MODE = 'privateMode',
+}
 
-    const isPrivate = Session.get<boolean>('privateMode');
+export const useUserStore = defineStore('user', () => {
+  const state = reactive({
+    privateMode: Session.get<boolean>(SessionKeys.PRIVATE_MODE) ?? false,
+  });
 
-    return {
-      privateMode: isPrivate,
-    };
-  },
-  // optional getters
-  getters: {},
+  const setPrivateMode = async (enabled: boolean) => {
+    state.privateMode = enabled;
+    Session.set(SessionKeys.PRIVATE_MODE, enabled);
+  };
 
-  actions: {
-    async setPrivateMode(enabled: boolean) {
-      this.privateMode = enabled;
-      Session.set('privateMode', enabled);
-      // const user = await AuthStore.currentUser()
-      //
-      // this.privateMode = enabled
-      // user.set('profileInfo', {
-      //   privateMode : enabled,
-      // })
-      //
-      // await user.save()
-    },
-  },
+  const togglePrivateMode = async () => {
+    await setPrivateMode(!state.privateMode);
+  };
+
+  return {
+    state,
+    togglePrivateMode,
+    setPrivateMode,
+  };
 });

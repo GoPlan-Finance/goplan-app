@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import { reactive, ref, watchEffect } from 'vue';
+import { reactive, watchEffect } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
-import duration from 'dayjs/plugin/duration';
 
 export enum NotificationType {
   SUCCESS = 'success',
