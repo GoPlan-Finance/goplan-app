@@ -51,7 +51,7 @@ Feel free to submit a PR if you want to add items to the Roadmap!
 - [x] Search for securities
 - [x] Watchlist #8
     - Actions: Add/Delete
-- [ ] Dashboard
+- [x] Dashboard
     - Total value, gains, percentage gains
     - Performance chart
     - Asset Type overview (Stock, bonds, cash...)
