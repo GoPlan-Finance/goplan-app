@@ -24,13 +24,11 @@
 import BuySellAsset from '@components/TransactionModal.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import HoldingsTable from '@components/Holdings/HoldingsTable.vue';
-import { Screens } from '@/utils/screens';
-import { computed } from 'vue';
+import { Screens } from '@/hooks/useScreensize';
 import { useHoldingStore } from '@/store';
-import { Holding } from '@models';
-import { TableLayoutCollection } from '@components/DataTable';
 import GEmptyState from '@components/base/GEmptyState.vue';
 import { useI18n } from 'vue-i18n';
+import { TableLayoutCollection } from '@components/DataTable/useTableLayout';
 
 const { t } = useI18n();
 

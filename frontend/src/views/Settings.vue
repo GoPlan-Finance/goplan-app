@@ -1,6 +1,6 @@
 <template>
   <HeadlineActions :headline="t('Settings')" />
-  <div class="flex flex-col lg:flex-row gap-4">
+  <div class="grid xl:grid-cols-2 gap-4">
     <GFormItem :label="t('Default Currency')">
       <CurrencySelect class="border-0" v-model:value="defaultCurrency" />
     </GFormItem>
@@ -16,27 +16,24 @@ import { useI18n } from 'vue-i18n';
 import GFormItem from '@components/base/GFormItem.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import LocaleSelect from '@components/LocaleSelect.vue';
-import { AuthStore, useUserStore } from '@/store';
+import { useUserStore } from '@/store';
 import { computed } from 'vue';
 
 const { t } = useI18n();
-const { state } = useUserStore();
-
-const user = await AuthStore.currentUser();
+const userStore = useUserStore();
+await userStore.loadUser();
 
 const defaultCurrency = computed({
-  get: () => user.profileInfo.defaultCurrency,
-  set: v => {
-    user.profileInfo.defaultCurrency = v;
-    user.save();
+  get: () => userStore.state.user?.defaultCurrency,
+  set: currency => {
+    userStore.setDefaultCurrency(currency);
   },
 });
 
 const locale = computed({
-  get: () => user.profileInfo.locale,
-  set: v => {
-    user.profileInfo.locale = v;
-    user.save();
+  get: () => userStore.state.user?.locale,
+  set: locale => {
+    userStore.setLocale(locale);
   },
 });
 </script>
