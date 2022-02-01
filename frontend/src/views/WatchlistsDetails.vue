@@ -1,57 +1,52 @@
 <template>
-  <template v-if="watchlist">
-    <h1 class="text-gray-700 text-3xl font-medium mb-6">
-      {{ watchlist.name }}
-    </h1>
-    <template v-if="watchlistItems.length > 0">
-      <DataTable :config="config" :rows="watchlistItems">
-        <template #beforeFilters(right)>
-          <AddToWatchlist :watchlist="watchlist" />
-        </template>
-        <template #field(ticker)="{ row }">
-          <AppLink
-            v-if="row.symbol"
-            :ticker="row.symbol.tickerName"
-            class="font-bold overflow-hidden overflow-ellipsis"
-            to="ticker_details"
-          >
-            {{ row.symbol.tickerName }}
-          </AppLink>
-        </template>
-        <template #field(name)="{ row }">
-          <AppLink
-            v-if="row.symbol"
-            :ticker="row.symbol.tickerName"
-            class="text-sm text-gray-500 overflow-hidden overflow-ellipsis"
-            to="ticker_details"
-          >
-            {{ row.symbol.name }}
-          </AppLink>
-        </template>
-        <template #field(dayPLChange)="{ row }">
-          <PriceChange
-            v-if="row.lastPrice"
-            :compare-from="row.lastPrice.previousClose"
-            :compare-to="row.lastPrice.price"
-          />
-          <GSkeleton class="h-5" v-else />
-        </template>
-        <template #field(lastPrice)="{ row }">
-          <div v-if="row.lastPrice">{{ row.lastPrice.price }}</div>
-          <GSkeleton class="h-5" v-else />
-        </template>
-        <template #actions="{ row }">
-          <div class="cursor-pointer hover:text-red-600 text-gray-300" @click="remove(row)">
-            <TrashIcon class="h-6 w-6" />
-          </div>
-        </template>
-      </DataTable>
-    </template>
-    <template v-else>
-      <GEmptyState title="No Assets in Watchlist">
-        <AddToWatchlist :watchlist="watchlist" />
-      </GEmptyState>
-    </template>
+  <HeadlineActions :headline="watchlist.name">
+    <AddToWatchlist :watchlist="watchlist" />
+  </HeadlineActions>
+  <template v-if="watchlistItems.length > 0">
+    <DataTable :config="config" :rows="watchlistItems">
+      <template #field(ticker)="{ row }">
+        <AppLink
+          v-if="row.symbol"
+          :ticker="row.symbol.tickerName"
+          class="font-bold overflow-hidden overflow-ellipsis"
+          to="ticker_details"
+        >
+          {{ row.symbol.tickerName }}
+        </AppLink>
+      </template>
+      <template #field(name)="{ row }">
+        <AppLink
+          v-if="row.symbol"
+          :ticker="row.symbol.tickerName"
+          class="text-sm text-gray-500 overflow-hidden overflow-ellipsis"
+          to="ticker_details"
+        >
+          {{ row.symbol.name }}
+        </AppLink>
+      </template>
+      <template #field(dayPLChange)="{ row }">
+        <PriceChange
+          v-if="row.lastPrice"
+          :compare-from="row.lastPrice.previousClose"
+          :compare-to="row.lastPrice.price"
+        />
+        <GSkeleton class="h-5" v-else />
+      </template>
+      <template #field(lastPrice)="{ row }">
+        <div v-if="row.lastPrice">{{ row.lastPrice.price }}</div>
+        <GSkeleton class="h-5" v-else />
+      </template>
+      <template #actions="{ row }">
+        <div class="cursor-pointer hover:text-red-600 text-gray-300" @click="remove(row)">
+          <TrashIcon class="h-6 w-6" />
+        </div>
+      </template>
+    </DataTable>
+  </template>
+  <template v-else>
+    <GEmptyState title="No Assets in Watchlist">
+      <AddToWatchlist :watchlist="watchlist" />
+    </GEmptyState>
   </template>
 </template>
 
@@ -59,17 +54,18 @@
 import { AssetPrice, Watchlist, WatchlistItem } from '@common/models';
 import { Holding } from '@common/models/Holding';
 import { Query } from '@goplan-finance/utils';
-import { TableConfig } from '@components/DataTable';
-import DataTable from '@components/DataTable.vue';
+import { TableConfig } from '@components/DataTable/useDataTable';
+import DataTable from '@components/DataTable/DataTable.vue';
 import PriceChange from '@components/PriceChange.vue';
 import AppLink from '@components/router/AppLink.vue';
 import { useAssetPriceStore } from '@/store';
-import { Screens } from '@/utils/screens';
+import { Screens } from '@/hooks/useScreensize';
 import { TrashIcon } from '@heroicons/vue/solid';
 import { onUnmounted, ref, watch } from 'vue';
 import GEmptyState from '@components/base/GEmptyState.vue';
 import AddToWatchlist from '@components/AddToWatchlist.vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
+import HeadlineActions from '@components/HeadlineActions.vue';
 
 const priceStore = useAssetPriceStore();
 
@@ -109,12 +105,12 @@ const config: TableConfig = {
       justify: 'right',
     },
   },
-  tableLayout: {
+  tableLayoutCollection: {
     [Screens.DEFAULT]: [
       ['ticker', 'name'],
       ['lastPrice', 'dayPLChange'],
     ],
-    [Screens.SM]: [['ticker', 'name'], 'lastPrice', 'dayPLChange', 'createdAt'],
+    [Screens.SM]: [['ticker', 'name'], ['lastPrice'], ['dayPLChange'], ['createdAt']],
   },
   settings: {
     actions: true,

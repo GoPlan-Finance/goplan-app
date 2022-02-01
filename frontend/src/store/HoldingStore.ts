@@ -84,7 +84,7 @@ export const useHoldingStore = defineStore({
     },
 
     totalChangePercent(): number {
-      return (this.totalChangeValue / this.totalBookValue) * 100;
+      return this.totalChangeValue / this.totalBookValue;
     },
   },
 
