@@ -84,7 +84,7 @@
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-only-warn": "1.0.3",
     "eslint-plugin-varspacing": "1.2.2",
-    "eslint-plugin-vue": "8.2.0",
+    "eslint-plugin-vue": "8.7.1",
     "jest": "27.4.7",
     "jest-css-modules-transform": "4.3.0",
     "postcss": "8.4.5",
