@@ -33,7 +33,7 @@
     "async-mutex": "0.3.2",
     "crypto-js": "4.1.1",
     "papaparse": "5.3.2",
-    "parse": "3.3.1",
+    "parse": "3.4.1",
     "ts-money": "0.4.7",
     "ts-node": "10.4.0",
     "typescript": "4.5.4"
