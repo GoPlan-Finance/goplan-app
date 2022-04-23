@@ -1245,7 +1245,21 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@goplan-finance/utils@1.0.2", "@goplan-finance/utils@^1.0.2":
+"@goplan-finance/utils@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@goplan-finance/utils/-/utils-1.0.4.tgz#6a9363f9e4709b26790820ce6df6b577f80121fb"
+  integrity sha512-sDQH9Igm8oGNofP7VYcylPjEOUnZQ2B68B1uoxZU+r5LOUF6BOy7STWr726raadzox+Jx8PvlR+5G/lRWNyKtQ==
+  dependencies:
+    async-mutex "^0.3.1"
+    axios "^0.22.0"
+    crypto-js "^4.1.1"
+    parse "^3.2.0"
+    prettier "^2.3.2"
+    ts-money "^0.4.6"
+    ts-node "^10.1.0"
+    typescript "^4.4.3"
+
+"@goplan-finance/utils@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@goplan-finance/utils/-/utils-1.0.2.tgz#d37cf8804d68fb058eab7415f1d394f5e044b36f"
   integrity sha512-OgLugbh3QrC71KtjZWjwNuL3DtlstDNnODpKjRYp+lsCUw4CQ8/5tO4wG1ImMWMRK1BiLPguzzh9oZuaA0ynFw==
