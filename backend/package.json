@@ -63,7 +63,7 @@
     "bluebird": "3.7.2",
     "concurrently": "7.1.0",
     "eslint": "8.6.0",
-    "eslint-config-standard": "16.0.3",
+    "eslint-config-standard": "17.0.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-only-warn": "1.0.3",
