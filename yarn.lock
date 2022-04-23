@@ -2747,10 +2747,10 @@
     "@typescript-eslint/types" "5.9.1"
     eslint-visitor-keys "^3.0.0"
 
-"@vitejs/plugin-vue@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.0.1.tgz#db0e5eacf96358e04cc501c9008079b25a70a4ac"
-  integrity sha512-wtdMnGVvys9K8tg+DxowU1ytTrdVveXr3LzdhaKakysgGXyrsfaeds2cDywtvujEASjWOwWL/OgWM+qoeM8Plg==
+"@vitejs/plugin-vue@2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.3.1.tgz#5f286b8d3515381c6d5c8fa8eee5e6335f727e14"
+  integrity sha512-YNzBt8+jt6bSwpt7LP890U1UcTOIZZxfpE5WOJ638PNxSEKOqAi0+FSKS0nVeukfdZ0Ai/H7AFd6k3hayfGZqQ==
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
@@ -2886,12 +2886,12 @@
     thread-loader "^3.0.0"
     webpack "^5.54.0"
 
-"@vue/cli-plugin-eslint@5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-5.0.3.tgz#47f00fea50205513f1908fbb1f93420760f6091c"
-  integrity sha512-gp2UdXYp3ofXndD2vKWQ56e6GXwCkrkS5yBzfM6T9aKFS9+3TV5FipQGQf4O2V3rhlCjWulUV4i3uaQMRems6g==
+"@vue/cli-plugin-eslint@5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-5.0.4.tgz#33ee3e971d8ee1664d55ffd15b2af548af66fef8"
+  integrity sha512-NLBEKFTFJhYHMzQ3z+sb6xlkcNaN/RcbZ3hiCY72aJe4YOO8jEAp0XkPzlHd4xYkMW7jrmOwwLOPw+3BJ4b77Q==
   dependencies:
-    "@vue/cli-shared-utils" "^5.0.3"
+    "@vue/cli-shared-utils" "^5.0.4"
     eslint-webpack-plugin "^3.1.0"
     globby "^11.0.2"
     webpack "^5.54.0"
@@ -2925,24 +2925,6 @@
     lru-cache "^6.0.0"
     node-fetch "^2.6.1"
     node-ipc "^9.1.1"
-    open "^8.0.2"
-    ora "^5.3.0"
-    read-pkg "^5.1.1"
-    semver "^7.3.4"
-    strip-ansi "^6.0.0"
-
-"@vue/cli-shared-utils@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-5.0.3.tgz#e8facc759f4e2ceed4a26f33943c0005a834e4af"
-  integrity sha512-xAHxFDYVohHWXOLdmGvka3ffQcRgKdACempFQkGJX74Q7OBf0zPf5WH+vQXhlR17eA3LmWdY+Nv8OfsIGim6Fg==
-  dependencies:
-    chalk "^4.1.2"
-    execa "^1.0.0"
-    joi "^17.4.0"
-    launch-editor "^2.2.1"
-    lru-cache "^6.0.0"
-    node-fetch "^2.6.7"
-    node-ipc "9.2.1"
     open "^8.0.2"
     ora "^5.3.0"
     read-pkg "^5.1.1"
@@ -9642,7 +9624,7 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-ipc@9.2.1, node-ipc@^9.1.1:
+node-ipc@^9.1.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/node-ipc/-/node-ipc-9.2.1.tgz#b32f66115f9d6ce841dc4ec2009d6a733f98bb6b"
   integrity sha512-mJzaM6O3xHf9VT8BULvJSbdVbmHUKRNOH7zDDkCrA1/T+CVjq2WVIDfLt0azZRXpgArJtl3rtmEozrbXPZ9GaQ==
