@@ -19,7 +19,7 @@ jobs:
     env:
       MONGODB_VERSION: 3.6.9
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -43,7 +43,7 @@ jobs:
     env:
       MONGODB_VERSION: 4.4.6
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
 #          token: ${{ secrets.REPO_PERSONAL_TOKEN }}
           fetch-depth: 0
