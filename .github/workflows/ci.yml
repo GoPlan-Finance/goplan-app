@@ -24,7 +24,7 @@ jobs:
           submodules: true
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
           cache: 'yarn'
@@ -48,7 +48,7 @@ jobs:
           submodules: true
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
           cache: 'yarn'
