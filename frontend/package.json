@@ -77,7 +77,7 @@
     "@vue/test-utils": "next",
     "autoprefixer": "10.4.5",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "28.0.1",
+    "babel-jest": "28.0.2",
     "concurrently": "7.1.0",
     "cross-env": "7.0.3",
     "eslint": "8.14.0",
