@@ -69,7 +69,7 @@
     "eslint-plugin-only-warn": "1.0.3",
     "eslint-plugin-promise": "6.0.0",
     "eslint-plugin-varspacing": "1.2.2",
-    "jest": "28.0.1",
+    "jest": "28.0.2",
     "mongodb-runner": "4.9.0",
     "nodemon": "2.0.15",
     "nyc": "15.1.0",
