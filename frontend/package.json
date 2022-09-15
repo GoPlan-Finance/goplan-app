@@ -75,7 +75,7 @@
     "@vue/eslint-config-airbnb": "6.0.0",
     "@vue/eslint-config-typescript": "10.0.0",
     "@vue/test-utils": "next",
-    "autoprefixer": "10.4.5",
+    "autoprefixer": "10.4.11",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "28.1.0",
     "concurrently": "7.1.0",
