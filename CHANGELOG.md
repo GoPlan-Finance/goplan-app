@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. Dates are d
 
 #### Unreleased
 
+- Transaction Types fix [`#707`](https://github.com/sadortun/GoPlan-app/pull/707)
+- Transaction Types [`#706`](https://github.com/sadortun/GoPlan-app/pull/706)
+- Updated Holding time series [`#704`](https://github.com/sadortun/GoPlan-app/pull/704)
 - Analytics improvements [`#703`](https://github.com/sadortun/GoPlan-app/pull/703)
 - Analytics metrics [`#700`](https://github.com/sadortun/GoPlan-app/pull/700)
 - Bump axios from 0.24.0 to 0.25.0 in /backend [`#701`](https://github.com/sadortun/GoPlan-app/pull/701)
@@ -340,4 +343,4 @@ All notable changes to this project will be documented in this file. Dates are d
 - Bump babel-watch from 7.4.0 to 7.4.1 in /backend [`#29`](https://github.com/sadortun/GoPlan-app/pull/29)
 - Bump parse from 2.19.0 to 3.1.0 in /backend [`#30`](https://github.com/sadortun/GoPlan-app/pull/30)
 - Added basic project structure. [`#16`](https://github.com/sadortun/GoPlan-app/pull/16)
-- Updated Analytics Holding time series. [`0f29ce1`](https://github.com/sadortun/GoPlan-app/commit/0f29ce1c2cadb4311a8668146c28274f944857f6)
+- fix validation [`d108456`](https://github.com/sadortun/GoPlan-app/commit/d108456be5621f8664695b2173bc10d47871bb5a)
