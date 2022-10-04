@@ -19,12 +19,12 @@ jobs:
     env:
       MONGODB_VERSION: 3.6.9
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
           cache: 'yarn'
@@ -43,12 +43,12 @@ jobs:
     env:
       MONGODB_VERSION: 4.4.6
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
           cache: 'yarn'
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
 #          token: ${{ secrets.REPO_PERSONAL_TOKEN }}
           fetch-depth: 0
@@ -81,7 +81,7 @@ jobs:
         run: npm_config_yes=true npx auto-changelog
 
       - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@3a136a8631bbc4ca05cc2f33d3a19059e9255bae
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -89,7 +89,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@b2391d37b4157fa4aa2e118d643f417910ff3242
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -102,7 +102,7 @@ jobs:
 #            type=semver,pattern={{major}}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@ba317382dcde9f7deb318467fc6cd7230d8b1714
         with:
           context: .
           push: true

@@ -7,87 +7,64 @@
 
       <SearchBar class="mx-4 lg:mx-0 sm:w-96 active:w-full" />
     </div>
-
     <div class="flex items-center gap-4">
-      <div
-        class="hover:text-gray-500 cursor-pointer"
-        @click="userStore.setPrivateMode(!privateMode)"
-      >
-        <EyeIcon v-if="privateMode !== true" class="h-7 w-7" />
-        <EyeOffIcon v-if="privateMode === true" class="h-7 w-7" />
+      <div class="hover:text-gray-500 cursor-pointer h-7 w-7" @click="togglePrivateMode">
+        <EyeIcon v-if="state.privateMode !== true" />
+        <EyeOffIcon v-else class="text-red-600" />
       </div>
 
-      <BellIcon class="h-7 w-7 hover:text-gray-500 cursor-pointer" />
-
-      <div class="relative">
-        <button
-          class="relative z-10 block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none"
-          @click="dropdownOpen = !dropdownOpen"
-        >
-          <img
-            alt="Your avatar"
-            class="h-full w-full object-cover"
-            src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=296&q=80"
-          />
-        </button>
-
-        <div
-          v-show="dropdownOpen"
-          class="fixed inset-0 h-full w-full z-10"
-          @click="dropdownOpen = false"
-        />
-
-        <div
-          v-show="dropdownOpen"
-          class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl z-20"
-        >
+      <GDropdown>
+        <template #button="{ toggle }">
+          <button @click="toggle()" class="h-8">
+            <CogIcon class="h-7" />
+          </button>
+        </template>
+        <template #default="{ toggle }">
           <router-link
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
-            to="profile"
+            to="settings"
           >
-            Profile
+            {{ t('Settings') }}
           </router-link>
           <router-link
+            v-if="isDevMode"
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
             to="/styleguide"
           >
-            Styleguide
+            {{ t('Styleguide') }}
           </router-link>
-          <a
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
-            href="#"
-            >Products</a
-          >
           <a
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-600 hover:text-white"
             @click="signOut"
           >
-            Log out
+            {{ t('Logout') }}
           </a>
-        </div>
-      </div>
+        </template>
+      </GDropdown>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue';
+import { computed, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { useSidebar } from '../hooks/useSidebar';
-import { AuthStore, useUserStore } from '../store';
+import { useSidebar } from '@/hooks/useSidebar';
+import { AuthStore, useUserStore } from '@/store';
 import SearchBar from './SearchBar.vue';
-import { MenuIcon, EyeIcon, EyeOffIcon, BellIcon } from '@heroicons/vue/outline';
+import { CogIcon, EyeIcon, EyeOffIcon, MenuIcon } from '@heroicons/vue/outline';
+import GDropdown from '@components/base/GDropdown.vue';
+import { useI18n } from 'vue-i18n';
 
-const userStore = useUserStore();
-const { push: pushRoute } = useRouter();
+const { state, togglePrivateMode } = useUserStore();
+const router = useRouter();
 const authStore = inject('$authStore') as AuthStore;
-const dropdownOpen = ref(false);
 const { isOpen } = useSidebar();
+const { t } = useI18n();
 
 const signOut = async () => {
   await authStore.signOut();
-  await pushRoute('auth');
+  await router.push('auth');
 };
 
-const privateMode = computed(() => userStore.privateMode);
+const isDevMode = computed(() => import.meta.env.DEV);
 </script>

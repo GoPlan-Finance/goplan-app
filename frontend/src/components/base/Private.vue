@@ -1,5 +1,5 @@
 <template>
-  <template v-if="privateMode && hide"> ***** </template>
+  <template v-if="state.privateMode && hide"> ***** </template>
   <template v-else>
     <slot />
   </template>
@@ -13,7 +13,5 @@ const props = defineProps<{
   hide?: true;
 }>();
 
-const userStore = useUserStore();
-
-const privateMode = computed(() => userStore.privateMode);
+const { state } = useUserStore();
 </script>

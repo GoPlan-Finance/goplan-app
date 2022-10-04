@@ -94,8 +94,10 @@ import { useI18n } from 'vue-i18n';
 import GFormItem from '@components/base/GFormItem.vue';
 import TransactionTypeSelect from '@components/TransactionTypeSelect.vue';
 import { TransactionType } from '@models/Transaction';
+import { useNotificationStore } from '@/store';
 
 const { t } = useI18n();
+const notification = useNotificationStore();
 
 const props = defineProps<{
   assetSymbol?: AssetSymbol;
@@ -209,6 +211,7 @@ const save = async () => {
 
   try {
     await transactionInternal.value.save();
+    notification.success(t('Transaction saved'));
     reset();
   } catch (e) {
     alert(e);

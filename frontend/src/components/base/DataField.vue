@@ -4,7 +4,7 @@
       {{ label }}
     </dt>
     <dd class="mt-1 text-gray-900 sm:mt-0">
-      <DataFormatter :data="data" :type="type" />
+      <DataFormatter :data="data" :type="type" :currency="currency" />
     </dd>
   </div>
 </template>
@@ -17,6 +17,7 @@ export interface DataFieldItem {
   label: string;
   data: string | string[] | number | Date;
   type?: DataType;
+  currency?: string;
 }
 
 const props = withDefaults(defineProps<DataFieldItem>(), { type: DataType.STRING });

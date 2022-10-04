@@ -1,12 +1,20 @@
 Parse.User.allowCustomUserClass(true);
 
-export interface UserProfileInfo {
-  privateMode: boolean;
-}
-
 export class User extends Parse.User {
-  get profileInfo(): UserProfileInfo {
-    return this.get('profileInfo') || {};
+  get defaultCurrency(): string {
+    return this.get('defaultCurrency');
+  }
+
+  set defaultCurrency(currency: string) {
+    this.set('defaultCurrency', currency);
+  }
+
+  get locale(): string {
+    return this.get('locale');
+  }
+
+  set locale(locale: string) {
+    this.set('locale', locale);
   }
 }
 

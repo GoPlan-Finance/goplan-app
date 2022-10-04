@@ -129,12 +129,12 @@
 
 <script setup lang="ts">
 import { Transaction } from '@common/models';
-import { useAccountStore, useTransactionStore } from '@/store';
-import { Screens } from '@/utils/screens';
+import { useAccountStore, useNotificationStore, useTransactionStore } from '@/store';
+import { Screens } from '@/hooks/useScreensize';
 import dayjs from 'dayjs';
-import { onBeforeMount, reactive, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import BuySellAsset from '@components/TransactionModal.vue';
-import DataTable from '../components/DataTable.vue';
+import DataTable from '@components/DataTable/DataTable.vue';
 import HeadlineActions from '../components/HeadlineActions.vue';
 import AppLink from '../components/router/AppLink.vue';
 import ImportTransactionsModal from '../components/Transactions/ImportTransactionsModal.vue';
@@ -157,13 +157,22 @@ import { ButtonType } from '@/types';
 import ButtonDefault from '@components/base/ButtonDefault.vue';
 import TransactionTypeSelect from '@components/TransactionTypeSelect.vue';
 import { TransactionType } from '@models/Transaction';
+import { NotificationItem } from '@store/NotificationStore';
+import { TableConfig } from '@components/DataTable/useDataTable';
+import { useNumberFormat } from '@/hooks/useNumberFormat';
 
 const { t } = useI18n();
+const { formatCurrency, formatNumber } = useNumberFormat();
 
-const rows = ref([]);
+const accountStore = useAccountStore();
+await accountStore.subscribe();
+const transactionStore = useTransactionStore();
+await transactionStore.subscribe();
+
+const rows = computed(() => transactionStore.transactions);
 const showExportModal = ref(false);
 const showImportModal = ref(false);
-const config = reactive({
+const config = reactive<TableConfig>({
   fields: {
     type: {},
     executedAt: {
@@ -184,30 +193,32 @@ const config = reactive({
     symbolName: {},
     quantity: {
       justify: 'right',
-      format: value => {
-        return value === 0 ? '' : StringUtils.padDecimals(value, 0, 2);
+      format: (value: number) => {
+        return value === 0
+          ? ''
+          : formatNumber(value, { maximumFractionDigits: 2, minimumFractionDigits: 0 });
       },
     },
     price: {
       justify: 'right',
-      format: (value, row) => {
-        return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency, false);
+      format: (value: number, row: Transaction) => {
+        return value === 0 ? '' : formatCurrency(value, row.currency);
       },
     },
     totalExcludingFees: {
       justify: 'right',
-      format: (value, row) => {
-        return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency);
+      format: (value: number, row: Transaction) => {
+        return value === 0 ? '' : formatCurrency(value, row.currency);
       },
     },
     fees: {
       justify: 'right',
-      format: (value, row) => {
-        return value === 0 ? '' : CurrencyUtils.formatCurrency(value, row.currency);
+      format: (value: number, row: Transaction) => {
+        return value === 0 ? '' : formatCurrency(value, row.currency);
       },
     },
   },
-  tableLayout: {
+  tableLayoutCollection: {
     [Screens.DEFAULT]: [
       ['executedAt', 'type'],
       ['symbolName', 'name'],
@@ -236,8 +247,13 @@ const config = reactive({
     accounts: {
       align: 'left',
       value: null,
-      options: [],
-      handler: (value, row) => {
+      options: accountStore.accounts.map(account => {
+        return {
+          value: account,
+          label: account.name,
+        };
+      }),
+      handler: (value, row: Transaction) => {
         return row.account.id === value.id;
       },
     },
@@ -251,7 +267,7 @@ const config = reactive({
     },
   },
   search: {
-    handler: (searchString, transaction) => {
+    handler: (searchString: string, transaction: Transaction) => {
       const searchVal = searchString.toLowerCase();
 
       if (transaction.symbolName && transaction.symbolName.toLowerCase().startsWith(searchVal)) {
@@ -266,39 +282,6 @@ const config = reactive({
     },
   },
 });
-
-const accountStore = useAccountStore();
-const transactionStore = useTransactionStore();
-
-onBeforeMount(async () => {
-  await transactionStore.subscribe();
-  await accountStore.subscribe();
-});
-
-watch(
-  () => accountStore.accounts,
-  () => {
-    config.filters.accounts.options = accountStore.accounts.map(account => {
-      return {
-        value: account,
-        label: account.name,
-      };
-    });
-  },
-  {
-    immediate: true,
-  }
-);
-
-watch(
-  () => transactionStore.transactions,
-  () => {
-    rows.value = transactionStore.transactions;
-  },
-  {
-    immediate: true,
-  }
-);
 
 const remove = async (transaction: Transaction) => {
   if (confirm('Are you sure?')) {

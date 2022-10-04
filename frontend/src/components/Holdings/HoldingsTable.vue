@@ -51,16 +51,16 @@
       <GSkeleton v-else class="h-6" />
     </template>
     <template #summary(openTotalPrice)>
-      {{ formatCurrency(totalBookValue, 'USD', true, 'en-us', 'never') }}
+      {{ formatCurrency(totalBookValue) }}
     </template>
     <template #summary(currentTotalPrice)>
-      {{ formatCurrency(totalOpen, 'USD', true, 'en-us', 'never') }}
+      {{ formatCurrency(totalOpen) }}
     </template>
     <template #summary(openPL)>
-      <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" currency="USD" total />
+      <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" total />
     </template>
     <template #summary(openPLPercent)>
-      <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" currency="USD" />
+      <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" />
     </template>
   </DataTable>
 </template>
@@ -68,14 +68,19 @@
 <script lang="ts" setup>
 import { Holding } from '@common/models/Holding';
 import PriceChange from '@components/PriceChange.vue';
-import { RangeValue, TableConfig, TableLayoutCollection } from '@components/DataTable';
-import DataTable from '@components/DataTable.vue';
+import { RangeValue, TableConfig } from '@components/DataTable/useDataTable';
+import DataTable from '@components/DataTable/DataTable.vue';
 import AppLink from '@components/router/AppLink.vue';
 import { CurrencyUtils } from '@goplan-finance/utils';
 import { reactive } from 'vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
+import { useUserStore } from '@/store';
+import { TableLayoutCollection } from '@components/DataTable/useTableLayout';
+import { useNumberFormat } from '@/hooks/useNumberFormat';
 
-const formatCurrency = CurrencyUtils.formatCurrency;
+const { formatCurrency } = useNumberFormat();
+const userStore = useUserStore();
+await userStore.loadUser();
 
 const props = defineProps<{
   holdings: Holding[];
@@ -221,10 +226,11 @@ const config = reactive<TableConfig>({
       },
     },
   },
-  tableLayout: props.tableLayout,
+  tableLayoutCollection: props.tableLayout,
   settings: {
     actions: false,
     translationPrefix: 'holdings.table',
+    locale: userStore.state.user.locale,
   },
   search: {
     handler: (searchString, holding: Holding) => {

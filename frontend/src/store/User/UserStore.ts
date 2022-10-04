@@ -1,36 +1,47 @@
 import { defineStore } from 'pinia';
-import { Session } from '../auth';
+import { AuthStore, Session } from '../auth';
+import { reactive, readonly } from 'vue';
+import { User } from '@models';
 
-export const useUserStore = defineStore({
-  // name of the store
-  // it is used in devtools and allows restoring state
-  id: 'user',
-  // a function that returns a fresh state
-  state: () => {
-    // const user = await AuthStore.currentUser() as User
-    // const privateMode = user.profileInfo.privateMode || false
+export enum SessionKeys {
+  PRIVATE_MODE = 'privateMode',
+}
 
-    const isPrivate = Session.get<boolean>('privateMode');
+export const useUserStore = defineStore('user', () => {
+  const state = reactive<{ privateMode: boolean; user: User | null }>({
+    privateMode: Session.get<boolean>(SessionKeys.PRIVATE_MODE) ?? false,
+    user: null,
+  });
 
-    return {
-      privateMode: isPrivate,
-    };
-  },
-  // optional getters
-  getters: {},
+  const loadUser = async () => {
+    state.user = await AuthStore.currentUser();
+  };
 
-  actions: {
-    async setPrivateMode(enabled: boolean) {
-      this.privateMode = enabled;
-      Session.set('privateMode', enabled);
-      // const user = await AuthStore.currentUser()
-      //
-      // this.privateMode = enabled
-      // user.set('profileInfo', {
-      //   privateMode : enabled,
-      // })
-      //
-      // await user.save()
-    },
-  },
+  const setPrivateMode = async (enabled: boolean) => {
+    state.privateMode = enabled;
+    Session.set(SessionKeys.PRIVATE_MODE, enabled);
+  };
+
+  const togglePrivateMode = async () => {
+    await setPrivateMode(!state.privateMode);
+  };
+
+  const setDefaultCurrency = async (currency: string) => {
+    state.user.defaultCurrency = currency;
+    state.user.save();
+  };
+
+  const setLocale = async (locale: string) => {
+    state.user.locale = locale;
+    state.user.save();
+  };
+
+  return {
+    state: readonly(state),
+    togglePrivateMode,
+    setPrivateMode,
+    setDefaultCurrency,
+    setLocale,
+    loadUser,
+  };
 });
