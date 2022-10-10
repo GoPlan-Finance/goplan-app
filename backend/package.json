@@ -37,7 +37,7 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.6",
     "eodhistoricaldata-openapi": "github:goplan-finance/eodhistoricaldata-openapi-javascript#master",
-    "express": "4.18.0",
+    "express": "4.18.2",
     "financialmodelingprep-openapi": "github:goplan-finance/financialmodelingprep-openapi-javascript#master",
     "kerberos": "2.0.0",
     "module-alias": "^2.2.2",
