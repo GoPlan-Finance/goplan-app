@@ -43,7 +43,7 @@
     "module-alias": "^2.2.2",
     "mongodb": "^4.3.0",
     "netmask": ">=2.0.1",
-    "parse": "3.4.1",
+    "parse": "3.4.4",
     "parse-server": "https://github.com/GoPlan-Finance/parse-server#master",
     "ts-money": "^0.4.6",
     "ts-node": "^10.2.1"
