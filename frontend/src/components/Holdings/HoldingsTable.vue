@@ -51,10 +51,10 @@
       <GSkeleton v-else class="h-6" />
     </template>
     <template #summary(openTotalPrice)>
-      {{ formatCurrency(totalBookValue) }}
+      {{ formatCurrency(totalBookValue, 'TBD') }}
     </template>
     <template #summary(currentTotalPrice)>
-      {{ formatCurrency(totalOpen) }}
+      {{ formatCurrency(totalOpen, 'TBD') }}
     </template>
     <template #summary(openPL)>
       <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" total />

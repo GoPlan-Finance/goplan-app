@@ -1,28 +1,43 @@
-import { Holding, Transaction } from '@common/models';
+import { Holding, Transaction } from '@models';
 import { Query } from '@goplan-finance/utils';
-import { Mutex } from 'async-mutex';
 import dayjs from 'dayjs';
-import { useTransactionStore } from '../';
-import { HoldingTimeSeriesHelper } from '@store/Holding/HoldingTimeSeriesHelper';
+import { useTransactionStore } from 'goplan-frontend/src/store';
+import { HoldingTimeSeriesHelper } from 'goplan-frontend/src/store/Holding/HoldingTimeSeriesHelper';
+// import { DataUpdateHelper } from '@models/Helpers/DataUpdateHelper';
 
-const holdingMutex = new Mutex();
-
-export class HoldingHelper {
+export class HoldingHelperFrontend /*extends DataUpdateHelper<Holding>*/ {
   private static async updateHolding(holding: Holding) {
+    if (!holding.pendingOps?.transactions) {
+      return;
+    }
+
     const transactionsStore = useTransactionStore();
     await transactionsStore.subscribe();
 
     console.log(`Updating holding "${holding.symbolName}"`);
 
-    const transactions: Transaction[] = transactionsStore.transactions.filter(transaction => {
-      if (
-        !transaction.symbolName ||
-        !holding.symbolName ||
-        transaction.symbolName !== holding.symbolName
-      ) {
-        return false;
-      }
+    const allTransactions: Transaction[] = holding.pendingOps?.transactions.map(t => {
+      const transaction: Transaction = Transaction.fromJSON(Transaction, t);
+      return transaction;
+    });
 
+    await Promise.all(
+      allTransactions.map(async (transaction): Promise<void> => {
+        await transaction.decrypt(true);
+      })
+    );
+
+    const transactions = allTransactions.filter(transaction => {
+      if ((!transaction.symbol || !holding.symbol) && transaction.symbol.id !== holding.symbol.id) {
+        // @todo prob not useful
+        if (
+          !transaction.symbolName ||
+          !holding.symbolName ||
+          transaction.symbolName !== holding.symbolName
+        ) {
+          return false;
+        }
+      }
       if (!transaction.type) {
         return false;
       }
@@ -49,8 +64,8 @@ export class HoldingHelper {
     holding.closedTotalPrice = 0;
 
     const minMax = (holding: Holding, executedAt: Date, op: 'Buy' | 'Sell') => {
-      const first = `first${op}At`;
-      const last = `last${op}At`;
+      const first: keyof Holding = `first${op}At`;
+      const last: keyof Holding = `last${op}At`;
 
       if (!holding[first] || dayjs(holding[first]).unix() > dayjs(executedAt).unix()) {
         holding[first] = executedAt;
@@ -62,8 +77,8 @@ export class HoldingHelper {
     };
 
     const avg = (holding: Holding, op: 'buy' | 'open' | 'closed') => {
-      const total = `${op}TotalPrice`;
-      const qty = `${op}Qty`;
+      const total: keyof Holding = `${op}TotalPrice`;
+      const qty: keyof Holding = `${op}Qty`;
 
       if (holding[qty] === 0) {
         return null;
@@ -100,6 +115,8 @@ export class HoldingHelper {
     );
     holding.isOutdated = false;
 
+    holding.pendingOps.transactions = undefined;
+
     await holding.save();
 
     await HoldingTimeSeriesHelper.updateHistory(holding, transactions);
@@ -133,7 +150,15 @@ export class HoldingHelper {
     }
   }
 
-  public static async;
+  public static async maybeUpdateOutdated(holding: Holding): Promise<void> {
+    if (holding.isOutdated) {
+      try {
+        await HoldingHelperFrontend.updateHolding(holding);
+      } catch (e) {
+        console.error(`maybeUpdateOutdated(${holding.symbolName})`, e);
+      }
+    }
+  }
 
   public static async findOutdatedHoldings() {
     const isOutdatedQuery = (): Query<Holding> => {
@@ -150,17 +175,7 @@ export class HoldingHelper {
 
     console.log(`Holdings->findOutdatedHoldings: Found ${holdings.length} to update`);
     for (const holding of holdings) {
-      await HoldingHelper.maybeUpdateOutdated(holding);
-    }
-  }
-
-  public static async maybeUpdateOutdated(holding: Holding): Promise<void> {
-    if (holding.isOutdated) {
-      try {
-        await HoldingHelper.updateHolding(holding);
-      } catch (e) {
-        console.error(`maybeUpdateOutdated(${holding.symbolName})`, e);
-      }
+      await HoldingHelperFrontend.maybeUpdateOutdated(holding);
     }
   }
 }

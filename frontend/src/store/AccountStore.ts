@@ -1,11 +1,8 @@
-// import {IndexedDB} from './base/IndexedDB'
 import { Account } from '@common/models';
 import { Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 import { useUserStore } from '@store/User/UserStore';
 import { Currencies } from 'ts-money';
-import { TransactionType } from '@models/Transaction';
-import { useTransactionStore } from '@store/TransactionStore';
 
 // const db = new IndexedDB('companyProfile')
 

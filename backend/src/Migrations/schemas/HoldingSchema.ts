@@ -7,6 +7,7 @@ export default SchemaMigrations.makeSchema('Holding', {
     currency: { type: 'String' },
 
     isOutdated: { type: 'Boolean', defaultValue: true },
+    pendingOps: { type: 'Object' },
 
     firstBuyAt: { type: 'Object' },
     firstSellAt: { type: 'Object' },

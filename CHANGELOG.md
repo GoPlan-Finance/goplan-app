@@ -435,4 +435,4 @@ All notable changes to this project will be documented in this file. Dates are d
 - Bump parse from 2.19.0 to 3.1.0 in /backend [`#30`](https://github.com/sadortun/GoPlan-app/pull/30)
 - Added basic project structure. [`#16`](https://github.com/sadortun/GoPlan-app/pull/16)
 - Added OpenSSF Best practice badge (#709) [`#677`](https://github.com/sadortun/GoPlan-app/issues/677)
-- Update typescript-eslint monorepo to v5 [`f29291b`](https://github.com/sadortun/GoPlan-app/commit/f29291b49bdbca566f1db99e020928afc25f131c)
+- Update CHANGELOG.md [`477a3d5`](https://github.com/sadortun/GoPlan-app/commit/477a3d57a9eea453f609f6370337132acd888036)

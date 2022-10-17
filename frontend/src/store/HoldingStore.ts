@@ -1,5 +1,5 @@
 import { Holding } from '@common/models/Holding';
-import { HoldingHelper } from '@store/Holding/HoldingHelper';
+import { HoldingHelperFrontend } from '@models/Helpers/HoldingHelperFrontend';
 import { ArrayUtils, Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -94,7 +94,7 @@ export const useHoldingStore = defineStore({
 
   actions: {
     async _init() {
-      HoldingHelper.createMissingHoldings().then(() => HoldingHelper.findOutdatedHoldings());
+      //HoldingHelperFrontend.createMissingHoldings().then(() => HoldingHelperFrontend.findOutdatedHoldings());
 
       const priceStore = useAssetPriceStore();
       await priceStore.subscribe();
@@ -106,7 +106,7 @@ export const useHoldingStore = defineStore({
       q.include('symbol');
 
       await q.liveQuery(this.holdings, async (holding, op) => {
-        await HoldingHelper.maybeUpdateOutdated(holding);
+        await HoldingHelperFrontend.maybeUpdateOutdated(holding);
 
         if (!holding.symbol) {
           return;

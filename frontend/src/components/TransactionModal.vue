@@ -211,7 +211,8 @@ const save = async () => {
 
   try {
     await transactionInternal.value.save();
-    notification.success(t('Transaction saved'));
+
+    notification.notification.success(t('Transaction saved'));
     reset();
   } catch (e) {
     alert(e);
