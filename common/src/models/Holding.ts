@@ -17,22 +17,22 @@ export class Holding extends CalculatedDataObject<HoldingPendingOpsInterface> {
 
   constructor() {
     super(Holding.className, [
-        'firstBuyAt',
-        'firstSellAt',
-        'lastBuyAt',
-        'lastSellAt',
+      'firstBuyAt',
+      'firstSellAt',
+      'lastBuyAt',
+      'lastSellAt',
 
-        'buyQty',
-        'buyAvgPrice',
-        'buyTotalPrice',
+      'buyQty',
+      'buyAvgPrice',
+      'buyTotalPrice',
 
-        'openQty',
-        'openAvgPrice',
-        'openTotalPrice',
+      'openQty',
+      'openAvgPrice',
+      'openTotalPrice',
 
-        'closedQty',
-        'closedAvgPrice',
-        'closedTotalPrice',
+      'closedQty',
+      'closedAvgPrice',
+      'closedTotalPrice',
     ]);
   }
 

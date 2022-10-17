@@ -31,6 +31,8 @@ export interface ImportRowDataInterface extends CsvDataInterface {
   assetSymbol?: AssetSymbol;
 }
 
+const symbolSearchCache = [];
+
 export abstract class BaseCSVImporter {
   abstract prepareRow(row: unknown): Promise<CsvDataInterface>;
 
@@ -78,8 +80,14 @@ export abstract class BaseCSVImporter {
   }
 
   protected async validateRow(unsafeRow: CsvDataInterface): Promise<ImportRowDataInterface> {
-    if (!unsafeRow.type || !unsafeRow.date || !unsafeRow.accountName) {
-      throw '"date", "type", "currency", "accountName" fields are mandatory';
+    if (!unsafeRow.accountName) {
+      throw '"accountName" fields are mandatory';
+    }
+    if (!unsafeRow.type) {
+      throw '"type" fields are mandatory';
+    }
+    if (!unsafeRow.date) {
+      throw '"date" fields are mandatory';
     }
 
     const row: ImportRowDataInterface = {
@@ -109,28 +117,31 @@ export abstract class BaseCSVImporter {
 
       if (!row.assetSymbol) {
         // This should most likely be moved into AssetSymbol.AfterFind trigger.
-        const searchedSymbols: AssetSymbol[] = await Parse.Cloud.run('Assets--Search', {
-          query: row.symbol,
-        });
+        const searchedSymbols: AssetSymbol[] =
+          symbolSearchCache[row.symbol] ??
+          (await Parse.Cloud.run('Assets--Search', {
+            query: row.symbol,
+          }));
 
+        symbolSearchCache[row.symbol] = searchedSymbols;
         const exactMatch = searchedSymbols.find(symbol => symbol.tickerName === row.symbol);
         if (exactMatch) {
           row.assetSymbol = exactMatch;
         }
-        //        throw `Notice: Symbol ${row.symbol} not found.`
       }
+      //        throw `Notice: Symbol ${row.symbol} not found.`
     }
 
-    const types = ['transfer', 'buy', 'sell', 'dividends', 'fees'];
+    const types = ['transfer', 'buy', 'sell', 'dividends', 'fees', 'split'];
     if (!types.includes(row.type)) {
-      throw `'Type must be one of the following "${types.join('", "')}"`;
+      throw `'Type must be one of the following "${types.join('", "')}", got "${row.type}"`;
     }
 
     if (row.currency && row.assetSymbol && row.assetSymbol.currency !== row.currency) {
       throw `Currency "${row.currency}" does not match Asset Currency of "${row.assetSymbol.currency}"`;
     }
 
-    if (!row.symbol && ['buy', 'sell', 'dividends'].includes(row.type)) {
+    if (!row.symbol && ['buy', 'sell', 'dividends', 'split'].includes(row.type)) {
       throw 'Symbol missing';
     }
 
@@ -138,7 +149,7 @@ export abstract class BaseCSVImporter {
       throw 'totalExcludingFees missing';
     }
 
-    if (!row.quantity && ['buy', 'sell'].includes(row.type)) {
+    if (!row.quantity && ['buy', 'sell', 'split'].includes(row.type)) {
       throw 'quantity missing';
     }
 

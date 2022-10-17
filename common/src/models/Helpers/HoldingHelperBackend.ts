@@ -1,9 +1,9 @@
 import { Holding, Transaction } from '@models';
 import { Query } from '@goplan-finance/utils';
-import { DataUpdateHelper } from '@models/Helpers/DataUpdateHelper';
+// import { DataUpdateHelper } from '@models/Helpers/DataUpdateHelper';
 import { HoldingPendingOpsInterface } from '@models/Holding';
 
-export class HoldingHelperBackend extends DataUpdateHelper<Holding> {
+export class HoldingHelperBackend /*extends DataUpdateHelper<Holding> */ {
   private static async _prepareData(holding: Holding): Promise<HoldingPendingOpsInterface> {
     const transactions = await Query.create(Transaction).useMasterKey(true).findBy({
       symbol: holding.symbol,

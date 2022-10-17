@@ -10,8 +10,7 @@ export enum TransactionType {
   DISTRIBUTION = 'distribution',
   DRIP = 'drip',
   FEES = 'fees',
-  DEPOSIT = 'deposit',
-  WITHDRAWAL = 'withdrawal',
+  SPLIT = 'split',
 }
 
 export class Transaction extends SecureObject {

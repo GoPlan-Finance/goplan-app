@@ -80,6 +80,13 @@
           {{ t('transactions.type.' + value.toLowerCase()) }}
         </div>
         <div
+          v-else-if="value.toLowerCase() === TransactionType.SPLIT"
+          class="flex gap-2 text-yellow-500"
+        >
+          <ShareIcon class="h-6 w-6" />
+          {{ t('transactions.type.' + value.toLowerCase()) }}
+        </div>
+        <div
           v-else-if="value.toLowerCase() === TransactionType.DEPOSIT"
           class="flex gap-2 text-green-600"
         >
@@ -148,6 +155,7 @@ import {
   MinusCircleIcon,
   InformationCircleIcon,
   DotsCircleHorizontalIcon,
+  ShareIcon,
 } from '@heroicons/vue/solid';
 import { useI18n } from 'vue-i18n';
 import ExportTransactionsModal from '@components/Transactions/ExportTransactionsModal.vue';

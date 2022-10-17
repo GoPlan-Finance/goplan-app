@@ -28,7 +28,10 @@ export class HoldingHelperFrontend /*extends DataUpdateHelper<Holding>*/ {
     );
 
     const transactions = allTransactions.filter(transaction => {
-      if ((!transaction.symbol || !holding.symbol) && transaction.symbol.id !== holding.symbol.id) {
+      if (
+        (!transaction.symbol || !holding.symbol) &&
+        transaction.symbol?.id !== holding.symbol?.id
+      ) {
         // @todo prob not useful
         if (
           !transaction.symbolName ||
@@ -42,7 +45,7 @@ export class HoldingHelperFrontend /*extends DataUpdateHelper<Holding>*/ {
         return false;
       }
 
-      return ['buy', 'sell'].includes(transaction.type.toLowerCase());
+      return ['buy', 'sell', 'split'].includes(transaction.type.toLowerCase());
     });
 
     holding.firstBuyAt = null;
@@ -88,7 +91,7 @@ export class HoldingHelperFrontend /*extends DataUpdateHelper<Holding>*/ {
     };
 
     transactions.forEach(transaction => {
-      if (transaction.type.toLowerCase() === 'buy') {
+      if (transaction.type.toLowerCase() === 'buy' || transaction.type.toLowerCase() === 'split') {
         holding.buyQty += transaction.quantity;
         holding.buyTotalPrice += transaction.totalExcludingFees;
 

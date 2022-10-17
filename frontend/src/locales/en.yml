@@ -81,6 +81,7 @@ transactions:
     price: Price
     quantity: Quantity
     sell: Sell
+    split: Split
     symbolName: Ticker
     totalExcludingFees: Total Excluding Fees
     transfer: Transfer
@@ -92,6 +93,7 @@ transactions:
     dividends: Dividends
     fees: Fees
     sell: Sell
+    split: Split
     withdraw: Withdraw
 watchlist:
   table:

@@ -40,7 +40,15 @@ export class Canada_NationalBank_CDBN extends BaseCSVImporter {
     date: {
       columns: ['Date de transaction'],
       handler(val: string): dayjs.Dayjs {
-        return dayjs(val, 'DD/MM/YYYY', true);
+        const d1 = dayjs(val, 'DD/MM/YYYY', true);
+        if (d1.isValid()) {
+          return d1;
+        }
+
+        const d2 = dayjs(val, 'YYYY-MM-DD', true);
+        if (d2.isValid()) {
+          return d2;
+        }
       },
     },
     price: {
@@ -68,7 +76,7 @@ export class Canada_NationalBank_CDBN extends BaseCSVImporter {
       },
     },
     type: {
-      columns: ['Operation'],
+      columns: ['Operation', 'Opération'],
 
       handler(val: string): TransactionType {
         const types: Record<string, TransactionType> = {
@@ -83,7 +91,7 @@ export class Canada_NationalBank_CDBN extends BaseCSVImporter {
           Fraction: TransactionType.DEPOSIT, // Balance of a DRIP
 
           Transfert: TransactionType.TRANSFER,
-
+          Fractionnement: TransactionType.SPLIT,
           DISECH: null,
           INTNAL: null,
           'Imp Non Res': null,
