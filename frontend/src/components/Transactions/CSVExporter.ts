@@ -5,7 +5,7 @@
  */
 import { Transaction } from '@common/models';
 import * as Papa from 'papaparse';
-import { CsvDataInterface } from '@components/Transactions/DefaultCSVImporter';
+import { CsvDataInterface } from '@components/Transactions/CustomImporters/BaseCSVImporter';
 
 export class CSVExporter {
   mapTransactions(transactions: Transaction[]): CsvDataInterface[] {

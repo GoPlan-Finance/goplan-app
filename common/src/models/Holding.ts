@@ -1,10 +1,15 @@
 import { Query, SecureObject } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
 import { AssetPrice, AssetSymbol, Transaction, User } from '.';
+import { CalculatedDataObject } from '@models/base/CalculatedDataObject';
 
 const createMutex = new Mutex();
 
-export class Holding extends SecureObject {
+export interface HoldingPendingOpsInterface {
+  transactions?: unknown[];
+}
+
+export class Holding extends CalculatedDataObject<HoldingPendingOpsInterface> {
   static className = 'Holding';
 
   private _lastPrice: AssetPrice | null = null;
@@ -12,22 +17,22 @@ export class Holding extends SecureObject {
 
   constructor() {
     super(Holding.className, [
-      'firstBuyAt',
-      'firstSellAt',
-      'lastBuyAt',
-      'lastSellAt',
+        'firstBuyAt',
+        'firstSellAt',
+        'lastBuyAt',
+        'lastSellAt',
 
-      'buyQty',
-      'buyAvgPrice',
-      'buyTotalPrice',
+        'buyQty',
+        'buyAvgPrice',
+        'buyTotalPrice',
 
-      'openQty',
-      'openAvgPrice',
-      'openTotalPrice',
+        'openQty',
+        'openAvgPrice',
+        'openTotalPrice',
 
-      'closedQty',
-      'closedAvgPrice',
-      'closedTotalPrice',
+        'closedQty',
+        'closedAvgPrice',
+        'closedTotalPrice',
     ]);
   }
 

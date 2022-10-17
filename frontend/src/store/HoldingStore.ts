@@ -1,5 +1,5 @@
 import { Holding } from '@common/models/Holding';
-import { HoldingHelper } from '@store/Holding/HoldingHelper';
+import { HoldingHelperFrontend } from '@models/Helpers/HoldingHelperFrontend';
 import { ArrayUtils, Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
@@ -29,7 +29,11 @@ export const useHoldingStore = defineStore({
      * Get an array of unique symbol types (Common Stock, Fund, ETF, ...)
      */
     types(): string[] {
-      return [...new Set<string>(this.holdings.map((holding: Holding) => holding.symbol.type))];
+      return [
+        ...new Set<string>(
+          this.holdings.map((holding: Holding) => holding.symbol?.type).filter(v => !!v)
+        ),
+      ];
     },
 
     typeAllocations(): TypeAllocation[] {
@@ -38,7 +42,7 @@ export const useHoldingStore = defineStore({
         let currentValue = 0;
 
         this.holdings.forEach((holding: Holding) => {
-          if (holding.symbol.type === type) {
+          if (holding.symbol?.type === type) {
             initialValue += holding.openTotalPrice;
             currentValue += holding.lastPrice?.price * holding.openQty;
           }
@@ -90,7 +94,7 @@ export const useHoldingStore = defineStore({
 
   actions: {
     async _init() {
-      HoldingHelper.createMissingHoldings().then(() => HoldingHelper.findOutdatedHoldings());
+      //HoldingHelperFrontend.createMissingHoldings().then(() => HoldingHelperFrontend.findOutdatedHoldings());
 
       const priceStore = useAssetPriceStore();
       await priceStore.subscribe();
@@ -102,7 +106,7 @@ export const useHoldingStore = defineStore({
       q.include('symbol');
 
       await q.liveQuery(this.holdings, async (holding, op) => {
-        await HoldingHelper.maybeUpdateOutdated(holding);
+        await HoldingHelperFrontend.maybeUpdateOutdated(holding);
 
         if (!holding.symbol) {
           return;

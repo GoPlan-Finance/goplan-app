@@ -3,8 +3,8 @@
  *
  *
  */
-import { Account, AssetSymbol, Transaction } from '@common/models';
-import { TransactionType } from '@common/models/Transaction';
+import { Account, AssetSymbol, Transaction } from '@models';
+import { TransactionType } from '@models/Transaction';
 import { Query, StringUtils } from '@goplan-finance/utils';
 
 import { Mutex } from 'async-mutex';
@@ -16,31 +16,36 @@ type LoggerFn = (i: string, msg: string) => void;
 
 export interface CsvDataInterface {
   currency: string;
-  date: string;
-  price: string;
-  quantity: string;
-  fees: string;
-  totalExcludingFees: string;
+  date: dayjs.Dayjs;
+  price: number | null;
+  quantity: number | null;
+  fees: number | null;
+  totalExcludingFees: number | null;
   type: TransactionType;
-  account?: Account;
   accountName: string;
   symbol: string;
+}
+
+export interface ImportRowDataInterface extends CsvDataInterface {
+  account?: Account;
   assetSymbol?: AssetSymbol;
 }
 
-export class DefaultCSVImporter {
+export abstract class BaseCSVImporter {
+  abstract prepareRow(row: unknown): Promise<CsvDataInterface>;
+
   mutex = new Mutex();
 
   accounts: Account[] | null = null;
 
-  parseCSV(file): Promise<CsvDataInterface[]> {
+  async parseCSV(file): Promise<unknown[]> {
     return new Promise(resolve => {
       const reader = new FileReader();
       reader.readAsText(file);
       Papa.parse(file, {
         header: true,
         complete({ data }) {
-          resolve(data as CsvDataInterface[]);
+          resolve(data as unknown[]);
         },
       });
     });
@@ -57,9 +62,13 @@ export class DefaultCSVImporter {
       let account = this.accounts.find(account => account.name === name || account.id === name);
 
       if (!account) {
+        if (!currency) {
+          throw `You need to specify a currency for the account "${name}. To do so, create an account first, then retry the import`;
+        }
+
         account = new Account();
         account.name = name;
-        account.currency = currency ?? Currencies.USD.code;
+        account.currency = currency;
         await account.save();
         this.accounts.push(account);
       }
@@ -68,20 +77,30 @@ export class DefaultCSVImporter {
     });
   }
 
-  private async validateRow(row: CsvDataInterface): Promise<CsvDataInterface> {
-    // date  type  symbol  quantity  price  fees  totalExcludingFees  currency  accountName  description
-
-    if (!row.type || !row.date || !row.currency || !row.accountName) {
+  protected async validateRow(unsafeRow: CsvDataInterface): Promise<ImportRowDataInterface> {
+    if (!unsafeRow.type || !unsafeRow.date || !unsafeRow.accountName) {
       throw '"date", "type", "currency", "accountName" fields are mandatory';
     }
 
-    row.account = await this.getOrCreateAccount(row.accountName, row.currency.toUpperCase());
-    row.quantity = row.quantity || null;
-    row.symbol = row.symbol ? row.symbol.toUpperCase() : null;
-    row.type = row.type.toLowerCase() as TransactionType;
-    row.currency = row.currency.toUpperCase();
+    const row: ImportRowDataInterface = {
+      accountName: unsafeRow.accountName.trim(),
+      currency: unsafeRow.currency?.toUpperCase(),
+      quantity: unsafeRow.quantity || null,
+      type: unsafeRow.type.toLowerCase() as TransactionType,
+      symbol: unsafeRow.symbol ? unsafeRow.symbol.toUpperCase().trim() : null,
+      date: unsafeRow.date,
+      price: unsafeRow.price,
+      fees: unsafeRow.fees,
+      totalExcludingFees: unsafeRow.totalExcludingFees,
+    };
 
-    if (!dayjs(row.date).isValid()) {
+    row.account = await this.getOrCreateAccount(row.accountName, row.currency);
+
+    // if (!row.account.currency) {
+    //   throw '"date", "type", "currency", "accountName" fields are mandatory';
+    // }
+
+    if (!row.date?.isValid()) {
       throw 'The date format is invalid';
     }
 
@@ -89,6 +108,15 @@ export class DefaultCSVImporter {
       row.assetSymbol = await AssetSymbol.fetchSymbolByTicker(row.symbol);
 
       if (!row.assetSymbol) {
+        // This should most likely be moved into AssetSymbol.AfterFind trigger.
+        const searchedSymbols: AssetSymbol[] = await Parse.Cloud.run('Assets--Search', {
+          query: row.symbol,
+        });
+
+        const exactMatch = searchedSymbols.find(symbol => symbol.tickerName === row.symbol);
+        if (exactMatch) {
+          row.assetSymbol = exactMatch;
+        }
         //        throw `Notice: Symbol ${row.symbol} not found.`
       }
     }
@@ -122,45 +150,42 @@ export class DefaultCSVImporter {
       throw 'fees missing';
     }
 
-    if (
-      row.totalExcludingFees &&
-      parseFloat(row.totalExcludingFees) !== 0 &&
-      ['fees'].includes(row.type)
-    ) {
+    if (row.totalExcludingFees && row.totalExcludingFees !== 0 && ['fees'].includes(row.type)) {
       throw 'totalExcludingFees must be empty';
     }
 
-    const qty = parseFloat(row.quantity);
-    if (['sell', 'buy'].includes(row.type) && qty < 0) {
-      row.quantity = Math.abs(qty).toString(); // Some exports contains SELL -100
-    }
+    // if (['sell', 'buy'].includes(row.type) && row.quantity < 0) {
+    //   row.quantity = Math.abs(row.quantity); // Some exports contains SELL -100
+    // }
 
-    const totalExcludingFees = parseFloat(row.totalExcludingFees);
-    if (['sell', 'buy'].includes(row.type) && totalExcludingFees < 0) {
-      row.totalExcludingFees = Math.abs(totalExcludingFees).toString(); // Some exports contains SELL -100
-    }
+    // if (['sell', 'buy'].includes(row.type) && row.totalExcludingFees < 0) {
+    //   row.totalExcludingFees = Math.abs(row.totalExcludingFees); // Some exports contains SELL -100
+    // }
 
     return row;
   }
 
-  async validateCSV(file: File, logger: LoggerFn): Promise<CsvDataInterface[]> {
-    const validRows = [];
+  async validateCSV(file: File, logger: LoggerFn): Promise<ImportRowDataInterface[]> {
+    const validRows: ImportRowDataInterface[] = [];
 
-    const data: CsvDataInterface[] = await this.parseCSV(file);
-    for (const [i, row] of Object.entries(data)) {
+    const data: unknown[] = await this.parseCSV(file);
+    for (const [i, rawData] of Object.entries(data)) {
       try {
-        validRows.push(await this.validateRow(row));
+        const rowData: CsvDataInterface = await this.prepareRow(rawData);
+
+        validRows.push(await this.validateRow(rowData));
 
         logger(i, 'Valid');
       } catch (error) {
         logger(i, error);
+        console.error(`Import failed #${i}`, error, rawData);
       }
     }
 
     return validRows;
   }
 
-  async importCSV(rows: CsvDataInterface[], logger: LoggerFn) {
+  async importCSV(rows: ImportRowDataInterface[], logger: LoggerFn) {
     for (const [i, row] of Object.entries(rows)) {
       try {
         const transaction = new Transaction();

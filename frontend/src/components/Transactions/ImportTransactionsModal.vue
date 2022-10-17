@@ -121,8 +121,10 @@
 import { ref } from 'vue';
 import ButtonDefault from '../base/ButtonDefault.vue';
 import Modal from '@components/base/GoModal.vue';
-import { DefaultCSVImporter } from './DefaultCSVImporter';
+import { BaseCSVImporter } from './CustomImporters/BaseCSVImporter';
 import { UploadIcon } from '@heroicons/vue/outline';
+import { DefaultCSVImporter } from '@components/Transactions/CustomImporters/DefaultCSVImporter';
+import { Canada_NationalBank_CDBN } from '@components/Transactions/CustomImporters/Canada_NationalBank_CDBN';
 
 enum ImportStepEnum {
   Instructions,
@@ -138,7 +140,7 @@ const currentStep = ref<ImportStepEnum>(ImportStepEnum.Instructions);
 const logs = ref([]);
 const validRows = ref([]);
 
-const csvImporter = new DefaultCSVImporter();
+const csvImporter = new Canada_NationalBank_CDBN();
 
 const reset = () => {
   validRows.value = [];

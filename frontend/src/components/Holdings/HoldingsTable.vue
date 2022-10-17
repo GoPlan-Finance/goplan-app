@@ -51,10 +51,10 @@
       <GSkeleton v-else class="h-6" />
     </template>
     <template #summary(openTotalPrice)>
-      {{ formatCurrency(totalBookValue) }}
+      {{ formatCurrency(totalBookValue, 'TBD') }}
     </template>
     <template #summary(currentTotalPrice)>
-      {{ formatCurrency(totalOpen) }}
+      {{ formatCurrency(totalOpen, 'TBD') }}
     </template>
     <template #summary(openPL)>
       <PriceChange :compare-from="totalBookValue" :compare-to="totalOpen" total />
@@ -65,12 +65,13 @@
   </DataTable>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Holding } from '@common/models/Holding';
 import PriceChange from '@components/PriceChange.vue';
 import { RangeValue, TableConfig } from '@components/DataTable/useDataTable';
 import DataTable from '@components/DataTable/DataTable.vue';
 import AppLink from '@components/router/AppLink.vue';
+import { CurrencyUtils } from '@goplan-finance/utils';
 import { reactive } from 'vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
 import { useUserStore } from '@/store';
@@ -92,7 +93,15 @@ const config = reactive<TableConfig>({
   fields: {
     name: {
       value: (holding: Holding) => {
-        return holding?.symbol?.name ?? holding?.importRawData['description'] ?? '';
+        if (holding?.symbolName) {
+          return holding?.symbolName;
+        }
+
+        if (holding?.importRawData && holding?.importRawData['description']) {
+          return holding?.importRawData['description'];
+        }
+
+        return '??';
       },
     },
     symbolName: {},
