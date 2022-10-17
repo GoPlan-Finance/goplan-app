@@ -8,13 +8,16 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { computed } from 'vue';
 import { DataType } from '@/types';
 import { CurrencyUtils } from '@goplan-finance/utils';
+import { useNumberFormat } from '@/hooks/useNumberFormat';
 
 dayjs.extend(localizedFormat);
+const { formatNumber, formatPercent, formatCurrency } = useNumberFormat();
 
 const props = withDefaults(
   defineProps<{
     data: string | string[] | number | Date;
     type?: DataType;
+    currency?: string;
   }>(),
   { type: DataType.STRING }
 );
@@ -25,21 +28,18 @@ const redGreen = (value: number, formattedValue: string) => {
 
 const getValue = computed(() => {
   const positive = (props.data as number) > 0;
-  const formattedPercent = `${parseFloat(props.data as string).toFixed(2)} %`;
+  const formattedPercent = formatPercent(Number(props.data));
+  const formattedCurrency = formatCurrency(Number(props.data), props.currency);
 
   switch (props.type) {
     case DataType.STRING:
       return props.data;
 
     case DataType.NUMBER:
-      return Number(props.data).toLocaleString();
+      return formatNumber(Number(props.data));
 
     case DataType.PERCENT:
-      const value = parseFloat(props.data as string);
-      if (isNaN(Number(props.data))) {
-        return;
-      }
-      return `${parseFloat(props.data as string).toFixed(2)} %`;
+      return formattedPercent;
 
     case DataType.PERCENT_CHANGE:
       return redGreen(
@@ -48,18 +48,13 @@ const getValue = computed(() => {
       );
 
     case DataType.MONEY:
-      return CurrencyUtils.formatCurrency(
-        props.data as number,
-        'USD',
-        true
-      ); /* @todo set currency */
+      return formattedCurrency;
 
     case DataType.MONEY_CHANGE:
-      const formattedValue = CurrencyUtils.formatCurrency(props.data as number, 'USD', true);
       return redGreen(
         props.data as number,
-        positive ? `+ ${formattedValue}` : formattedValue
-      ); /* @todo set currency */
+        positive ? `+ ${formattedCurrency}` : formattedCurrency
+      );
 
     case DataType.DATE:
       return dayjs(props.data as Date).format('ll');

@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import BuySellAsset from '@components/BuySellAsset.vue';
+import BuySellAsset from '@components/TransactionModal.vue';
 import HoldingTimeSeriesChart from '@components/Charts/HoldingTimeSeriesChart.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import { useI18n } from 'vue-i18n';

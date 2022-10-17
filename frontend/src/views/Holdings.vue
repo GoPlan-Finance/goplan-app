@@ -2,7 +2,7 @@
   <HeadlineActions :headline="$t('holdings.headline')">
     <BuySellAsset />
   </HeadlineActions>
-  <template v-if="holdingStore.hasOpenHoldings">
+  <template v-if="holdingStore.holdings.length">
     <!--  <h1 class="text-gray-700 text-2xl items-center">Active Positions</h1>-->
     <HoldingsTable
       :holdings="holdingStore.openHoldings"
@@ -10,10 +10,19 @@
       :total-book-value="holdingStore.totalBookValue"
       :table-layout="openTableLayout"
     />
-    <!--  <br />-->
-    <!--  <br />-->
-    <!--  <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>-->
-    <!--  <holdings-table :rows="closed.rows" :table-layout="closed.tableLayout" />-->
+
+    <template v-if="holdingStore.closedHoldings.length">
+      <br />
+      <br />
+      <h1 class="text-gray-700 text-2xl items-center">Previous Positions</h1>
+
+      <HoldingsTable
+        :holdings="holdingStore.closedHoldings"
+        :total-open="0"
+        :total-book-value="holdingStore.totalBookValue"
+        :table-layout="closedTableLayout"
+      />
+    </template>
   </template>
   <GEmptyState v-else>
     {{ t('No Holdings') }}
@@ -21,16 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import BuySellAsset from '@components/BuySellAsset.vue';
+import BuySellAsset from '@components/TransactionModal.vue';
 import HeadlineActions from '@components/HeadlineActions.vue';
 import HoldingsTable from '@components/Holdings/HoldingsTable.vue';
-import { Screens } from '@/utils/screens';
-import { computed } from 'vue';
+import { Screens } from '@/hooks/useScreensize';
 import { useHoldingStore } from '@/store';
-import { Holding } from '@models';
-import { TableLayoutCollection } from '@components/DataTable';
 import GEmptyState from '@components/base/GEmptyState.vue';
 import { useI18n } from 'vue-i18n';
+import { TableLayoutCollection } from '@components/DataTable/useTableLayout';
 
 const { t } = useI18n();
 
@@ -59,6 +66,22 @@ const openTableLayout: TableLayoutCollection = {
 const closedTableLayout: TableLayoutCollection = {
   [Screens.DEFAULT]: [['symbolName'], ['closedPL']],
   [Screens.SM]: [['symbolName', 'name'], ['lastSellAt'], ['closedPL']],
+
+  [Screens.DEFAULT]: [['symbolName'], ['currentTotalPrice']],
+  [Screens.SM]: [
+    ['symbolName', 'name'],
+    ['lastBuyAt'],
+    [],
+    ['currentTotalPrice', 'currentAvgPrice'],
+    ['openPL', 'openPLPercent'],
+  ],
+  [Screens.MD]: [
+    ['symbolName', 'name'],
+    ['closedQty', 'lastBuyAt'],
+    ['closedTotalPrice', 'closedAvgPrice'],
+    ['closedPL'],
+    ['weight'],
+  ],
 };
 
 const holdingStore = useHoldingStore();

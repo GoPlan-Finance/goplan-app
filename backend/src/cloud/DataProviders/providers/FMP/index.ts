@@ -46,7 +46,9 @@ export class FMP implements Types.DataProviderInterface {
     const response = error.response;
 
     if (response.status === 429) {
+      // @ts-expect-error no def
       const s = response.data['X-Rate-Limit-Retry-After-Seconds'] || 0;
+      // @ts-expect-error no def
       const ms = response.data['X-Rate-Limit-Retry-After-Milliseconds'] || 0;
 
       const err = new Types.APIError(Types.APIErrorType.QUOTA_ERROR);

@@ -1,7 +1,8 @@
-// import {IndexedDB} from './base/IndexedDB'
 import { Account } from '@common/models';
 import { Query } from '@goplan-finance/utils';
 import { defineStore } from 'pinia';
+import { useUserStore } from '@store/User/UserStore';
+import { Currencies } from 'ts-money';
 
 // const db = new IndexedDB('companyProfile')
 
@@ -12,13 +13,14 @@ interface StoreState {
 
 export const useAccountStore = defineStore({
   id: 'account',
-
   state: (): StoreState => ({
     subscriptionPromise: null,
     accounts: [],
   }),
   actions: {
     async _init() {
+      const userStore = useUserStore();
+
       if (this.liveSubscription) {
         return;
       }
@@ -32,7 +34,7 @@ export const useAccountStore = defineStore({
         console.log('CREATING DEFAULT ACCOUNT');
         const account = new Account();
         account.name = 'Default Account';
-        account.currency = 'USD';
+        account.currency = userStore.state?.user?.defaultCurrency ?? Currencies.USD.code;
         await account.save();
       }
 

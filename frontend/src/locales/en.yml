@@ -7,12 +7,12 @@ accounts:
 allocations:
   type:
     table:
-      type: Type
-      initialValue: Initial Value
       currentValue: Current Value
-      openChangeTotal: Change Total
+      initialValue: Initial Value
       openChangePercent: Change Percent
-      weight: % Porfolio
+      openChangeTotal: Change Total
+      type: Type
+      weight: '% Porfolio'
 details:
   address: Address
   ceo: CEO
@@ -86,6 +86,13 @@ transactions:
     transfer: Transfer
     type: Type
     value: Value
+  type:
+    buy: Buy
+    deposit: Deposit
+    dividends: Dividends
+    fees: Fees
+    sell: Sell
+    withdraw: Withdraw
 watchlist:
   table:
     createdAt: Date Added

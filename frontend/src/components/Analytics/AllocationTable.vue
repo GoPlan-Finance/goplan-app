@@ -1,13 +1,7 @@
 <template>
   <DataTable :config="config" :rows="holdingStore.typeAllocations">
     <template #field(openChangeTotal)="{ value }">
-      <PriceChange
-        v-if="value"
-        :compare-from="value.from"
-        :compare-to="value.to"
-        :currency="value.currency"
-        total
-      />
+      <PriceChange v-if="value" :compare-from="value.from" :compare-to="value.to" total />
       <GSkeleton v-else class="h-6" />
     </template>
     <template #field(openChangePercent)="{ value }">
@@ -15,33 +9,32 @@
         v-if="value"
         :compare-from="value.from"
         :compare-to="value.to"
-        :currency="value.currency"
+        class="font-bold"
       />
       <GSkeleton v-else class="h-6" />
     </template>
     <template #field(initialValue)="{ row }">
-      {{ formatCurrency(row.initialValue, 'USD', true, 'en-us', 'never') }}
+      {{ formatCurrency(row.initialValue) }}
     </template>
     <template #field(currentValue)="{ row }">
-      {{ formatCurrency(row.currentValue, 'USD', true, 'en-us', 'never') }}
+      {{ formatCurrency(row.currentValue) }}
     </template>
   </DataTable>
 </template>
 
 <script setup lang="ts">
-import { RangeValue, TableConfig, TableLayoutCollection } from '@components/DataTable';
-import DataTable from '@components/DataTable.vue';
-import { CurrencyUtils } from '@goplan-finance/utils';
+import { RangeValue, TableConfig } from '@components/DataTable/useDataTable';
+import DataTable from '@components/DataTable/DataTable.vue';
 import { reactive } from 'vue';
-import { Screens } from '@/utils/screens';
+import { Screens } from '@/hooks/useScreensize';
 import { useHoldingStore } from '@/store';
 import { TypeAllocation } from '@store/HoldingStore';
 import PriceChange from '@components/PriceChange.vue';
 import GSkeleton from '@components/base/GSkeleton.vue';
+import { TableLayoutCollection } from '@components/DataTable/useTableLayout';
+import { useNumberFormat } from '@/hooks/useNumberFormat';
 
-const formatCurrency = CurrencyUtils.formatCurrency;
-
-const tableLayout: TableLayoutCollection = {
+const tableLayoutCollection: TableLayoutCollection = {
   [Screens.DEFAULT]: [['type'], ['currentValue']],
   [Screens.SM]: [
     ['type'],
@@ -52,6 +45,7 @@ const tableLayout: TableLayoutCollection = {
   ],
 };
 
+const { formatCurrency } = useNumberFormat();
 const holdingStore = useHoldingStore();
 await holdingStore.subscribe();
 
@@ -63,7 +57,6 @@ const typeAllocationRange = (typeAllocation: TypeAllocation): RangeValue => {
   return {
     from: typeAllocation.initialValue,
     to: typeAllocation.currentValue,
-    currency: 'USD',
   };
 };
 
@@ -95,12 +88,11 @@ const config = reactive<TableConfig>({
         if (!row.currentValue) {
           return 0;
         }
-        // @todo currency
         return holdingStore.totalOpen === 0 ? 0 : row.currentValue / holdingStore.totalOpen;
       },
     },
   },
-  tableLayout,
+  tableLayoutCollection,
   settings: {
     actions: false,
     translationPrefix: 'allocations.type.table',

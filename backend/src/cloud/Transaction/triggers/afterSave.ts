@@ -7,6 +7,7 @@ import { Transaction } from '@common/models';
 import { Holding } from '@common/models/Holding';
 import { Query } from '@goplan-finance/utils';
 import { Mutex } from 'async-mutex';
+import { HoldingHelperBackend } from '@models/Helpers/HoldingHelperBackend';
 
 export const findHolding = async (transaction: Transaction): Promise<Holding | null> => {
   if (transaction.symbol) {
@@ -38,10 +39,7 @@ Parse.Cloud.afterSave('Transaction', async request => {
 
       holding.setACL(transaction.getACL());
 
-      holding.isOutdated = true;
-      // @todo Set HoldingTimeSeries.isOutdated based on transaction date
-
-      await holding.save(null, Holding.useMasterKey(true));
+      await HoldingHelperBackend.prepareData(holding);
     }
   });
 });

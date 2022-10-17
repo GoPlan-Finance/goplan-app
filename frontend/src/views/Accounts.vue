@@ -19,28 +19,31 @@
 </template>
 
 <script setup lang="ts">
-import { useAccountStore, useTransactionStore } from '@/store';
-import { Screens } from '@/utils/screens';
+import { useAccountStore, useTransactionStore, useUserStore } from '@/store';
+import { Screens } from '@/hooks/useScreensize';
 import { computed, reactive } from 'vue';
-import DataTable from '../components/DataTable.vue';
+import DataTable from '@components/DataTable/DataTable.vue';
 import HeadlineActions from '../components/HeadlineActions.vue';
 import { useI18n } from 'vue-i18n';
 import EditCreateAccount from '@components/EditCreateAccount.vue';
-import { PencilIcon, TrashIcon } from '@heroicons/vue/solid';
+import { PencilIcon } from '@heroicons/vue/solid';
 import { Account } from '@models';
-import { TableConfig } from '@components/DataTable';
+import { TableConfig } from '@components/DataTable/useDataTable';
 import { TransactionType } from '@models/Transaction';
 
 const { t } = useI18n();
 
 const accountStore = useAccountStore();
+await accountStore.subscribe();
 const transactionStore = useTransactionStore();
+await transactionStore.subscribe();
+const userStore = useUserStore();
+await userStore.loadUser();
 
 await transactionStore.subscribe();
 await accountStore.subscribe();
 
 const rows = computed(() => accountStore.accounts);
-const transactions = computed(() => transactionStore.transactions);
 
 const config = reactive<TableConfig>({
   fields: {
@@ -49,12 +52,13 @@ const config = reactive<TableConfig>({
       justify: 'right',
       format: 'currency',
       value: (account: Account) => {
-        return transactions.value.reduce((result, currentTransaction) => {
+        // TODO: Handle currencies
+        return transactionStore.transactions.reduce((result, currentTransaction) => {
           if (currentTransaction.account.id === account.id) {
             if (currentTransaction.type.toLowerCase() === TransactionType.SELL) {
-              return result + currentTransaction.totalExcludingFees;
+              return (result ?? 0) + currentTransaction.totalExcludingFees;
             } else if (currentTransaction.type.toLowerCase() === TransactionType.BUY) {
-              return result - currentTransaction.totalExcludingFees;
+              return (result ?? 0) - currentTransaction.totalExcludingFees;
             }
           } else {
             return result;
@@ -63,7 +67,7 @@ const config = reactive<TableConfig>({
       },
     },
   },
-  tableLayout: {
+  tableLayoutCollection: {
     [Screens.DEFAULT]: [['name'], ['balance']],
   },
   settings: {
@@ -73,6 +77,7 @@ const config = reactive<TableConfig>({
       field: 'name',
       direction: 'desc',
     },
+    locale: userStore.state.user?.locale,
   },
   filters: {},
 });

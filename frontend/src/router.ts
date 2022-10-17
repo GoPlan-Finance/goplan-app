@@ -14,6 +14,7 @@ import Tables from '@styleguide/views/Tables.vue';
 import UIElements from '@styleguide/views/UIElements.vue';
 import Analytics from '@views/Analytics.vue';
 import Details from '@views/Details.vue';
+import Settings from '@views/Settings.vue';
 import NotFound from '@views/Error404.vue';
 import Holdings from '@views/Holdings.vue';
 import Auth from '@views/modules/Auth/Auth.vue';
@@ -74,7 +75,12 @@ const appRoutes: RouteRecordRaw[] = [
     props: true,
     component: Accounts,
   },
-
+  {
+    path: '/settings',
+    name: 'settings',
+    props: true,
+    component: Settings,
+  },
   {
     path: '/details/:ticker',
     name: 'ticker_details',

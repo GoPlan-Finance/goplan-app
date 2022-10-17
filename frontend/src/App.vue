@@ -1,4 +1,5 @@
 <template>
+  <NotificationDisplay />
   <component :is="layout">
     <Suspense>
       <RouterView :key="$route.fullPath" />
@@ -13,6 +14,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import GLoadingSpinner from '@components/base/GLoadingSpinner.vue';
+import NotificationDisplay from '@components/NotificationDisplay.vue';
 
 const defaultLayout = 'default';
 

@@ -41,7 +41,12 @@ class SubscriptionsHandler<T> {
     }
 
     this.interval = setInterval(async () => {
-      await this.runOnce();
+      try {
+        await this.runOnce();
+      } catch (e) {
+        console.log('FAILED TO FETCH DATA');
+        console.log(e);
+      }
     }, this.delay * 1000);
   }
 
