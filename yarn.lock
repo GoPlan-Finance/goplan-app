@@ -3467,13 +3467,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/parse@2.18.14":
-  version "2.18.14"
-  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.14.tgz#a3a5145ffc5555ca637536272f7b9980fe3c7180"
-  integrity sha512-/F+Oipp9j3/Xepe497r4yCDk6BtkuKKKOZlAoJNswRQ9M+i9LXos2NiDHHYOfNoBMcq5WGxVX8pGxmTXNjc6NQ==
-  dependencies:
-    "@types/node" "*"
-
 "@types/parse@2.18.18":
   version "2.18.18"
   resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.18.tgz#13e716595a49b6bd82a0f04d89c8c6f5930bc861"
