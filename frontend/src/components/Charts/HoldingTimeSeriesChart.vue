@@ -236,7 +236,7 @@ const scaleClicked = async (label: string) => {
   await reloadData();
 };
 
-  await reloadData();
+await reloadData();
 
 const onDataZoom = async event => {
   /*
@@ -273,8 +273,6 @@ const onDataZoom = async event => {
 };
 
 //watch(() => props.assetSymbol, () => reloadData())
-
-
 </script>
 <style scoped>
 .chart {
