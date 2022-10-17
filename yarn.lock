@@ -2055,13 +2055,13 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@goplan-finance/utils@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@goplan-finance/utils/-/utils-1.0.4.tgz#6a9363f9e4709b26790820ce6df6b577f80121fb"
-  integrity sha512-sDQH9Igm8oGNofP7VYcylPjEOUnZQ2B68B1uoxZU+r5LOUF6BOy7STWr726raadzox+Jx8PvlR+5G/lRWNyKtQ==
+"@goplan-finance/utils@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@goplan-finance/utils/-/utils-1.0.7.tgz#ea562cbc85e7a884169e82b563f042f9b65b0099"
+  integrity sha512-zzKn4uYA3EsFOHzu6Cz/OFYm++Hc3ptvN4EvQSNuU3JFK2K2Afrt0Da6Rh3ER9RBoIrrJCT+5R6kn86aRy8F5g==
   dependencies:
-    async-mutex "^0.3.1"
-    axios "^0.22.0"
+    async-mutex "^0.4.0"
+    axios "^0.27.0"
     crypto-js "^4.1.1"
     parse "^3.2.0"
     prettier "^2.3.2"
@@ -4888,6 +4888,14 @@ axios@^0.22.0:
   integrity sha512-Z0U3uhqQeg1oNcihswf4ZD57O3NrR1+ZXhxaROaWpDmsDTx7T2HNBV2ulBtie2hwJptu8UvgnJoK+BIqdzh/1w==
   dependencies:
     follow-redirects "^1.14.4"
+
+axios@^0.27.0:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+  dependencies:
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
 
 axios@^1.1.3:
   version "1.1.3"
@@ -7860,7 +7868,7 @@ follow-redirects@^1.14.0, follow-redirects@^1.14.4:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
   integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
 
-follow-redirects@^1.15.0:
+follow-redirects@^1.14.9, follow-redirects@^1.15.0:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
