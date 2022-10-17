@@ -36,12 +36,12 @@
     "parse": "3.4.1",
     "ts-money": "0.4.7",
     "ts-node": "10.7.0",
-    "typescript": "4.6.3"
+    "typescript": "4.8.4"
   },
   "devDependencies": {
     "@types/crypto-js": "4.1.1",
     "@types/jest": "27.5.0",
-    "@types/node": "16.11.32",
+    "@types/node": "16.11.66",
     "@types/parse": "2.18.14",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
