@@ -67,7 +67,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-only-warn": "1.0.3",
-    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-promise": "6.1.0",
     "eslint-plugin-varspacing": "1.2.2",
     "jest": "28.1.0",
     "mongodb-runner": "4.9.0",
