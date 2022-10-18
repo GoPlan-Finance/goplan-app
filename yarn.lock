@@ -13682,10 +13682,10 @@ ts-jest@28.0.1:
     semver "7.x"
     yargs-parser "^20.x"
 
-ts-money@0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/ts-money/-/ts-money-0.4.7.tgz#4d17afe35aba3e2a7dd122f90f813f64fa5e09ba"
-  integrity sha512-MKuLuUs0Er7zwKgTrs264a1q6Yz7xsDDDH1J/Voize4pUhABsDEyd7EqW4K+d82QTmClOAg5usaULQqFWZLFmQ==
+ts-money@0.4.8:
+  version "0.4.8"
+  resolved "https://registry.yarnpkg.com/ts-money/-/ts-money-0.4.8.tgz#0cba57950f0d509fea9a1b86eaafa5bc0a5b54ab"
+  integrity sha512-tYOzrAzyhfp4+GWLcXSlgPKbQIhGBR33/bVuzY5EPQceBHiH6YPo+lDkYusKXsCVb4hNAZtld44qjSdaQcNTig==
   dependencies:
     lodash "^4.17.5"
 
