@@ -61,7 +61,7 @@
     "@tailwindcss/forms": "0.5.3",
     "@types/concurrently": "7.0.0",
     "@types/crypto-js": "4.1.1",
-    "@types/jest": "27.5.0",
+    "@types/jest": "29.2.0",
     "@types/node": "18.11.0",
     "@types/papaparse": "5.3.5",
     "@types/parse": "2.18.18",
