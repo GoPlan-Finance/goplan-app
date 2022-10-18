@@ -78,7 +78,7 @@
     "autoprefixer": "10.4.12",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "28.1.0",
-    "concurrently": "7.1.0",
+    "concurrently": "7.4.0",
     "cross-env": "7.0.3",
     "eslint": "8.14.0",
     "eslint-plugin-import": "2.26.0",
