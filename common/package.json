@@ -35,7 +35,7 @@
     "papaparse": "5.3.2",
     "parse": "3.4.4",
     "ts-money": "0.4.8",
-    "ts-node": "10.7.0",
+    "ts-node": "10.9.1",
     "typescript": "4.8.4"
   },
   "devDependencies": {
