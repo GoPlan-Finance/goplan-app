@@ -62,7 +62,7 @@
     "@types/concurrently": "7.0.0",
     "@types/crypto-js": "4.1.1",
     "@types/jest": "29.2.0",
-    "@types/node": "18.11.0",
+    "@types/node": "18.11.9",
     "@types/papaparse": "5.3.5",
     "@types/parse": "2.18.18",
     "@typescript-eslint/eslint-plugin": "5.40.1",
