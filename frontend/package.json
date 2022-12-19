@@ -80,7 +80,7 @@
     "babel-jest": "29.2.0",
     "concurrently": "7.4.0",
     "cross-env": "7.0.3",
-    "eslint": "8.25.0",
+    "eslint": "8.30.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-only-warn": "1.0.3",
     "eslint-plugin-varspacing": "1.2.2",
