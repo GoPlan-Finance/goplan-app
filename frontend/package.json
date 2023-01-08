@@ -57,7 +57,7 @@
   "devDependencies": {
     "@babel/core": "7.19.3",
     "@babel/preset-env": "7.19.4",
-    "@intlify/vite-plugin-vue-i18n": "3.4.0",
+    "@intlify/vite-plugin-vue-i18n": "7.0.0",
     "@tailwindcss/forms": "0.5.3",
     "@types/concurrently": "7.0.0",
     "@types/crypto-js": "4.1.1",
