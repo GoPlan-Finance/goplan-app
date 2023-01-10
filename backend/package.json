@@ -33,7 +33,7 @@
     "@goplan-finance/utils": "^1.0.2",
     "async-mutex": "^0.4.0",
     "axios": "^1.1.3",
-    "convict": "^6.2.2",
+    "convict": "^6.2.4",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.6",
     "eodhistoricaldata-openapi": "github:goplan-finance/eodhistoricaldata-openapi-javascript#master",
