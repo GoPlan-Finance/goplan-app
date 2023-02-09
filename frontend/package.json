@@ -34,7 +34,7 @@
   "homepage": "https://github.com/GoPlan-Finance/GoPlan-app#readme",
   "dependencies": {
     "@goplan-finance/utils": "^1.0.2",
-    "@heroicons/vue": "^1.0.4",
+    "@heroicons/vue": "^2.0.15",
     "async-mutex": "^0.4.0",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.5",
