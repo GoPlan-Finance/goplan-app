@@ -65,7 +65,7 @@
     "@types/node": "18.11.0",
     "@types/papaparse": "5.3.5",
     "@types/parse": "2.18.18",
-    "@typescript-eslint/eslint-plugin": "5.40.1",
+    "@typescript-eslint/eslint-plugin": "5.54.0",
     "@typescript-eslint/parser": "5.40.1",
     "@vitejs/plugin-vue": "2.3.4",
     "@vue/cli-plugin-babel": "5.0.8",
