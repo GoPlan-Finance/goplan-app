@@ -55,7 +55,7 @@
     "vue-router": "^4.0.11"
   },
   "devDependencies": {
-    "@babel/core": "7.19.3",
+    "@babel/core": "7.21.3",
     "@babel/preset-env": "7.19.4",
     "@intlify/vite-plugin-vue-i18n": "3.4.0",
     "@tailwindcss/forms": "0.5.3",
