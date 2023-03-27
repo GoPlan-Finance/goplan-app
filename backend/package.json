@@ -54,7 +54,7 @@
     "@types/crypto-js": "4.1.1",
     "@types/express": "4.17.14",
     "@types/jest": "29.2.0",
-    "@types/node": "18.11.0",
+    "@types/node": "18.15.10",
     "@types/parse": "2.18.18",
     "@typescript-eslint/eslint-plugin": "5.40.1",
     "@typescript-eslint/parser": "5.40.1",
