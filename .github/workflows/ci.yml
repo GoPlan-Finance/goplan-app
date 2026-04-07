@@ -81,7 +81,7 @@ jobs:
         run: npm_config_yes=true npx auto-changelog
 
       - name: Log in to the Container registry
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@ba754150c9dbbaa912ae0ac3cfba43f84195cef2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
